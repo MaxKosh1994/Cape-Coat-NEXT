@@ -32,11 +32,12 @@ export default function SignUp() {
     });
   }
 
-  const handleSignUp = async (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+  const handleSignUp = async (e) => {
+    e.preventDefault();
     if (formData.full_name && formData.email && formData.password) {
+      console.log(formData);
       const resp = await dispatch(signUpUserThunk(formData));
-      if (resp.message) {
+      if (resp.response.data.message) {
         setErrorMsg(resp.response.data.message);
       } else {
         // TODO определить куда редирект после реги
@@ -49,7 +50,7 @@ export default function SignUp() {
   return (
     <>
       <div className={styles.formContainer}>
-        <form action={handleSignUp} className={styles.signInForm}>
+        <form className={styles.signInForm}>
           <Typography variant="h3" textAlign="center" className={styles.header}>
             Создайте аккаунт
             {errorMsg && <p>{error}</p>}
@@ -93,6 +94,7 @@ export default function SignUp() {
                 backgroundColor: 'black',
                 color: 'white',
               }}
+              onClick={handleSignUp}
             >
               Зарегистрироваться
             </Button>

@@ -5,6 +5,12 @@ import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import Link from 'next/link';
 
+import dynamic from 'next/dynamic';
+
+const DynamicMap = dynamic(() => import('@/components/About/Map'), {
+  ssr: false,
+});
+
 const Home = () => {
   return (
     <>
@@ -49,7 +55,7 @@ const Home = () => {
               </Link>
             </div>
             <div className={styles.latestContainer}>
-              <Link href="/new-arrivals" className={styles.mainLink}>
+              <Link href="/catalog/new-arrivals" className={styles.mainLink}>
                 <Image
                   src={`${process.env.NEXT_PUBLIC_CATEGORY_URL}coats.jpg`}
                   alt=""
@@ -76,6 +82,7 @@ const Home = () => {
             </Link>
           </div>
         </div>
+        <DynamicMap />
       </main>
     </>
   );

@@ -6,6 +6,7 @@ const emailRegex =
 
 module.exports.register = async (req, res) => {
   try {
+    console.log(req.body);
     const { full_name, email, password } = req.body;
     if (!full_name || !email || !password) {
       return res.status(401).json({ message: 'Некорректные данные!' });

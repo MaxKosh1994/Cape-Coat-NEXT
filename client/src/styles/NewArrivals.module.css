@@ -1,0 +1,33 @@
+.arrivalsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.arrivalsContainer div {
+  margin-bottom: 15px;
+  /* height: 600px;
+  width: 400px; */
+}
+
+.arrivalsText {
+  font-size: 1.8rem;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  justify-content: center;
+  margin: 40px auto;
+}
+
+@media (max-width: 599px) {
+  .arrivalsContainer {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  .arrivalsText {
+    margin: 1px auto;
+  }
+}
+
+@media screen and (min-width: 600px) and (max-width: 900px) {
+}

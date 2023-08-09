@@ -10,5 +10,5 @@ const {
 
 module.exports = catalogRouter
   .get('/categories', getAll)
-  .get('/collection/:id', getCollection)
+  .get('/collection', getCollection)
   .get('/new-arrivals', getNewArrivals);
