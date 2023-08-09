@@ -5,6 +5,12 @@ import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import Link from 'next/link';
 
+import dynamic from 'next/dynamic';
+
+const DynamicMap = dynamic(() => import('@/components/About/Map'), {
+  ssr: false,
+});
+
 const Home = () => {
   return (
     <>
@@ -76,6 +82,7 @@ const Home = () => {
             </Link>
           </div>
         </div>
+        <DynamicMap />
       </main>
     </>
   );

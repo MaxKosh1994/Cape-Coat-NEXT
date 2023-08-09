@@ -1,13 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { YMaps, Map, Placemark, ObjectManager } from '@pbe/react-yandex-maps';
 
-export default function MapComp() {
+const MapComp = () => {
   const mapRef = useRef(null);
-  const [mapCreated, setMapCreated] = useState(false);
   const [isTooltipVisible, setTooltipVisible] = useState(false);
+  const mapCreated = useRef(false);
 
   useEffect(() => {
-    if (!window || !window.ymaps || !mapRef.current || mapCreated) return;
+    if (!window || !window.ymaps || !mapRef.current || mapCreated.current) {
+      return;
+    }
+
+    mapCreated.current = true;
 
     window.ymaps.ready(() => {
       const map = new window.ymaps.Map(mapRef.current, {
@@ -29,7 +33,7 @@ export default function MapComp() {
           setTooltipVisible(true);
           map.balloon.open([56.316843, 43.98731], {
             contentBody:
-              'Address: Russia, Nizhny Novgorod, Malaya Pokrovskaya st., 20',
+              'Адрес: Россия, г.Нижний Новгород, ул. Малая Покровская, 20',
           });
         }
       });
@@ -42,12 +46,14 @@ export default function MapComp() {
       });
 
       map.geoObjects.add(placemark);
-      setMapCreated(true);
     });
-  }, [isTooltipVisible, mapCreated]);
+  }, []);
 
   if (typeof window === 'undefined') {
     return null;
   }
-  return <div style={{ width: 500, height: 300 }} ref={mapRef}></div>;
-}
+
+  return <div style={{ height: 600 }} ref={mapRef}></div>;
+};
+
+export default MapComp;
