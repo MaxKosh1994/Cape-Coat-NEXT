@@ -3,9 +3,7 @@ import styles from '../styles/Auth.module.css';
 import { TextField, Button, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { isUserLoginThunk, signInUserThunk } from '../app/thunkActionsAuth';
-import { RootState } from '../app/store';
-import { startSession } from '../app/sessionSlice';
+import { signInUserThunk } from '../app/thunkActionsAuth';
 import Link from 'next/link';
 
 export default function SignIn() {
@@ -46,7 +44,7 @@ export default function SignIn() {
   return (
     <>
       <div className={styles.formContainer}>
-        <form action={handleSignIn} className={styles.signInForm}>
+        <form className={styles.signInForm}>
           <Typography variant="h3" align="center" className={styles.header}>
             Войдите в аккаунт
             {errorMsg && <p>{error}</p>}
@@ -80,6 +78,7 @@ export default function SignIn() {
                 backgroundColor: 'black',
                 color: 'white',
               }}
+              onClick={handleSignIn}
             >
               Войти
             </Button>
