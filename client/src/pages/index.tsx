@@ -10,36 +10,36 @@ const Home = () => {
     <>
       <Head>
         <title>Cape&Coat | Main</title>
-        <meta name='title' content='Cape and Coat' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <meta name="title" content="Cape and Coat" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
-          href='https://fonts.googleapis.com/css2?family=Ysabeau+Infant&display=swap'
-          rel='stylesheet'
+          href="https://fonts.googleapis.com/css2?family=Ysabeau+Infant&display=swap"
+          rel="stylesheet"
         />
-        <link rel='icon' href='/favicon.ico' />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className='main-container'>
+        <div className="main-container">
           <div className={styles.vidContainer}>
             <video autoPlay loop muted className={styles.vid}>
-              <source src='/IMG_6623.mp4' type='video/mp4' />
+              <source src="/IMG_6623.mp4" type="video/mp4" />
             </video>
           </div>
           <div className={styles.stockContainer}>
             <Typography
               style={{ textAlign: 'center' }}
-              variant='h1'
-              component='h1'
+              variant="h1"
+              component="h1"
             >
               SALE
             </Typography>
           </div>
           <div className={styles.blocksContainer}>
             <div className={styles.collectionContainerMain}>
-              <Link href='/catalog/collection' className={styles.mainLink}>
+              <Link href="/catalog/collection" className={styles.mainLink}>
                 <Image
                   src={`${process.env.NEXT_PUBLIC_COLLECTION_URL}IMG_8836.JPG`}
-                  alt=''
+                  alt=""
                   fill={true}
                   className={styles.imageMain}
                 />
@@ -49,10 +49,10 @@ const Home = () => {
               </Link>
             </div>
             <div className={styles.latestContainer}>
-              <Link href='/new-arrivals' className={styles.mainLink}>
+              <Link href="/catalog/new-arrivals" className={styles.mainLink}>
                 <Image
                   src={`${process.env.NEXT_PUBLIC_CATEGORY_URL}coats.jpg`}
-                  alt=''
+                  alt=""
                   fill={true}
                   className={styles.imageMain}
                 />
@@ -63,10 +63,10 @@ const Home = () => {
             </div>
           </div>
           <div className={styles.catalogNav}>
-            <Link href='/catalog' className={styles.mainLink}>
+            <Link href="/catalog" className={styles.mainLink}>
               <Image
-                src='/cat-main.jpg'
-                alt=''
+                src="/cat-main.jpg"
+                alt=""
                 fill={true}
                 className={styles.imgToCat}
               />
