@@ -1,0 +1,47 @@
+.formContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  width: 30vw;
+  margin: 0 auto;
+}
+
+.redirect {
+  text-decoration: underline;
+  text-decoration-thickness: 0.01rem;
+}
+
+.redirMsg {
+  margin-top: 30px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.header {
+  font-size: 1.4rem;
+}
+
+@media only screen and (min-width: 120px) and (max-width: 599px) {
+  .formContainer {
+    width: 80%;
+  }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 900px) {
+  .formContainer {
+    width: 80%;
+  }
+
+  .signInForm {
+    width: 90%;
+    font-size: 2rem;
+  }
+  .redirMsg {
+    font-size: 1.7rem;
+  }
+
+  .header {
+    font-size: 1.8rem;
+  }
+}
