@@ -1,0 +1,534 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "user1@example.com",
+      "password": "password1",
+      "phone": "888888888888",
+      "full_name": "Ivan Fedorovich Kruzenshtern",
+      "address": "NN ul Lenina 23",
+      "telegram": "@IvanKrus",
+      "admin": true
+    },
+    {
+      "id": 2,
+      "email": "user2@example.com",
+      "password": "password2",
+      "phone": "222222222222",
+      "full_name": "John Doe",
+      "address": "123 Main St",
+      "telegram": "@JohnDoe",
+      "admin": true
+    },
+    {
+      "id": 3,
+      "email": "user3@example.com",
+      "password": "password3",
+      "phone": "333333333333",
+      "full_name": "Jane Smith",
+      "address": "456 Elm St",
+      "telegram": "@JaneSmith",
+      "admin": false
+    },
+    {
+      "id": 4,
+      "email": "user4@example.com",
+      "password": "password4",
+      "phone": "444444444444",
+      "full_name": "Alex Johnson",
+      "address": "789 Oak St",
+      "telegram": "@AlexJohnson",
+      "admin": false
+    },
+    {
+      "id": 5,
+      "email": "user5@example.com",
+      "password": "password5",
+      "phone": "555555555555",
+      "full_name": "Sarah Wilson",
+      "address": "321 Maple Ave",
+      "telegram": "@SarahWilson",
+      "admin": false
+    },
+    {
+      "id": 6,
+      "email": "user6@example.com",
+      "password": "password6",
+      "phone": "666666666666",
+      "full_name": "Michael Brown",
+      "address": "654 Pine St",
+      "telegram": "@MichaelBrown",
+      "admin": false
+    },
+    {
+      "id": 7,
+      "email": "user7@example.com",
+      "password": "password7",
+      "phone": "777777777777",
+      "full_name": "Emily Davis",
+      "address": "987 Cedar Ave",
+      "telegram": "@EmilyDavis",
+      "admin": false
+    },
+    {
+      "id": 8,
+      "email": "user8@example.com",
+      "password": "password8",
+      "phone": "888888888888",
+      "full_name": "David Wilson",
+      "address": "1234 Spruce St",
+      "telegram": "@DavidWilson",
+      "admin": false
+    },
+    {
+      "id": 9,
+      "email": "user9@example.com",
+      "password": "password9",
+      "phone": "999999999999",
+      "full_name": "Olivia Martin",
+      "address": "5678 Birch Ave",
+      "telegram": "@OliviaMartin",
+      "admin": false
+    },
+    {
+      "id": 10,
+      "email": "user10@example.com",
+      "password": "password10",
+      "phone": "101010101010",
+      "full_name": "William Anderson",
+      "address": "9012 Elm St",
+      "telegram": "@WilliamAnderson",
+      "admin": false
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "user_id": 3,
+      "total": 30000,
+      "status": "purchased",
+      "address": "456 Elm St",
+      "createdAt": "2023-07-12T10:30:00.000Z"
+    },
+    {
+      "id": 2,
+      "user_id": 5,
+      "total": 5000,
+      "status": "shipped",
+      "address": "321 Maple Ave",
+      "createdAt": "2023-07-12T10:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "user_id": 2,
+      "total": 10000,
+      "status": "delivered",
+      "address": "123 Main St",
+      "createdAt": "2023-07-12T10:30:00.000Z"
+    },
+    {
+      "id": 4,
+      "user_id": 6,
+      "total": 15000,
+      "status": "pending",
+      "address": "654 Pine St",
+      "createdAt": "2023-07-12T10:30:00.000Z"
+    },
+    {
+      "id": 5,
+      "user_id": 4,
+      "total": 2000,
+      "status": "canceled",
+      "address": "789 Oak St",
+      "createdAt": "2023-07-12T10:30:00.000Z"
+    },
+    {
+      "id": 6,
+      "user_id": 1,
+      "total": 8000,
+      "status": "shipped",
+      "address": "NN ul Lenina 23",
+      "createdAt": "2023-07-12T10:30:00.000Z"
+    },
+    {
+      "id": 7,
+      "user_id": 9,
+      "total": 12000,
+      "status": "purchased",
+      "address": "5678 Birch Ave",
+      "createdAt": "2023-07-12T10:30:00.000Z"
+    },
+    {
+      "id": 8,
+      "user_id": 7,
+      "total": 25000,
+      "status": "shipped",
+      "address": "987 Cedar Ave",
+      "createdAt": "2023-07-12T10:30:00.000Z"
+    },
+    {
+      "id": 9,
+      "user_id": 10,
+      "total": 5000,
+      "status": "delivered",
+      "address": "9012 Elm St",
+      "createdAt": "2023-07-12T10:30:00.000Z"
+    },
+    {
+      "id": 10,
+      "user_id": 8,
+      "total": 18000,
+      "status": "pending",
+      "address": "1234 Spruce St",
+      "createdAt": "2023-07-12T10:30:00.000Z"
+    }
+  ],
+  "item": [
+    {
+      "id": 1,
+      "name": "coat1",
+      "description": "The best one",
+      "model_sizes": "S M XL",
+      "care_instucttions": "Show it to your mom",
+      "characterictics": "Long one and made out of your neighbor's skin",
+      "price": 13000,
+      "colour": "red",
+      "instock": true,
+      "photo": "binary code for the photo",
+      "collection_id": 1,
+      "category_id": 1
+    },
+    {
+      "id": 2,
+      "name": "shirt2",
+      "description": "Premium quality",
+      "model_sizes": "M L",
+      "care_instucttions": "Machine washable",
+      "characterictics": "Soft and comfortable fabric",
+      "price": 5000,
+      "colour": "blue",
+      "instock": true,
+      "photo": "binary code for the photo",
+      "collection_id": 2,
+      "category_id": 1
+    },
+    {
+      "id": 3,
+      "name": "pants3",
+      "description": "Stylish and trendy",
+      "model_sizes": "S M L",
+      "care_instucttions": "Dry clean only",
+      "characterictics": "Slim fit and stretchable",
+      "price": 8000,
+      "colour": "black",
+      "instock": true,
+      "photo": "binary code for the photo",
+      "collection_id": 3,
+      "category_id": 2
+    },
+    {
+      "id": 4,
+      "name": "dress4",
+      "description": "Elegant and graceful",
+      "model_sizes": "S L XL",
+      "care_instucttions": "Hand wash gently",
+      "characterictics": "Flowy and lightweight",
+      "price": 10000,
+      "colour": "pink",
+      "instock": true,
+      "photo": "binary code for the photo",
+      "collection_id": 4,
+      "category_id": 2
+    },
+    {
+      "id": 5,
+      "name": "shoes5",
+      "description": "Comfortable footwear",
+      "model_sizes": "7 8 9",
+      "care_instucttions": "Wipe clean with a damp cloth",
+      "characterictics": "Durable and stylish",
+      "price": 6000,
+      "colour": "brown",
+      "instock": true,
+      "photo": "binary code for the photo",
+      "collection_id": 5,
+      "category_id": 3
+    },
+    {
+      "id": 6,
+      "name": "skirt6",
+      "description": "Chic and trendy",
+      "model_sizes": "XS S M",
+      "care_instucttions": "Machine wash cold",
+      "characterictics": "A-line silhouette",
+      "price": 7000,
+      "colour": "yellow",
+      "instock": true,
+      "photo": "binary code for the photo",
+      "collection_id": 1,
+      "category_id": 2
+    },
+    {
+      "id": 7,
+      "name": "hat7",
+      "description": "Stylish accessory",
+      "model_sizes": "One size",
+      "care_instucttions": "Hand wash only",
+      "characterictics": "Wide brim and adjustable strap",
+      "price": 2500,
+      "colour": "black",
+      "instock": true,
+      "photo": "binary code for the photo",
+      "collection_id": 2,
+      "category_id": 3
+    },
+    {
+      "id": 8,
+      "name": "jacket8",
+      "description": "Warm and cozy",
+      "model_sizes": "M L XL",
+      "care_instucttions": "Dry clean recommended",
+      "characterictics": "Faux fur collar and zip closure",
+      "price": 12000,
+      "colour": "gray",
+      "instock": true,
+      "photo": "binary code for the photo",
+      "collection_id": 3,
+      "category_id": 1
+    },
+    {
+      "id": 9,
+      "name": "sweater9",
+      "description": "Soft and comfortable",
+      "model_sizes": "S M",
+      "care_instucttions": "Machine wash gentle cycle",
+      "characterictics": "Crew neck and ribbed cuffs",
+      "price": 4500,
+      "colour": "green",
+      "instock": true,
+      "photo": "binary code for the photo",
+      "collection_id": 4,
+      "category_id": 1
+    },
+    {
+      "id": 10,
+      "name": "bag10",
+      "description": "Stylish and spacious",
+      "model_sizes": "One size",
+      "care_instucttions": "Spot clean with damp cloth",
+      "characterictics": "Multiple compartments and adjustable strap",
+      "price": 9000,
+      "colour": "navy",
+      "instock": true,
+      "photo": "binary code for the photo",
+      "collection_id": 5,
+      "category_id": 3
+    }
+  ],
+  "order_items": [
+    {
+      "id": 1,
+      "order_id": 1,
+      "item_id": 1
+    },
+    {
+      "id": 2,
+      "order_id": 1,
+      "item_id": 3
+    },
+    {
+      "id": 3,
+      "order_id": 2,
+      "item_id": 5
+    },
+    {
+      "id": 4,
+      "order_id": 3,
+      "item_id": 2
+    },
+    {
+      "id": 5,
+      "order_id": 4,
+      "item_id": 4
+    },
+    {
+      "id": 6,
+      "order_id": 5,
+      "item_id": 6
+    },
+    {
+      "id": 7,
+      "order_id": 6,
+      "item_id": 8
+    },
+    {
+      "id": 8,
+      "order_id": 7,
+      "item_id": 10
+    },
+    {
+      "id": 9,
+      "order_id": 8,
+      "item_id": 9
+    },
+    {
+      "id": 10,
+      "order_id": 9,
+      "item_id": 7
+    },
+    {
+      "id": 11,
+      "order_id": 9,
+      "item_id": 3
+    },
+    {
+      "id": 12,
+      "order_id": 10,
+      "item_id": 1
+    }
+  ],
+  "collection": [
+    {
+      "id": 1,
+      "name": "Summer Collection"
+    },
+    {
+      "id": 2,
+      "name": "Winter Collection"
+    },
+    {
+      "id": 3,
+      "name": "Spring Collection"
+    },
+    {
+      "id": 4,
+      "name": "Autumn Collection"
+    },
+    {
+      "id": 5,
+      "name": "Holiday Collection"
+    }
+  ],
+  "category": [
+    {
+      "id": 1,
+      "name": "Clothing"
+    },
+    {
+      "id": 2,
+      "name": "Bottoms"
+    },
+    {
+      "id": 3,
+      "name": "Accessories"
+    }
+  ],
+  "promocode": [
+    {
+      "id": 1,
+      "name": "Watermelon"
+    },
+    {
+      "id": 2,
+      "name": "Bowling"
+    }
+  ],
+  "cart": [
+    {
+      "id": 1,
+      "user_id": 3,
+      "total": 25000,
+      "quantity": 3
+    },
+    {
+      "id": 2,
+      "user_id": 2,
+      "total": 15000,
+      "quantity": 2
+    },
+    {
+      "id": 3,
+      "user_id": 5,
+      "total": 5000,
+      "quantity": 1
+    },
+    {
+      "id": 4,
+      "user_id": 1,
+      "total": 12000,
+      "quantity": 4
+    },
+    {
+      "id": 5,
+      "user_id": 4,
+      "total": 8000,
+      "quantity": 2
+    }
+  ],
+  "cart_items": [
+    {
+      "id": 1,
+      "cart_id": 1,
+      "item_id": 2
+    },
+    {
+      "id": 2,
+      "cart_id": 2,
+      "item_id": 4
+    },
+    {
+      "id": 3,
+      "cart_id": 3,
+      "item_id": 1
+    },
+    {
+      "id": 4,
+      "cart_id": 4,
+      "item_id": 3
+    },
+    {
+      "id": 5,
+      "cart_id": 5,
+      "item_id": 5
+    }
+  ],
+  "favorite": [
+    {
+      "id": 1,
+      "user_id": 6,
+      "item_id": 2
+    },
+    {
+      "id": 2,
+      "user_id": 6,
+      "item_id": 4
+    },
+    {
+      "id": 3,
+      "user_id": 8,
+      "item_id": 1
+    },
+    {
+      "id": 4,
+      "user_id": 5,
+      "item_id": 3
+    },
+    {
+      "id": 5,
+      "user_id": 4,
+      "item_id": 5
+    }
+  ],
+  "measurements": [
+    {
+      "id": 1,
+      "user_id": 4,
+      "height": 183,
+      "bust": 110,
+      "waist": 90,
+      "hips": 90,
+      "length": 140,
+      "sleeve": 90
+    }
+  ]
+}

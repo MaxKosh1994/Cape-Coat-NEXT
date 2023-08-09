@@ -1,0 +1,21 @@
+{
+  "/api/*": "/$1",
+  "/api/users/": "/users/",
+  "/api/users/:id": "/users/:id",
+  "/api/orders/:id": "/users/:id",
+  "/api/item/": "/item/",
+  "/api/item/:id": "/item/:id",
+  "/api/category/": "/category/",
+  "/api/category/:id": "/category/:id",
+  "/api/collection/": "/collection/",
+  "/api/collection/:id": "/collection/:id",
+  "/api/order_items": "/order_items",
+  "/api/order_items/:id": "/order_items",
+  "/api/cart": "/cart",
+  "/api/cart/:id": "/cart/:id",
+  "/api/cart_items": "/cart_items",
+  "/api/cart_items/:id": "/cart_items/:id",
+  "/api/favorite/": "/favorite",
+  "/api/favorite/:id": "/favorite/:id",
+  "/api/measurements/:id": "/measurements/:id"
+}
