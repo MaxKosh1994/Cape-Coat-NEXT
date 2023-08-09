@@ -1,3 +1,4 @@
 PORT=3XXX
 DATABASE=dialect://user:password@localhost:port/database
 SECRET_KEY_SESSION = sxxxxx_kxx_Sxxxxx_x
+CORS_PORT=http://localhost:XXXX

@@ -1,7 +1,7 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
-const path = require('path');
 const cors = require('cors');
 const expressSession = require('express-session');
 const FileStore = require('session-file-store')(expressSession);
@@ -10,7 +10,7 @@ const apiRouter = require('./routers/api.router');
 
 const { PORT, SECRET_KEY_SESSION } = process.env;
 const corsOptions = {
-  origin: ['http://localhost:5173'],
+  origin: [process.env.CORS_PORT],
   credentials: true,
 };
 
