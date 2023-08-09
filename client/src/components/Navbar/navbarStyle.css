@@ -1,0 +1,15 @@
+.nav-menu {
+  margin-top: -30px;
+}
+.nav-mobile {
+  margin: 0px;
+}
+.mobile_menu_text {
+  font-size: 25px;
+  font-family: "Ysabeau Infant", sans-serif;
+}
+@media (max-width: 767px) {
+  .mobile-icon {
+    margin-left: 0px;
+  }
+}
