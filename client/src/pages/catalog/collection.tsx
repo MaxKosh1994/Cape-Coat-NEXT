@@ -15,15 +15,12 @@ export default function CollectionPage() {
   const [collectionName, setCollectionName] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
-  // TODO как автоматизировать момент с выбором коллекции для главной?
-  // TODO булевоe current в таблице коллекции и админ кликает да\нет?
-  const idPlaceholder = 1;
 
   useEffect(() => {
     try {
       (async function (): Promise<void> {
         const response = await fetch(
-          process.env.NEXT_PUBLIC + `catalog/collection/${idPlaceholder}`
+          process.env.NEXT_PUBLIC_URL + `catalog/collection`
         );
         if (response.status === 200) {
           const collection = await response.json();
