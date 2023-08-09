@@ -12,9 +12,12 @@ module.exports.getAll = async (req, res) => {
 
 module.exports.getCollection = async (req, res) => {
   try {
+    const currCollection = await Collection.findOne({
+      where: { current: true },
+    });
     const collectionItems = await Item.findAll({
       where: {
-        [Op.and]: [{ collection_id: req.params.id }, { in_stock: false }],
+        [Op.and]: [{ collection_id: currCollection.id }, { in_stock: false }],
       },
       include: [
         {
