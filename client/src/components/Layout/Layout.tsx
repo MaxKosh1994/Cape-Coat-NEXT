@@ -3,9 +3,9 @@ import Navbar from '../Navbar/Navbar';
 
 const Layout = ({ children }) => {
   return (
-    <div>
+    <div style={{ overflow: 'hidden' }}>
       <Navbar />
-      {children}
+      <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
     </div>
   );
 };

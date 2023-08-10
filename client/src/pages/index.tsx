@@ -31,6 +31,7 @@ const Home = () => {
               <source src="/IMG_6623.mp4" type="video/mp4" />
             </video>
           </div>
+
           <div className={styles.stockContainer}>
             <Typography
               style={{ textAlign: 'center' }}

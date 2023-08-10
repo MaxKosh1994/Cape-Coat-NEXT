@@ -22,7 +22,7 @@ const SearchBar: React.FC<SearchBarProps> = () => {
             padding: isMobile ? '3px' : '8px',
           }}
         >
-          <SearchIcon />
+          <SearchIcon sx={{ color: 'black' }} />
         </IconButton>
       </Link>
     </>
