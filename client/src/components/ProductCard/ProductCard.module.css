@@ -1,0 +1,25 @@
+.NameCard {
+  padding-left: 16px;
+  padding-top: 16px;
+  margin: 0px;
+}
+
+.CardContent {
+  padding-bottom: 0px;
+}
+
+.InfoCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.Price {
+  text-align: left;
+}
+
+.Icons {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 10px;
+}

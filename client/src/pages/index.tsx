@@ -1,16 +1,11 @@
 import { useState, useEffect } from 'react';
 import { GetServerSideProps, GetStaticProps } from 'next';
 import { Typography } from '@mui/material';
+import PlaceIcon from '@mui/icons-material/Place';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import Link from 'next/link';
-
-import dynamic from 'next/dynamic';
-
-const DynamicMap = dynamic(() => import('@/components/About/Map'), {
-  ssr: false,
-});
 
 const Home = () => {
   return (
@@ -43,6 +38,7 @@ const Home = () => {
               </Typography>
             </div>
           </div>
+
           <div className={styles.stockContainer}>
             <Image
               src={`${process.env.NEXT_PUBLIC_CATEGORY_URL}trenches.jpg`}
@@ -93,8 +89,32 @@ const Home = () => {
               </div>
             </div>
           </div>
+          <div className={styles.mapNav}>
+            <Link href="/catalog">
+              <Image
+                src="/cat-main.jpg"
+                alt=""
+                fill={true}
+                className={styles.imgToMap}
+              />
+              <Typography>
+                <span className={styles.mapNavText}>
+                  Наш шоурум{' '}
+                  <Link href="/address" className={styles.mapNavTextSmall}>
+                    <PlaceIcon
+                      style={{
+                        color: 'red',
+                        width: '1.2rem',
+                        height: '1.2rem',
+                      }}
+                    />
+                    Показать на карте
+                  </Link>
+                </span>
+              </Typography>
+            </Link>
+          </div>
         </div>
-        <DynamicMap />
       </main>
     </>
   );

@@ -5,7 +5,7 @@ import styles from '../../styles/Catalog.module.css';
 import axios from 'axios';
 import Image from 'next/image';
 
-export default function CategoryList({ id, imageUrl, linkText, allCategory }) {
+export default function CategoryList({ id, imageUrl, category, allCategory }) {
   const router = useRouter();
   const [englishName, setEnglishName] = useState('');
 
@@ -14,7 +14,7 @@ export default function CategoryList({ id, imageUrl, linkText, allCategory }) {
       try {
         const response = await axios.get(
           `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
-            linkText
+            category
           )}&langpair=ru|en`
         );
 
@@ -33,26 +33,25 @@ export default function CategoryList({ id, imageUrl, linkText, allCategory }) {
     };
 
     translateToEnglish();
-  }, [linkText]);
+  }, [category]);
 
   const categoryHandler = (e) => {
     const target = e.target;
     if (!target) return; // Проверка наличия целевого элемента
-    const parent = target.closest('.container-category').id;
+    const parent = target.closest('.category-container').id;
     router.push(`/catalog/${englishName}`, { state: parent });
   };
 
   return (
-    <div className={styles.containerCategory} onClick={categoryHandler} id={id}>
-      <div className={styles.link}>
-        <Image
-          src={imageUrl}
-          className={styles.image}
-          fill={true}
-          alt={linkText}
-        />
-        <span className={styles.linkText}>{linkText}</span>
-      </div>
+    <div className={styles.categoryContainer} onClick={categoryHandler} id={id}>
+      <Image
+        src={imageUrl}
+        className={styles.image}
+        width={400}
+        height={600}
+        alt={category}
+      />
+      <p className={styles.categoryName}>{category}</p>
     </div>
   );
 }
