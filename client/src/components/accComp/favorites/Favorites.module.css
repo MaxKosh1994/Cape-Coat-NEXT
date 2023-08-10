@@ -1,0 +1,28 @@
+.itemsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-left: 60px;
+  margin-right: 60px;
+  margin-top: 30px;
+}
+
+.itemsContainer div {
+  margin-bottom: 15px;
+}
+
+@media (max-width: 820px) {
+  .itemsContainer {
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 599px) {
+  .itemsContainer {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
