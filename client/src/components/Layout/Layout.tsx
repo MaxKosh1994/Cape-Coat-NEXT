@@ -4,10 +4,10 @@ import Script from 'next/script';
 
 const Layout = ({ children }) => {
   return (
-    <div>
+    <div style={{ overflow: 'hidden' }}>
       <Script src="https://smtpjs.com/v3/smtp.js"></Script>
       <Navbar />
-      {children}
+      <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
     </div>
   );
 };
