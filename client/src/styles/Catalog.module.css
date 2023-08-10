@@ -1,78 +1,82 @@
-.catalogueContainer {
-  width: 100vw;
-  height: 230px;
-  margin-bottom: 50px;
+.headerText {
+  font-size: 2.2rem;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  justify-content: center;
+  margin: -20px auto 40px;
 }
 
-.containerCategory {
-  height: 230px;
-  width: 70%;
-  display: flex;
-  margin: 5px auto;
-  border-radius: 20px;
-  overflow: hidden;
+.catalogueContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, auto));
+  gap: 80px;
+  margin: 10px 40px;
+  justify-content: center;
   align-items: center;
+  margin-bottom: 30px;
+}
+
+.categoryContainer {
+  height: 600px;
+  width: 400px;
+  text-align: center;
+  margin-bottom: 50px;
 }
 
 .image {
   display: block;
-  border-radius: 20px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: 0 0;
-  width: 100%;
-  height: 100%;
-  filter: brightness(65%);
-  transition: filter 0.3s ease;
 }
 
-.link {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-  border-radius: 20px;
-}
-
-.linkText {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.categoryName {
+  margin-top: 10px;
   font-size: 2rem;
   font-weight: bold;
-  z-index: 1;
 }
 
-.link:hover {
-  background-color: rgba(0, 0, 0, 0.3);
-  /* -webkit-text-stroke-width: 0.5px;
-  -webkit-text-stroke-color: black;
-  font-size: 3rem; */
-}
-
-.link:hover .image {
-  filter: brightness(100%);
-}
-
-.containerCategory:last-child {
-  margin-bottom: 20px;
-}
-
-@media (max-width: 599px) {
-  .containerCategory {
-    height: 150px;
-    width: 90%;
+@media (max-width: 768px) {
+  .headerText {
+    margin: -40px auto 20px;
   }
-  .linkText {
-    font-size: 1.4rem;
+
+  .catalogueContainer {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
   }
-  .containerCategory:last-child {
-    margin-bottom: 0;
+
+  .categoryContainer {
+    height: 500px;
+    width: 360px;
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  .categoryName {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 499px) {
+  .headerText {
+    margin: -40px auto 20px;
+  }
+
+  .catalogueContainer {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .categoryContainer {
+    height: 250px;
+    width: 170px;
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  .categoryName {
+    margin-top: 5px;
+    font-size: 22px;
   }
 }
