@@ -84,7 +84,7 @@ export default function SignIn() {
             </Button>
             <p className={styles.redirMsg}>
               Еще не зарегистрированы?{' '}
-              <Link href="/register" className="redirect">
+              <Link href="/signup" className="redirect">
                 Создайте аккаунт
               </Link>
             </p>
