@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CategoryList from '../../components/catalog/categoryList';
 // import Category from '../Category/Category';
 import styles from '../../styles/Catalog.module.css';
+import { Typography } from '@mui/material';
 
 export default function Catalog() {
   const [allCategories, setAllCategories] = useState([]);
@@ -27,13 +28,18 @@ export default function Catalog() {
 
   return (
     <>
+      <Typography>
+        <span className={styles.headerText}>
+          <strong>Каталог</strong>
+        </span>
+      </Typography>
       <div className={styles.catalogueContainer}>
         {allCategories.map((cat) => (
           <CategoryList
             key={cat.id}
             id={cat.id}
             imageUrl={`${process.env.NEXT_PUBLIC_CATEGORY_URL}${cat.photo}`}
-            linkText={cat.name}
+            category={cat.name}
             allCategory={allCategories}
           />
         ))}
