@@ -279,7 +279,7 @@ export default function Navbar() {
                 justifyContent: 'space-between',
               }}
             >
-              <Link href="/home" passHref>
+              <Link href="/" passHref>
                 <Box
                   sx={{
                     display: { xs: 'none', md: 'flex' },
@@ -446,7 +446,7 @@ export default function Navbar() {
                 >
                   <MenuIcon />
                 </IconButton>
-                <Link href="/home" passHref>
+                <Link href="/" passHref>
                   <Box
                     sx={{
                       display: 'flex',

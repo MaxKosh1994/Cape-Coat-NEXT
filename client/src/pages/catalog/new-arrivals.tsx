@@ -20,6 +20,7 @@ export default function NewArrivalsPage() {
       console.log(err);
     }
   }, []);
+
   return (
     <>
       <Typography>
