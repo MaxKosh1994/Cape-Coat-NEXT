@@ -1,23 +1,25 @@
 .HeaderDiv {
   display: flex;
   justify-content: center;
-  width: 100%;
   align-items: center;
   overflow-x: hidden;
-  /* background-color: white; */
-}
-
-.RootContainer {
-  height: 100%;
-  margin-top: 0px;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
+  visibility: inherit;
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  list-style: none;
+  float: left;
+  min-height: 1px;
+  vertical-align: top;
+  box-sizing: border-box;
+  width: 66.666%;
+  position: relative;
+  left: 16.666%;
 }
 
 .Container {
   background-color: white;
-  padding: 0px 40px 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,16 +30,70 @@
 }
 
 .HeaderName {
-  font-size: 3rem;
-  margin-bottom: 32px;
-  /* margin-top: 50px; */
-  font-weight: 700;
+  visibility: inherit;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  list-style: none;
+  box-sizing: border-box;
+  text-align: center !important;
+  font-weight: 400;
+  font-style: normal;
+  margin: 0 0 0.75em;
+  line-height: 1.4;
+  font-size: 2rem;
+  opacity: 1;
+}
+
+.ConteinerText {
+  visibility: inherit;
+  font-size: 2rem;
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  list-style: none;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  word-wrap: break-word;
+}
+
+.ContainerPhotoOne {
+  display: flex;
+}
+
+.Table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.TableTr {
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
+}
+
+.PhotoOne {
+  text-align: left;
+  padding: 15px;
+}
+
+.Photo {
+  width: 100%;
+  height: 100%;
+}
+
+.InfoConteiner {
+  width: 70%;
+  text-align: left;
+  padding: 15px;
+  font-size: 150px;
 }
 
 .Info {
   text-align: justify;
   font-family: Ysabeau Infant, serif;
-  font-size: 1.5rem;
+  font-size: 20px;
   font-weight: 500;
   margin-bottom: 1.25rem;
   margin-top: 0px;
@@ -45,6 +101,10 @@
 .Map {
   width: 100%;
   height: 400px;
+}
+
+@media (min-widht: 769px) {
+  left: 16.666%;
 }
 
 @media (max-width: 768px) {

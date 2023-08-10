@@ -9,7 +9,7 @@ export default function About() {
   return (
     <>
       <AboutComp />
-      <DynamicMap />
+      {/* <DynamicMap /> */}
     </>
   );
 }
