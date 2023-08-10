@@ -16,6 +16,8 @@ module.exports.getCart = async (req, res) => {
         { model: Photo, limit: 1 },
       ],
     });
+    console.log(currUser);
+    console.log(cartItems);
     res.json(cartItems);
   } catch (err) {
     res.status(500).json({ message: 'Ошибка сервера' });
