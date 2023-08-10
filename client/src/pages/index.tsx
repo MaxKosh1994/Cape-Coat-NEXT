@@ -43,6 +43,7 @@ const Home = () => {
               </Typography>
             </div>
           </div>
+
           <div className={styles.stockContainer}>
             <Image
               src={`${process.env.NEXT_PUBLIC_CATEGORY_URL}trenches.jpg`}
