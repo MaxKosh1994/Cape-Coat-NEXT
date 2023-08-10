@@ -37,7 +37,7 @@ export default function SignUp() {
     if (formData.full_name && formData.email && formData.password) {
       console.log(formData);
       const resp = await dispatch(signUpUserThunk(formData));
-      if (resp.response.data.message) {
+      if (resp?.response?.data?.message) {
         setErrorMsg(resp.response.data.message);
       } else {
         // TODO определить куда редирект после реги

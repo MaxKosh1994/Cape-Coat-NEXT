@@ -1,68 +1,41 @@
-const bcrypt = require('bcrypt');
-const { User } = require('../../db/models');
-
-const emailRegex =
-  /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.(?:com|ru|net|org|edu|gov|mil|biz|info|io)$/;
+const {
+  registerUser,
+  loginUser,
+  checkSession,
+} = require('../services/authServices/authServices'); // Import the userService module
 
 module.exports.register = async (req, res) => {
   try {
-    console.log(req.body);
     const { full_name, email, password } = req.body;
-    if (!full_name || !email || !password) {
-      return res.status(401).json({ message: 'Некорректные данные!' });
+
+    const registrationResult = await registerUser(full_name, email, password);
+
+    if (!registrationResult.success) {
+      return res.status(401).json({ message: registrationResult.message });
     }
-    if (!emailRegex.test(email)) {
-      return res.status(401).json({ message: 'Некорректный формат email' });
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const isUserExists = await User.findOrCreate({
-      where: { email },
-      defaults: { full_name, email, password: hashedPassword },
-    });
-    const [userData, isCreated] = isUserExists;
-    if (isCreated) {
-      req.session.user = userData.email;
-      res.json(userData.email);
-    } else {
-      res
-        .status(401)
-        .json({ message: 'Пользователь с таким email уже существует' });
-    }
+
+    req.session.user = registrationResult.userData.email;
+    res.json(registrationResult.userData.email);
   } catch (err) {
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 };
 
 module.exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    if (!emailRegex.test(email)) {
-      return res.status(401).json({ message: 'Некорректный формат email' });
-    }
-    const currentUser = await User.findOne({ where: { email }, raw: true });
-    if (currentUser) {
-      const passwordCheck = await bcrypt.compare(
-        password,
-        currentUser.password,
-      );
-      if (passwordCheck) {
-        req.session.user = currentUser.email;
-        req.session.save();
-        res.json({
-          email: currentUser.email,
-          name: currentUser.full_name,
-          isAdmin: currentUser.admin,
-        });
-      } else {
-        res.status(401).json({ message: 'Неверный пароль' });
-      }
-    } else {
-      res.status(409).json({ message: 'Такого пользователя не существует' });
-    }
-  } catch (err) {
-    console.log('Ошибка login --->', err);
-    res.status(500).json({ message: 'Ошибка сервера' });
+  const { email, password } = req.body;
+  const loginResult = await loginUser(email, password);
+
+  if (!loginResult.success) {
+    return res.status(401).json({ message: loginResult.message });
   }
+
+  req.session.user = loginResult.email;
+  req.session.save();
+  res.json({
+    email: loginResult.email,
+    name: loginResult.name,
+    isAdmin: loginResult.isAdmin,
+  });
 };
 
 module.exports.logout = (req, res) => {
@@ -76,26 +49,20 @@ module.exports.logout = (req, res) => {
       }
     });
   } catch (err) {
-    console.log('Ошибка в logout --->', err);
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 };
 
 module.exports.session = async (req, res) => {
   try {
-    const email = req.session?.user;
+    const sessionResult = await checkSession(req.session);
 
-    if (email) {
-      const currentUser = await User.findOne({
-        where: {
-          email,
-        },
-        raw: true,
+    if (sessionResult.isLogin) {
+      res.status(200).json({
+        isLogin: true,
+        user: sessionResult.user,
+        isAdmin: sessionResult.isAdmin,
       });
-
-      res
-        .status(200)
-        .json({ isLogin: true, user: email, isAdmin: currentUser.admin });
     } else {
       res.status(200).json({ isLogin: false });
     }
