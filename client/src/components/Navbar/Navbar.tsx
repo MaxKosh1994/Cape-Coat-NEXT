@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {
-  styled,
-  alpha,
-  ThemeProvider,
-  createTheme,
-} from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import Image from 'next/image';
 import { grey } from '@mui/material/colors';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import InputBase from '@mui/material/InputBase';
+
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -28,11 +23,8 @@ import SearchBar from '../SearchBar/SearchBar';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { useAppDispatch } from '../../app/hooks';
-import { isUserLoginThunk, signInUserThunk } from '../../app/thunkActionsAuth';
-import {
-  fetchFavouritesData,
-  fetchItemData,
-} from '../../app/thunkActionsFavourite';
+import { isUserLoginThunk } from '../../app/thunkActionsAuth';
+import { fetchFavouritesData } from '../../app/thunkActionsFavourite';
 import { checkCartItemThunk } from '../../app/thunkActionsCart';
 import './navbarStyle.css';
 
@@ -47,44 +39,6 @@ const theme = createTheme({
   },
 });
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  width: '100%',
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1.5, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
 function ElevationScroll(props: Props) {
   const { children, window } = props;
   const trigger = useScrollTrigger({
@@ -133,6 +87,23 @@ const handleScrollAndHighlight = () => {
 };
 
 export default function Navbar() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const handleScroll = () => {
+    if (window.scrollY > 0) {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const muiTheme = createTheme(theme);
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
 
@@ -182,10 +153,6 @@ export default function Navbar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
@@ -215,9 +182,7 @@ export default function Navbar() {
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
-    >
-      {/* Меню профиля */}
-    </Menu>
+    ></Menu>
   );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
@@ -302,6 +267,7 @@ export default function Navbar() {
       <Box sx={{ width: '100%' }}>
         <ElevationScroll>
           <AppBar
+            className={`navbar ${isScrolled ? 'scrolled' : ''}`}
             component="nav"
             sx={{
               minHeight: 70,
@@ -310,6 +276,7 @@ export default function Navbar() {
             <Toolbar
               sx={{
                 padding: '16px 5px',
+                justifyContent: 'space-between',
               }}
             >
               <Link href="/" passHref>
@@ -322,7 +289,6 @@ export default function Navbar() {
                   <Image
                     src={logo}
                     alt="Logo"
-                    // placeholder="empty"
                     priority={true}
                     style={{
                       width: '200px',
@@ -333,8 +299,84 @@ export default function Navbar() {
                 </Box>
               </Link>
 
-              <Box sx={{ flexGrow: 1 }} />
-
+              <Box
+                sx={{
+                  display: {
+                    margin: '0px',
+                    xs: 'none',
+                    color: iconColour,
+                    md: 'flex',
+                    justifyContent: 'center',
+                  },
+                }}
+              >
+                <Link href="/about" passHref>
+                  <MenuItem
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
+                  >
+                    <p className="nav-menu">О бренде</p>
+                  </MenuItem>
+                </Link>
+                <Link href="/catalog" passHref>
+                  <MenuItem
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
+                  >
+                    <p className="nav-menu">Каталог</p>
+                  </MenuItem>
+                </Link>
+                <Link href="/catalog/collection" passHref>
+                  <MenuItem
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
+                  >
+                    <p className="nav-menu">Коллекция</p>
+                  </MenuItem>
+                </Link>
+                <Link href="/sale" passHref>
+                  <MenuItem
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
+                  >
+                    <p className="nav-menu">Sale</p>
+                  </MenuItem>
+                </Link>
+                <Link href="/FAQ" passHref>
+                  <MenuItem
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
+                  >
+                    <p className="nav-menu">FAQ</p>
+                  </MenuItem>
+                </Link>
+                <MenuItem
+                  sx={{
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                    },
+                  }}
+                >
+                  <p onClick={handleScrollAndHighlight} className="nav-menu">
+                    Контакты
+                  </p>
+                </MenuItem>
+              </Box>
               <Box
                 sx={{
                   display: { xs: 'none', md: 'flex' },
@@ -416,7 +458,6 @@ export default function Navbar() {
                     <Image
                       src={logo}
                       alt="Logo"
-                      // placeholder="empty"
                       priority={true}
                       style={{
                         width: '200px',
@@ -473,84 +514,6 @@ export default function Navbar() {
                 </div>
               </Box>
             </Toolbar>
-            <Box
-              sx={{
-                display: {
-                  xs: 'none',
-                  color: iconColour,
-                  md: 'flex',
-                  justifyContent: 'center',
-                  height: '10px',
-                },
-              }}
-            >
-              <Link href="/about" passHref>
-                <MenuItem
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'transparent',
-                    },
-                  }}
-                >
-                  <p className="nav-menu">О бренде</p>
-                </MenuItem>
-              </Link>
-              <Link href="/catalog" passHref>
-                <MenuItem
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'transparent',
-                    },
-                  }}
-                >
-                  <p className="nav-menu">Каталог</p>
-                </MenuItem>
-              </Link>
-              <Link href="/catalog/collection" passHref>
-                <MenuItem
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'transparent',
-                    },
-                  }}
-                >
-                  <p className="nav-menu">Коллекция</p>
-                </MenuItem>
-              </Link>
-              <Link href="/sale" passHref>
-                <MenuItem
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'transparent',
-                    },
-                  }}
-                >
-                  <p className="nav-menu">Sale</p>
-                </MenuItem>
-              </Link>
-              <Link href="/FAQ" passHref>
-                <MenuItem
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'transparent',
-                    },
-                  }}
-                >
-                  <p className="nav-menu">FAQ</p>
-                </MenuItem>
-              </Link>
-              <MenuItem
-                sx={{
-                  '&:hover': {
-                    backgroundColor: 'transparent',
-                  },
-                }}
-              >
-                <p onClick={handleScrollAndHighlight} className="nav-menu">
-                  Контакты
-                </p>
-              </MenuItem>
-            </Box>
           </AppBar>
         </ElevationScroll>
         <Toolbar sx={isHomePage ? {} : { height: 130 }} />
