@@ -6,19 +6,19 @@ const {
   Promocode,
   Photo,
 } = require('../../db/models');
+const {
+  getUserCartItems,
+  delUserCartItem,
+  validatePromoCode,
+  emptyUserCart,
+} = require('../services/cartServices');
 
 module.exports.getCart = async (req, res) => {
   try {
-    const currUser = await User.findOne({ where: { email: req.params.user } });
-    const cartItems = await Item.findAll({
-      include: [
-        { model: Cart, where: { user_id: currUser.id } },
-        { model: Photo, limit: 1 },
-      ],
-    });
-    console.log(currUser);
-    console.log(cartItems);
-    res.json(cartItems);
+    const getUserCartResult = await getUserCartItems(req.params.user);
+    if (getUserCartResult.success) {
+      res.json(getUserCartResult.cartItems);
+    }
   } catch (err) {
     res.status(500).json({ message: 'Ошибка сервера' });
   }
@@ -67,18 +67,11 @@ module.exports.getCartInCat = async (req, res) => {
 
 module.exports.delItemFromCart = async (req, res) => {
   try {
-    const currUser = await User.findOne({
-      where: { email: req.params.user },
-    });
-    const currCart = await Cart.findOne({ where: { user_id: currUser.id } });
-    const delCartItem = await CartItem.destroy({
-      where: {
-        item_id: req.params.id,
-        cart_id: currCart.id,
-      },
-      raw: true,
-    });
-    if (delCartItem) {
+    const delCartItemResult = await delUserCartItem(
+      req.params.user,
+      req.params.id,
+    );
+    if (delCartItemResult.success) {
       res.sendStatus(200);
     } else {
       res.sendStatus(500);
@@ -90,14 +83,11 @@ module.exports.delItemFromCart = async (req, res) => {
 
 module.exports.checkPromoCode = async (req, res) => {
   try {
-    const isValidPromo = await Promocode.findOne({
-      where: { code: req.params.code },
-      raw: true,
-    });
-    if (isValidPromo) {
-      res.status(200).json(isValidPromo);
+    const validatePromoCodeResult = await validatePromoCode(req.params.code);
+    if (validatePromoCodeResult.success) {
+      res.status(200).json(validatePromoCodeResult.isValidPromo);
     } else {
-      res.status(404).json({ message: 'Такого промокода не существует' });
+      res.status(404).json(validatePromoCodeResult.message);
     }
   } catch (err) {
     res.status(500).json({ message: 'Ошибка сервера' });
@@ -106,29 +96,9 @@ module.exports.checkPromoCode = async (req, res) => {
 
 module.exports.emptyCart = async (req, res) => {
   try {
-    const currUser = await User.findOne({
-      where: { email: req.params.user },
-    });
-
-    //  const currCart = await Cart.findOne({
-    //    where: { user_id: currUser.id },
-    //    raw: true,
-    //  });
-    //  const delCartItems = await CartItem.destroy({
-    //    where: { cart_id: currCart.id },
-    //  });
-
-    const emptyUserCart = await Cart.destroy({
-      where: { user_id: currUser.id },
-    });
-    if (emptyUserCart !== 0) {
-      res.json({
-        success: true,
-        message: 'Корзина удалена',
-      });
-    }
+    const emptyUserCartResult = emptyUserCart(req.params.user);
+    res.json(emptyUserCartResult);
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 };

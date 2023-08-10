@@ -2,7 +2,7 @@ const {
   registerUser,
   loginUser,
   checkSession,
-} = require('../services/authServices/authServices'); // Import the userService module
+} = require('../services/authServices'); // Import the userService module
 
 module.exports.register = async (req, res) => {
   try {
