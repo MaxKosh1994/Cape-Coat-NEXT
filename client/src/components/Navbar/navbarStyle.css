@@ -3,16 +3,16 @@
   position: fixed;
   width: 100%;
   z-index: 1000;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.5s ease-in-out;
 }
 
 .navbar.scrolled {
   background-color: white;
 }
 
-.nav-menu {
+/* .nav-menu {
   margin-top: -30px;
-}
+} */
 .nav-mobile {
   margin: 0px;
 }
