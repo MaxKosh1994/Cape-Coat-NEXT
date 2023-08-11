@@ -52,6 +52,7 @@ export default function CartPage() {
     if (re.success) {
       setCartItemsList([]);
     }
+    // TODO если корзина не удалилась
   };
   const createOrder = async (data) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}order/new`, {
