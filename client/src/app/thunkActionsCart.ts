@@ -5,7 +5,7 @@ import { RootState } from './store';
 import { useSelector } from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit';
 
-export const getCartItemsThunk = (user) => async (dispatch, getState) => {
+export const getCartItemsThunk = () => async (dispatch, getState) => {
   try {
     const { user } = getState().sessionSlice;
     console.log('user in thunk', user);
@@ -70,16 +70,16 @@ export const addCartItemsThunk = (id) => async (dispatch) => {
 };
 
 export const checkCartItemThunk =
-  (id: number | undefined = undefined) =>
-  async (dispatch: Dispatch, getState: () => RootState) => {
+  () => async (dispatch: Dispatch, getState: () => RootState) => {
     try {
       const { user } = getState().sessionSlice;
+
       if (!user) {
         return;
       }
 
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_URL}cart/item/${id}`,
+        `${process.env.NEXT_PUBLIC_URL}cart/item/${user}`,
         {
           withCredentials: true,
           headers: {

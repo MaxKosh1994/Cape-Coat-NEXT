@@ -138,8 +138,8 @@ module.exports.addToCart = async (req, res) => {
 
 module.exports.checkCart = async (req, res) => {
   try {
-    const email = req.session.user;
-    const { id } = req.params;
+    const { email } = req.params;
+    console.log('emailemail', email);
     if (email) {
       const currUser = await findUserByEmail(email);
       const userCart = await findUserCart(currUser.id);
