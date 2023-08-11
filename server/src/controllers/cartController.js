@@ -9,15 +9,19 @@ const {
 
 module.exports.getCart = async (req, res) => {
   try {
-    const currUser = await User.findOne({ where: { email: req.params.user } });
+    const currUser = await User.findOne({
+      where: { email: req.params.user },
+      raw: true,
+    });
+
     const cartItems = await Item.findAll({
       include: [
         { model: Cart, where: { user_id: currUser.id } },
         { model: Photo, limit: 1 },
       ],
     });
-    console.log(currUser);
-    console.log(cartItems);
+
+    console.log('cartItems', cartItems);
     res.json(cartItems);
   } catch (err) {
     res.status(500).json({ message: 'Ошибка сервера' });
@@ -182,8 +186,8 @@ module.exports.addToCart = async (req, res) => {
 
 module.exports.checkCart = async (req, res) => {
   try {
-    const email = req.session.user;
-    const { id } = req.params;
+    const { email } = req.params;
+    console.log('emailemail', email);
     if (email) {
       const user = await User.findOne({
         where: { email },

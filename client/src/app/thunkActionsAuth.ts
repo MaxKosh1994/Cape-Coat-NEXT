@@ -7,7 +7,7 @@ import {
 } from './sessionSlice';
 import { setFavourites } from './favouriteSlice';
 import { fetchFavouritesData } from './thunkActionsFavourite';
-import { getCartItemsThunk } from './thunkActionsCart';
+import { checkCartItemThunk, getCartItemsThunk } from './thunkActionsCart';
 import { getCartItems } from './cartSlice';
 
 export const signUpUserThunk = (inputsData) => async (dispatch) => {
@@ -44,7 +44,10 @@ export const signInUserThunk = (inputsData) => async (dispatch) => {
         credentials: 'include',
       }
     );
+    console.log('data', res.data.email);
     dispatch(startSession(res.data));
+    dispatch(fetchFavouritesData());
+    dispatch(checkCartItemThunk());
 
     return res.data;
   } catch (err) {
