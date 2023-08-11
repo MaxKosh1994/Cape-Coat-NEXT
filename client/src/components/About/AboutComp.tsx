@@ -37,16 +37,16 @@ export default function AboutComp() {
               В результате получаются изделия, балансирующие на грани классики и
               последних тенденций.
             </p>
-            <Typography variant='h2' component='h2'>
+            <Typography variant="h2" component="h2">
               Наши контакты:
             </Typography>
             <p className={styles.Info}>
-              <a style={{ color: 'black' }} href='mailto:Cape.n.coat@gmail.com'>
+              <a style={{ color: 'black' }} href="mailto:Cape.n.coat@gmail.com">
                 <MailOutlineIcon /> Email: Cape.n.coat@gmail.com
               </a>
             </p>
             <p className={styles.Info}>
-              <a style={{ color: 'black' }} href='https://t.me/@kkireva'>
+              <a style={{ color: 'black' }} href="https://t.me/@kkireva">
                 <TelegramIcon /> Telegram: @kkireva
               </a>
             </p>
