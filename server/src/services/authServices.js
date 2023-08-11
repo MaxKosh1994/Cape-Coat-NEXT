@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const { User } = require('../../db/models');
+const { findUserByEmail, findOrCreateUserByEmail } = require('./userService');
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -13,10 +14,11 @@ module.exports.registerUser = async (full_name, email, password) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const [userData, isCreated] = await User.findOrCreate({
-      where: { email },
-      defaults: { full_name, email, password: hashedPassword },
-    });
+    const [userData, isCreated] = await findOrCreateUserByEmail(
+      full_name,
+      email,
+      hashedPassword,
+    );
 
     if (isCreated) {
       return { success: true, userData };
@@ -35,7 +37,7 @@ module.exports.loginUser = async (email, password) => {
     if (!emailRegex.test(email)) {
       return { success: false, message: 'Некорректный формат email' };
     }
-    const currentUser = await User.findOne({ where: { email }, raw: true });
+    const currentUser = await findUserByEmail(email);
 
     if (!currentUser) {
       return { success: false, message: 'Такого пользователя не существует' };
@@ -63,12 +65,7 @@ module.exports.checkSession = async (session) => {
     const email = session?.user;
 
     if (email) {
-      const currentUser = await User.findOne({
-        where: {
-          email,
-        },
-        raw: true,
-      });
+      const currentUser = await findUserByEmail(email);
 
       return {
         isLogin: true,

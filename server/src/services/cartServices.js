@@ -7,54 +7,43 @@ const {
   Photo,
 } = require('../../db/models');
 
-module.exports.getUserCartItems = async (userEmail) => {
+module.exports.findUserCart = async (userId) => {
   try {
-    const currUser = await User.findOne({
-      where: { email: userEmail },
-    });
-    const cartItems = await Item.findAll({
-      include: [
-        { model: Cart, where: { user_id: currUser.id } },
-        { model: Photo, limit: 1 },
-      ],
-    });
-    return { success: true, cartItems };
-  } catch (error) {
-    throw new Error('Ошибка сервера');
-  }
-};
-
-module.exports.delUserCartItem = async (userEmail, itemId) => {
-  try {
-    const currUser = await User.findOne({
-      where: { email: userEmail },
-    });
-    const currCart = await Cart.findOne({
-      where: { user_id: currUser.id },
-    });
-    const delCartItem = await CartItem.destroy({
+    const userCart = await Cart.findOne({
       where: {
-        item_id: itemId,
-        cart_id: currCart.id,
+        user_id: userId,
       },
-      raw: true,
     });
-    if (delCartItem) {
-      return { success: true };
-    }
-    return { success: false };
+    return { success: true, userCart };
   } catch (error) {
     throw new Error('Ошибка сервера');
   }
 };
 
-module.exports.emptyUserCart = async (userEmail) => {
+module.exports.getOrCreateUserCart = async (userId) => {
+  const cart = await Cart.findOrCreate({
+    where: {
+      user_id: userId,
+    },
+  });
+  return cart;
+};
+
+module.exports.createUserCart = async (userId) => {
   try {
-    const currUser = await User.findOne({
-      where: { email: userEmail },
+    const userCart = await Cart.create({
+      user_id: userId,
     });
+    return { success: true, userCart };
+  } catch (error) {
+    throw new Error('Ошибка сервера');
+  }
+};
+
+module.exports.emptyUserCart = async (userId) => {
+  try {
     const emptyCart = await Cart.destroy({
-      where: { user_id: currUser.id },
+      where: { user_id: userId },
     });
     if (emptyCart !== 0) {
       return {
