@@ -17,6 +17,8 @@ export default function Favorites() {
     dispatch(fetchAllFavorites());
   }, [dispatch]);
 
+  console.log(itemData);
+
   return (
     <>
       {itemData?.length > 0 ? (
@@ -38,7 +40,9 @@ export default function Favorites() {
           ))}
         </div>
       ) : (
-        <p>У вас пока нет товаров в избранном</p>
+        <div className={styles.infoContainer}>
+          <p>У вас пока нет товаров в избранном</p>
+        </div>
       )}
     </>
   );

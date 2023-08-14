@@ -1,0 +1,55 @@
+.errContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+}
+
+.errMsg {
+  margin: 20px;
+  font-size: 1.5rem;
+}
+
+.errBtn {
+  margin: 20px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 8px 15px;
+}
+
+.errBtn > a {
+  color: #000;
+}
+
+@media screen and (min-width: 551px) and (max-width: 900px) {
+  .errMsg {
+    font-size: 1.9rem;
+  }
+  .errBtn {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .errContainer {
+    min-height: 50vh;
+  }
+
+  .errMsg,
+  .errBtnContainer {
+    text-align: center;
+  }
+
+  .errBtnContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .errBtn {
+    margin: 10px;
+    font-size: 1.1rem;
+    padding: 6px 12px;
+  }
+}

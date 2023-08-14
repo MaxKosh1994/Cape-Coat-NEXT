@@ -11,7 +11,7 @@ export default function Footer() {
   const fontSize = 10;
 
   return (
-    <footer id="footer" className={styles.footer}>
+    <footer id='footer' className={styles.footer}>
       <div className={styles.wrapper}>
         <div className={styles.footer__top}>
           <div className={styles.footer__navigation}>
@@ -20,7 +20,7 @@ export default function Footer() {
                 <div className={`${styles['footer__navigation-title']}`}>
                   <Image
                     src={logo}
-                    alt="Logo"
+                    alt='Logo'
                     priority={true}
                     style={{
                       width: '200px',
@@ -42,7 +42,7 @@ export default function Footer() {
                   <a
                     className={`${styles['footer__navigation-item']}`}
                     style={{ color: 'black' }}
-                    href="/FAQ"
+                    href='/FAQ'
                   >
                     Информация о снятии мерок
                   </a>
@@ -51,7 +51,7 @@ export default function Footer() {
                   <Link
                     className={`${styles['footer__navigation-item']}`}
                     style={{ color: 'black' }}
-                    href="/privacy"
+                    href='/privacy'
                   >
                     Политика конфиденциальности
                   </Link>
@@ -74,19 +74,19 @@ export default function Footer() {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <a style={{ color: 'black' }} href="https://t.me/@kkireva">
+                    <a style={{ color: 'black' }} href='https://t.me/@kkireva'>
                       <TelegramIcon />
                     </a>
                     <a
                       style={{ color: 'black' }}
-                      href="https://elbrusboot.camp/"
+                      href='https://elbrusboot.camp/'
                     >
                       <TerrainOutlinedIcon />
                     </a>
 
                     <a
                       style={{ color: 'black' }}
-                      href="mailto:Cape.n.coat@gmail.com"
+                      href='mailto:Cape.n.coat@gmail.com'
                     >
                       <MailOutlineIcon />
                     </a>
@@ -94,8 +94,10 @@ export default function Footer() {
                 </div>
 
                 <div className={`${styles['footer__navigation-item']}`}>
-                  <Phone sx={{ fontSize: '1rem', marginRight: '10px' }} />
-                  +7 (920)-119-99-19
+                  <span>
+                    <Phone sx={{ fontSize: '1rem', marginRight: '10px' }} />
+                    +7 (920)-119-99-19
+                  </span>
                 </div>
               </div>
             </div>

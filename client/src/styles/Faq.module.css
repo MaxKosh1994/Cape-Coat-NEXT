@@ -1,0 +1,125 @@
+.mainDiv {
+  display: flex;
+  justify-content: center;
+  width: 94%;
+  align-items: center;
+  overflow-x: hidden;
+  background-color: white;
+  margin: 0 auto;
+  margin-bottom: 60px;
+}
+
+.RootContainer {
+  min-height: 100vh;
+  display: flex;
+  justify-content: start;
+}
+
+.Container {
+  background-color: white;
+  padding: 0px 40px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 0px;
+  margin-bottom: 60px;
+}
+
+.Info {
+  text-align: justify;
+  font-family: Ysabeau Infant, serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  margin-top: 0px;
+}
+
+.Header {
+  margin-bottom: 100px;
+  font-weight: 700;
+}
+
+.Movie {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.iframe {
+  width: 560px;
+  height: 315px;
+}
+
+@media (max-width: 768px) {
+  .Container {
+    padding: 40px 60px 60px;
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+
+  .Header {
+    margin-bottom: 60px;
+  }
+
+  .Movie {
+    margin-top: 1rem;
+  }
+
+  .Info {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 550px) {
+  .Container {
+    padding: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .Header {
+    margin-bottom: 40px;
+    font-size: 2rem;
+  }
+
+  .Info {
+    font-size: 1.2rem;
+  }
+
+  .Movie {
+    margin-top: 0.5rem;
+  }
+
+  .iframe {
+    width: 373px;
+    height: 210px;
+  }
+}
+
+@media (max-width: 375px) {
+  .Container {
+    padding: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .Header {
+    margin-bottom: 40px;
+    font-size: 2rem;
+  }
+
+  .Info {
+    font-size: 1.2rem;
+  }
+
+  .Movie {
+    margin-top: 0.5rem;
+  }
+
+  .iframe {
+    width: 250px;
+    height: 140px;
+  }
+}

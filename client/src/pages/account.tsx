@@ -48,7 +48,7 @@ export default function Account() {
           className={styles.button}
           type='button'
         >
-          Мои параметры
+          Личные данные
         </Button>
         <Button
           onClick={() => setSelectedComponent('orders')}
