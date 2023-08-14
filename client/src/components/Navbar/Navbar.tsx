@@ -233,6 +233,9 @@ export default function Navbar() {
                     md: 'flex',
                     justifyContent: 'center',
                   },
+                  position: 'absolute',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
                 }}
               >
                 <NavigationMenu
