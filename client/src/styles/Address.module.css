@@ -1,0 +1,22 @@
+.header {
+  font-size: 1.8rem;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  justify-content: center;
+  margin: 40px auto;
+}
+
+.infoText {
+  display: block;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.mapContainer {
+  width: 600px;
+  height: 600px;
+  display: flex;
+  margin: 40px auto;
+  margin-bottom: 40px;
+}

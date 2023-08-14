@@ -86,8 +86,7 @@ module.exports.addFavourites = async (req, res) => {
 
 module.exports.favourites = async (req, res) => {
   try {
-    const email = req?.session?.user;
-    const { id } = req.params;
+    const { email } = req.params;
     if (email) {
       const user = await User.findOne({
         where: { email },

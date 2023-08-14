@@ -1,0 +1,9 @@
+.formDiv {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.button {
+  border-radius: 0;
+}

@@ -1,51 +1,41 @@
-.button {
-  width: 100% !important;
-  margin: 10px 0 !important;
-  padding: 10px !important;
-  background-color: #eee !important;
-  text-align: center !important;
-  color: black !important;
-  font-size: large;
-  border-radius: 0 !important;
-  padding-bottom: 5px !important;
-}
-
 .mainDiv {
-  width: 100%;
-}
-
-.button:active,
-.button:focus {
-  border-bottom: 2px solid black !important;
+  width: 80%;
+  min-height: 550px;
+  margin: 0 auto;
+  margin-bottom: 50px;
 }
 
 .routesDiv {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 100px;
-  margin-right: 100px;
-  padding-left: 30px;
-  padding-right: 30px;
+  margin: 0 auto;
+  width: 75%;
 }
 
-.headerDiv {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-left: 60px;
-  margin-right: 60px;
-  margin-top: 30px;
+.elContainer {
+  margin: 0 auto;
+  width: 100%;
 }
 
-.headersText {
-  color: rgb(107, 107, 107);
+.button {
+  width: 100% !important;
+  margin: 10px 0 !important;
+  padding: 10px !important;
+  background-color: #ffffff !important;
+  text-align: center !important;
+  color: rgb(80, 80, 80) !important;
+  /* font-size: large; */
+  border-radius: 0 !important;
+  padding-bottom: 5px !important;
+}
+
+.button:active,
+.button:focus {
+  border-bottom: 1px solid black !important;
 }
 
 @media (max-width: 820px) {
-  .headerDiv {
-    margin-top: 0px;
-  }
   .routesDiv {
     margin-left: 50px;
     margin-right: 50px;
@@ -53,15 +43,6 @@
 }
 
 @media (max-width: 550px) {
-  .mobileDiv {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .headerDiv {
-    margin-top: 0px;
-    margin-bottom: 0px;
-  }
   .routesDiv {
     margin-top: 20px;
     display: flex;

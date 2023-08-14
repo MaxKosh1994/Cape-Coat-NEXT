@@ -19,7 +19,7 @@ module.exports = cartRouter
   .get('/:user', getCart)
   .post('/item/add', addToCartInOneCat)
   .post('/item/:id', addToCart)
-  .get('/item/:id', checkCart)
+  .get('/item/:email', checkCart)
   .delete('/item/del', delToCartInOneCat)
   .delete('/item/:id/:user', delItemFromCart)
   .delete('/emptyCart/:user', emptyCart);

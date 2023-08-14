@@ -6,9 +6,7 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-
 import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Person2Icon from '@mui/icons-material/Person2';
@@ -27,6 +25,8 @@ import { isUserLoginThunk } from '../../app/thunkActionsAuth';
 import { fetchFavouritesData } from '../../app/thunkActionsFavourite';
 import { checkCartItemThunk } from '../../app/thunkActionsCart';
 import './navbarStyle.css';
+import NavigationMenu from './NavigationMenu/NavigationMenu';
+import MobileMenu from './MobileMenu/MobileMenu';
 
 const theme = createTheme({
   palette: {
@@ -108,7 +108,7 @@ export default function Navbar() {
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
 
   const router = useRouter();
-  const isHomePage = router.pathname === '/home';
+  const isHomePage = router.pathname === '/';
 
   const dispatch = useAppDispatch();
   const isUserLogin = useSelector(
@@ -186,81 +186,6 @@ export default function Navbar() {
   );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <Link href="/about" passHref>
-        <MenuItem
-          style={{ fontSize: '24px', fontFamily: 'Ysabeau Infant' }}
-          onClick={handleMobileMenuClose}
-        >
-          О бренде
-        </MenuItem>
-      </Link>
-      <Link href="/account/favorites" passHref>
-        <MenuItem
-          style={{ fontSize: '24px', fontFamily: 'Ysabeau Infant' }}
-          onClick={handleMobileMenuClose}
-        >
-          Избранное
-        </MenuItem>
-      </Link>
-      <Link href="/catalog" passHref>
-        <MenuItem
-          style={{ fontSize: '24px', fontFamily: 'Ysabeau Infant' }}
-          onClick={handleMobileMenuClose}
-        >
-          Каталог
-        </MenuItem>
-      </Link>
-      <Link href="/catalog/collection" passHref>
-        <MenuItem
-          style={{ fontSize: '24px', fontFamily: 'Ysabeau Infant' }}
-          onClick={handleMobileMenuClose}
-        >
-          Коллекция
-        </MenuItem>
-      </Link>
-      <Link href="/sale" passHref>
-        <MenuItem
-          style={{ fontSize: '24px', fontFamily: 'Ysabeau Infant' }}
-          onClick={handleMobileMenuClose}
-        >
-          Sale
-        </MenuItem>
-      </Link>
-      <Link href="/FAQ" passHref>
-        <MenuItem
-          style={{ fontSize: '24px', fontFamily: 'Ysabeau Infant' }}
-          onClick={handleMobileMenuClose}
-        >
-          FAQ
-        </MenuItem>
-      </Link>
-      <MenuItem
-        style={{ fontSize: '24px', fontFamily: 'Ysabeau Infant' }}
-        onClick={() => {
-          handleScrollAndHighlight();
-          handleMobileMenuClose();
-        }}
-      >
-        Контакты
-      </MenuItem>
-    </Menu>
-  );
 
   return (
     <>
@@ -308,74 +233,15 @@ export default function Navbar() {
                     md: 'flex',
                     justifyContent: 'center',
                   },
+                  position: 'absolute',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
                 }}
               >
-                <Link href="/about" passHref>
-                  <MenuItem
-                    sx={{
-                      '&:hover': {
-                        backgroundColor: 'transparent',
-                      },
-                    }}
-                  >
-                    <p className="nav-menu">О бренде</p>
-                  </MenuItem>
-                </Link>
-                <Link href="/catalog" passHref>
-                  <MenuItem
-                    sx={{
-                      '&:hover': {
-                        backgroundColor: 'transparent',
-                      },
-                    }}
-                  >
-                    <p className="nav-menu">Каталог</p>
-                  </MenuItem>
-                </Link>
-                <Link href="/catalog/collection" passHref>
-                  <MenuItem
-                    sx={{
-                      '&:hover': {
-                        backgroundColor: 'transparent',
-                      },
-                    }}
-                  >
-                    <p className="nav-menu">Коллекция</p>
-                  </MenuItem>
-                </Link>
-                <Link href="/sale" passHref>
-                  <MenuItem
-                    sx={{
-                      '&:hover': {
-                        backgroundColor: 'transparent',
-                      },
-                    }}
-                  >
-                    <p className="nav-menu">Sale</p>
-                  </MenuItem>
-                </Link>
-                <Link href="/FAQ" passHref>
-                  <MenuItem
-                    sx={{
-                      '&:hover': {
-                        backgroundColor: 'transparent',
-                      },
-                    }}
-                  >
-                    <p className="nav-menu">FAQ</p>
-                  </MenuItem>
-                </Link>
-                <MenuItem
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'transparent',
-                    },
-                  }}
-                >
-                  <p onClick={handleScrollAndHighlight} className="nav-menu">
-                    Контакты
-                  </p>
-                </MenuItem>
+                <NavigationMenu
+                  isScrolled={isScrolled}
+                  handleScrollAndHighlight={handleScrollAndHighlight}
+                />
               </Box>
               <Box
                 sx={{
@@ -389,7 +255,7 @@ export default function Navbar() {
                     isUserLogin
                       ? isAdmin
                         ? '/admin/orders'
-                        : '/account/profile'
+                        : '/account'
                       : '/signin'
                   }
                   passHref
@@ -474,7 +340,7 @@ export default function Navbar() {
                       isUserLogin
                         ? isAdmin
                           ? '/admin/orders'
-                          : '/account/profile'
+                          : '/account'
                         : '/signin'
                     }
                     passHref
@@ -516,9 +382,14 @@ export default function Navbar() {
             </Toolbar>
           </AppBar>
         </ElevationScroll>
-        <Toolbar sx={isHomePage ? {} : { height: 130 }} />
+        {!isHomePage && <Toolbar sx={{ height: 130 }} />}
       </Box>
-      {renderMobileMenu}
+      <MobileMenu
+        mobileMoreAnchorEl={mobileMoreAnchorEl}
+        isMobileMenuOpen={isMobileMenuOpen}
+        handleMobileMenuClose={handleMobileMenuClose}
+        handleScrollAndHighlight={handleScrollAndHighlight}
+      />
       {renderMenu}
     </>
   );
