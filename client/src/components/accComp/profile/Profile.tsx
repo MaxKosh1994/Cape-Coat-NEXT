@@ -22,9 +22,6 @@ export default function Profile() {
 
   return (
     <div className={styles.mainDiv}>
-      <div className={styles.headerDiv}>
-        <h2>Личные данные</h2>
-      </div>
       <div className={styles.mainContainer}>
         <div className={styles.container}>
           <div className={styles.liContainer}>
