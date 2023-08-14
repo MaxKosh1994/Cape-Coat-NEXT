@@ -6,9 +6,6 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import styles from './AboutComp.module.css';
 import Image from 'next/image';
 
-
-//TODO я не знаю, что делать с отображением текста в конце и футера на айпадах :(
-
 export default function AboutComp() {
   return (
     <div className={styles.HeaderDiv}>
