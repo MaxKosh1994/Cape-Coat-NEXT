@@ -54,18 +54,12 @@
   font-size: 14px;
   line-height: 20px;
   box-sizing: border-box;
-  align-items: center;
   display: flex;
-  margin-right: 8px;
-  position: relative;
-}
-.basketItemRight {
-  text-rendering: optimizeSpeed;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  box-sizing: border-box;
-  width: 100%;
+  height: 500px;
+  width: 300px;
+  margin-right: 35px;
+  /* align-items: center; */
+  /* position: relative; */
 }
 
 .basketItemLeft > a > img {
@@ -77,12 +71,23 @@
   text-decoration-skip-ink: auto;
   box-sizing: border-box;
   display: block;
-  max-height: 100px;
+  object-fit: cover;
+  /* height: 100%;
+  width: 100%; */
+  /* max-height: 100px;
   max-width: 72px;
-  object-fit: contain;
-  width: 72px;
-  margin-top: 10px;
-  margin-right: 10px;
+  width: 72px; */
+  /* margin-top: 10px;
+  margin-right: 10px; */
+}
+
+.basketItemRight {
+  text-rendering: optimizeSpeed;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 20px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .basketItem {
@@ -97,7 +102,37 @@
   font-size: 14px;
   line-height: 20px;
   border-top: 1px solid #e9e9e9;
-  /* box-sizing: border-box;  */
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.basketItemTitle,
+.basketItemProperties {
+  text-rendering: optimizeSpeed;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 20px;
+  box-sizing: border-box;
+  color: #000;
+  width: 100%;
+  display: block;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.basketItemContent,
+.basketItemContentCenter {
+  width: 100%;
+  text-rendering: optimizeSpeed;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  height: 30px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  align-items: center;
 }
 
 .basketItem::before {
@@ -119,17 +154,6 @@
   height: 2px;
   background-color: #e9e9e9;
 }
-.basketItemRight > div:nth-child(1) {
-  text-rendering: optimizeSpeed;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  align-items: center;
-}
 
 .orderBlock,
 .orderBlockSummary {
@@ -142,8 +166,9 @@
   position: sticky;
   top: 130px;
 }
+
 .orderBlock.orderBlockSummary
-  > p.order__description.order__description--online-payment {
+  > p.orderDescription.orderDescriptionOnlinePayment {
   text-rendering: optimizeSpeed;
   box-sizing: border-box;
   margin: 0;
@@ -158,6 +183,7 @@
   line-height: 20px;
   padding: 8px 12px;
 }
+
 .orderSummary {
   text-rendering: optimizeSpeed;
   box-sizing: border-box;
@@ -166,6 +192,7 @@
   line-height: 20px;
   margin-bottom: 20px;
 }
+
 .summary {
   text-rendering: optimizeSpeed;
   font-size: 14px;
@@ -175,7 +202,7 @@
 }
 .orderSummaryRow {
   text-rendering: optimizeSpeed;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 400;
   line-height: 20px;
   box-sizing: border-box;
@@ -186,7 +213,7 @@
 
 .itemPrices {
   text-rendering: optimizeSpeed;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 400;
   line-height: 20px;
   box-sizing: border-box;
@@ -195,16 +222,18 @@
   flex-flow: row nowrap;
   gap: 6px;
 }
+
 .itemPricesPrice {
   text-rendering: optimizeSpeed;
   box-sizing: border-box;
   color: #000;
   font-weight: 400;
   white-space: nowrap;
-  font-size: 14px;
+  font-size: 20px;
   line-height: 20px;
   min-height: 20px;
 }
+
 .orderSummaryTotal {
   text-rendering: optimizeSpeed;
   box-sizing: border-box;
@@ -214,6 +243,7 @@
   line-height: 28px;
   text-transform: uppercase;
 }
+
 .button,
 .buttonBlock,
 .buttonBig,
@@ -244,66 +274,31 @@
   border: 1px solid #000;
   margin-bottom: 12px;
 }
-.orderDescription {
-  text-rendering: optimizeSpeed;
+
+.basketItemDeleteButton {
   box-sizing: border-box;
-  margin: 0;
-  font-size: 14px;
-  font-weight: 300;
-  margin-bottom: 20px;
-  color: #999;
-  line-height: 12px;
-}
-.basketItemRight > div > button {
-  box-sizing: border-box;
-  font: inherit;
-  align-items: center;
-  background-color: #eee;
+  background-color: transparent;
   border: none;
-  box-shadow: none;
-  color: #000;
   cursor: pointer;
   display: inline-flex;
   flex-flow: row nowrap;
-  font-size: 14px;
-  font-weight: 500;
   justify-content: center;
-  line-height: 18px;
-  margin: 0;
   position: relative;
-  text-align: center;
+  width: 28px;
+  height: 28px;
+  /* align-items: center; 
+  box-shadow: none;
+  color: #000; 
+  font-size: 14px;
+  font-weight: 500; 
+  line-height: 18px;
+  margin: 0;text-align: center;
   text-decoration: none;
   text-transform: uppercase;
   user-select: none;
   white-space: nowrap;
-  padding: 0;
-  flex: 0 1 30px;
-}
-.basketItemTitle {
-  text-rendering: optimizeSpeed;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  box-sizing: border-box;
-  color: #000;
-  width: 100%;
-  display: block;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-.basketItemContent,
-.basketItemContentCenter {
-  width: 100%;
-  text-rendering: optimizeSpeed;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  height: 30px;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  align-items: center;
+  padding: 0; 
+  flex: 0 1 30px; */
 }
 
 .headerItemCart {
@@ -326,6 +321,18 @@
   padding: 8px 16px 8px 16px;
   width: 100%;
   z-index: 2;
+}
+
+.promocodeInputContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.promocodeInputContainer .button.buttonBlock.buttonBordered {
+  width: 40%;
+  background-color: #6b6b6b;
+  border-color: #6b6b6b;
+  padding: 9px 0;
 }
 
 .orderBlock,
@@ -377,6 +384,7 @@
   transition: all 0.3s ease;
   width: 100%;
 }
+
 .formControlLabel,
 .formControlLabelVisible {
   text-rendering: optimizeSpeed;
@@ -401,6 +409,7 @@
   /* z-index: 1; */
   /* opacity: 1; */
 }
+
 .formControlControl {
   box-sizing: border-box;
   font: inherit;
@@ -416,6 +425,7 @@
   padding: 14px 52px 14px 16px;
   /* z-index: 2; */
 }
+
 .formControlButtons {
   text-rendering: optimizeSpeed;
   font-size: 14px;
@@ -446,6 +456,7 @@
   right: 0;
   top: calc(100% + 4px);
 }
+
 .formBlock {
   text-rendering: optimizeSpeed;
   font-size: 14px;
@@ -470,27 +481,6 @@
   border-color: #000;
 }
 
-.checkbox,
-.checkbox--bordered,
-.checkbox--active,
-.checkbox--radio,
-.checkbox--right {
-  /* text-rendering: optimizeSpeed;
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 20px;
-  box-sizing: border-box;
-  align-items: flex-start;
-  cursor: pointer;
-  display: flex;
-  justify-content: flex-start;
-  padding: 12px 0;
-  position: relative;
-  user-select: none;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0; */
-}
 .checkboxIcon {
   accent-color: #000;
 }
@@ -506,6 +496,7 @@
   margin-right: 10px;
   margin-top: -1px;
 }
+
 .checkboxHeader {
   text-rendering: optimizeSpeed;
   cursor: pointer;
@@ -517,6 +508,7 @@
   margin-top: -2px;
   margin-left: 13px;
 }
+
 .checkboxDescription {
   text-rendering: optimizeSpeed;
   cursor: pointer;
@@ -529,6 +521,7 @@
   margin-bottom: 0;
   margin-left: 26px;
 }
+
 .checkboxControl {
   text-rendering: optimizeSpeed;
   font-size: 14px;
@@ -561,6 +554,7 @@
   line-height: 20px;
   box-sizing: border-box;
 }
+
 .deliveryServiceForm {
   text-rendering: optimizeSpeed;
   font-size: 14px;
@@ -589,9 +583,11 @@
   margin: 15% auto;
   font-size: 1.7rem;
 }
+
 .emptyCartMsg > a {
   font-style: italic;
 }
+
 .orderStatusCart {
   font-size: 1.4rem;
   margin-bottom: 20px;
@@ -601,34 +597,43 @@
   .container {
     padding-left: 20px;
     padding-right: 20px;
-    margin-top: 50px;
+    margin-top: 0;
   }
 
   .order {
     grid-template-columns: 1fr;
   }
 
+  .basketItemLeft > a > img {
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .basketItem {
+    flex-direction: column;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+
+  .basketItemLeft {
+    width: 300px;
+    margin: 5px auto;
+  }
+
   .basketItemRight {
     display: flex;
     flex-direction: column;
-    width: 100%; /* Set the width to 100% to fit the parent container */
-  }
-
-  .basketItemHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    width: 100%; /* Set the width to 100% to fit the parent container */
+    width: 300px;
+    margin: 5px auto;
   }
 
   .basketItemDeleteButton {
-    cursor: pointer;
-    background-color: #999;
+    width: 30px;
+    height: 30px;
   }
 
   .orderSummaryTotal {
-    font-size: 18px;
+    font-size: 24px;
     line-height: 26px;
   }
 
@@ -639,19 +644,13 @@
     font-size: 12px;
     line-height: 16px;
     padding: 8px;
-    width: 100%; /* Set the width to 100% to fit the parent container */
+    width: 100%;
   }
 
   .orderDescription {
     font-size: 12px;
     line-height: 16px;
-    width: 100%; /* Set the width to 100% to fit the parent container */
-  }
-
-  .basketItemLeft > a > img {
-    margin-top: 10px;
-    max-height: 200px;
-    width: auto;
+    width: 100%;
   }
 
   .orderProperty {
@@ -663,7 +662,7 @@
   .formControlActive {
     font-size: 12px;
     line-height: 16px;
-    width: 100%; /* Set the width to 100% to fit the parent container */
+    width: 100%;
   }
 
   .formControlLabel,
@@ -693,117 +692,7 @@
   .orderStatusCart {
     font-size: 1.2rem;
   }
-
-  .basketItemTitle {
-    margin-right: 8px;
-  }
-
-  /* .linkWrapper{
-  height: 300px;
-  width: 200px;
-} */
 }
-
-/* @media screen and (max-width: 499px) {
-  .container-xs {
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-top: 50px;
-  }
-
-  .order {
-    grid-template-columns: 1fr;
-  }
-
-  .basket-item__right {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .basket-item__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-  }
-
-  .basket-item__delete-button {
-    cursor: pointer;
-    background-color: #999;
-  }
-
-  .order-summary--total {
-    font-size: 18px;
-    line-height: 26px;
-  }
-
-  .button,
-  .button--block,
-  .button--big,
-  .button--bordered .order__button {
-    font-size: 12px;
-    line-height: 16px;
-    padding: 8px;
-  }
-
-  .order__description {
-    font-size: 12px;
-    line-height: 16px;
-  }
-
-  .basket-item__left > a > img {
-    margin-top: 10px;
-    max-height: 88px;
-    width: 69px;
-  }
-
-  .order__property {
-    font-size: 12px;
-    line-height: 16px;
-  }
-
-  .form-control,
-  .form-control--active {
-    font-size: 12px;
-    line-height: 16px;
-  }
-
-  .form-control__label,
-  .form-control__label--visible {
-    font-size: 12px;
-    line-height: 16px;
-  }
-
-  .form-control__control {
-    font-size: 14px;
-    line-height: 20px;
-    padding: 10px 42px 10px 12px;
-  }
-
-  .delivery-service__form {
-    font-size: 12px;
-    line-height: 16px;
-  }
-
-  .empty-cart-msg {
-    margin: 35% 10px;
-    font-size: 1.3rem;
-  }
-
-  .order-status-cart {
-    font-size: 1.2rem;
-  }
-
-  .basket-item__title {
-    margin-right: 8px;
-  }
-
-  .basket-item__left > a > img {
-    max-height: 200px;
-    max-width: 90px;
-    width: auto;
-  }
-} */
 
 @media screen and (min-width: 500px) and (max-width: 900px) {
   .emptyCartMsg {
@@ -830,6 +719,11 @@
 
   .pcErr {
     font-size: 1.4rem;
+  }
+
+  .basketItemDeleteButton {
+    height: 36px;
+    width: 36px;
   }
 }
 

@@ -16,17 +16,19 @@ export default function CartPage() {
   const [delError, setDelError] = useState('');
   const [cartTotal, setCartTotal] = useState(0);
   const [promocode, setPromocode] = useState('');
+  const [promoUsed, setPromoUsed] = useState(false);
   const [promocodeErr, setPromocodeErr] = useState('');
   const [discount, setDiscount] = useState(0);
+  const [commentsInput, setCommentsInput] = useState('');
+  const [orderStatus, setOrderStatus] = useState('');
+  const [selectedDelivery, setSelectedDelivery] = useState('showroom');
+  const [showAddressInputs, setShowAddressInputs] = useState(false);
   const [addressInputs, setAddressInputs] = useState({
     city: '',
     street: '',
     number: '',
     flat: '',
   });
-  const [commentsInput, setCommentsInput] = useState('');
-  const [orderStatus, setOrderStatus] = useState('');
-  const [selectedDelivery, setSelectedDelivery] = useState('');
   const [deliveryCost, setDeliveryCost] = useState(0);
   const [userMeasurements, setUserMeasurements] = useState(undefined);
 
@@ -104,6 +106,7 @@ export default function CartPage() {
       console.log(error);
     }
   };
+
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -117,6 +120,29 @@ export default function CartPage() {
   }, [dispatch, user]);
 
   useEffect(() => {
+    const jacketItems = cartItemsList.filter((item) => item.category_id === 3);
+    if (cartItemsList.length > 2) {
+      const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
+      const discountPercentage = 0.05;
+      const discountAmount = subtotal * discountPercentage;
+      setDiscount(discountAmount);
+      const updatedTotal = subtotal - discountAmount + deliveryCost;
+      setCartTotal(updatedTotal);
+    } else if (jacketItems.length >= 2) {
+      const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
+      const subtotalJackets = jacketItems.reduce(
+        (sum, item) => sum + item.price,
+        0
+      );
+      const discountPercentage = 0.05;
+      const discountAmount = subtotalJackets * discountPercentage;
+      setDiscount(discountAmount);
+      const updatedTotal = subtotal - discountAmount + deliveryCost;
+      setCartTotal(updatedTotal);
+    }
+  }, [cartItemsList]);
+
+  useEffect(() => {
     const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
     const updatedTotal = subtotal - discount + deliveryCost;
     setCartTotal(updatedTotal);
@@ -125,8 +151,10 @@ export default function CartPage() {
   useEffect(() => {
     if (selectedDelivery === 'showroom') {
       setDeliveryCost(0);
+      setShowAddressInputs(false);
     } else {
       setDeliveryCost(300);
+      setShowAddressInputs(true);
       // TODO подключить API почты россии для расчета доставки?
     }
   }, [selectedDelivery]);
@@ -201,26 +229,41 @@ export default function CartPage() {
 
   const handleApplyPromocode = async (e: MouseEvent<HTMLButtonElement>) => {
     const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
-    if (promocode) {
+    if (promocode && !promoUsed) {
       const isValidPromo = await fetch(
         `${process.env.NEXT_PUBLIC_URL}cart/promocode/${promocode}`
       );
       const response = await isValidPromo.json();
       if (isValidPromo.status === 200) {
-        const disc = (response.percent / 100) * subtotal;
-        setDiscount(disc);
+        if (discount === 0) {
+          const disc = (response.percent / 100) * subtotal;
+          setDiscount(disc);
+          setPromoUsed(true);
+        } else {
+          const disc = discount + (response.percent / 100) * subtotal;
+          setDiscount(disc);
+          setPromoUsed(true);
+        }
       } else {
-        setPromocodeErr(response.message);
+        setPromocodeErr(response);
         setTimeout(() => {
           setPromocodeErr('');
         }, 1000);
         setCartTotal(subtotal);
       }
+    } else if (promoUsed) {
+      setPromocodeErr('Вы уже использовали промокод');
+      setTimeout(() => {
+        setPromocodeErr('');
+      }, 1000);
     } else {
       setPromocodeErr('Вы не ввели промокод');
+      setTimeout(() => {
+        setPromocodeErr('');
+      }, 1000);
     }
   };
-  console.log(cartItemsList);
+
   return (
     <>
       {cartItemsList.length === 0 ? (
@@ -237,7 +280,7 @@ export default function CartPage() {
             <section className={styles.order}>
               <div className={styles.orderForm}>
                 <h1 className={styles.headerItemCart}>
-                  Корзина:&nbsp;<span>{cartItemsList.length} товаров</span>
+                  Корзина&nbsp;<span>({cartItemsList.length})</span>
                 </h1>
                 <p className={styles.errorMsgCart}>{delError}</p>
                 <section
@@ -249,11 +292,10 @@ export default function CartPage() {
                         <Link
                           href={`/catalog/categoryName/${item.id}`}
                           rel="noopener noreferrer"
-                          className={styles.linkWrapper}
                         >
                           <Image
-                            width={80}
-                            height={120}
+                            width={300}
+                            height={500}
                             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${item.Photos[0].photo}`}
                             alt={item.name}
                             className={styles.basketItemImage}
@@ -271,20 +313,19 @@ export default function CartPage() {
                             {item.name}
                           </Link>
                           <button
-                            className={`${styles.button} ${styles.basketItemDeleteButton} ${styles.buttonIcon}`}
+                            className={styles.basketItemDeleteButton}
                             type="button"
                             onClick={() => handleDeleteItemFromCart(item.id)}
                           >
                             <Image
                               src="/delicon.png"
-                              alt=""
-                              width={22}
-                              height={22}
+                              alt="Удалить"
+                              fill={true}
                             />
                           </button>
                         </div>
                         <div
-                          className={`${styles.basketItemContent} ${styles.basketItemContentEnd}`}
+                          className={`${styles.basketItemContent} ${styles.basketItemContentCenter}`}
                         >
                           <div className={styles.basketItemProperties}>
                             <div>Артикул: {item.article}</div>
@@ -305,7 +346,7 @@ export default function CartPage() {
                     </div>
                   ))}
                 </section>
-                <section
+                {/* <section
                   className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
                 >
                   <h2 className={styles.headerItemCart}>Ваши мерки</h2>
@@ -345,7 +386,7 @@ export default function CartPage() {
                       </>
                     </label>
                   </div>
-                </section>
+                </section> */}
                 <section
                   className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
                 >
@@ -392,68 +433,129 @@ export default function CartPage() {
                         role="radio"
                         type="radio"
                         name="delivery"
+                        value="showroom"
+                        className={styles.checkboxIcon}
+                        onChange={handleDeliveryChange}
+                        defaultChecked={true}
+                      />
+                      <span className={styles.checkboxLabel}>
+                        <span className={styles.checkboxHeader}>
+                          Забрать в шоу-руме
+                        </span>
+                        <span className={styles.checkboxDescription}>
+                          <em>Нижний Новгород, ул. Малая Покровская, 20</em>
+                        </span>
+                        <span className={styles.checkboxDescription}>
+                          <em>Будние дни, с 10:00 до 20:00</em>
+                        </span>
+                        <span className={styles.checkboxDescription}>
+                          <strong>Бесплатно</strong>
+                        </span>
+                      </span>
+                    </label>
+                  </div>
+                  <div className={styles.formBlock}>
+                    <label
+                      className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+                      // modelmodifiers="[object Object]"
+                    >
+                      <input
+                        hidden=""
+                        role="radio"
+                        type="radio"
+                        name="delivery"
                         value="post"
                         className={styles.checkboxIcon}
                         onChange={handleDeliveryChange}
                       />
                       <span className={styles.checkboxLabel}>
                         <span className={styles.checkboxHeader}>
-                          Доставка Почтой России
+                          Доставка СДЭК
                         </span>
                         <span className={styles.checkboxDescription}>
                           <strong>от 300 рублей</strong>, от 3 дней
                         </span>
                       </span>
                     </label>
-                    <div className={styles.deliveryService}>
-                      <div className={styles.deliveryServiceForm}>
-                        <div>
-                          <div className={styles.inputLocation}>
-                            <div className={styles.formControl}>
-                              <label className={styles.formControlLabel}>
-                                Город
-                              </label>
-                              <input
-                                role="text"
-                                title="Город"
-                                placeholder=""
-                                name="city"
-                                className={styles.formControlControl}
-                                onChange={handleInputChange}
-                              />
-                              <div className={styles.formControlMessages}></div>
-                            </div>
-                            <div className={styles.formControl}>
-                              <label
-                                className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
-                              >
-                                Улица
-                              </label>
-                              <input
-                                role="text"
-                                title="Улица*"
-                                placeholder=""
-                                name="street"
-                                className={styles.formControlControl}
-                                onChange={handleInputChange}
-                              />
-                              <div className={styles.formControlMessages}></div>
-                            </div>
-                          </div>
-                          <div className={styles.inputGroup}>
+                    {showAddressInputs && (
+                      <div className={styles.deliveryService}>
+                        <div className={styles.deliveryServiceForm}>
+                          <div>
                             <div className={styles.inputLocation}>
+                              <div className={styles.formControl}>
+                                <label className={styles.formControlLabel}>
+                                  Город
+                                </label>
+                                <input
+                                  role="text"
+                                  title="Город"
+                                  placeholder=""
+                                  name="city"
+                                  className={styles.formControlControl}
+                                  onChange={handleInputChange}
+                                />
+                                <div
+                                  className={styles.formControlMessages}
+                                ></div>
+                              </div>
+                              <div className={styles.formControl}>
+                                <label
+                                  className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
+                                >
+                                  Улица
+                                </label>
+                                <input
+                                  role="text"
+                                  title="Улица*"
+                                  placeholder=""
+                                  name="street"
+                                  className={styles.formControlControl}
+                                  onChange={handleInputChange}
+                                />
+                                <div
+                                  className={styles.formControlMessages}
+                                ></div>
+                              </div>
+                            </div>
+                            <div className={styles.inputGroup}>
+                              <div className={styles.inputLocation}>
+                                <div
+                                  className={`${styles.formControl} ${styles.formControlDisabled}`}
+                                >
+                                  <label
+                                    className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
+                                  >
+                                    Дом
+                                  </label>
+                                  <input
+                                    role="text"
+                                    title="Дом"
+                                    name="number"
+                                    placeholder=""
+                                    className={styles.formControlControl}
+                                    onChange={handleInputChange}
+                                    disabled=""
+                                  />
+                                  <div
+                                    className={styles.formControlButtons}
+                                  ></div>
+                                  <div
+                                    className={styles.formControlMessages}
+                                  ></div>
+                                </div>
+                              </div>
                               <div
                                 className={`${styles.formControl} ${styles.formControlDisabled}`}
                               >
                                 <label
                                   className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
                                 >
-                                  Дом
+                                  Квартира/Офис
                                 </label>
                                 <input
                                   role="text"
-                                  title="Дом"
-                                  name="number"
+                                  name="flat"
+                                  title="Квартира/Офис"
                                   placeholder=""
                                   className={styles.formControlControl}
                                   onChange={handleInputChange}
@@ -467,54 +569,10 @@ export default function CartPage() {
                                 ></div>
                               </div>
                             </div>
-                            <div
-                              className={`${styles.formControl} ${styles.formControlDisabled}`}
-                            >
-                              <label
-                                className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
-                              >
-                                Квартира/Офис
-                              </label>
-                              <input
-                                role="text"
-                                name="flat"
-                                title="Квартира/Офис"
-                                placeholder=""
-                                className={styles.formControlControl}
-                                onChange={handleInputChange}
-                                disabled=""
-                              />
-                              <div className={styles.formControlButtons}></div>
-                              <div className={styles.formControlMessages}></div>
-                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className={styles.formBlock}>
-                    <label
-                      className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
-                      // modelmodifiers="[object Object]"
-                    >
-                      <input
-                        hidden=""
-                        role="radio"
-                        type="radio"
-                        name="delivery"
-                        value="showroom"
-                        className={styles.checkboxIcon}
-                        onChange={handleDeliveryChange}
-                      />
-                      <span className={styles.checkboxLabel}>
-                        <span className={styles.checkboxHeader}>
-                          Забрать в шоу-руме
-                        </span>
-                        <span className={styles.checkboxDescription}>
-                          <strong>Бесплатно</strong>
-                        </span>
-                      </span>
-                    </label>
+                    )}
                   </div>
                 </section>
               </div>
@@ -522,38 +580,56 @@ export default function CartPage() {
                 className={`${styles.orderBlock} ${styles.orderBlockSummary}`}
               >
                 <h1 className={styles.headerItemCart}>Ваш заказ</h1>
-                <p
-                  className={`${styles.orderDescription} ${styles.orderDescriptionOnlinePayment}`}
-                >
-                  <input
-                    className={styles.promocodeInput}
-                    type="text"
-                    placeholder="Промокод"
-                    onChange={handlePromocodeChange}
-                  />
-                </p>
+                <div className={styles.promocodeInputContainer}>
+                  <p
+                    className={`${styles.orderDescription} ${styles.orderDescriptionOnlinePayment}`}
+                  >
+                    <input
+                      className={styles.promocodeInput}
+                      type="text"
+                      placeholder="Промокод"
+                      onChange={handlePromocodeChange}
+                    />
+                  </p>
+                  <button
+                    className={`${styles.button} ${styles.buttonBlock}  ${styles.buttonBordered}`}
+                    onClick={handleApplyPromocode}
+                  >
+                    Применить
+                  </button>
+                </div>
                 {promocodeErr && (
-                  <p className={`${styles.errorMsgCart} ${pcErr}`}>
+                  <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
                     {promocodeErr}
                   </p>
                 )}
-                <button
-                  className={`${styles.button} ${styles.buttonBlock}  ${styles.buttonBordered}`}
-                  onClick={handleApplyPromocode}
-                >
-                  Применить
-                </button>
                 <div className={styles.orderSummary}>
                   <div className={styles.summary}>
                     <div className={styles.orderSummaryRow}>
                       <span>Товары ({cartItemsList.length}):</span>
                       <div className={styles.itemPrices}>
-                        <span className={styles.itemPricesPrice}>
-                          {cartItemsList
-                            .reduce((sum, item) => sum + item.price, 0)
-                            .toLocaleString()}{' '}
-                          &#8381;
-                        </span>
+                        {!promocodeErr && discount ? (
+                          <>
+                            <span
+                              className={styles.itemPricesPrice}
+                              style={{ textDecoration: 'line-through' }}
+                            >
+                              {cartItemsList
+                                .reduce((sum, item) => sum + item.price, 0)
+                                .toLocaleString()}{' '}
+                              &#8381;
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <span className={styles.itemPricesPrice}>
+                              {cartItemsList
+                                .reduce((sum, item) => sum + item.price, 0)
+                                .toLocaleString()}{' '}
+                              &#8381;
+                            </span>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className={styles.orderSummaryRow}>
@@ -599,23 +675,6 @@ export default function CartPage() {
                 {orderStatus && (
                   <p className={styles.orderStatusCart}>{orderStatus}</p>
                 )}
-                {/* нужна ли нам эта сряка-кряка? <p className="order__description">
-              <small>
-                Нажимая на кнопку "Оформить заказ" я подтверждаю своё согласие с{" "}
-                <a href="/information/privacy-policy/#policy">
-                  Политикой конфиденциальности
-                </a>
-                , <a href="/information/rules">Правилами работы магазина</a>,{" "}
-                <a href="/information/privacy-policy/#rules">
-                  Правилами обработки персональных данных
-                </a>{" "}
-                и{" "}
-                <a href="/information/loyalty/rules">
-                  Правилами участия в программе лояльности
-                </a>
-                .
-              </small>
-            </p> */}
               </div>
             </section>
           </div>
