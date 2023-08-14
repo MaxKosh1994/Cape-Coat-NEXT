@@ -6,6 +6,9 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import styles from './AboutComp.module.css';
 import Image from 'next/image';
 
+
+//TODO я не знаю, что делать с отображением текста в конце и футера на айпадах :(
+
 export default function AboutComp() {
   return (
     <div className={styles.HeaderDiv}>
@@ -18,7 +21,7 @@ export default function AboutComp() {
             <table className={styles.Table}>
               <tbody>
                 <tr>
-                  <td className={styles.PhotoOne}>
+                  <td className={styles.Photo}>
                     <Image
                       src={`${process.env.NEXT_PUBLIC_COLLAGE_URL}collage1.png`}
                       alt="collage1"
@@ -42,35 +45,53 @@ export default function AboutComp() {
               </tbody>
             </table>
           </div>
-          <p className={styles.Info}>
-            <strong>Основатель бренда</strong> Екатерина Киреева уделяет
-            пристальное внимание деталям, крою и выбору материалов. Лично
-            прорабатывает дизайн, конструкцию и технологию пошива каждой модели:
-            от идеи до воплощения.
-          </p>
-          <p className={styles.Info}>
-            <strong>Сape&Coat</strong> — это архитектурный крой, помноженный на
-            дорогие и качественные материалы.
-          </p>
-          <p className={styles.Info}>
-            В результате получаются изделия, балансирующие на грани классики и
-            последних тенденций.
-          </p>
-          <Typography variant="h2" component="h2">
+          <div className={styles.ContainerPhotoTwo}>
+            <table className={styles.Table}>
+              <tbody>
+                <tr>
+                  <td className={styles.InfoConteiner}>
+                    <p className={styles.Info}>
+                      <strong>Основатель бренда</strong> Екатерина Киреева
+                      уделяет пристальное внимание деталям, крою и выбору
+                      материалов. Лично прорабатывает дизайн, конструкцию и
+                      технологию пошива каждой модели: от идеи до воплощения.
+                    </p>
+                    <p className={styles.Info}>
+                      <strong>Сape&Coat</strong> — это архитектурный крой,
+                      помноженный на дорогие и качественные материалы.
+                    </p>
+                    <p className={styles.Info}>
+                      В результате получаются изделия, балансирующие на грани
+                      классики и последних тенденций.
+                    </p>
+                  </td>
+                  <td className={styles.Photo}>
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_COLLAGE_URL}collage2.png`}
+                      alt="collage1"
+                      width={300}
+                      height={400}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h1 className={styles.Contact}>
             Наши контакты:
-          </Typography>
+          </h1>
           <p className={styles.Info}>
             <a style={{ color: 'black' }} href="mailto:Cape.n.coat@gmail.com">
-              <MailOutlineIcon /> Email: Cape.n.coat@gmail.com
+              <MailOutlineIcon className={styles.Icon} /> Email: Cape.n.coat@gmail.com
             </a>
           </p>
           <p className={styles.Info}>
             <a style={{ color: 'black' }} href="https://t.me/@kkireva">
-              <TelegramIcon /> Telegram: @kkireva
+              <TelegramIcon className={styles.Icon} /> Telegram: @kkireva
             </a>
           </p>
           <p className={styles.Info}>
-            <PhoneIcon /> Phone number: +7(920)-119-99-19
+            <PhoneIcon className={styles.Icon} /> Phone number: +7(920)-119-99-19
           </p>
         </div>
       </div>
