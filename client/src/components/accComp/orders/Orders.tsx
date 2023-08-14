@@ -42,7 +42,7 @@ export default function Orders() {
           </div>
           <TableContainer
             className={styles.TableContainer}
-            sx={{ width: '50%' }}
+            sx={{ width: '64%' }}
             component={Paper}
           >
             <Table aria-label='simple table'>

@@ -252,7 +252,7 @@ export default function Navbar() {
                     isUserLogin
                       ? isAdmin
                         ? '/admin/orders'
-                        : '/account/profile'
+                        : '/account'
                       : '/signin'
                   }
                   passHref
@@ -337,7 +337,7 @@ export default function Navbar() {
                       isUserLogin
                         ? isAdmin
                           ? '/admin/orders'
-                          : '/account/profile'
+                          : '/account'
                         : '/signin'
                     }
                     passHref
