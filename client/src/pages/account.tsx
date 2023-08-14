@@ -29,13 +29,6 @@ export default function Account() {
 
   return (
     <div className={styles.mainDiv}>
-      <div className={styles.headerDiv}>
-        <h1>Мой аккаунт</h1>
-        <h4 onClick={handleOpen} className={styles.headersText}>
-          <LogoutIcon />
-          Выйти из аккаунта
-        </h4>
-      </div>
       <div className={styles.routesDiv}>
         <Button
           onClick={() => setSelectedComponent('favorites')}
@@ -57,9 +50,13 @@ export default function Account() {
         >
           Заказы
         </Button>
+        <Button onClick={handleOpen} className={styles.button} type='button'>
+          <LogoutIcon />
+          Выйти
+        </Button>
         <SureModal open={open} setOpen={setOpen} />
       </div>
-      {renderComponent()}
+      <div className={styles.elContainer}>{renderComponent()}</div>
     </div>
   );
 }
