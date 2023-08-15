@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { signInUserThunk } from '../app/thunkActionsAuth';
 import Link from 'next/link';
+import Head from 'next/head';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({
@@ -43,6 +44,12 @@ export default function SignIn() {
 
   return (
     <>
+      <Head>
+        <title>Cape&Coat | Вход</title>
+        <meta name="title" content="Cape and Coat" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className={styles.formContainer}>
         <form className={styles.signInForm}>
           <Typography variant="h3" align="center" className={styles.header}>

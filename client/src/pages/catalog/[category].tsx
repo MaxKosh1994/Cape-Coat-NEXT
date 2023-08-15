@@ -8,6 +8,7 @@ import { RootState } from '../../app/store';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import { category, categoryClear } from '../../app/CategorySlice';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 export default function Category() {
   const [catName, setCatName] = useState('');
@@ -75,6 +76,12 @@ export default function Category() {
 
   return (
     <>
+      <Head>
+        <title>Cape&Coat | {catName}</title>
+        <meta name="title" content="Cape and Coat" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className={styles.ContainerOneCard}>
         <h3 className={styles.Header}>{catName}</h3>
         <div className={styles.ProductCardsContainer}>{renderProductCards}</div>

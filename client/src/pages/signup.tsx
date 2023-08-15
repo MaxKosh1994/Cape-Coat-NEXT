@@ -4,6 +4,7 @@ import { TextField, Button, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { signUpUserThunk } from '../app/thunkActionsAuth';
 import Link from 'next/link';
+import Head from 'next/head';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -49,6 +50,12 @@ export default function SignUp() {
 
   return (
     <>
+      <Head>
+        <title>Cape&Coat | Регистрация</title>
+        <meta name="title" content="Cape and Coat" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className={styles.formContainer}>
         <form className={styles.signInForm}>
           <Typography variant="h3" textAlign="center" className={styles.header}>
