@@ -1,0 +1,34 @@
+.resultContainer {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-direction: column;
+  position: fixed;
+  top: 58px;
+  right: 133px;
+  width: 210px;
+  background-color: white;
+  color: rgb(83, 83, 83);
+  padding: 10px;
+  display: grid;
+  grid-gap: 20px;
+  overflow: auto;
+  max-height: 300px;
+  border-radius: 5px;
+}
+
+.resultContainer::-webkit-scrollbar {
+  /* display: none; */
+}
+
+.resultContainer {
+  /* -ms-overflow-style: none; */
+}
+
+.resultContainer {
+  scrollbar-width: none;
+}
+
+.resultContainer > div {
+  flex-basis: calc(25% - 20px);
+  margin-bottom: 0px;
+}
