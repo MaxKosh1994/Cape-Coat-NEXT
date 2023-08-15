@@ -1,0 +1,20 @@
+.ContainerOneCard {
+  margin: 0 -15px;;
+}
+
+.Header {
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.ProductCardsContainer {
+  /* display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly; */
+  gap: 5px;
+  margin-bottom: 15px;
+  margin: 0 -8px;
+}
+
+

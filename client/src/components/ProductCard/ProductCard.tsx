@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 
-import {
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  IconButton,
-} from '@mui/material';
+import { IconButton } from '@mui/material';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
@@ -33,15 +26,13 @@ export default function ProductCard({
   price,
   isFavorite: initialIsFavorite,
   isCart: initialIsCart,
-  width = '400px',
-  height = '540px',
   newPrice,
 }: IProductCard) {
   const dispatch = useAppDispatch();
 
   const [favCard, setFavCard] = useState();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
   const [isCart, setIsCart] = useState(initialIsCart);
@@ -64,7 +55,7 @@ export default function ProductCard({
     const parent = targer.closest('.conteiner-item').id;
 
     //TODO поменять в навигации categoryName на :categoryName
-    navigate(`/catalog/categoryName/${parent}`, { state: parent });
+    // navigate(`/catalog/categoryName/${parent}`, { state: parent });
   };
 
   //! логика лайка
@@ -73,10 +64,10 @@ export default function ProductCard({
     setIsFavorite(!isFavorite);
     dispatch(toggleFavorite(id));
     try {
-      if (!user) {
-        navigate('/signin');
-        return;
-      }
+      // if (!user) {
+      //   // navigate('/signin');
+      //   return;
+      // }
       if (isFavorite === false) {
         const response = await fetch(process.env.VITE_URL + 'favorite/add', {
           method: 'POST',
@@ -133,10 +124,10 @@ export default function ProductCard({
     setIsCart((prevIsCart) => !prevIsCart);
     dispatch(toggleCart(id));
     try {
-      if (!user) {
-        navigate('/signin');
-        return;
-      }
+      // if (!user) {
+      //   navigate('/signin');
+      //   return;
+      // }
       if (isCart === false) {
         const response = await fetch(process.env.VITE_URL + 'cart/item/add', {
           method: 'POST',
@@ -236,47 +227,44 @@ export default function ProductCard({
 
   return (
     <>
-      <Card
-        sx={{ width: width, marginBottom: '15px' }}
-        className="conteiner-item"
+      <div
+        className={styles.Card}
         key={id}
         // id={id}
       >
-        <CardMedia
+        <span className={styles.CardMedia}>
+          <img
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${photo}`}
+            alt="Product Image"
+            onClick={itemCardHandler}
+            className={styles.Image}
+          />
+        </span>
+        {/* <CardMedia
           component="img"
           alt="Product Image"
-          style={{ height: height }}
-          image={`${process.env.VITE_IMAGE_URL}${photo}`}
+          image={`${process.env.NEXT_PUBLIC_IMAGE_URL}${photo}`}
           className="card-media"
           onClick={itemCardHandler}
-        />
-        <Typography variant="h3" component="h1" className={styles.NameCard}>
-          {name}
-        </Typography>
-        <div className={styles.InfoCard}>
-          <CardContent className={styles.CardContent}>
-            <Typography variant="h3" component="p" className={styles.Price}>
-              Цена: {price?.toLocaleString().replace(/,\s?/g, ' ')} ₽
-            </Typography>
-          </CardContent>
+        /> */}
+        <h1 className={styles.NameCard}>{name}</h1>
+        {/* <div className={styles.InfoCard}> */}
+        <div className={styles.CardContent}>
+          <h3 className={styles.Price}>
+            Цена: {price?.toLocaleString().replace(/,\s?/g, ' ')} ₽
+          </h3>
+
           <div className={styles.Icons}>
-            <IconButton
-              aria-label="Add to favorites"
-              onClick={favoriteHandler}
-              style={{ color: 'black' }}
-            >
+            <IconButton aria-label="Add to favorites" onClick={favoriteHandler}>
               {isFavorite ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
             </IconButton>
-            <IconButton
-              onClick={cartHandler}
-              style={{ color: 'black' }}
-              aria-label="Add to cart"
-            >
+            <IconButton onClick={cartHandler} aria-label="Add to cart">
               {isCart ? <AddTaskIcon /> : <AddShoppingCartIcon />}
             </IconButton>
           </div>
         </div>
-      </Card>
+      </div>
+      {/* </div> */}
     </>
   );
 }

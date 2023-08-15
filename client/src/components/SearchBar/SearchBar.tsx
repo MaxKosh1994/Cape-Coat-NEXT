@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import styles from './SearchBarStyle.module.css';
+import { IItem } from '../accComp/orders/types';
+import { getAllItems } from './fetchSearch';
+import SearchContainer from '../SearchContainer/SearchContainer';
 
 interface SearchBarProps {}
 
@@ -28,6 +31,34 @@ const SearchBar: React.FC<SearchBarProps> = () => {
     marginLeft: isInputOpen ? '-150px' : '0', // Adjust the value
     transition: theme.transitions.create('margin-left'),
   }));
+
+  const [input, setInput] = useState('');
+  const [allItems, setAllItems] = useState<IItem[]>([]);
+
+  const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
+  useEffect(() => {
+    if (input.length > 0) {
+      const fetchData = async () => {
+        try {
+          const data = await getAllItems();
+          setAllItems(data);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchData();
+    }
+  }, [input]);
+
+  const filteredItems: IItem[] = allItems.filter((item) => {
+    return (
+      item.name.toLowerCase().includes(input.toLowerCase()) ||
+      item.article.toString().toLowerCase().includes(input.toLowerCase())
+    );
+  });
 
   return (
     <Search>
