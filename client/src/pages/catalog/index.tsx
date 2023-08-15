@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import CategoryList from '../../components/catalog/categoryList';
+import CategoryList from '../../components/catalog/CategoryList/categoryList';
 // import Category from '../Category/Category';
 import styles from '../../styles/Catalog.module.css';
 import { Typography } from '@mui/material';
+import Link from 'next/link';
 
 export default function Catalog() {
   const [allCategories, setAllCategories] = useState([]);
@@ -16,6 +17,7 @@ export default function Catalog() {
             credentials: 'include',
           }
         );
+        console.log(response)
         if (response.status === 200) {
           const allCategs = await response.json();
           setAllCategories(allCategs);
@@ -35,13 +37,15 @@ export default function Catalog() {
       </Typography>
       <div className={styles.catalogueContainer}>
         {allCategories.map((cat) => (
-          <CategoryList
-            key={cat.id}
-            id={cat.id}
-            imageUrl={`${process.env.NEXT_PUBLIC_CATEGORY_URL}${cat.photo}`}
-            category={cat.name}
-            allCategory={allCategories}
-          />
+          // <Link href={`catalog/${cat.name}`} key={cat.id}>
+            <CategoryList
+              key={cat.id}
+              id={cat.id}
+              imageUrl={`${process.env.NEXT_PUBLIC_CATEGORY_URL}${cat.photo}`}
+              category={cat.name}
+              allCategory={allCategories}
+            />
+          // </Link>
         ))}
       </div>
     </>

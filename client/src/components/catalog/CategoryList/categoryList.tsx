@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import styles from '../../styles/Catalog.module.css';
+import styles from '../../../styles/Catalog.module.css';
 // import Category from '../Category/Category';
 import axios from 'axios';
 import Image from 'next/image';
+import Link from 'next/link';
+import Category from '../../../pages/catalog/[category]';
+import { ICategoryList } from '@/TypeScript/categoryList.type';
+import { useNavigate } from 'react-router-dom';
 
-export default function CategoryList({ id, imageUrl, category, allCategory }) {
+export default function CategoryList({
+  id,
+  imageUrl,
+  category,
+}: ICategoryList) {
   const router = useRouter();
   const [englishName, setEnglishName] = useState('');
 
@@ -35,23 +43,35 @@ export default function CategoryList({ id, imageUrl, category, allCategory }) {
     translateToEnglish();
   }, [category]);
 
+  //TODO подумать над query, чтобы не отображалось в адресной строке
   const categoryHandler = (e) => {
     const target = e.target;
     if (!target) return; // Проверка наличия целевого элемента
-    const parent = target.closest('.category-container').id;
-    router.push(`/catalog/${englishName}`, { state: parent });
+    const parent = target.closest('.oneCategory').id;
+    // const query = { state: parent };
+    const pathname =
+      englishName === 'Trench coats'
+        ? '/catalog/trench'
+        : `/catalog/${englishName.toLowerCase()}`;
+    router.push({
+      pathname,
+      query: { id: parent },
+    });
   };
 
+
   return (
-    <div className={styles.categoryContainer} onClick={categoryHandler} id={id}>
-      <Image
-        src={imageUrl}
-        className={styles.image}
-        width={400}
-        height={600}
-        alt={category}
-      />
-      <p className={styles.categoryName}>{category}</p>
+    <div className="oneCategory" id={id}>
+      <div className={styles.categoryContainer} onClick={categoryHandler}>
+        <Image
+          src={imageUrl}
+          className={styles.image}
+          width={400}
+          height={600}
+          alt={category}
+        />
+        <p className={styles.categoryName}>{category}</p>
+      </div>
     </div>
   );
 }
