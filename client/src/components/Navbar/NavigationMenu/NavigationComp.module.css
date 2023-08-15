@@ -1,0 +1,34 @@
+.menu {
+  margin-top: 23px;
+  transition: all 0.3s;
+}
+.submenu,
+.menu {
+  display: inline-block;
+  vertical-align: top;
+  list-style: none;
+
+  padding: 0;
+}
+.menu > li {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 18px 0 0;
+  position: relative;
+}
+.menu__item {
+  display: inline-block;
+  vertical-align: top;
+  font-family: 'Jost', 'Arial', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 26px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #423c3d;
+  transition: all 0.3s;
+}
+.menu.fix {
+  margin-top: 9px;
+}
