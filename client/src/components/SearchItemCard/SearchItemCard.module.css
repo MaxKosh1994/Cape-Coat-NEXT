@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  cursor: pointer;
+  /* gap: 0px; */
+}
+
+.imageContainer,
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: end;
+}
+
+.container {
+  transition: background-color 0.3s ease;
+}
+
+.container > div:first-child {
+  margin-right: 10px;
+}
+
+.container:hover {
+  background-color: rgb(233, 233, 233);
+}

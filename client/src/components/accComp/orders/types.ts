@@ -1,19 +1,25 @@
 export interface IItem {
   id: number;
-  category_id: number;
-  collection_id: number;
+  article: number;
   name: string;
-  care_instructions: string;
-  characteristics: string;
   description: string;
-  color: string;
-  model_sizes: string;
-  photo: string;
+  model_params: string;
+  characteristics: string;
   price: number;
+  new_price: number;
   in_stock: boolean;
+  bestseller: boolean;
+  collection_id: number;
+  material_id: number;
+  category_id: number;
+  Photos: IPhoto[];
   createdAt: Date;
   updatedAt: Date;
   isFavorite: boolean;
+}
+
+export interface IPhoto {
+  photo: string;
 }
 
 export interface IOrder {

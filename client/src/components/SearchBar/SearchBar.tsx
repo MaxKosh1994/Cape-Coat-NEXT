@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import { useTheme } from '@mui/material/styles';
 import { useMediaQuery } from '@mui/material';
 import InputBase from '@mui/material/InputBase';
+import { IItem } from '../accComp/orders/types';
+import { getAllItems } from './fetchSearch';
+import SearchContainer from '../SearchContainer/SearchContainer';
 
 interface SearchBarProps {}
 
@@ -45,28 +48,64 @@ const SearchBar: React.FC<SearchBarProps> = () => {
     },
   }));
 
-  return (
-    <Search onClick={() => setIsInputOpen(true)}>
-      <IconButton
-        size="large"
-        aria-label="search"
-        color="inherit"
-        sx={{
-          padding: isMobile ? '3px' : '8px',
-        }}
-      >
-        <SearchIcon sx={{ color: 'black' }} />
-      </IconButton>
+  const [input, setInput] = useState('');
+  const [allItems, setAllItems] = useState<IItem[]>([]);
 
-      {isInputOpen && (
-        <StyledInputBase
-          autoFocus
-          placeholder="Search…"
-          inputProps={{ 'aria-label': 'search' }}
-          onBlur={() => setIsInputOpen(false)}
-        />
-      )}
-    </Search>
+  const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
+  useEffect(() => {
+    if (input.length > 0) {
+      const fetchData = async () => {
+        try {
+          const data = await getAllItems();
+          setAllItems(data);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchData();
+    }
+  }, [input]);
+
+  const filteredItems: IItem[] = allItems.filter((item) => {
+    return (
+      item.name.toLowerCase().includes(input.toLowerCase()) ||
+      item.article.toString().toLowerCase().includes(input.toLowerCase())
+    );
+  });
+
+  return (
+    <>
+      <Search onClick={() => setIsInputOpen(true)}>
+        <IconButton
+          size='large'
+          aria-label='search'
+          color='inherit'
+          sx={{
+            padding: isMobile ? '3px' : '8px',
+          }}
+        >
+          <SearchIcon sx={{ color: 'black' }} />
+        </IconButton>
+
+        {isInputOpen && (
+          <StyledInputBase
+            autoFocus={true}
+            placeholder='Search…'
+            value={input}
+            onChange={changeHandler}
+            inputProps={{ 'aria-label': 'search' }}
+            onBlur={() => {
+              setIsInputOpen(false);
+              setInput('');
+            }}
+          />
+        )}
+      </Search>
+      {input.length > 0 && <SearchContainer filteredItems={filteredItems} />}
+    </>
   );
 };
 
