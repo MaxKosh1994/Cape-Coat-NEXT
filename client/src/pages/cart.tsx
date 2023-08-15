@@ -6,6 +6,7 @@ import styles from '../styles/Cart.module.css';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
+import Head from 'next/head';
 
 export default function CartPage() {
   const user = useSelector((state) => state.sessionSlice.user);
@@ -266,6 +267,12 @@ export default function CartPage() {
 
   return (
     <>
+      <Head>
+        <title>Cape&Coat | Корзина</title>
+        <meta name="title" content="Cape and Coat" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       {cartItemsList.length === 0 ? (
         <>
           {orderStatus && <p className="order-status-cart">{orderStatus}</p>}

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '../../styles/Collection.module.css';
 import { Typography, Pagination } from '@mui/material';
 import { styled } from '@mui/system';
+import Head from 'next/head';
 
 const CollectionContainer = styled('div')({
   display: 'grid',
@@ -45,6 +46,12 @@ export default function CollectionPage() {
 
   return (
     <>
+      <Head>
+        <title>Cape&Coat | {collectionName}</title>
+        <meta name="title" content="Cape and Coat" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Typography className={styles.collectionText} variant="h3" align="center">
         <strong> {collectionName}</strong>
       </Typography>

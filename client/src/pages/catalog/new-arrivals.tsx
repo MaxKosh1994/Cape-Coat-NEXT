@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import ProductCard from '../ProductCard/ProductCard';
 import styles from '../../styles/NewArrivals.module.css';
 import { Typography } from '@mui/material';
+import Head from 'next/head';
 
 export default function NewArrivalsPage() {
   const [newArrivalsItems, setNewArrivalsItems] = useState([]);
@@ -23,6 +24,12 @@ export default function NewArrivalsPage() {
 
   return (
     <>
+      <Head>
+        <title>Cape&Coat | Новые поступления</title>
+        <meta name="title" content="Cape and Coat" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Typography>
         <p className={styles.arrivalsText}>
           <strong>Новинки</strong>
