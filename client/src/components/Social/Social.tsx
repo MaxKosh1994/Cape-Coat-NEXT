@@ -8,14 +8,13 @@ export default function Social() {
   return (
     <>
       <div className={styles.messengersContainer}>
-        <a href='https://t.me/@kkireva'>
+        <a href="https://t.me/@kkireva">
           <TelegramIcon />
         </a>
-        <a href='mailto:Cape.n.coat@gmail.com'>
+        <a href="mailto:Cape.n.coat@gmail.com">
           <MailOutlineIcon />
         </a>
       </div>
-      ;
     </>
   );
 }
