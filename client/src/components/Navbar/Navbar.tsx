@@ -105,7 +105,7 @@ export default function Navbar() {
   }, []);
 
   const muiTheme = createTheme(theme);
-  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery('(max-width:1024px)');
 
   const router = useRouter();
   const isHomePage = router.pathname === '/';
@@ -189,201 +189,96 @@ export default function Navbar() {
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
-        <ElevationScroll>
-          <AppBar
-            className={`navbar ${isScrolled ? 'scrolled' : ''}`}
-            component="nav"
-            sx={{
-              minHeight: 70,
-            }}
-          >
-            <Toolbar
-              sx={{
-                padding: '16px 5px',
-                justifyContent: 'space-between',
-              }}
+      <div
+        className={isScrolled ? 'header fix' : 'header'}
+        style={{
+          paddingTop: isMobile ? '5px' : '21px',
+          height: isMobile ? '55px' : '68px',
+          backgroundColor: isScrolled ? '#FFFFFF' : 'transparent',
+        }}
+      >
+        <div className="wrap">
+          {isMobile && (
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={handleMobileMenuOpen}
+              style={{ position: 'absolute', top: '6px', left: '20px' }}
             >
-              <Link href="/" passHref>
-                <Box
-                  sx={{
-                    display: { xs: 'none', md: 'flex' },
-                    alignItems: 'center',
-                  }}
-                >
-                  <Image
-                    src={logo}
-                    alt="Logo"
-                    priority={true}
-                    style={{
-                      width: '200px',
-                      height: '30px',
-                      objectFit: 'cover',
-                    }}
-                  />
-                </Box>
-              </Link>
+              <MenuIcon />
+            </IconButton>
+          )}
+          <Link href="/" passHref>
+            <Image
+              src={logo}
+              alt="Logo"
+              priority={true}
+              className="logo"
+              style={{
+                width: '200px',
+                height: '30px',
+                objectFit: 'cover',
+                marginBottom: isMobile ? '5px' : '0',
+                marginTop: isMobile && '0',
+              }}
+            />
+          </Link>
+          {!isMobile && (
+            <NavigationMenu
+              isScrolled={isScrolled}
+              handleScrollAndHighlight={handleScrollAndHighlight}
+            />
+          )}
+        </div>
+        <div className="header-right" style={{ top: '5px' }}>
+          {!isMobile && <SearchBar />}
 
-              <Box
-                sx={{
-                  display: {
-                    margin: '0px',
-                    xs: 'none',
-                    color: iconColour,
-                    md: 'flex',
-                    justifyContent: 'center',
-                  },
-                  position: 'absolute',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                }}
-              >
-                <NavigationMenu
-                  isScrolled={isScrolled}
-                  handleScrollAndHighlight={handleScrollAndHighlight}
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: { xs: 'none', md: 'flex' },
-                  alignItems: 'center',
-                }}
-              >
-                <SearchBar />
-                <Link
-                  href={
-                    isUserLogin
-                      ? isAdmin
-                        ? '/admin/orders'
-                        : '/account'
-                      : '/signin'
-                  }
-                  passHref
-                >
-                  <IconButton
-                    size="large"
-                    sx={{ color: iconColour, padding: '8px' }}
-                  >
-                    <Person2Icon />
-                  </IconButton>
-                </Link>
-                <Link href="/account/favorites" passHref>
-                  <IconButton
-                    size="large"
-                    aria-label="show 17 new notifications"
-                    sx={{ color: iconColour, padding: '8px' }}
-                  >
-                    <Badge badgeContent={amountOfLikes} color="error">
-                      <FavoriteIcon />
-                    </Badge>
-                  </IconButton>
-                </Link>
-                <Link href={isUserLogin ? '/cart' : '/signin'} passHref>
-                  <IconButton
-                    size="large"
-                    edge="end"
-                    aria-label="account of current user"
-                    aria-controls={menuId}
-                    aria-haspopup="true"
-                    sx={{ color: iconColour, padding: '8px' }}
-                  >
-                    <Badge badgeContent={amountOfCartItem} color="error">
-                      <AddShoppingCart />
-                    </Badge>
-                  </IconButton>
-                </Link>
-              </Box>
+          <Link
+            className="header-basket"
+            href={isUserLogin ? '/cart' : '/signin'}
+            passHref
+          >
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              sx={{ color: iconColour, padding: '8px' }}
+            >
+              <Badge badgeContent={amountOfCartItem} color="error">
+                <AddShoppingCart />
+              </Badge>
+            </IconButton>
+          </Link>
+          <Link
+            className="header-personal"
+            href={
+              isUserLogin ? (isAdmin ? '/admin/orders' : '/account') : '/signin'
+            }
+            passHref
+          >
+            <IconButton size="large" sx={{ color: iconColour, padding: '8px' }}>
+              <Person2Icon />
+            </IconButton>
+          </Link>
+          <Link className="header-favorite" href="/account/favorites" passHref>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              sx={{ color: iconColour, padding: '8px' }}
+            >
+              <Badge badgeContent={amountOfLikes} color="error">
+                <FavoriteIcon />
+              </Badge>
+            </IconButton>
+          </Link>
 
-              <Box
-                sx={{
-                  display: { xs: 'flex', md: 'none' },
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  width: '100%',
-                }}
-              >
-                <IconButton
-                  size="large"
-                  aria-label="show more"
-                  aria-controls={mobileMenuId}
-                  aria-haspopup="true"
-                  onClick={handleMobileMenuOpen}
-                  sx={{ color: iconColour, padding: '8px' }}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Link href="/" passHref>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      width: '100%',
-                    }}
-                  >
-                    <Image
-                      src={logo}
-                      alt="Logo"
-                      priority={true}
-                      style={{
-                        width: '200px',
-                        height: '30px',
-                        objectFit: 'cover',
-                      }}
-                    />
-                  </Box>
-                </Link>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <SearchBar />
-                  <Link
-                    href={
-                      isUserLogin
-                        ? isAdmin
-                          ? '/admin/orders'
-                          : '/account'
-                        : '/signin'
-                    }
-                    passHref
-                  >
-                    <IconButton
-                      size="large"
-                      aria-label="show more"
-                      aria-controls={mobileMenuId}
-                      aria-haspopup="true"
-                      sx={{
-                        color: iconColour,
-                        padding: isMobile ? '3px' : '10px',
-                      }}
-                    >
-                      <Badge color="error">
-                        <Person2Icon />
-                      </Badge>
-                    </IconButton>
-                  </Link>
-                  <Link href={isUserLogin ? '/cart' : '/signin'} passHref>
-                    <IconButton
-                      size="large"
-                      aria-label="show more"
-                      aria-controls={mobileMenuId}
-                      aria-haspopup="true"
-                      sx={{
-                        color: iconColour,
-                        padding: isMobile ? '3px' : '10px',
-                        paddingRight: '15px',
-                      }}
-                    >
-                      <Badge badgeContent={amountOfCartItem} color="error">
-                        <AddShoppingCart />
-                      </Badge>
-                    </IconButton>
-                  </Link>
-                </div>
-              </Box>
-            </Toolbar>
-          </AppBar>
-        </ElevationScroll>
-        {!isHomePage && <Toolbar sx={{ height: 130 }} />}
-      </Box>
+          <a href="javascript:;" className="search-ico"></a>
+        </div>
+      </div>
+
       <MobileMenu
         mobileMoreAnchorEl={mobileMoreAnchorEl}
         isMobileMenuOpen={isMobileMenuOpen}

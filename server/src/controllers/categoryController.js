@@ -4,6 +4,7 @@ const { Category, Item, Photo } = require('../../db/models');
 
 module.exports.oneCategory = async (req, res) => {
   try {
+    console.log(req.params)
     const { id } = req.params;
     const category = await Category.findAll({
       where: {
@@ -26,6 +27,7 @@ module.exports.oneCategory = async (req, res) => {
     if (category && category.length > 0) {
       res.status(200).json(category);
     } else {
+      console.log(res);
       res.status(404).json({ message: 'Category not found' });
     }
   } catch (err) {

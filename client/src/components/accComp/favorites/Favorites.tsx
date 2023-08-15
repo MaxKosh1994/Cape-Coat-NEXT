@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import { useAppDispatch } from '../../../app/hooks';
 import { fetchAllFavorites } from '../../../app/thunkActionsFavourite';
+import ProductCard from '@/components/ProductCard/ProductCard';
 
 export default function Favorites() {
   const itemData = useSelector(
@@ -17,26 +18,21 @@ export default function Favorites() {
     dispatch(fetchAllFavorites());
   }, [dispatch]);
 
-  console.log(itemData);
-
   return (
     <>
       {itemData?.length > 0 ? (
         <div className={styles.itemsContainer}>
           {itemData?.map((item) => (
-            // <ProductCard
-            //   key={item.id}
-            //   id={item.id}
-            //   photo={item.Photos[0].photo}
-            //   name={item.name}
-            //   isFavorite={true}
-            //   isCart={false}
-            //   color={item.color}
-            //   price={item.price}
-            //   width={window.innerWidth < 830 ? '300px' : '400px'}
-            //   height={window.innerWidth < 830 ? '415px' : '540рх'}
-            // />
-            <p key={item.id}>{item.name}</p>
+            <ProductCard
+              key={item.id}
+              id={item.id}
+              article={item.article}
+              photo={item.Photos[0].photo}
+              name={item.name}
+              price={item.price}
+              isFavorite={item.isFavorite}
+              isCart={item.isCart}
+            />
           ))}
         </div>
       ) : (

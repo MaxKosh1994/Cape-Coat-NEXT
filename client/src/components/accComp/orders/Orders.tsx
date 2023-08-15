@@ -12,6 +12,7 @@ import styles from './Orders.module.css';
 import { IOrder } from './types';
 import { fetchOrderData } from './FetchOrderData';
 import ModalItemsInOrder from '../modalItemOrders/ModalItemsInOrder';
+import SearchItemCard from '@/components/SearchItemCard/SearchItemCard';
 
 export default function Orders() {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -52,6 +53,7 @@ export default function Orders() {
                   <TableCell sx={{ fontSize: 'medium' }}>Дата</TableCell>
                   <TableCell sx={{ fontSize: 'medium' }}>Стоимость</TableCell>
                   <TableCell sx={{ fontSize: 'medium' }}>Статус</TableCell>
+                  <TableCell sx={{ fontSize: 'medium' }}>Товары</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -69,6 +71,11 @@ export default function Orders() {
                     </TableCell>
                     <TableCell>{order.total.toLocaleString()}</TableCell>
                     <TableCell>{order.status}</TableCell>
+                    <TableCell>
+                      {order.Items.map((item) => (
+                        <SearchItemCard key={item.id} item={item} />
+                      ))}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

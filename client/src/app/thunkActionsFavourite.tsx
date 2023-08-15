@@ -81,11 +81,14 @@ export const fetchAllFavorites = createAsyncThunk(
   'favorites/fetchAllFavorites',
   async (_, { dispatch }) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_URL}item/allFavorites`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}item/allFavorites`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+        }
+      );
 
       if (res.ok) {
         const data: IItem[] = await res.json();

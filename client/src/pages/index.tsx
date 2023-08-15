@@ -119,7 +119,6 @@ const Home = () => {
           </div>
         </div>
       </main>
-      <Social />
     </>
   );
 };

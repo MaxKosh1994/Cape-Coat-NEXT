@@ -1,7 +1,7 @@
 import React from 'react';
-import { MenuItem } from '@mui/material';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import styles from './NavigationComp.module.css';
 
 interface IProps {
   isScrolled: boolean;
@@ -26,35 +26,15 @@ const NavigationMenu: React.FC<IProps> = ({
   ];
 
   return (
-    <>
+    <ul className={isScrolled ? `${styles.menu} ${styles.fix}` : styles.menu}>
       {menuItems.map((item, index) => (
-        <Link
-          style={{ textDecoration: 'none' }}
-          href={item.link || '#'}
-          passHref
-          key={index}
-        >
-          <MenuItem
-            sx={{
-              '&:hover': {
-                backgroundColor: 'transparent',
-              },
-
-              fontSize: '23px',
-              color:
-                isHomePage && isScrolled
-                  ? 'black'
-                  : isHomePage
-                  ? 'white'
-                  : 'black',
-            }}
-            onClick={item.onClick}
-          >
-            <p className="nav-menu">{item.label}</p>
-          </MenuItem>
-        </Link>
+        <li key={index} className={styles.menuItem}>
+          <Link href={item.link || '#'} passHref className={styles.menuLink}>
+            {item.label}
+          </Link>
+        </li>
       ))}
-    </>
+    </ul>
   );
 };
 
