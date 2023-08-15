@@ -32,3 +32,17 @@
   flex-basis: calc(25% - 20px);
   margin-bottom: 0px;
 }
+
+@media (max-width: 821px) {
+  .resultContainer {
+    right: 115px;
+  }
+}
+
+@media (max-width: 550px) {
+  .resultContainer {
+    width: 100%;
+    right: 0px;
+    top: 90px;
+  }
+}

@@ -70,11 +70,11 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   }, [input]);
 
   const filteredItems: IItem[] = allItems.filter((item) => {
-    return item.name.toLowerCase().includes(input.toLowerCase());
+    return (
+      item.name.toLowerCase().includes(input.toLowerCase()) ||
+      item.article.toString().toLowerCase().includes(input.toLowerCase())
+    );
   });
-
-  //   console.log(allItems);
-  //   console.log(filteredItems);
 
   return (
     <>
@@ -97,7 +97,10 @@ const SearchBar: React.FC<SearchBarProps> = () => {
             value={input}
             onChange={changeHandler}
             inputProps={{ 'aria-label': 'search' }}
-            onBlur={() => setIsInputOpen(false)}
+            onBlur={() => {
+              setIsInputOpen(false);
+              setInput('');
+            }}
           />
         )}
       </Search>
