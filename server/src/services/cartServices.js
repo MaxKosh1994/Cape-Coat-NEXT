@@ -13,8 +13,9 @@ module.exports.findUserCart = async (userId) => {
       where: {
         user_id: userId,
       },
+      raw: true,
     });
-    return { success: true, userCart };
+    return userCart;
   } catch (error) {
     throw new Error('Ошибка сервера');
   }
@@ -67,6 +68,24 @@ module.exports.validatePromoCode = async (code) => {
       return { success: true, isValidPromo };
     }
     return { success: false, message: 'Такого промокода не существует' };
+  } catch (error) {
+    throw new Error('Ошибка сервера');
+  }
+};
+
+module.exports.delUserCartItem = async (cartId, itemId) => {
+  try {
+    const delCartItem = await CartItem.destroy({
+      where: {
+        item_id: itemId,
+        cart_id: cartId,
+      },
+      raw: true,
+    });
+    if (delCartItem) {
+      return { success: true };
+    }
+    return { success: false };
   } catch (error) {
     throw new Error('Ошибка сервера');
   }
