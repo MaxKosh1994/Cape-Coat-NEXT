@@ -18,8 +18,6 @@ export default function Favorites() {
     dispatch(fetchAllFavorites());
   }, [dispatch]);
 
-  console.log(itemData);
-
   return (
     <>
       {itemData?.length > 0 ? (
