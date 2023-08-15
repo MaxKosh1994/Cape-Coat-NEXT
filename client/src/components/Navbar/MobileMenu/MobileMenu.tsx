@@ -2,6 +2,7 @@ import React from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
+import SearchBar from '@/components/SearchBar/SearchBar';
 
 interface IMobileMenuProps {
   mobileMoreAnchorEl: null | HTMLElement;
@@ -86,6 +87,8 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
           handleMobileMenuClose();
         }}
       />
+
+      <SearchBar />
     </Menu>
   );
 };
