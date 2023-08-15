@@ -2,7 +2,8 @@ import React from 'react';
 import { Box, Modal } from '@mui/material';
 import { IItem } from '../orders/types';
 import styles from './Modal.module.css';
-// import ProductCard from '../../ProductCard/ProductCard';
+import ProductCard from '@/components/ProductCard/ProductCard';
+import SearchItemCard from '@/components/SearchItemCard/SearchItemCard';
 
 export default function ModalItemsInOrder({
   open,
@@ -16,25 +17,21 @@ export default function ModalItemsInOrder({
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
     >
-      <Box className={styles.box}>
-        <p>Здесь все будет</p>
-      </Box>
-      {/* <Box className={styles.box}>
-        {itemsInOrder?.map((item) => (
-          <ProductCard
-            key={item.id}
-            id={item.id}
-            photo={item.Photos[0].photo}
-            name={item.name}
-            isFavorite={true}
-            isCart={false}
-            color={item.color}
-            price={item.price}
-            width='400px'
-            height='540px'
-          />
+      <div className={styles.box}>
+        {itemsInOrder?.map((item: IItem) => (
+          //  <ProductCard
+          //    key={item.id}
+          //    id={item.id}
+          //    article={item.article.toString()}
+          //    photo={item.Photos[0].photo}
+          //    name={item.name}
+          //    price={item.price}
+          //    isFavorite={item.isFavorite}
+          //    isCart={item.isCart}
+          //  />
+          <SearchItemCard key={item.id} item={item} />
         ))}
-      </Box> */}
+      </div>
     </Modal>
   );
 }

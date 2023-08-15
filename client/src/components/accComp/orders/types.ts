@@ -16,6 +16,7 @@ export interface IItem {
   createdAt: Date;
   updatedAt: Date;
   isFavorite: boolean;
+  isCart: boolean;
 }
 
 export interface IPhoto {
