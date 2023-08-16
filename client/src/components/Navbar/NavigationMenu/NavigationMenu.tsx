@@ -29,9 +29,15 @@ const NavigationMenu: React.FC<IProps> = ({
     <ul className={isScrolled ? `${styles.menu} ${styles.fix}` : styles.menu}>
       {menuItems.map((item, index) => (
         <li key={index} className={styles.menuItem}>
-          <Link href={item.link || '#'} passHref className={styles.menuLink}>
-            {item.label}
-          </Link>
+          {item.onClick ? (
+            <Link href="#" onClick={item.onClick} className={styles.menuLink}>
+              {item.label}
+            </Link>
+          ) : (
+            <Link href={item.link || '#'} passHref className={styles.menuLink}>
+              {item.label}
+            </Link>
+          )}
         </li>
       ))}
     </ul>
