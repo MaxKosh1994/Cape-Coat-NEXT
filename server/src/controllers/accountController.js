@@ -89,6 +89,7 @@ module.exports.getAllOrders = async (req, res) => {
         total: order.total,
         status: order.status,
         address: order.address,
+        comments: order.comments,
         createdAt: order.createdAt,
         updatedAt: order.updatedAt,
         Items: order.Items,
