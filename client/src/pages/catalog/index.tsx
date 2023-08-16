@@ -18,7 +18,6 @@ export default function Catalog() {
             credentials: 'include',
           }
         );
-        console.log(response);
         if (response.status === 200) {
           const allCategs = await response.json();
           setAllCategories(allCategs);
@@ -44,7 +43,6 @@ export default function Catalog() {
       </Typography>
       <div className={styles.catalogueContainer}>
         {allCategories.map((cat) => (
-          // <Link href={`catalog/${cat.name}`} key={cat.id}>
           <CategoryList
             key={cat.id}
             id={cat.id}
@@ -52,7 +50,6 @@ export default function Catalog() {
             category={cat.name}
             allCategory={allCategories}
           />
-          // </Link>
         ))}
       </div>
     </>

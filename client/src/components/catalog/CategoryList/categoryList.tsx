@@ -44,21 +44,38 @@ export default function CategoryList({
   }, [category]);
 
   //TODO подумать над query, чтобы не отображалось в адресной строке
-  const categoryHandler = (e) => {
+  const categoryHandler = async(e) => {
     const target = e.target;
     if (!target) return; // Проверка наличия целевого элемента
     const parent = target.closest('.oneCategory').id;
-    // const query = { state: parent };
     const pathname =
       englishName === 'Trench coats'
         ? '/catalog/trench'
         : `/catalog/${englishName.toLowerCase()}`;
-    router.push({
-      pathname,
-      query: { id: parent },
-    });
-  };
 
+
+        // try {
+        //   const response = await fetch(`${pathname}?id=${parent}`);
+      
+        //   if (response.ok) {
+        //     // Делайте что-то с успешным ответом, например, ничего не делайте, если вам не нужно обрабатывать ответ
+        //     console.log(response)
+        //   } else {
+        //     console.error('Ошибка при выполнении запроса на сервер');
+        //   }
+        // } catch (error) {
+        //   console.error('Ошибка при выполнении запроса на сервер:', error);
+        // }
+
+        router.push(
+          {
+            pathname,
+            query: { id: parent },
+          },
+          undefined,
+          { shallow: true } // Здесь shallow: true
+        );
+  };
 
   return (
     <div className="oneCategory" id={id}>
