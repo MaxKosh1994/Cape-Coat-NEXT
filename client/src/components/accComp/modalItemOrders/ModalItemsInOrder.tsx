@@ -19,16 +19,6 @@ export default function ModalItemsInOrder({
     >
       <div className={styles.box}>
         {itemsInOrder?.map((item: IItem) => (
-          //  <ProductCard
-          //    key={item.id}
-          //    id={item.id}
-          //    article={item.article.toString()}
-          //    photo={item.Photos[0].photo}
-          //    name={item.name}
-          //    price={item.price}
-          //    isFavorite={item.isFavorite}
-          //    isCart={item.isCart}
-          //  />
           <SearchItemCard key={item.id} item={item} />
         ))}
       </div>

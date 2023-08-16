@@ -6,7 +6,7 @@ import styles from './SearchItemCard.module.css';
 export default function SearchItemCard({ item }: ISearchCardItem) {
   return (
     <div className={styles.container} key={item.id}>
-      <div>
+      <div className={styles.imageContainer}>
         <Image
           src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${item.Photos[0].photo}`}
           alt={item.name}
@@ -14,7 +14,7 @@ export default function SearchItemCard({ item }: ISearchCardItem) {
           height={75}
         />
       </div>
-      <div>
+      <div className={styles.textContainer}>
         <h5>{item.name}</h5>
         <h6>{`${item.price} Р`}</h6>
         <h6>{`Артикул: ${item.article}`}</h6>
