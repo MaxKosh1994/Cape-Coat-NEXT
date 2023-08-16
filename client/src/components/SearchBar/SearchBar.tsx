@@ -7,6 +7,7 @@ import styles from './SearchBarStyle.module.css';
 import { IItem } from '../accComp/orders/types';
 import { getAllItems } from './fetchSearch';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import SearchContainer from '../SearchContainer/SearchContainer';
 
 interface SearchBarProps {}
 
@@ -52,6 +53,10 @@ const SearchBar: React.FC<SearchBarProps> = () => {
     }
   }, [input]);
 
+  const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
   const filteredItems: IItem[] = allItems.filter((item) => {
     return (
       item.name.toLowerCase().includes(input.toLowerCase()) ||
@@ -60,27 +65,36 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   });
 
   return (
-    <Search>
-      <StyledIconButton onClick={() => setIsInputOpen(!isInputOpen)}>
-        {isTablet ? (
-          <span
-            className={styles.headerSearch}
-            style={{ color: '#423C3D', marginLeft: '6px' }}
-          >
-            Поиск
-          </span>
-        ) : (
-          <SearchIcon className={styles.headerSearchIcon} />
+    <>
+      <Search>
+        <StyledIconButton onClick={() => setIsInputOpen(!isInputOpen)}>
+          {isTablet ? (
+            <span
+              className={styles.headerSearch}
+              style={{ color: '#423C3D', marginLeft: '6px' }}
+            >
+              Поиск
+            </span>
+          ) : (
+            <SearchIcon className={styles.headerSearchIcon} />
+          )}
+        </StyledIconButton>
+        {isInputOpen && (
+          <StyledInputBase
+            value={input}
+            onChange={changeHandler}
+            placeholder='Поиск...'
+            autoFocus
+            inputProps={{ 'aria-label': 'search' }}
+            onBlur={() => {
+              setIsInputOpen(false);
+              setInput('');
+            }}
+          />
         )}
-      </StyledIconButton>
-      {isInputOpen && (
-        <StyledInputBase
-          placeholder="Поиск..."
-          autoFocus
-          onBlur={() => setIsInputOpen(false)}
-        />
-      )}
-    </Search>
+      </Search>
+      {input.length > 0 && <SearchContainer filteredItems={filteredItems} />}
+    </>
   );
 };
 
