@@ -3,8 +3,6 @@ import { IOrderCompProps } from './types';
 import styles from './OrderComp.module.css';
 import SearchItemCard from '@/components/SearchItemCard/SearchItemCard';
 
-//! Отступы кривые в карточке
-
 export default function OrderComp({ order }: IOrderCompProps) {
   return (
     <div className={styles.mainContainer}>
@@ -48,9 +46,7 @@ export default function OrderComp({ order }: IOrderCompProps) {
       </div>
 
       <div className={styles.footerContainer}>
-        <h4>
-          Комментарии: {order.comments}
-        </h4>
+        <h4>Комментарии: {order.comments}</h4>
       </div>
     </div>
   );
