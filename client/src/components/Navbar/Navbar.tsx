@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { createTheme } from '@mui/material/styles';
 import Image from 'next/image';
 import { grey } from '@mui/material/colors';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Menu from '@mui/material/Menu';
@@ -55,6 +52,7 @@ function ElevationScroll(props: Props) {
 const easeOutQuart = (progress) => 1 - Math.pow(1 - progress, 4);
 const easeInQuart = (progress) => progress ** 4;
 const handleScrollAndHighlight = () => {
+  console.log('скролл вниз');
   const scrollToBottom = () => {
     const currentPosition = window.pageYOffset;
     const targetPosition = document.body.scrollHeight;
@@ -106,6 +104,7 @@ export default function Navbar() {
 
   const muiTheme = createTheme(theme);
   const isMobile = useMediaQuery('(max-width:1024px)');
+  const isTablet = useMediaQuery('(max-width:768px)');
 
   const router = useRouter();
   const isHomePage = router.pathname === '/';
@@ -231,8 +230,8 @@ export default function Navbar() {
             />
           )}
         </div>
-        <div className="header-right" style={{ top: '5px' }}>
-          {!isMobile && <SearchBar />}
+        <div className="header-right">
+          {!isTablet && <SearchBar />}
 
           <Link
             className="header-basket"
