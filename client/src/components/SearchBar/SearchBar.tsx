@@ -61,21 +61,30 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   });
 
   return (
-    <Search>
-      <StyledIconButton onClick={() => setIsInputOpen(!isInputOpen)}>
-        <SearchIcon
-          className={styles.headerSearchIcon}
-          style={{ color: 'black' }}
-        />
-      </StyledIconButton>
-      {isInputOpen && (
-        <StyledInputBase
-          placeholder="Search..."
-          autoFocus
-          onBlur={() => setIsInputOpen(false)}
-        />
-      )}
-    </Search>
+    <>
+      <Search>
+        <StyledIconButton onClick={() => setIsInputOpen(!isInputOpen)}>
+          <SearchIcon
+            className={styles.headerSearchIcon}
+            style={{ color: 'black' }}
+          />
+        </StyledIconButton>
+        {isInputOpen && (
+          <StyledInputBase
+            value={input}
+            onChange={changeHandler}
+            placeholder='Search...'
+            autoFocus
+            inputProps={{ 'aria-label': 'search' }}
+            onBlur={() => {
+              setIsInputOpen(false);
+              setInput('');
+            }}
+          />
+        )}
+      </Search>
+      {input.length > 0 && <SearchContainer filteredItems={filteredItems} />}
+    </>
   );
 };
 
