@@ -7,6 +7,10 @@ import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import Head from 'next/head';
+import TrousersSizeForm from '@/components/Cart/coatSizeForm';
+import TrenchSizeForm from '@/components/Cart/trenchSizeForm';
+import CoatSizeForm from '@/components/Cart/coatSizeForm';
+import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
 
 export default function CartPage() {
   const user = useSelector((state) => state.sessionSlice.user);
@@ -32,6 +36,7 @@ export default function CartPage() {
   });
   const [deliveryCost, setDeliveryCost] = useState(0);
   const [userMeasurements, setUserMeasurements] = useState(undefined);
+  const [showParamsForm, setShowParamsForm] = useState({});
 
   function sendMail(name, user, order) {
     Email.send({
@@ -175,6 +180,14 @@ export default function CartPage() {
       setDelError('Не получилось удалить товар, попробуйте позже.');
     }
   };
+  const handleDisplaySizesForm = (itemId: number) => {
+    setShowParamsForm((prevState) => ({
+      ...prevState,
+      [itemId]: !prevState[itemId],
+    }));
+  };
+
+  const handleSaveSizesInputs = (e: ChangeEvent<HTMLInputElement>) => {};
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAddressInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -264,6 +277,7 @@ export default function CartPage() {
       }, 1000);
     }
   };
+  console.log(cartItemsList);
 
   return (
     <>
@@ -310,9 +324,7 @@ export default function CartPage() {
                         </Link>
                       </div>
                       <div className={styles.basketItemRight}>
-                        <div
-                          className={`${styles.basketItemContent} ${styles.basketItemContentCenter}`}
-                        >
+                        <div className={styles.basketItemContent}>
                           <Link
                             href={`/catalog/categoryName/${item.id}`}
                             className={styles.basketItemTitle}
@@ -331,24 +343,130 @@ export default function CartPage() {
                             />
                           </button>
                         </div>
-                        <div
-                          className={`${styles.basketItemContent} ${styles.basketItemContentCenter}`}
-                        >
+                        <div className={styles.basketItemContent}>
                           <div className={styles.basketItemProperties}>
                             <div>Артикул: {item.article}</div>
                           </div>
                         </div>
-                        <div
-                          className={`${styles.basketItemContent} ${styles.basketItemContentCenter}`}
-                        >
-                          <div className={styles.basketItemPrices}>
-                            <div className={styles.itemPrices}>
-                              <span className={styles.itemPricesPrice}>
-                                {item.price.toLocaleString()} &#8381;
-                              </span>
-                            </div>
+                        <div className={styles.basketItemContent}>
+                          <div className={styles.itemPrices}>
+                            <span className={styles.itemPricesPrice}>
+                              {item.price.toLocaleString()} &#8381;
+                            </span>
                           </div>
                         </div>
+                        <button
+                          className={styles.showSizeFormBtn}
+                          onClick={() => handleDisplaySizesForm(item.id)}
+                        >
+                          Ввести мерки
+                        </button>
+                        {showParamsForm[item.id] && (
+                          <>
+                            <div className={styles.sizesForm}>
+                              <form action="">
+                                <div className={styles.sizesFormBlock}>
+                                  <div>
+                                    <label
+                                      htmlFor="height"
+                                      className={styles.sizesFormLabel}
+                                    >
+                                      Ваш рост
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="height"
+                                      className={styles.sizesFormInput}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label
+                                      htmlFor="length"
+                                      className={styles.sizesFormLabel}
+                                    >
+                                      Желаемая длина изделия
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="length"
+                                      className={styles.sizesFormInput}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label
+                                      htmlFor="sleeve"
+                                      className={styles.sizesFormLabel}
+                                    >
+                                      Длина рукава
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="sleeve"
+                                      className={styles.sizesFormInput}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label
+                                      htmlFor="bust"
+                                      className={styles.sizesFormLabel}
+                                    >
+                                      Объем груди
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="bust"
+                                      className={styles.sizesFormInput}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label
+                                      htmlFor="waist"
+                                      className={styles.sizesFormLabel}
+                                    >
+                                      Объем талии
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="waist"
+                                      className={styles.sizesFormInput}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label
+                                      htmlFor="hips"
+                                      className={styles.sizesFormLabel}
+                                    >
+                                      Объем бедер
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="hips"
+                                      className={styles.sizesFormInput}
+                                    />
+                                  </div>
+                                  {item.category_id === 4 && (
+                                    <TrousersSizeForm />
+                                  )}
+                                  {item.category_id === 1 && (
+                                    <TrenchSizeForm itemId={item.id} />
+                                  )}
+                                  {item.category_id === 2 && (
+                                    <CoatSizeForm itemId={item.id} />
+                                  )}
+                                  {item.category_id === 5 && (
+                                    <FurCoatSizeForm itemId={item.id} />
+                                  )}
+                                </div>
+                                <button
+                                  className={styles.sizesFormBtn}
+                                  onClick={handleSaveSizesInputs}
+                                >
+                                  Сохранить
+                                </button>
+                              </form>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -412,7 +530,7 @@ export default function CartPage() {
                           Укажите желаемую длину изделия или другие пожелания
                         </label>
                         <textarea
-                          className={`${styles.commentInput} ${styles.formControlControl}`}
+                          className={`${styles.commentInput} ${styles.formInput}`}
                           role="text"
                           title="Комментарии"
                           placeholder=""
@@ -421,7 +539,6 @@ export default function CartPage() {
                           cols="50"
                           onChange={handleCommentChange}
                         />
-                        <div className={styles.formControlMessages}></div>
                       </div>
                     </label>
                   </div>
@@ -498,17 +615,12 @@ export default function CartPage() {
                                   title="Город"
                                   placeholder=""
                                   name="city"
-                                  className={styles.formControlControl}
+                                  className={styles.formInput}
                                   onChange={handleInputChange}
                                 />
-                                <div
-                                  className={styles.formControlMessages}
-                                ></div>
                               </div>
                               <div className={styles.formControl}>
-                                <label
-                                  className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
-                                >
+                                <label className={styles.formControlLabel}>
                                   Улица
                                 </label>
                                 <input
@@ -516,22 +628,15 @@ export default function CartPage() {
                                   title="Улица*"
                                   placeholder=""
                                   name="street"
-                                  className={styles.formControlControl}
+                                  className={styles.formInput}
                                   onChange={handleInputChange}
                                 />
-                                <div
-                                  className={styles.formControlMessages}
-                                ></div>
                               </div>
                             </div>
                             <div className={styles.inputGroup}>
                               <div className={styles.inputLocation}>
-                                <div
-                                  className={`${styles.formControl} ${styles.formControlDisabled}`}
-                                >
-                                  <label
-                                    className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
-                                  >
+                                <div className={styles.formControl}>
+                                  <label className={styles.formControlLabel}>
                                     Дом
                                   </label>
                                   <input
@@ -539,24 +644,17 @@ export default function CartPage() {
                                     title="Дом"
                                     name="number"
                                     placeholder=""
-                                    className={styles.formControlControl}
+                                    className={styles.formInput}
                                     onChange={handleInputChange}
                                     disabled=""
                                   />
                                   <div
                                     className={styles.formControlButtons}
                                   ></div>
-                                  <div
-                                    className={styles.formControlMessages}
-                                  ></div>
                                 </div>
                               </div>
-                              <div
-                                className={`${styles.formControl} ${styles.formControlDisabled}`}
-                              >
-                                <label
-                                  className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
-                                >
+                              <div className={styles.formControl}>
+                                <label className={styles.formControlLabel}>
                                   Квартира/Офис
                                 </label>
                                 <input
@@ -564,15 +662,12 @@ export default function CartPage() {
                                   name="flat"
                                   title="Квартира/Офис"
                                   placeholder=""
-                                  className={styles.formControlControl}
+                                  className={styles.formInput}
                                   onChange={handleInputChange}
                                   disabled=""
                                 />
                                 <div
                                   className={styles.formControlButtons}
-                                ></div>
-                                <div
-                                  className={styles.formControlMessages}
                                 ></div>
                               </div>
                             </div>
