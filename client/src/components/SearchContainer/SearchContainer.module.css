@@ -13,7 +13,7 @@
   grid-gap: 10px;
   overflow: auto;
   max-height: 300px;
-  border-radius: 5px;
+  /* border-radius: 5px; */
 }
 
 /* .resultContainer::-webkit-scrollbar {
@@ -35,7 +35,8 @@
 
 @media (max-width: 821px) {
   .resultContainer {
-    right: 115px;
+    top: 58px;
+    right: 5px;
   }
 }
 
