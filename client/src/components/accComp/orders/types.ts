@@ -29,6 +29,7 @@ export interface IOrder {
   total: number;
   status: string;
   address: string;
+  comments: string;
   Items: Array<IItem>;
   createdAt: Date;
   updatedAt: Date;
