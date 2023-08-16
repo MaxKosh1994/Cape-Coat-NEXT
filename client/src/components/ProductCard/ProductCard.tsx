@@ -255,11 +255,12 @@ export default function ProductCard({
           </h3>
 
           <div className={styles.Icons}>
-            <IconButton aria-label="Add to favorites" onClick={favoriteHandler}>
-              {isFavorite ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
+            <IconButton 
+            aria-label="Add to favorites" onClick={favoriteHandler}>
+              {isFavorite ? <FavoriteIcon className={styles.IconImage} /> : <FavoriteBorderOutlinedIcon className={styles.IconImage} />}
             </IconButton>
             <IconButton onClick={cartHandler} aria-label="Add to cart">
-              {isCart ? <AddTaskIcon /> : <AddShoppingCartIcon />}
+              {isCart ? <AddTaskIcon className={styles.IconImage} /> : <AddShoppingCartIcon className={styles.IconImage} />}
             </IconButton>
           </div>
         </div>
