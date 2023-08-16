@@ -3,6 +3,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import SearchBar from '@/components/SearchBar/SearchBar';
+import { useMediaQuery } from '@mui/material';
 
 interface IMobileMenuProps {
   mobileMoreAnchorEl: null | HTMLElement;
@@ -37,7 +38,7 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
   handleScrollAndHighlight,
 }) => {
   const mobileMenuId = 'primary-search-account-menu-mobile';
-
+  const isMobile = useMediaQuery('(max-width:768px)');
   return (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -57,11 +58,6 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
       <MobileMenuItem
         label="О бренде"
         link="/about"
-        onClick={handleMobileMenuClose}
-      />
-      <MobileMenuItem
-        label="Избранное"
-        link="/account/favorites"
         onClick={handleMobileMenuClose}
       />
       <MobileMenuItem
@@ -87,8 +83,7 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
           handleMobileMenuClose();
         }}
       />
-
-      <SearchBar />
+      {isMobile && <SearchBar />}
     </Menu>
   );
 };
