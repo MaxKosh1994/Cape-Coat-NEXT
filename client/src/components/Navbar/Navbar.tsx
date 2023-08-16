@@ -144,7 +144,7 @@ export default function Navbar() {
     setAmountOfCartItem(cartItems.length);
   }, [cartItems]);
 
-  const iconColour = grey[900];
+  const iconColour = '#423C3D';
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
