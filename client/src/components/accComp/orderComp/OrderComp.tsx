@@ -3,6 +3,8 @@ import { IOrderCompProps } from './types';
 import styles from './OrderComp.module.css';
 import SearchItemCard from '@/components/SearchItemCard/SearchItemCard';
 
+//! Отступы кривые в карточке
+
 export default function OrderComp({ order }: IOrderCompProps) {
   return (
     <div className={styles.mainContainer}>
@@ -28,7 +30,10 @@ export default function OrderComp({ order }: IOrderCompProps) {
           </div>
 
           <div className={styles.headerComp}>
-            <h4>Сумма заказа: {order.total.toLocaleString()}</h4>
+            <h4>
+              Сумма заказа: {order.total.toLocaleString().replace(/,\s?/g, ' ')}{' '}
+              ₽
+            </h4>
           </div>
 
           <div className={styles.headerComp}>
@@ -44,8 +49,7 @@ export default function OrderComp({ order }: IOrderCompProps) {
 
       <div className={styles.footerContainer}>
         <h4>
-          Комментарии: {order.comments} Попробуйте самостоятельно оцентровать
-          хоть один див и вам сразу захочется работать в такси в Ингушетии
+          Комментарии: {order.comments}
         </h4>
       </div>
     </div>
