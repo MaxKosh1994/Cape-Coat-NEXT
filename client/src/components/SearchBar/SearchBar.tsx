@@ -11,8 +11,8 @@ import SearchContainer from '../SearchContainer/SearchContainer';
 
 interface SearchBarProps {}
 
-const SearchBar: React.FC<SearchBarProps> = () => {
-  const isTablet = useMediaQuery('(max-width:768px)');
+const SearchBar: React.FC<SearchBarProps> = ({ onSearchIconClick }) => {
+  const isMobile = useMediaQuery('(max-width:768px)');
 
   const [isInputOpen, setIsInputOpen] = useState(false);
 
@@ -23,16 +23,20 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   }));
 
   const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    marginLeft: isTablet ? '110px' : '0',
+    position: isMobile ? 'fixed' : 'unset',
+    padding: isMobile ? '15px' : 0,
+    top: isMobile ? '55px' : 'unset',
+    left: isInputOpen ? '0' : '100%',
     color: 'black',
-    width: isTablet ? '123px' : '150px',
+    width: isMobile ? '100%' : '150px',
     transition: theme.transitions.create('width'),
+    backgroundColor: isMobile ? 'white' : 'transparent',
   }));
 
   const StyledIconButton = styled(IconButton)(({ theme }) => ({
     paddingTop: '6px',
     paddingRight: '2px',
-    marginLeft: isInputOpen ? '-150px' : '0',
+    marginLeft: isMobile ? '0' : '10px',
     transition: theme.transitions.create('margin-left'),
   }));
 
@@ -57,44 +61,27 @@ const SearchBar: React.FC<SearchBarProps> = () => {
     setInput(event.target.value);
   };
 
-  const filteredItems: IItem[] = allItems.filter((item) => {
-    return (
-      item.name.toLowerCase().includes(input.toLowerCase()) ||
-      item.article.toString().toLowerCase().includes(input.toLowerCase())
-    );
-  });
+  const handleSearchIconClick = () => {
+    setIsInputOpen(!isInputOpen);
+    onSearchIconClick();
+  };
 
   return (
-    <>
-      <Search>
-        <StyledIconButton onClick={() => setIsInputOpen(!isInputOpen)}>
-          {isTablet ? (
-            <span
-              className={styles.headerSearch}
-              style={{ color: '#423C3D', marginLeft: '6px' }}
-            >
-              Поиск
-            </span>
-          ) : (
-            <SearchIcon className={styles.headerSearchIcon} />
-          )}
-        </StyledIconButton>
-        {isInputOpen && (
-          <StyledInputBase
-            value={input}
-            onChange={changeHandler}
-            placeholder='Поиск...'
-            autoFocus
-            inputProps={{ 'aria-label': 'search' }}
-            onBlur={() => {
-              setIsInputOpen(false);
-              setInput('');
-            }}
-          />
-        )}
-      </Search>
-      {input.length > 0 && <SearchContainer filteredItems={filteredItems} />}
-    </>
+    <Search>
+      <StyledIconButton onClick={handleSearchIconClick}>
+        <SearchIcon className={styles.headerSearchIcon} />
+      </StyledIconButton>
+      {isInputOpen && (
+        <StyledInputBase
+          placeholder="Поиск..."
+          autoFocus
+          onBlur={() => {
+            setIsInputOpen(false);
+            onSearchIconClick();
+          }}
+        />
+      )}
+    </Search>
   );
 };
 
