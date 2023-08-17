@@ -2,6 +2,7 @@ import Image from 'next/image';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import TerrainOutlinedIcon from '@mui/icons-material/TerrainOutlined';
+import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import { Phone } from '@mui/icons-material';
 import Link from 'next/link';
 import logo from './logoStore.svg';
@@ -11,7 +12,7 @@ export default function Footer() {
   const fontSize = 10;
 
   return (
-    <footer id='footer' className={styles.footer}>
+    <footer id="footer" className={styles.footer}>
       <div className={styles.wrapper}>
         <div className={styles.footer__top}>
           <div className={styles.footer__navigation}>
@@ -20,7 +21,7 @@ export default function Footer() {
                 <div className={`${styles['footer__navigation-title']}`}>
                   <Image
                     src={logo}
-                    alt='Logo'
+                    alt="Logo"
                     priority={true}
                     style={{
                       width: '200px',
@@ -34,7 +35,22 @@ export default function Footer() {
             <div className={`${styles['footer__navigation-wrapper']}`}>
               <div className={`${styles['footer__navigation-block']}`}>
                 <div className={`${styles['footer__navigation-title']}`}>
-                  <div className={`${styles['footer--title']}`}>
+                  <div className={`${styles['footer__title']}`}>
+                    Наш шоурум:
+                  </div>
+                </div>
+                <div className={`${styles['footer__navigation-item']}`}>
+                  г.Нижний Новгород, ул. Малая Покровская, 20
+                </div>
+                <div className={`${styles['footer__navigation-item']}`}>
+                  Ждем вас с 10:00 до 20:00
+                </div>
+              </div>
+            </div>
+            <div className={`${styles['footer__navigation-wrapper']}`}>
+              <div className={`${styles['footer__navigation-block']}`}>
+                <div className={`${styles['footer__navigation-title']}`}>
+                  <div className={`${styles['footer__title']}`}>
                     Покупателям:
                   </div>
                 </div>
@@ -42,7 +58,7 @@ export default function Footer() {
                   <a
                     className={`${styles['footer__navigation-item']}`}
                     style={{ color: 'black' }}
-                    href='/FAQ'
+                    href="/FAQ"
                   >
                     Информация о снятии мерок
                   </a>
@@ -51,7 +67,7 @@ export default function Footer() {
                   <Link
                     className={`${styles['footer__navigation-item']}`}
                     style={{ color: 'black' }}
-                    href='/privacy'
+                    href="/privacy"
                   >
                     Политика конфиденциальности
                   </Link>
@@ -63,7 +79,10 @@ export default function Footer() {
             >
               <div className={`${styles['footer__navigation-block']}`}>
                 <div className={`${styles['footer__navigation-title']}`}>
-                  <div className={`${styles['footer--title']}`}>Контакты:</div>
+                  <div className={`${styles['footer__title']}`}>
+                    <Phone sx={{ fontSize: '1rem', marginRight: '10px' }} />
+                    +7 (920)-119-99-19
+                  </div>
                 </div>
 
                 <div className={`${styles['footer__navigation-item']}`}>
@@ -71,33 +90,21 @@ export default function Footer() {
                   <div
                     style={{
                       display: 'flex',
-                      justifyContent: 'space-between',
+                      justifyContent: 'space-evenly',
+                      marginTop: '10px',
+                      marginBottom: '10px',
                     }}
                   >
-                    <a style={{ color: 'black' }} href='https://t.me/@kkireva'>
+                    <a style={{ color: 'black' }} href="https://t.me/@kkireva">
                       <TelegramIcon />
                     </a>
                     <a
                       style={{ color: 'black' }}
-                      href='https://elbrusboot.camp/'
-                    >
-                      <TerrainOutlinedIcon />
-                    </a>
-
-                    <a
-                      style={{ color: 'black' }}
-                      href='mailto:Cape.n.coat@gmail.com'
+                      href="mailto:Cape.n.coat@gmail.com"
                     >
                       <MailOutlineIcon />
                     </a>
                   </div>
-                </div>
-
-                <div className={`${styles['footer__navigation-item']}`}>
-                  <span>
-                    <Phone sx={{ fontSize: '1rem', marginRight: '10px' }} />
-                    +7 (920)-119-99-19
-                  </span>
                 </div>
               </div>
             </div>
