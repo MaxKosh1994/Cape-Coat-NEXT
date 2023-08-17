@@ -1,8 +1,8 @@
 .mainDiv {
-  width: 80%;
+  width: 100%;
   min-height: 550px;
   margin: 0 auto;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .routesDiv {
@@ -10,7 +10,8 @@
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
-  width: 75%;
+  width: 50%;
+  margin-bottom: 40px;
 }
 
 .elContainer {
@@ -25,9 +26,9 @@
   background-color: #ffffff !important;
   text-align: center !important;
   color: rgb(80, 80, 80) !important;
-  /* font-size: large; */
   border-radius: 0 !important;
   padding-bottom: 5px !important;
+  letter-spacing: 0.1rem;
 }
 
 .button:active,
@@ -37,20 +38,25 @@
 
 @media (max-width: 820px) {
   .routesDiv {
-    margin-left: 50px;
-    margin-right: 50px;
+    margin: 0 auto;
+    width: 90%;
+    margin-bottom: 40px;
   }
 }
 
 @media (max-width: 550px) {
   .routesDiv {
-    margin-top: 20px;
     display: flex;
-    justify-content: space-evenly;
     width: 90%;
-    margin-left: 0px;
-    margin-right: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .button {
+    font-size: small;
+  }
+
+  .hideText {
+    display: none;
   }
 }
