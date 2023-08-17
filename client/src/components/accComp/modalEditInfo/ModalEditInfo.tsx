@@ -47,23 +47,14 @@ export default function ModalEditInfo({
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
     >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 400,
-          bgcolor: '#eee',
-          border: '2px solid #000',
-          boxShadow: 24,
-          p: 4,
-        }}
-        className={styles.customModal}
-      >
+      <Box className={styles.container}>
         <form onSubmit={handleClose}>
           <div className={styles.formDiv}>
-            {info.length > 0 && <p>{info}</p>}
+            {info.length > 0 && (
+              <div className={styles.infoDiv}>
+                <p className={styles.infoP}>{info}</p>
+              </div>
+            )}
             <TextField
               autoComplete='off'
               className='text-field'
@@ -79,7 +70,7 @@ export default function ModalEditInfo({
             <TextField
               autoComplete='off'
               className='text-field'
-              label='Адрес (Город, улица, дом, квартира, индекс)'
+              label='Адрес'
               name='address'
               type='text'
               value={inputsUserInfo?.address || ''}
