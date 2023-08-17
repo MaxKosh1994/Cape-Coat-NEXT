@@ -71,11 +71,17 @@
   width: 100%;
 }
 
+.boldDarkText {
+  font-weight: bold;
+  color: #333333;
+}
+
 @media (max-width: 821px) {
   .bodyContainer {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: 100%;
   }
 
   .rightBodyContainer {

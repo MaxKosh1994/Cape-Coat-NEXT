@@ -19,7 +19,7 @@ export default function OrderComp({ order }: IOrderCompProps) {
         <div className={styles.leftBodyContainer}>
           <div className={styles.headerComp}>
             <h4>
-              Дата:
+              <span className={styles.boldDarkText}>Дата: </span>
               {`  ${order.createdAt
                 .toString()
                 .slice(0, 10)
@@ -29,13 +29,16 @@ export default function OrderComp({ order }: IOrderCompProps) {
 
           <div className={styles.headerComp}>
             <h4>
-              Сумма заказа: {order.total.toLocaleString().replace(/,\s?/g, ' ')}{' '}
-              ₽
+              <span className={styles.boldDarkText}>Сумма заказа: </span>{' '}
+              {order.total.toLocaleString().replace(/,\s?/g, ' ')} ₽
             </h4>
           </div>
 
           <div className={styles.headerComp}>
-            <h4>Адрес: {order.address}</h4>
+            <h4>
+              <span className={styles.boldDarkText}>Адрес: </span>{' '}
+              {order.address}
+            </h4>
           </div>
         </div>
         <div className={styles.rightBodyContainer}>
