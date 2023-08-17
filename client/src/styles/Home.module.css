@@ -129,7 +129,7 @@
 .allBtn:hover {
   background-color: #999999;
   color: #ececec;
-  border: 1px solid #ececec;
+  border: none;
 }
 
 @media (max-width: 599px) {

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { GetServerSideProps, GetStaticProps } from 'next';
 import { Typography } from '@mui/material';
-import PlaceIcon from '@mui/icons-material/Place';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
