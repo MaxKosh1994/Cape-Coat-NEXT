@@ -12,6 +12,8 @@ body {
   font-family: 'Ysabeau Infant';
   /* height: 100%; */
   width: 100%;
+  padding-right: 0 !important;
+  overflow: unset !important;
 }
 
 body {
