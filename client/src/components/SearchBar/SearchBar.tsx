@@ -66,22 +66,36 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearchIconClick }) => {
     onSearchIconClick();
   };
 
+  const filteredItems: IItem[] = allItems.filter((item) => {
+    return (
+      item.name.toLowerCase().includes(input.toLowerCase()) ||
+      item.article.toString().toLowerCase().includes(input.toLowerCase())
+    );
+  });
+
   return (
-    <Search>
-      <StyledIconButton onClick={handleSearchIconClick}>
-        <SearchIcon className={styles.headerSearchIcon} />
-      </StyledIconButton>
-      {isInputOpen && (
-        <StyledInputBase
-          placeholder="Поиск..."
-          autoFocus
-          onBlur={() => {
-            setIsInputOpen(false);
-            onSearchIconClick();
-          }}
-        />
-      )}
-    </Search>
+    <>
+      <Search>
+        <StyledIconButton onClick={handleSearchIconClick}>
+          <SearchIcon className={styles.headerSearchIcon} />
+        </StyledIconButton>
+        {isInputOpen && (
+          <StyledInputBase
+            value={input}
+            onChange={changeHandler}
+            placeholder='Поиск...'
+            autoFocus
+            inputProps={{ 'aria-label': 'search' }}
+            onBlur={() => {
+              setIsInputOpen(false);
+              setInput('');
+              onSearchIconClick();
+            }}
+          />
+        )}
+      </Search>
+      {input.length > 0 && <SearchContainer filteredItems={filteredItems} />}
+    </>
   );
 };
 
