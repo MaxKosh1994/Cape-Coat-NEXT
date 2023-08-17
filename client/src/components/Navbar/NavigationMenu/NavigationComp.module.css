@@ -18,7 +18,43 @@
   font-size: 1.2rem;
   letter-spacing: 0.1em;
 }
+.menu > li:hover {
+  color: black;
+}
 
 .menu.fix {
   margin-top: 9px;
+}
+
+.menuItem {
+  position: relative;
+}
+
+.dropdownMenu {
+  display: none;
+  position: absolute;
+  top: 22px;
+  left: 0;
+  background-color: white;
+
+  list-style-type: none;
+}
+
+.menuItem:hover .dropdownMenu {
+  display: block;
+}
+
+.menuItem:not(:hover) .dropdownMenu {
+  animation: hideSubmenu 0.2s ease-in-out forwards;
+}
+
+@keyframes hideSubmenu {
+  from {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  to {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
