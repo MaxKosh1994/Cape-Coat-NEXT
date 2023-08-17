@@ -7,6 +7,7 @@ import styles from './SearchBarStyle.module.css';
 import { IItem } from '../accComp/orders/types';
 import { getAllItems } from './fetchSearch';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import SearchContainer from '../SearchContainer/SearchContainer';
 
 interface SearchBarProps {}
 
@@ -55,6 +56,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearchIconClick }) => {
       fetchData();
     }
   }, [input]);
+
+  const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
 
   const handleSearchIconClick = () => {
     setIsInputOpen(!isInputOpen);

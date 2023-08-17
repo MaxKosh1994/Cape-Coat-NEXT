@@ -4,6 +4,7 @@
   width: 100%;
   cursor: pointer;
   padding: 5px;
+  border-bottom: 0.5px solid rgb(78, 78, 78);
 }
 
 .imageContainer {

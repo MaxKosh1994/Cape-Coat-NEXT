@@ -1,25 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
-import { styled } from '@mui/system';
 import styles from '@/styles/Category.module.css';
 
 import { RootState } from '../../app/store';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import { category, categoryClear } from '../../app/CategorySlice';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 
 export default function Category() {
   const [catName, setCatName] = useState('');
   const location = useRouter().query.id;
-  console.log(location);
   const dispatch = useDispatch();
 
   const card = useSelector(
     (state: RootState) => state.CategorySlice.categoryItems
   );
 
+  
   useEffect(() => {
     try {
       (async function (): Promise<void> {
@@ -59,7 +58,7 @@ export default function Category() {
     } catch (err) {
       console.log(err);
     }
-  }, []);
+  }, [location]);
 
   const renderProductCards = card.map((item) => (
     <ProductCard

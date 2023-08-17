@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import styles from './SureModal.module.css';
+import styles from './sureModal.module.css';
 import { signOutUserThunk } from '../../../app/thunkActionsAuth';
 import { useDispatch } from 'react-redux';
 import { checkSession } from '../../../app/sessionSlice';
@@ -48,7 +48,7 @@ export default function SureModal({ open, setOpen }: ISureModal) {
             </Button>
             <Button
               onClick={logOutHandler}
-              className={styles.button}
+              className={styles.buttonExit}
               type='submit'
               variant='contained'
               color='primary'

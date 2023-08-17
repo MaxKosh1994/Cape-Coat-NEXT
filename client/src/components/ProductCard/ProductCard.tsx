@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 
+
 import { IconButton } from '@mui/material';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -32,10 +33,12 @@ export default function ProductCard({
 
   const [favCard, setFavCard] = useState();
 
-  // const navigate = useNavigate();
-
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
   const [isCart, setIsCart] = useState(initialIsCart);
+
+  const [localStorageFavorites, setLocalStorageFavorites] = useState(
+    JSON.parse(localStorage.getItem('favorites')) || []
+  );
 
   const favorites = useSelector(
     (state: RootState) => state.CategorySlice.favorites
@@ -44,9 +47,6 @@ export default function ProductCard({
     (state: RootState) => state.CategorySlice.itemsInCart
   );
 
-  // const favorites2 = useSelector(
-  //   (state: RootState) => state.favouriteSlice.favourites
-  // );
   const { user } = useSelector((state: RootState) => state.sessionSlice);
 
   const itemCardHandler = async (e): Promise<void> => {
@@ -64,25 +64,25 @@ export default function ProductCard({
     setIsFavorite(!isFavorite);
     dispatch(toggleFavorite(id));
     try {
-      // if (!user) {
-      //   // navigate('/signin');
-      //   return;
-      // }
+
       if (isFavorite === false) {
-        const response = await fetch(process.env.VITE_URL + 'favorite/add', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            id,
-            article,
-            photo,
-            name,
-            newPrice,
-            price,
-            isFavorite,
-          }),
-        });
+        const response = await fetch(
+          process.env.NEXT_PUBLIC_URL + 'favorite/add',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              id,
+              article,
+              photo,
+              name,
+              newPrice,
+              price,
+              isFavorite,
+            }),
+          }
+        );
         if (response.status === 200) {
           const favorite = await response.json();
           setFavCard(favorite);
@@ -92,20 +92,23 @@ export default function ProductCard({
           dispatch(setLikedStatus(true));
         }
       } else {
-        const response = await fetch(process.env.VITE_URL + 'favorite/del', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            id,
-            article,
-            photo,
-            name,
-            newPrice,
-            price,
-            isFavorite,
-          }),
-        });
+        const response = await fetch(
+          process.env.NEXT_PUBLIC_URL + 'favorite/del',
+          {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              id,
+              article,
+              photo,
+              name,
+              newPrice,
+              price,
+              isFavorite,
+            }),
+          }
+        );
         if (response.status === 200) {
           const favorite = await response.json();
           setFavCard(favorite);
@@ -129,21 +132,24 @@ export default function ProductCard({
       //   return;
       // }
       if (isCart === false) {
-        const response = await fetch(process.env.VITE_URL + 'cart/item/add', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            id,
-            article,
-            photo,
-            name,
-            newPrice,
-            price,
-            isFavorite,
-            isCart,
-          }),
-        });
+        const response = await fetch(
+          process.env.NEXT_PUBLIC_URL + 'cart/item/add',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              id,
+              article,
+              photo,
+              name,
+              newPrice,
+              price,
+              isFavorite,
+              isCart,
+            }),
+          }
+        );
         if (response.status === 200) {
           const inCart = await response.json();
           const itemInCart = inCart[0];
@@ -151,21 +157,24 @@ export default function ProductCard({
           dispatch(addCartItem(inCart));
         }
       } else {
-        const response = await fetch(process.env.VITE_URL + 'cart/item/del', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            id,
-            article,
-            photo,
-            name,
-            newPrice,
-            price,
-            isFavorite,
-            isCart,
-          }),
-        });
+        const response = await fetch(
+          process.env.NEXT_PUBLIC_URL + 'cart/item/del',
+          {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              id,
+              article,
+              photo,
+              name,
+              newPrice,
+              price,
+              isFavorite,
+              isCart,
+            }),
+          }
+        );
         if (response.status === 200) {
           const delCart = await response.json();
 
@@ -185,10 +194,13 @@ export default function ProductCard({
         if (!user) {
           return;
         }
-        const response = await fetch(process.env.VITE_URL + 'cart/cartInCat', {
-          method: 'GET',
-          credentials: 'include',
-        });
+        const response = await fetch(
+          process.env.NEXT_PUBLIC_URL + 'cart/cartInCat',
+          {
+            method: 'GET',
+            credentials: 'include',
+          }
+        );
         if (response.status === 200) {
           const allItemInCart = await response.json();
           const isProductInCart = allItemInCart.includes(id);
@@ -207,7 +219,7 @@ export default function ProductCard({
         if (!user) {
           return;
         }
-        const response = await fetch(process.env.VITE_URL + 'favorite', {
+        const response = await fetch(process.env.NEXT_PUBLIC_URL + 'favorite', {
           method: 'GET',
           credentials: 'include',
         });
@@ -240,15 +252,7 @@ export default function ProductCard({
             className={styles.Image}
           />
         </span>
-        {/* <CardMedia
-          component="img"
-          alt="Product Image"
-          image={`${process.env.NEXT_PUBLIC_IMAGE_URL}${photo}`}
-          className="card-media"
-          onClick={itemCardHandler}
-        /> */}
         <h1 className={styles.NameCard}>{name}</h1>
-        {/* <div className={styles.InfoCard}> */}
         <div className={styles.CardContent}>
           <h3 className={styles.Price}>
             Цена: {price?.toLocaleString().replace(/,\s?/g, ' ')} ₽
@@ -256,15 +260,28 @@ export default function ProductCard({
 
           <div className={styles.Icons}>
             <IconButton aria-label="Add to favorites" onClick={favoriteHandler}>
-              {isFavorite ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
+              {isFavorite ? (
+                <FavoriteIcon
+                  style={{ color: 'rgb(0 0 0 / 70%)' }}
+                  className={styles.IconImage}
+                />
+              ) : (
+                <FavoriteBorderOutlinedIcon className={styles.IconImage} />
+              )}
             </IconButton>
             <IconButton onClick={cartHandler} aria-label="Add to cart">
-              {isCart ? <AddTaskIcon /> : <AddShoppingCartIcon />}
+              {isCart ? (
+                <AddTaskIcon
+                  style={{ color: 'rgb(0 0 0 / 70%)' }}
+                  className={styles.IconImage}
+                />
+              ) : (
+                <AddShoppingCartIcon className={styles.IconImage} />
+              )}
             </IconButton>
           </div>
         </div>
       </div>
-      {/* </div> */}
     </>
   );
 }
