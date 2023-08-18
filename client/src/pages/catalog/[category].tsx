@@ -28,7 +28,6 @@ export default function Category() {
             credentials: 'include',
           }
         );
-        console.log(response);
         if (response.status === 200) {
           const result = await response.json();
           dispatch(categoryClear());
