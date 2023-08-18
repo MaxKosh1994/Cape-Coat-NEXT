@@ -8,7 +8,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 export const getCartItemsThunk = () => async (dispatch, getState) => {
   try {
     const { user } = getState().sessionSlice;
-    console.log('user in thunk', user);
+    // console.log('user in thunk', user);
     const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}cart/${user}`, {
       withCredentials: true,
       headers: {
