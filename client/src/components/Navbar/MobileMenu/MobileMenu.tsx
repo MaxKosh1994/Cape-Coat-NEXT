@@ -8,6 +8,7 @@ interface IMobileMenuProps {
   isMobileMenuOpen: boolean;
   handleMobileMenuClose: () => void;
   handleScrollAndHighlight: () => void;
+  onSearchIconClick: () => void;
 }
 
 interface IMenuItemProps {
@@ -75,7 +76,7 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
         onClick={handleMobileMenuClose}
       />
       <MobileMenuItem
-        label="Коллекция"
+        label="Коллекции"
         link="/catalog/collection"
         onClick={handleMobileMenuClose}
       />
@@ -92,7 +93,6 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
           handleMobileMenuClose();
         }}
       />
-      {/* {isMobile && <SearchBar />} */}
     </Menu>
   );
 };

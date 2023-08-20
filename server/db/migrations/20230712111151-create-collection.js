@@ -20,6 +20,10 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      urlName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       current: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,

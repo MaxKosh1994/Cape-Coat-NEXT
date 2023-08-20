@@ -2,12 +2,47 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styles from './NavigationComp.module.css';
-import { fetchNavigationMenuData } from './fetchNavigationMenuData';
+import {
+  fetchNavigationMenuCategoryData,
+  fetchNavigationMenuCollectionData,
+} from './fetchNavigationMenuData';
 
 interface IProps {
   isScrolled: boolean;
-  handleMobileMenuClose: () => void;
   handleScrollAndHighlight: () => void;
+  onSearchIconClick: () => void;
+}
+
+interface ICategories {
+  id: number;
+  name: string;
+  photo: string;
+  link: string;
+  urlName: string;
+}
+
+interface ICollections {
+  id: number;
+  name: string;
+  photo: string;
+  description: string;
+  current: boolean;
+  link: string;
+  urlName: string;
+}
+
+interface IFaqMenuItem {
+  id: number;
+  name: string;
+  collections?: ICollections[];
+  link: string;
+}
+
+interface IMenuItem {
+  label: string;
+  link?: string;
+  submenu?: (ICategories | ICollections | IFaqMenuItem)[];
+  onClick?: () => void;
 }
 
 const NavigationMenu: React.FC<IProps> = ({
@@ -17,34 +52,48 @@ const NavigationMenu: React.FC<IProps> = ({
 }) => {
   const router = useRouter();
   const isHomePage = router.pathname === '/';
-  const [submenuStates, setSubmenuStates] = useState({});
+  const [submenuStates, setSubmenuStates] = useState<{
+    [index: number]: boolean;
+  }>({});
 
-  const [orders, setOrders] = useState([]);
+  const [categories, setCategories] = useState<ICategories[]>([]);
+  const [collections, setCollections] = useState<ICollections[]>([]);
 
   useEffect(() => {
     const getData = async () => {
-      const data = await fetchNavigationMenuData();
-      setOrders(data.orders);
+      const categoryData = await fetchNavigationMenuCategoryData();
+      setCategories(categoryData.categories);
+      console.log('categoryData', categoryData);
+
+      const collectionsData = await fetchNavigationMenuCollectionData();
+      setCollections(collectionsData.collections);
+      console.log('collectionsData', collectionsData);
     };
 
     getData();
   }, []);
+  const faqSubMenu: IFaqMenuItem[] = [
+    { id: 1, name: 'Как оформить заказ', link: '/FAQ/orderFAQ' },
+    { id: 2, name: 'Как снять мерки', link: '/FAQ/measurementsFAQ' },
+    { id: 3, name: 'Как оформить доставку', link: '/FAQ/deliveryFAQ' },
+    { id: 4, name: 'Как оформить возврат', link: '/FAQ/returnFAQ' },
+  ];
 
-  const menuItems = [
+  const menuItems: IMenuItem[] = [
     { label: 'О бренде', link: '/about' },
-    { label: 'Каталог', link: '/catalog', submenu: orders },
-    { label: 'Коллекция', link: '/catalog/collection' },
+    { label: 'Каталог', link: '/catalog', submenu: categories },
+    { label: 'Коллекции', link: '/catalog/collection', submenu: collections },
     { label: 'Sale', link: '/sale' },
-    { label: 'FAQ', link: '/FAQ' },
+    { label: 'FAQ', link: '/FAQ', submenu: faqSubMenu },
     { label: 'Контакты', onClick: handleScrollAndHighlight },
   ];
 
-  const handleMouseEnter = (index) => {
+  const handleMouseEnter = (index: number) => {
     setSubmenuStates((prevState) => ({ ...prevState, [index]: true }));
     onSearchIconClick();
   };
 
-  const handleMouseLeave = (index) => {
+  const handleMouseLeave = (index: number) => {
     setSubmenuStates((prevState) => ({ ...prevState, [index]: false }));
     onSearchIconClick();
   };
@@ -77,11 +126,23 @@ const NavigationMenu: React.FC<IProps> = ({
                     submenuStates[index] ? styles.dropdownVisible : ''
                   }`}
                 >
-                  {item.submenu.map((order, orderIndex) => (
-                    <li key={orderIndex} className={styles.dropdownMenuItem}>
-                      <Link href={`/catalog/${order.name}`} passHref>
-                        {order.name}
-                      </Link>
+                  {item.submenu.map((el) => (
+                    <li key={el.id} className={styles.dropdownMenuItem}>
+                      {el.link ? (
+                        <Link href={el.link} passHref>
+                          {el.name}
+                        </Link>
+                      ) : (
+                        <Link
+                          href={{
+                            pathname: `${item.link}/${el.urlName}`,
+                            query: { id: el.id },
+                          }}
+                          passHref
+                        >
+                          {el.name}
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>

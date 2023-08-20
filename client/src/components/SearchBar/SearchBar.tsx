@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
@@ -9,7 +9,9 @@ import { getAllItems } from './fetchSearch';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SearchContainer from '../SearchContainer/SearchContainer';
 
-interface SearchBarProps {}
+interface SearchBarProps {
+  onSearchIconClick: () => void;
+}
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearchIconClick }) => {
   const isMobile = useMediaQuery('(max-width:768px)');
@@ -83,7 +85,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearchIconClick }) => {
           <StyledInputBase
             value={input}
             onChange={changeHandler}
-            placeholder='Поиск...'
+            placeholder="Поиск..."
             autoFocus
             inputProps={{ 'aria-label': 'search' }}
             onBlur={() => {
