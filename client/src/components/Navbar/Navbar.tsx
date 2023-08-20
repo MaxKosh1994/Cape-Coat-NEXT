@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createTheme } from '@mui/material/styles';
 import Image from 'next/image';
-import { grey } from '@mui/material/colors';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Menu from '@mui/material/Menu';
@@ -36,23 +35,9 @@ const theme = createTheme({
   },
 });
 
-function ElevationScroll(props: Props) {
-  const { children, window } = props;
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 0,
-    target: window ? window() : undefined,
-  });
-
-  return React.cloneElement(children, {
-    elevation: trigger ? 4 : 0,
-  });
-}
-
-const easeOutQuart = (progress) => 1 - Math.pow(1 - progress, 4);
-const easeInQuart = (progress) => progress ** 4;
+const easeOutQuart = (progress: number) => 1 - Math.pow(1 - progress, 4);
+const easeInQuart = (progress: number) => progress ** 4;
 const handleScrollAndHighlight = () => {
-  console.log('скролл вниз');
   const scrollToBottom = () => {
     const currentPosition = window.pageYOffset;
     const targetPosition = document.body.scrollHeight;
@@ -60,7 +45,7 @@ const handleScrollAndHighlight = () => {
     const duration = 1000;
     const startTime = performance.now();
 
-    const scrollStep = (timestamp) => {
+    const scrollStep = (timestamp: number) => {
       const elapsedTime = timestamp - startTime;
       let progress = elapsedTime / duration;
 
@@ -189,8 +174,6 @@ export default function Navbar() {
       onClose={handleMenuClose}
     ></Menu>
   );
-
-  const mobileMenuId = 'primary-search-account-menu-mobile';
 
   return (
     <>
