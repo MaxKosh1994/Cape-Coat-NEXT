@@ -7,6 +7,4 @@ export interface IProductCard {
   newPrice?: number
   isFavorite: boolean
   isCart: boolean
-  width?: string
-  height?: string
 }
