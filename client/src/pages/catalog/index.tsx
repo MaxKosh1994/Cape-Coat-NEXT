@@ -21,7 +21,7 @@ export default function Catalog() {
         if (response.status === 200) {
           const allCategs = await response.json();
           setAllCategories(allCategs);
-        }
+        } 
       })();
     } catch (err) {
       console.log(err);
@@ -48,6 +48,7 @@ export default function Catalog() {
             id={cat.id}
             imageUrl={`${process.env.NEXT_PUBLIC_CATEGORY_URL}${cat.photo}`}
             category={cat.name}
+            urlName={cat.urlName}
             allCategory={allCategories}
           />
         ))}

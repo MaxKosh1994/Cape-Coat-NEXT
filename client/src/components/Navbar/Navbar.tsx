@@ -111,7 +111,7 @@ export default function Navbar() {
   const [amountOfCartItem, setAmountOfCartItem] = useState(0);
   const [isNavbarWhite, setIsNavbarWhite] = useState(false);
   const onSearchIconClick = () => {
-    console.log('1123124124');
+    // console.log('1123124124');
     setIsNavbarWhite(!isNavbarWhite);
   };
 
