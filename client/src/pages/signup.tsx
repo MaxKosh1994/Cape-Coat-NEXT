@@ -36,7 +36,7 @@ export default function SignUp() {
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (formData.full_name && formData.email && formData.password) {
-      console.log(formData);
+      // console.log(formData);
       const resp = await dispatch(signUpUserThunk(formData));
       if (resp?.response?.data?.message) {
         setErrorMsg(resp.response.data.message);

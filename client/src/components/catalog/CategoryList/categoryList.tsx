@@ -7,74 +7,28 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Category from '../../../pages/catalog/[category]';
 import { ICategoryList } from '@/TypeScript/categoryList.type';
-import { useNavigate } from 'react-router-dom';
 
 export default function CategoryList({
   id,
   imageUrl,
   category,
+  urlName,
 }: ICategoryList) {
   const router = useRouter();
   const [englishName, setEnglishName] = useState('');
 
-  useEffect(() => {
-    const translateToEnglish = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
-            category
-          )}&langpair=ru|en`
-        );
-
-        if (
-          response.data.responseData &&
-          response.data.responseData.translatedText
-        ) {
-          setEnglishName(response.data.responseData.translatedText);
-        } else {
-          setEnglishName('');
-        }
-      } catch (error) {
-        console.error('Translation error:', error);
-        setEnglishName('');
-      }
-    };
-
-    translateToEnglish();
-  }, [category]);
-
   //TODO подумать над query, чтобы не отображалось в адресной строке
-  const categoryHandler = async(e) => {
+  const categoryHandler = async (e) => {
     const target = e.target;
-    if (!target) return; // Проверка наличия целевого элемента
-    const parent = target.closest('.oneCategory').id;
-    const pathname =
-      englishName === 'Trench coats'
-        ? '/catalog/trench'
-        : `/catalog/${englishName.toLowerCase()}`;
-
-
-        // try {
-        //   const response = await fetch(`${pathname}?id=${parent}`);
-      
-        //   if (response.ok) {
-        //     // Делайте что-то с успешным ответом, например, ничего не делайте, если вам не нужно обрабатывать ответ
-        //     console.log(response)
-        //   } else {
-        //     console.error('Ошибка при выполнении запроса на сервер');
-        //   }
-        // } catch (error) {
-        //   console.error('Ошибка при выполнении запроса на сервер:', error);
-        // }
-
-        router.push(
-          {
-            pathname,
-            query: { id: parent },
-          },
-          undefined,
-          { shallow: true } // Здесь shallow: true
-        );
+    if (!target) return; 
+    const pathname = `/catalog/${urlName}`
+    router.push(
+      {
+        pathname,
+      },
+      undefined,
+      { shallow: true }
+    );
   };
 
   return (

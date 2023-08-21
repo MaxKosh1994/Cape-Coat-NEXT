@@ -59,7 +59,6 @@ const useProductCardLogic = (
     dispatch(toggleCart(id));
     try {
       if (!user) {
-        // navigate('/signin');
         return;
       }
 

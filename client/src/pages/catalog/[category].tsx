@@ -4,26 +4,26 @@ import styles from '@/styles/Category.module.css';
 
 import { RootState } from '../../app/store';
 import ProductCard from '../../components/ProductCard/ProductCard';
-import { category, categoryClear } from '../../app/CategorySlice';
+import { ICategory, category, categoryClear } from '../../app/CategorySlice';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Custom404 from '../404';
 
 export default function Category() {
   const [catName, setCatName] = useState('');
-  const location = useRouter().query.id;
+  const nameOneCategory = useRouter().query.category;
   const dispatch = useDispatch();
 
   const card = useSelector(
     (state: RootState) => state.CategorySlice.categoryItems
   );
 
-  
   useEffect(() => {
     try {
       (async function (): Promise<void> {
         const response = await fetch(
-          process.env.NEXT_PUBLIC_URL + `category/${location}`,
+          process.env.NEXT_PUBLIC_URL + `category/${nameOneCategory}`,
           {
             credentials: 'include',
           }
@@ -32,34 +32,33 @@ export default function Category() {
           const result = await response.json();
           dispatch(categoryClear());
 
-          result.forEach((el) => {
-            el.Items.forEach((item) => {
-              const photos = item.Photos; // Массив фотографий
-              const firstPhoto = photos[0]?.photo || ''; // Получение первой фотографии или пустой строки, если фотография отсутствует
-
-              dispatch(
-                category({
-                  id: item.id,
-                  article: item.article,
-                  photo: firstPhoto,
-                  name: item.name,
-                  price: item.price,
-                  categoryName: item.categoryName,
-                  isFavorite: false,
-                  isCart: false,
-                })
-              );
-            });
-            setCatName(el.name);
+          result.items.forEach((item: ICategory) => {
+            dispatch(
+              category({
+                id: item.id,
+                article: item.article,
+                photo: item.Photos[0]?.photo || '',
+                name: item.name,
+                price: item.price,
+                categoryName: item.categoryName,
+                isFavorite: false,
+                isCart: false,
+              })
+            );
           });
+          setCatName(result.catName);
+        } 
+        else if (response.status === 404) {
+          const result = await response.json();
+          console.log(result.message);
         }
       })();
     } catch (err) {
       console.log(err);
     }
-  }, [location]);
+  }, [nameOneCategory]);
 
-  const renderProductCards = card.map((item) => (
+  const renderProductCards = card.map((item: ICategory) => (
     <ProductCard
       key={item.id}
       id={item.id}
@@ -82,7 +81,13 @@ export default function Category() {
       </Head>
       <div className={styles.ContainerOneCard}>
         <h3 className={styles.Header}>{catName}</h3>
-        <div className={styles.ProductCardsContainer}>{renderProductCards}</div>
+        {renderProductCards.length ? (
+          <div className={styles.ProductCardsContainer}>
+            {renderProductCards}
+          </div>
+        ) : (
+          <Custom404 />
+        )}
       </div>
     </>
   );

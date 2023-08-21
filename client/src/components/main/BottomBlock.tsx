@@ -31,7 +31,7 @@ export default function BottomBlock() {
       console.log(error);
     }
   };
-  console.log(itemsForMain);
+  // console.log(itemsForMain);
 
   return (
     <>

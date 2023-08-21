@@ -4,4 +4,4 @@ const categoryRouter = new Router();
 
 const { oneCategory } = require('../controllers/categoryController');
 
-module.exports = categoryRouter.get('/:id', oneCategory);
+module.exports = categoryRouter.get('/:urlName', oneCategory);
