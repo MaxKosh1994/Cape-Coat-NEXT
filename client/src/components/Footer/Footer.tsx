@@ -5,7 +5,7 @@ import styles from './FooterComp.module.css';
 import { useMediaQuery } from '@mui/material';
 
 export default function Footer() {
-  const isTablet = useMediaQuery('(min-width:600px) and (max-width:1012px)');
+  const isTablet = useMediaQuery('(min-width:637px) and (max-width:1100px)');
 
   return (
     <footer>
@@ -13,7 +13,13 @@ export default function Footer() {
         <div className={styles.footerContainer}>
           <div className={styles.footerSection}>
             <div className={styles.logoContainer}>
-              <Image src={logo} alt="Logo" fill={true} />
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                layout="responsive"
+                width={300}
+                height={40}
+              />
             </div>
           </div>
           <div className={styles.footerSection}>
@@ -63,14 +69,11 @@ export default function Footer() {
           <div className={styles.footerSection}>
             <div className={styles.logoContainer}>
               <Image
-                src={logo}
+                src="/logo.png"
                 alt="Logo"
-                priority={true}
-                style={{
-                  width: '200px',
-                  height: '30px',
-                  objectFit: 'cover',
-                }}
+                width={500}
+                height={120}
+                layout="responsive"
               />
             </div>
           </div>
@@ -116,19 +119,11 @@ export default function Footer() {
           </div>
         </div>
       )}
+
       {/* <div className={styles.footerContainer}>
         <div className={styles.footerSection}>
           <div className={styles.logoContainer}>
-            <Image
-              src={logo}
-              alt="Logo"
-              priority={true}
-              style={{
-                width: '200px',
-                height: '30px',
-                objectFit: 'cover',
-              }}
-            />
+            <Image src="/logo.png" alt="Logo" fill={true} />
           </div>
         </div>
         <div className={styles.footerSection}>
