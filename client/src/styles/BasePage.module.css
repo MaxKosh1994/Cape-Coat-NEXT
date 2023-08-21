@@ -1,17 +1,15 @@
-.arrivalsContainer {
+.pageContainer {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
 
-.arrivalsContainer div {
+.pageContainer div {
   margin-bottom: 15px;
-  /* height: 600px;
-  width: 400px; */
 }
 
-.arrivalsText {
+.header {
   font-size: 1.8rem;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
@@ -20,14 +18,11 @@
 }
 
 @media (max-width: 599px) {
-  .arrivalsContainer {
+  .pageContainer {
     margin-left: 15px;
     margin-right: 15px;
   }
-  .arrivalsText {
+  .header {
     margin: 1px auto;
   }
-}
-
-@media screen and (min-width: 600px) and (max-width: 900px) {
 }
