@@ -60,3 +60,13 @@ module.exports.getNewArrivals = async (req, res) => {
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 };
+module.exports.getAllCollections = async (req, res) => {
+  try {
+    const collections = await Collection.findAll({ raw: true });
+
+    res.json(collections);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+};

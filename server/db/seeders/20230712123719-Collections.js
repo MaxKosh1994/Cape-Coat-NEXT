@@ -11,6 +11,7 @@ module.exports = {
           photo:
             'https://1001sovety.ru/wp-content/uploads/2021/05/luki-osen-zima-55.jpg',
           description: 'Холодно пиздец',
+          urlName: 'fall-winter-2023',
           current: true,
         },
         {
@@ -18,6 +19,7 @@ module.exports = {
           photo:
             'https://1001sovety.ru/wp-content/uploads/2019/11/zhenskiye-kostyumy-63.jpg',
           description: 'Жарко пиздец',
+          urlName: 'spring-summer-2024',
           current: true,
         },
         {
@@ -25,6 +27,7 @@ module.exports = {
           photo:
             'https://assets.vogue.ru/photos/6055aa4e277efc3790234a64/2:3/w_2560%2Cc_limit/210312_Ramadan_0608.jpg',
           description: 'Ну крч платья',
+          urlName: 'dresses',
           current: true,
         },
       ],

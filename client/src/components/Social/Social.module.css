@@ -29,3 +29,15 @@
 .messengersContainer a:hover {
   transform: scale(0.9);
 }
+
+@media (max-width: 821px) {
+  .messengersContainer {
+    bottom: 220px;
+  }
+}
+
+@media (max-width: 550px) {
+  .messengersContainer {
+    left: 20px;
+  }
+}

@@ -16,6 +16,7 @@
   margin-bottom: 26px;
   /* overflow: hidden; */
   position: relative;
+  cursor: pointer;
 }
 
 .Image {
