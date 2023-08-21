@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import logo from './logoStore.svg';
 import styles from './FooterComp.module.css';
 import { useMediaQuery } from '@mui/material';
 
@@ -25,7 +24,9 @@ export default function Footer() {
           <div className={styles.footerSection}>
             <div className={styles.footerTitle}>Наш шоурум:</div>
             <div className={styles.footerItem}>
-              г.Нижний Новгород, ул. Малая Покровская, 20
+              <Link href="/address">
+                г.Нижний Новгород, ул. Малая Покровская, 20
+              </Link>
             </div>
             <div className={styles.footerItem}>Ждем вас с 10:00 до 20:00</div>
           </div>
@@ -80,7 +81,9 @@ export default function Footer() {
           <div className={styles.footerSection}>
             <div className={styles.footerTitle}>Наш шоурум:</div>
             <div className={styles.footerItem}>
-              г.Нижний Новгород, ул. Малая Покровская, 20
+              <Link href="/address">
+                г.Нижний Новгород, ул. Малая Покровская, 20
+              </Link>
             </div>
             <div className={styles.footerItem}>Ждем вас с 10:00 до 20:00</div>
           </div>
