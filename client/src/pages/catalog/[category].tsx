@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styles from '@/styles/Category.module.css';
 
 import { RootState } from '../../app/store';
-import ProductCard from '../../components/ProductCard/ProductCard';
 import { category, categoryClear } from '../../app/CategorySlice';
 import { useRouter } from 'next/router';
-import { GetServerSideProps } from 'next';
-import Head from 'next/head';
+import BasePage from '@/components/ItemPage/BasePage';
 
 export default function Category() {
   const [catName, setCatName] = useState('');
@@ -18,7 +15,6 @@ export default function Category() {
     (state: RootState) => state.CategorySlice.categoryItems
   );
 
-  
   useEffect(() => {
     try {
       (async function (): Promise<void> {
@@ -59,31 +55,9 @@ export default function Category() {
     }
   }, [location]);
 
-  const renderProductCards = card.map((item) => (
-    <ProductCard
-      key={item.id}
-      id={item.id}
-      article={item.article}
-      photo={item.photo}
-      name={item.name}
-      price={item.price}
-      isFavorite={item.isFavorite}
-      isCart={item.isCart}
-    />
-  ));
-
   return (
     <>
-      <Head>
-        <title>Cape&Coat | {catName}</title>
-        <meta name="title" content="Cape and Coat" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div className={styles.ContainerOneCard}>
-        <h3 className={styles.Header}>{catName}</h3>
-        <div className={styles.ProductCardsContainer}>{renderProductCards}</div>
-      </div>
+      <BasePage pageName={catName} itemsArr={card} />
     </>
   );
 }
