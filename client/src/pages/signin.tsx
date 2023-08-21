@@ -13,6 +13,7 @@ export default function SignIn() {
     password: '',
   });
   const error = useSelector((state) => state.sessionSlice.error);
+  const user = useSelector((state) => state.sessionSlice.user);
 
   const [errorMsg, setErrorMsg] = useState(false);
   const dispatch = useDispatch();
@@ -32,7 +33,8 @@ export default function SignIn() {
         if (resp.isAdmin) {
           router.push('/admin/orders');
         } else {
-          if (router.asPath === '/cart') {
+          // TODO временный костыль чтобы открывалась корзина на логине
+          if (user) {
             router.push('/cart');
           } else {
             router.back();
@@ -52,50 +54,58 @@ export default function SignIn() {
       </Head>
       <div className={styles.formContainer}>
         <form className={styles.signInForm}>
-          <Typography variant="h3" align="center" className={styles.header}>
-            Войдите в аккаунт
-            {errorMsg && <p>{error}</p>}
-            <TextField
-              className={styles.textField}
-              placeholder="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-            />
-            <TextField
-              className={styles.textField}
-              placeholder="Пароль"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              style={{
-                backgroundColor: 'black',
-                color: 'white',
-              }}
-              onClick={handleSignIn}
-            >
-              Войти
-            </Button>
-            <p className={styles.redirMsg}>
-              Еще не зарегистрированы?{' '}
-              <Link href="/signup" className="redirect">
-                Создайте аккаунт
-              </Link>
-            </p>
-          </Typography>
+          <h3 className={styles.header}>Войдите в аккаунт</h3>
+          {errorMsg && <p>{error}</p>}
+          <TextField
+            className={styles.textField}
+            placeholder="Email"
+            name="email"
+            type="email"
+            inputProps={{
+              style: {
+                fontFamily: 'Ysabeau Infant',
+              },
+            }}
+            value={formData.email}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            className={styles.textField}
+            placeholder="Пароль"
+            name="password"
+            type="password"
+            inputProps={{
+              style: {
+                fontFamily: 'Ysabeau Infant',
+              },
+            }}
+            value={formData.password}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            style={{
+              backgroundColor: 'black',
+              color: 'white',
+            }}
+            onClick={handleSignIn}
+          >
+            Войти
+          </Button>
+          <p className={styles.redirMsg}>
+            Еще не зарегистрированы?{' '}
+            <Link href="/signup" className={styles.redirect}>
+              Создайте аккаунт
+            </Link>
+          </p>
         </form>
       </div>
     </>
