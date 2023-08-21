@@ -1,12 +1,6 @@
-const { Op } = require('sequelize');
-const {
-  User,
-  Measurement,
-  Order,
-  Favorite,
-  Photo,
-  Item,
-} = require('../../db/models');
+const { User, Measurement, Order, Photo, Item } = require('../../db/models');
+
+const { sendMessageToUser } = require('../../telegramBot/bot'); // ФУНКЦИЯ ДЛЯ ОТПРАВКИ СООБЩЕНИЙ БОТОМ
 
 module.exports.getProfileInfo = async (req, res) => {
   try {
@@ -112,15 +106,19 @@ module.exports.updateInfo = async (req, res) => {
   try {
     const { user } = req.session;
     const { full_name, address, phone, telegram } = req.body;
+
     if (!full_name) {
       return res
         .status(403)
         .json({ message: 'Пожалуйста, заполните все обязательные поля' });
     }
+
     const userExisting = await User.findOne({ where: { email: user } });
+
     if (!userExisting) {
       return res.status(404).json({ message: 'Пользователь не найден' });
     }
+
     if (full_name) {
       userExisting.full_name = full_name;
     }
@@ -133,7 +131,17 @@ module.exports.updateInfo = async (req, res) => {
     if (telegram) {
       userExisting.telegram = telegram;
     }
+
     await userExisting.save();
+
+    //! Тестовая отправка сообщений для менеджера
+
+    const { MANAGER_TELEGRAM_ID } = process.env;
+    const message = 'Ваши данные были успешно обновлены';
+    await sendMessageToUser(MANAGER_TELEGRAM_ID, message);
+
+    //! ------------------
+
     res.status(200).json({ message: 'Данные успешно обновлены' });
   } catch (err) {
     console.log('Ошибка в updateInfo --->', err);
