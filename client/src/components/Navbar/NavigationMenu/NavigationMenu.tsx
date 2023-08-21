@@ -63,11 +63,11 @@ const NavigationMenu: React.FC<IProps> = ({
     const getData = async () => {
       const categoryData = await fetchNavigationMenuCategoryData();
       setCategories(categoryData.categories);
-      console.log('categoryData', categoryData);
+      // console.log('categoryData', categoryData);
 
       const collectionsData = await fetchNavigationMenuCollectionData();
       setCollections(collectionsData.collections);
-      console.log('collectionsData', collectionsData);
+      // console.log('collectionsData', collectionsData);
     };
 
     getData();
