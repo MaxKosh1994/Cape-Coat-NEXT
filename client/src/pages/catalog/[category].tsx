@@ -44,8 +44,7 @@ export default function Category() {
             );
           });
           setCatName(result.catName);
-        } 
-        else if (response.status === 404) {
+        } else if (response.status === 404) {
           const result = await response.json();
           console.log(result.message);
         }
@@ -55,37 +54,13 @@ export default function Category() {
     }
   }, [nameOneCategory]);
 
-  const renderProductCards = card.map((item: ICategory) => (
-    <ProductCard
-      key={item.id}
-      id={item.id}
-      article={item.article}
-      photo={item.photo}
-      name={item.name}
-      price={item.price}
-      isFavorite={item.isFavorite}
-      isCart={item.isCart}
-    />
-  ));
-
   return (
     <>
-      <Head>
-        <title>Cape&Coat | {catName}</title>
-        <meta name="title" content="Cape and Coat" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div className={styles.ContainerOneCard}>
-        <h3 className={styles.Header}>{catName}</h3>
-        {renderProductCards.length ? (
-          <div className={styles.ProductCardsContainer}>
-            {renderProductCards}
-          </div>
-        ) : (
-          <Custom404 />
-        )}
-      </div>
+      {card.length ? (
+        <BasePage pageName={catName} itemsArr={card} />
+      ) : (
+        <Custom404 />
+      )}
     </>
   );
 }
