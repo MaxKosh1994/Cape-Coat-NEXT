@@ -42,7 +42,7 @@ export default function OrderComp({ order }: IOrderCompProps) {
           </div>
         </div>
         <div className={styles.rightBodyContainer}>
-          {order.Items.map((item) => (
+          {order.Items?.map((item) => (
             <SearchItemCard key={item.id} item={item} />
           ))}
         </div>

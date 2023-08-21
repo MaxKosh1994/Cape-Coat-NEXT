@@ -1,0 +1,25 @@
+.mainContainer {
+  display: flex;
+  /* flex-direction: column; */
+  /* align-items: center; */
+  /* justify-content: space-between; */
+  border: 0.5px solid black;
+  margin-bottom: 10px;
+}
+
+.userInfoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 80%;
+  padding: 5px;
+  padding-right: 10px;
+  font-size: small;
+}
+
+.leftContainer {
+  width: 20%;
+  padding: 5px;
+  background-color: rgb(237, 237, 237);
+  font-size: small;
+}

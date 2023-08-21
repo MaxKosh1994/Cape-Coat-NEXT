@@ -1,33 +1,34 @@
-import { useState, useEffect } from "react";
-import * as React from "react";
+import { useState, useEffect } from 'react';
+import * as React from 'react';
 import {
   formDataIteamAxios,
   categoryDataFetch,
   collectionDataFetch,
-} from "../../components/Admin/HTTP/adminApi";
-import InfoModal from "../../components/Admin/InfoModal";
-import ItemInput from "../../components/Admin/ItemInput";
+} from '../../components/Admin/HTTP/adminApi';
+import InfoModal from '../../components/Admin/InfoModal';
+import ItemInput from '../../components/Admin/ItemInput';
 
-import Box from "@mui/material/Box";
+import Box from '@mui/material/Box';
 import {
   Button,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
-} from "@mui/material";
+} from '@mui/material';
+import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
 
 export default function Iteam() {
   const [files, setFile] = useState({});
   const [category, setCategory] = useState([]);
   const [collection, setCollection] = useState([]);
-  const [message, setMessage] = useState("");
-  const [nameCat, setNameCat] = useState("");
-  const [nameCol, setNameCol] = useState("");
+  const [message, setMessage] = useState('');
+  const [nameCat, setNameCat] = useState('');
+  const [nameCol, setNameCol] = useState('');
   const [open, setOpen] = useState(false);
   const [descript, setDescription] = useState({
-    category_id: "1",
-    collection_id: "1",
+    category_id: '1',
+    collection_id: '1',
     in_stock: false,
   });
   useEffect(() => {
@@ -61,21 +62,21 @@ export default function Iteam() {
       e.preventDefault();
       const formData = new FormData();
       for (let key in files.photos) {
-        formData.append("photos", files.photos[key]);
+        formData.append('photos', files.photos[key]);
       }
-      formData.append("description", JSON.stringify(descript));
+      formData.append('description', JSON.stringify(descript));
       const response = formDataIteamAxios(formData, setMessage);
       setOpen(true);
       setTimeout(() => {
-        setMessage("");
+        setMessage('');
         setOpen(false);
       }, 1000);
       e.target.reset();
-      setNameCat("");
-      setNameCol("");
+      setNameCat('');
+      setNameCol('');
       setDescription({
-        category_id: "1",
-        collection_id: "1",
+        category_id: '1',
+        collection_id: '1',
         in_stock: false,
       });
     } catch (err) {
@@ -84,32 +85,33 @@ export default function Iteam() {
   };
   return (
     <>
+      <NavAdminComp />
       <div
         style={{
-          marginTop: "0px",
-          marginBottom: "20px",
+          marginTop: '0px',
+          marginBottom: '20px',
         }}
       >
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
           <form
             onSubmit={submit}
-            style={{ marginTop: "10px" }}
-            encType="multipart/form-data"
+            style={{ marginTop: '10px' }}
+            encType='multipart/form-data'
           >
-            <div style={{ display: "flex", justifyContent: "flex-start" }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <FormControl sx={{ m: 1, minWidth: 250 }}>
                 <InputLabel
                   style={{
-                    fontWeight: "700",
-                    color: "rgba(90, 90, 90, 0.833)",
+                    fontWeight: '700',
+                    color: 'rgba(90, 90, 90, 0.833)',
                   }}
-                  id="demo-simple-select-autowidth-label"
+                  id='demo-simple-select-autowidth-label'
                 >
                   Выберите категорию
                 </InputLabel>
@@ -118,12 +120,12 @@ export default function Iteam() {
                     handleCategoryChange(e); // Сначала обновляем состояние nameCat
                     changeHandlerDescription(e); // Затем обновляем состояние descript
                   }}
-                  labelId="demo-simple-select-autowidth-label"
-                  id="demo-simple-select-autowidth"
+                  labelId='demo-simple-select-autowidth-label'
+                  id='demo-simple-select-autowidth'
                   value={nameCat}
-                  name="category_id"
+                  name='category_id'
                   autoWidth
-                  label="category"
+                  label='category'
                 >
                   {category.map((el) => (
                     <MenuItem value={el.id} key={el.id}>
@@ -136,10 +138,10 @@ export default function Iteam() {
               <FormControl sx={{ m: 1, minWidth: 250 }}>
                 <InputLabel
                   style={{
-                    fontWeight: "700",
-                    color: "rgba(90, 90, 90, 0.833)",
+                    fontWeight: '700',
+                    color: 'rgba(90, 90, 90, 0.833)',
                   }}
-                  id="demo-simple-select-autowidth-label"
+                  id='demo-simple-select-autowidth-label'
                 >
                   Выберите коллекцию
                 </InputLabel>
@@ -148,12 +150,12 @@ export default function Iteam() {
                     handleCollectionChange(e); // Сначала обновляем состояние nameCol
                     changeHandlerDescription(e); // Затем обновляем состояние descript
                   }}
-                  labelId="demo-simple-select-autowidth-label"
-                  id="demo-simple-select-autowidth"
+                  labelId='demo-simple-select-autowidth-label'
+                  id='demo-simple-select-autowidth'
                   value={nameCol}
-                  name="collection_id"
+                  name='collection_id'
                   autoWidth
-                  label="collection"
+                  label='collection'
                 >
                   {collection.map((el) => (
                     <MenuItem value={el.id} key={el.id}>
@@ -166,107 +168,107 @@ export default function Iteam() {
             <Box
               sx={{
                 width: 550,
-                maxWidth: "100%",
+                maxWidth: '100%',
               }}
             >
               <ItemInput
                 changeHandler={changeHandlerDescription}
-                name={"nameModel"}
-                label={"Имя модели"}
+                name={'nameModel'}
+                label={'Имя модели'}
               />
               <ItemInput
                 changeHandler={changeHandlerDescription}
-                name={"description"}
-                label={"Описание"}
+                name={'description'}
+                label={'Описание'}
               />
               <ItemInput
                 changeHandler={changeHandlerDescription}
-                name={"model_sizes"}
-                label={"Размер модели"}
+                name={'model_sizes'}
+                label={'Размер модели'}
               />
 
               <ItemInput
                 changeHandler={changeHandlerDescription}
-                name={"characteristics"}
-                label={"Характеристики"}
+                name={'characteristics'}
+                label={'Характеристики'}
               />
               <ItemInput
                 changeHandler={changeHandlerDescription}
-                name={"price"}
-                label={"Цена"}
+                name={'price'}
+                label={'Цена'}
               />
               <ItemInput
                 changeHandler={changeHandlerDescription}
-                name={"color"}
-                label={"Цвет"}
+                name={'color'}
+                label={'Цвет'}
               />
             </Box>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ display: "flex", marginBottom: "1rem" }}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', marginBottom: '1rem' }}>
                 <input
-                  placeholder="in_stock"
+                  placeholder='in_stock'
                   onChange={changeHandlerDescript}
-                  type="checkbox"
-                  name="in_stock"
+                  type='checkbox'
+                  name='in_stock'
                 ></input>
                 <div
                   style={{
-                    fontWeight: "700", // Замените "200px" на желаемую ширину
-                    color: "rgba(90, 90, 90, 0.833)",
-                    marginLeft: "8px",
+                    fontWeight: '700', // Замените "200px" на желаемую ширину
+                    color: 'rgba(90, 90, 90, 0.833)',
+                    marginLeft: '8px',
                   }}
                 >
-                  {" В наличии"}
+                  {' В наличии'}
                 </div>
               </div>
               <div
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "start",
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'start',
                 }}
               >
                 <h5
                   style={{
-                    color: " rgba(90, 90, 90, 0.833)",
-                    fontSize: "1rem",
-                    marginBottom: "10px",
-                    fontWeight: "700",
+                    color: ' rgba(90, 90, 90, 0.833)',
+                    fontSize: '1rem',
+                    marginBottom: '10px',
+                    fontWeight: '700',
                   }}
                 >
                   Фото товара
                 </h5>
                 <label
-                  htmlFor="fileCatInput"
+                  htmlFor='fileCatInput'
                   style={{
-                    padding: "5px 10px",
-                    border: "1px solid rgba(90, 90, 90, 0.3)",
-                    borderRadius: "5px",
-                    cursor: "pointer",
+                    padding: '5px 10px',
+                    border: '1px solid rgba(90, 90, 90, 0.3)',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
                   }}
                 >
                   Выберите файлы
                 </label>
                 <input
-                  id="fileCatInput"
+                  id='fileCatInput'
                   required
                   filename={files}
                   onChange={changeHandlerFiles}
-                  type="file"
-                  accept="image/*"
+                  type='file'
+                  accept='image/*'
                   multiple
-                  style={{ display: "none" }}
+                  style={{ display: 'none' }}
                 ></input>
               </div>
               <Button
-                type="submit"
+                type='submit'
                 style={{
-                  fontWeight: "700",
-                  color: " rgb(220, 220, 220)",
-                  backgroundColor: "rgba(90, 90, 90, 0.833)",
-                  marginTop: "25px",
+                  fontWeight: '700',
+                  color: ' rgb(220, 220, 220)',
+                  backgroundColor: 'rgba(90, 90, 90, 0.833)',
+                  marginTop: '25px',
                 }}
-                variant="contained"
+                variant='contained'
               >
                 Добавить
               </Button>
