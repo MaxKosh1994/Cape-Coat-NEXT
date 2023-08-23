@@ -233,6 +233,15 @@
   min-height: 20px;
 }
 
+.faqLink {
+  text-rendering: optimizeSpeed;
+  box-sizing: border-box;
+  color: #000;
+  font-weight: 400;
+  white-space: nowrap;
+  font-size: 16px;
+}
+
 .orderSummaryTotal {
   text-rendering: optimizeSpeed;
   box-sizing: border-box;
@@ -466,17 +475,17 @@
   text-transform: uppercase;
   color: #000;
   font-size: 14px;
+  margin-bottom: 5px;
 }
 
 .sizesFormBtn {
   display: block;
-  margin: 20px auto;
+  margin: 12px auto;
   width: 40%;
   background-color: #6b6b6b;
   border: none;
   padding: 8px 0;
   cursor: pointer;
-
   justify-content: center;
   align-items: center;
   color: #fff;

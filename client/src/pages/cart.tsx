@@ -355,14 +355,38 @@ export default function CartPage() {
                             </span>
                           </div>
                         </div>
-                        <button
-                          className={styles.showSizeFormBtn}
-                          onClick={() => handleDisplaySizesForm(item.id)}
-                        >
-                          Ввести мерки
-                        </button>
+                        {item.in_stock ? (
+                          <>
+                            <div className={styles.basketItemContent}>
+                              <div className={styles.itemPrices}>
+                                <span className={styles.itemPricesPrice}>
+                                  {item.model_params}
+                                </span>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              className={styles.showSizeFormBtn}
+                              onClick={() => handleDisplaySizesForm(item.id)}
+                            >
+                              Ввести мерки
+                            </button>
+                          </>
+                        )}
                         {showParamsForm[item.id] && (
                           <>
+                            <div className={styles.basketItemContent}>
+                              <div className={styles.itemPrices}>
+                                <Link
+                                  className={styles.faqLink}
+                                  href="/FAQ/measurementsFAQ"
+                                >
+                                  Посмотреть как снимать мерки
+                                </Link>
+                              </div>
+                            </div>
                             <div className={styles.sizesForm}>
                               <form action="">
                                 <div className={styles.sizesFormBlock}>
