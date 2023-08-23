@@ -27,6 +27,39 @@ module.exports = {
           key: 'id',
         },
       },
+      height: {
+        type: Sequelize.TEXT,
+      },
+      length: {
+        type: Sequelize.TEXT,
+      },
+      sleeve: {
+        type: Sequelize.TEXT,
+      },
+      bust: {
+        type: Sequelize.TEXT,
+      },
+      waist: {
+        type: Sequelize.TEXT,
+      },
+      hips: {
+        type: Sequelize.TEXT,
+      },
+      saddle: {
+        type: Sequelize.TEXT,
+      },
+      loops: {
+        type: Sequelize.BOOLEAN,
+      },
+      buttons: {
+        type: Sequelize.BOOLEAN,
+      },
+      lining: {
+        type: Sequelize.TEXT,
+      },
+      added: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

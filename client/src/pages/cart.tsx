@@ -11,6 +11,8 @@ import TrousersSizeForm from '@/components/Cart/trousersSizeForm';
 import TrenchSizeForm from '@/components/Cart/trenchSizeForm';
 import CoatSizeForm from '@/components/Cart/coatSizeForm';
 import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
+import LikeButton from '@/components/likeButton/LikeButton';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 export default function CartPage() {
   const user = useSelector((state) => state.sessionSlice.user);
@@ -49,22 +51,9 @@ export default function CartPage() {
     buttons: '',
     lining: '',
   });
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setParamsFormData({ ...paramsFormData, [e.target.name]: e.target.value });
-  };
-
-  const handleCustomFormChange = (updatedFields) => {
-    setParamsFormData((prevState) => ({
-      ...prevState,
-      ...updatedFields,
-    }));
-  };
-
-  const handleSaveSizesInputs = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    console.log(paramsFormData);
-  };
+  const [userParams, setUserParams] = useState(
+    Array(cartItemsList.length).fill('')
+  );
 
   function sendMail(name, user, order) {
     Email.send({
@@ -179,14 +168,49 @@ export default function CartPage() {
       setDelError('Не получилось удалить товар, попробуйте позже.');
     }
   };
-  const handleDisplaySizesForm = (itemId: number) => {
+  const handleDisplaySizesForm = (index, itemId: number) => {
     setShowParamsForm((prevState) => ({
       ...prevState,
       [itemId]: !prevState[itemId],
     }));
   };
 
-  // const handleSaveSizesInputs = (e: ChangeEvent<HTMLInputElement>) => {};
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setParamsFormData({ ...paramsFormData, [e.target.name]: e.target.value });
+  };
+
+  const handleCustomFormChange = (updatedFields) => {
+    setParamsFormData((prevState) => ({
+      ...prevState,
+      ...updatedFields,
+    }));
+  };
+
+  const handleSaveSizesInputs = async (index: number, itemId: number) => {
+    setParamsFormData((prevState) => ({
+      ...prevState,
+      itemId: itemId,
+    }));
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}cart/measures/${itemId}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(paramsFormData),
+      }
+    );
+    const res = await response.json();
+    if (response.status === 200) {
+      const userParams = `Ваш рост: ${res.height}см, длина изделия: ${res.length}см, длина рукава: ${res.sleeve}см, объем груди: ${res.bust}см, объем талии: ${res.waist}см, объем бедер: ${res.hips}см`;
+      setUserParams((prevTexts) => {
+        const updatedTexts = [...prevTexts];
+        updatedTexts[index] = userParams;
+        return updatedTexts;
+      });
+      setShowParamsForm(false);
+    }
+  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAddressInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -271,7 +295,8 @@ export default function CartPage() {
       }, 1000);
     }
   };
-
+  console.log(cartItemsList);
+  // console.log(cartItemsList.map((item) => item.Carts[0].CartItem.measurements));
   return (
     <>
       <Head>
@@ -300,7 +325,7 @@ export default function CartPage() {
                 <section
                   className={`${styles.orderBlock} ${styles.orderBlockBasket}`}
                 >
-                  {cartItemsList.map((item) => (
+                  {cartItemsList.map((item, index) => (
                     <div className={styles.basketItem} key={item.id}>
                       <div className={styles.basketItemLeft}>
                         <Link
@@ -324,17 +349,18 @@ export default function CartPage() {
                           >
                             {item.name}
                           </Link>
-                          <button
-                            className={styles.basketItemDeleteButton}
-                            type="button"
-                            onClick={() => handleDeleteItemFromCart(item.id)}
-                          >
-                            <Image
-                              src="/delicon.png"
-                              alt="Удалить"
-                              fill={true}
-                            />
-                          </button>
+                          <div className={styles.iconsContainer}>
+                            <LikeButton item={item.id} />
+                            <button
+                              className={styles.basketItemDeleteButton}
+                              type="button"
+                              onClick={() => handleDeleteItemFromCart(item.id)}
+                            >
+                              <DeleteOutlineIcon
+                                sx={{ fontSize: '2rem', color: '#656565' }}
+                              />
+                            </button>
+                          </div>
                         </div>
                         <div className={styles.basketItemContent}>
                           <div className={styles.basketItemProperties}>
@@ -359,26 +385,39 @@ export default function CartPage() {
                             </div>
                           </>
                         ) : (
-                          //     {есть мерки в бд ? (
-                          //       мерки
-                          //       <button
-                          //         className={styles.showSizeFormBtn}
-                          //         onClick={() => handleDisplaySizesForm(item.id)}
-                          //       >
-                          //         Изменить мерки
-                          //       </button>
-                          //     )
-                          //   :(
-
-                          //   )
-                          // }
                           <>
-                            <button
-                              className={styles.showSizeFormBtn}
-                              onClick={() => handleDisplaySizesForm(item.id)}
-                            >
-                              Ввести мерки
-                            </button>
+                            {userParams[index] ||
+                            item.Carts[0].CartItem.added ? (
+                              <>
+                                <div className={styles.userParameters}>
+                                  <div className={styles.itemPrices}>
+                                    <span className={styles.itemPricesPrice}>
+                                      {userParams[index] ||
+                                        `Ваш рост: ${item.Carts[0].CartItem.height}см, Длина изделия: ${item.Carts[0].CartItem.length}см, Длина рукава: ${item.Carts[0].CartItem.sleeve}см, Объем груди: ${item.Carts[0].CartItem.bust}см, Объем талии: ${item.Carts[0].CartItem.waist}см, Объем бедер: ${item.Carts[0].CartItem.hips}см`}
+                                    </span>
+                                  </div>
+                                </div>
+                                <button
+                                  className={styles.showSizeFormBtn}
+                                  onClick={() =>
+                                    handleDisplaySizesForm(index, item.id)
+                                  }
+                                >
+                                  Изменить мерки
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  className={styles.showSizeFormBtn}
+                                  onClick={() =>
+                                    handleDisplaySizesForm(index, item.id)
+                                  }
+                                >
+                                  Ввести мерки
+                                </button>
+                              </>
+                            )}
                           </>
                         )}
                         {showParamsForm[item.id] && (
@@ -415,7 +454,7 @@ export default function CartPage() {
                                       htmlFor="length"
                                       className={styles.sizesFormLabel}
                                     >
-                                      Желаемая длина изделия
+                                      Длина изделия
                                     </label>
                                     <input
                                       type="text"
@@ -512,7 +551,10 @@ export default function CartPage() {
                                 </div>
                                 <button
                                   className={styles.sizesFormBtn}
-                                  onClick={handleSaveSizesInputs}
+                                  onClick={(event) => {
+                                    event.preventDefault();
+                                    handleSaveSizesInputs(index, item.id);
+                                  }}
                                 >
                                   Сохранить
                                 </button>
@@ -607,10 +649,16 @@ export default function CartPage() {
                       />
                       <span className={styles.checkboxLabel}>
                         <span className={styles.checkboxHeader}>
-                          Доставка СДЭК
+                          Доставка СДЭК или Почтой России
                         </span>
                         <span className={styles.checkboxDescription}>
                           <strong>от 300 рублей</strong>, от 3 дней
+                        </span>
+                        <span className={styles.checkboxDescription}>
+                          <em>
+                            Точную стоимость доставки вам сообщит менеджер.
+                            Итоговая сумма заказа может измениться.
+                          </em>
                         </span>
                       </span>
                     </label>
