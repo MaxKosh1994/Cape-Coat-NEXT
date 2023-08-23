@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       hips: DataTypes.TEXT,
       saddle: DataTypes.TEXT,
       loops: DataTypes.BOOLEAN,
-      buttons: DataTypes.BOOLEAN,
+      buttons: DataTypes.TEXT,
       lining: DataTypes.TEXT,
       added: DataTypes.BOOLEAN,
     },

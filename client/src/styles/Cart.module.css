@@ -654,8 +654,9 @@
 }
 
 .emptyCartMsg {
-  margin: 15% auto;
+  margin: 25% auto;
   font-size: 1.7rem;
+  text-align: center;
 }
 
 .emptyCartMsg > a {
@@ -782,7 +783,7 @@
   }
 
   .emptyCartMsg {
-    margin: 35% 10px;
+    margin: 70% 10px 30%;
     font-size: 1.3rem;
   }
 
@@ -793,7 +794,7 @@
 
 @media screen and (min-width: 500px) and (max-width: 900px) {
   .emptyCartMsg {
-    margin: 30% 20px;
+    margin: 45% 20px;
     font-size: 1.8rem;
   }
 

@@ -93,14 +93,9 @@ export default function CartPage() {
         setOrderStatus('');
       }, 2000);
     } else {
-      setOrderStatus(re.message);
-      // TODO либо убрать таймаут
-      // но тогда будет меняться на долю секунды кнопка на "заказ создан блабла"
-      setTimeout(() => {
-        emptyCart();
-        dispatch(getCartItems([]));
-        router.push('/account/orders');
-      }, 2000);
+      emptyCart();
+      dispatch(getCartItems([]));
+      router.push('/thankyou');
       sendMail(name, user, re.message);
     }
   };
@@ -191,6 +186,7 @@ export default function CartPage() {
       ...prevState,
       itemId: itemId,
     }));
+    console.log(paramsFormData);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}cart/measures/${itemId}`,
       {
@@ -308,7 +304,7 @@ export default function CartPage() {
       {cartItemsList?.length === 0 ? (
         <>
           {orderStatus && <p className="order-status-cart">{orderStatus}</p>}
-          <p className="empty-cart-msg">
+          <p className={styles.emptyCartMsg}>
             Сейчас в вашей корзине пусто.{' '}
             <Link href="/catalog">Загляните в каталог</Link>
           </p>

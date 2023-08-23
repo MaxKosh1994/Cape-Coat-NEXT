@@ -12,13 +12,27 @@ module.exports.createOrder = async (req, res) => {
       },
       { raw: true },
     );
-    // TODO чтобы не создать заказ два раза одинаковый ?
-    // если на 6 строке заменить на findOrCreate
-    // и поиск по user_id то нельзя будет сделать второй заказ
     if (newOrder) {
-      const orderItemsData = req.body.cartItemsList.map((cartItem) => ({
-        item_id: cartItem.id,
+      const orderItemsData = req.body.cartItemsList.map((oneItem) => ({
+        item_id: oneItem.id,
         order_id: newOrder.id,
+        measurements: `Рост: ${oneItem.Carts.map(
+          (item) => item.CartItem.height,
+        )}см, длина изделия: ${oneItem.Carts.map(
+          (item) => item.CartItem.length,
+        )}см, длина рукава: ${oneItem.Carts.map(
+          (item) => item.CartItem.sleeve,
+        )}см, объем груди: ${oneItem.Carts.map(
+          (item) => item.CartItem.bust,
+        )}см, объем талии: ${oneItem.Carts.map(
+          (item) => item.CartItem.waist,
+        )}см, объем бедер: ${oneItem.Carts.map(
+          (item) => item.CartItem.hips,
+        )}см, седло: ${oneItem.Carts.map(
+          (item) => item.CartItem.saddle,
+        )}, пуговицы: ${oneItem.Carts.map(
+          (item) => item.CartItem.buttons,
+        )}, утепление: ${oneItem.Carts.map((item) => item.CartItem.lining)}`,
       }));
 
       await OrderItem.bulkCreate(orderItemsData);

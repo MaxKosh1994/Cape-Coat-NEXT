@@ -4,6 +4,7 @@ import styles from '../../styles/Cart.module.css';
 export default function CoatSizeForm({ itemId, onCoatSizeChange }) {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
+    console.log(name, value, type, checked);
     const newValue = type === 'checkbox' ? checked : value;
     onCoatSizeChange({ [name]: newValue });
   };

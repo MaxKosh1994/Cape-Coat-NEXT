@@ -52,7 +52,7 @@ module.exports = {
         type: Sequelize.BOOLEAN,
       },
       buttons: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.TEXT,
       },
       lining: {
         type: Sequelize.TEXT,

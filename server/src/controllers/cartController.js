@@ -125,7 +125,7 @@ module.exports.addMeasures = async (req, res) => {
           hips,
           saddle,
           loops: Boolean(loops),
-          buttons: Boolean(buttons),
+          buttons,
           lining,
           added: true,
         },
