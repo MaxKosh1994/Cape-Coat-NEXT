@@ -48,7 +48,7 @@ export default function SureModal({ open, setOpen }: ISureModal) {
             </Button>
             <Button
               onClick={logOutHandler}
-              className={styles.button}
+              className={styles.buttonExit}
               type='submit'
               variant='contained'
               color='primary'

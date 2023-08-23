@@ -1,10 +1,16 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 // import { stateType, userType } from "../types"
 
+
+export interface IPhoto {
+  photo: string; // Поле для фотографии товара
+  // Дополнительные свойства фотографии, если есть
+}
+
 export interface ICategory {
   id: number;
   article: string;
-  photo: string;
+  photo: IPhoto | undefined;
   name: string;
   price: number;
   categoryName: string;

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createTheme } from '@mui/material/styles';
 import Image from 'next/image';
-import { grey } from '@mui/material/colors';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Menu from '@mui/material/Menu';
@@ -36,23 +35,9 @@ const theme = createTheme({
   },
 });
 
-function ElevationScroll(props: Props) {
-  const { children, window } = props;
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 0,
-    target: window ? window() : undefined,
-  });
-
-  return React.cloneElement(children, {
-    elevation: trigger ? 4 : 0,
-  });
-}
-
-const easeOutQuart = (progress) => 1 - Math.pow(1 - progress, 4);
-const easeInQuart = (progress) => progress ** 4;
+const easeOutQuart = (progress: number) => 1 - Math.pow(1 - progress, 4);
+const easeInQuart = (progress: number) => progress ** 4;
 const handleScrollAndHighlight = () => {
-  console.log('скролл вниз');
   const scrollToBottom = () => {
     const currentPosition = window.pageYOffset;
     const targetPosition = document.body.scrollHeight;
@@ -60,7 +45,7 @@ const handleScrollAndHighlight = () => {
     const duration = 1000;
     const startTime = performance.now();
 
-    const scrollStep = (timestamp) => {
+    const scrollStep = (timestamp: number) => {
       const elapsedTime = timestamp - startTime;
       let progress = elapsedTime / duration;
 
@@ -103,7 +88,7 @@ export default function Navbar() {
   }, []);
 
   const muiTheme = createTheme(theme);
-  const isMobile = useMediaQuery('(max-width:1024px)');
+  const isMobile = useMediaQuery('(max-width:1095px)');
   const isTablet = useMediaQuery('(max-width:768px)');
 
   const router = useRouter();
@@ -124,6 +109,11 @@ export default function Navbar() {
 
   const [amountOfLikes, setAmountOfLikes] = useState(0);
   const [amountOfCartItem, setAmountOfCartItem] = useState(0);
+  const [isNavbarWhite, setIsNavbarWhite] = useState(false);
+  const onSearchIconClick = () => {
+    // console.log('1123124124');
+    setIsNavbarWhite(!isNavbarWhite);
+  };
 
   useEffect(() => {
     if (isUserLogin) {
@@ -154,6 +144,7 @@ export default function Navbar() {
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
+    setIsNavbarWhite(false);
   };
 
   const handleMenuClose = () => {
@@ -184,8 +175,6 @@ export default function Navbar() {
     ></Menu>
   );
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
-
   return (
     <>
       <div
@@ -193,16 +182,21 @@ export default function Navbar() {
         style={{
           paddingTop: isMobile ? '5px' : '21px',
           height: isMobile ? '55px' : '68px',
-          backgroundColor: isScrolled ? '#FFFFFF' : 'transparent',
+          backgroundColor:
+            isScrolled || isNavbarWhite ? '#FFFFFF' : 'transparent',
         }}
       >
         <div className="wrap">
           {isMobile && (
             <IconButton
+              className="burger"
               edge="start"
               color="inherit"
               aria-label="menu"
-              onClick={handleMobileMenuOpen}
+              onClick={(event) => {
+                handleMobileMenuOpen(event);
+                onSearchIconClick();
+              }}
               style={{ position: 'absolute', top: '6px', left: '20px' }}
             >
               <MenuIcon />
@@ -227,54 +221,70 @@ export default function Navbar() {
             <NavigationMenu
               isScrolled={isScrolled}
               handleScrollAndHighlight={handleScrollAndHighlight}
+              onSearchIconClick={onSearchIconClick}
             />
           )}
-        </div>
-        <div className="header-right">
-          {!isTablet && <SearchBar />}
-
-          <Link
-            className="header-basket"
-            href={isUserLogin ? '/cart' : '/signin'}
-            passHref
+          <div
+            className={`${
+              isScrolled && !isMobile ? 'header-right fix' : 'header-right'
+            }`}
           >
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              sx={{ color: iconColour, padding: '8px' }}
-            >
-              <Badge badgeContent={amountOfCartItem} color="error">
-                <AddShoppingCart />
-              </Badge>
-            </IconButton>
-          </Link>
-          <Link
-            className="header-personal"
-            href={
-              isUserLogin ? (isAdmin ? '/admin/orders' : '/account') : '/signin'
-            }
-            passHref
-          >
-            <IconButton size="large" sx={{ color: iconColour, padding: '8px' }}>
-              <Person2Icon />
-            </IconButton>
-          </Link>
-          <Link className="header-favorite" href="/account/favorites" passHref>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              sx={{ color: iconColour, padding: '8px' }}
-            >
-              <Badge badgeContent={amountOfLikes} color="error">
-                <FavoriteIcon />
-              </Badge>
-            </IconButton>
-          </Link>
+            <SearchBar onSearchIconClick={onSearchIconClick} />
 
-          <a href="javascript:;" className="search-ico"></a>
+            <Link
+              className="header-personal"
+              href={
+                isUserLogin
+                  ? isAdmin
+                    ? '/admin/orders'
+                    : '/account'
+                  : '/signin'
+              }
+              passHref
+            >
+              <IconButton
+                size="large"
+                sx={{ color: iconColour, padding: '8px' }}
+              >
+                <Person2Icon />
+              </IconButton>
+            </Link>
+            <Link
+              className="header-favorite"
+              href="/account/favorites"
+              passHref
+            >
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                sx={{ color: iconColour, padding: '8px' }}
+              >
+                <Badge badgeContent={amountOfLikes} color="error">
+                  <FavoriteIcon />
+                </Badge>
+              </IconButton>
+            </Link>
+            <Link
+              className="header-basket"
+              href={isUserLogin ? '/cart' : '/signin'}
+              passHref
+            >
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                sx={{ color: iconColour, padding: '8px' }}
+              >
+                <Badge badgeContent={amountOfCartItem} color="error">
+                  <AddShoppingCart />
+                </Badge>
+              </IconButton>
+            </Link>
+
+            <a href="javascript:;" className="search-ico"></a>
+          </div>
         </div>
       </div>
 
@@ -283,6 +293,7 @@ export default function Navbar() {
         isMobileMenuOpen={isMobileMenuOpen}
         handleMobileMenuClose={handleMobileMenuClose}
         handleScrollAndHighlight={handleScrollAndHighlight}
+        onSearchIconClick={onSearchIconClick}
       />
       {renderMenu}
     </>

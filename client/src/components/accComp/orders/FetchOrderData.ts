@@ -21,7 +21,7 @@ export const fetchOrderData = async (): Promise<DataResponse> => {
       return { info: '', orders: response };
     }
 
-    return { info: 'Unknown status', orders: [] }; // добавлен оператор return
+    return { info: 'Unknown status', orders: [] };
   } catch (error) {
     console.log(error);
     return { info: 'Error occurred', orders: [] };

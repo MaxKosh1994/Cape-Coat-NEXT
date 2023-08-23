@@ -1,0 +1,118 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  border: 0.5px solid black;
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: rgba(227, 227, 227, 0.856);
+  font-size: large;
+  font-weight: bold;
+  color: rgb(70, 70, 70);
+}
+
+.bodyContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.leftBodyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-evenly;
+  font-size: small;
+  margin-right: 85px;
+  padding: 5px;
+  width: 20%;
+}
+
+.rightBodyContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-left: 30px;
+  padding: 10px;
+  width: 80%;
+}
+
+.rightBodyContainer > * {
+  margin-right: 10px;
+}
+
+.headerComp {
+  padding: 4px;
+  overflow-wrap: break-word;
+}
+
+.footerContainer {
+  padding: 4px;
+  overflow-wrap: break-word;
+  background-color: rgb(244, 244, 244);
+  display: flex;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  align-items: center;
+  width: 100%;
+}
+
+.boldDarkText {
+  font-weight: bold;
+  color: #333333;
+}
+
+@media (max-width: 821px) {
+  .bodyContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .rightBodyContainer {
+    align-items: center;
+    justify-content: center;
+    margin-left: 0px;
+    width: 100%;
+  }
+
+  .leftBodyContainer {
+    width: 100%;
+  }
+}
+
+@media (max-width: 550px) {
+  .bodyContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .rightBodyContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0px;
+    width: 100%;
+  }
+
+  .leftBodyContainer {
+    width: 100%;
+  }
+}

@@ -44,7 +44,7 @@ export const signInUserThunk = (inputsData) => async (dispatch) => {
         credentials: 'include',
       }
     );
-    console.log('data', res.data.email);
+    // console.log('data', res.data.email);
     dispatch(startSession(res.data));
     dispatch(fetchFavouritesData());
     dispatch(checkCartItemThunk());

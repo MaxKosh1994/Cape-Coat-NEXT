@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
@@ -7,11 +7,14 @@ import styles from './SearchBarStyle.module.css';
 import { IItem } from '../accComp/orders/types';
 import { getAllItems } from './fetchSearch';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import SearchContainer from '../SearchContainer/SearchContainer';
 
-interface SearchBarProps {}
+interface SearchBarProps {
+  onSearchIconClick: () => void;
+}
 
-const SearchBar: React.FC<SearchBarProps> = () => {
-  const isTablet = useMediaQuery('(max-width:768px)');
+const SearchBar: React.FC<SearchBarProps> = ({ onSearchIconClick }) => {
+  const isMobile = useMediaQuery('(max-width:768px)');
 
   const [isInputOpen, setIsInputOpen] = useState(false);
 
@@ -22,16 +25,20 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   }));
 
   const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    marginLeft: isTablet ? '110px' : '0',
+    position: isMobile ? 'fixed' : 'unset',
+    padding: isMobile ? '15px' : 0,
+    top: isMobile ? '55px' : 'unset',
+    left: isInputOpen ? '0' : '100%',
     color: 'black',
-    width: isTablet ? '123px' : '150px',
+    width: isMobile ? '100%' : '150px',
     transition: theme.transitions.create('width'),
+    backgroundColor: isMobile ? 'white' : 'transparent',
   }));
 
   const StyledIconButton = styled(IconButton)(({ theme }) => ({
     paddingTop: '6px',
     paddingRight: '2px',
-    marginLeft: isInputOpen ? '-150px' : '0',
+    marginLeft: isMobile ? '0' : '10px',
     transition: theme.transitions.create('margin-left'),
   }));
 
@@ -52,6 +59,15 @@ const SearchBar: React.FC<SearchBarProps> = () => {
     }
   }, [input]);
 
+  const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
+  const handleSearchIconClick = () => {
+    setIsInputOpen(!isInputOpen);
+    onSearchIconClick();
+  };
+
   const filteredItems: IItem[] = allItems.filter((item) => {
     return (
       item.name.toLowerCase().includes(input.toLowerCase()) ||
@@ -60,27 +76,28 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   });
 
   return (
-    <Search>
-      <StyledIconButton onClick={() => setIsInputOpen(!isInputOpen)}>
-        {isTablet ? (
-          <span
-            className={styles.headerSearch}
-            style={{ color: '#423C3D', marginLeft: '6px' }}
-          >
-            Поиск
-          </span>
-        ) : (
+    <>
+      <Search>
+        <StyledIconButton onClick={handleSearchIconClick}>
           <SearchIcon className={styles.headerSearchIcon} />
+        </StyledIconButton>
+        {isInputOpen && (
+          <StyledInputBase
+            value={input}
+            onChange={changeHandler}
+            placeholder="Поиск..."
+            autoFocus
+            inputProps={{ 'aria-label': 'search' }}
+            onBlur={() => {
+              setIsInputOpen(false);
+              setInput('');
+              onSearchIconClick();
+            }}
+          />
         )}
-      </StyledIconButton>
-      {isInputOpen && (
-        <StyledInputBase
-          placeholder="Поиск..."
-          autoFocus
-          onBlur={() => setIsInputOpen(false)}
-        />
-      )}
-    </Search>
+      </Search>
+      {input.length > 0 && <SearchContainer filteredItems={filteredItems} />}
+    </>
   );
 };
 

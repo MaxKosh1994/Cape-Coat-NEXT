@@ -1,15 +1,16 @@
 .menu {
-  margin-top: 23px;
-  transition: all 0.3s;
+  margin-top: 20px;
+  transition: top 0.5s;
 }
+
 .submenu,
 .menu {
   display: inline-block;
   vertical-align: top;
   list-style: none;
-
   padding: 0;
 }
+
 .menu > li {
   display: inline-block;
   vertical-align: top;
@@ -19,6 +20,54 @@
   letter-spacing: 0.1em;
 }
 
+.menu > li:hover {
+  color: black;
+}
+
 .menu.fix {
   margin-top: 9px;
+}
+
+.menuItem {
+  position: relative;
+}
+
+.dropdownMenu {
+  display: none;
+  position: absolute;
+  top: 22px;
+  left: 0;
+  background-color: white;
+  width: max-content;
+  list-style-type: none;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  transition: opacity 0.2s ease-in-out, top 0.5s;
+}
+
+.menuItem:hover .dropdownMenu {
+  display: block;
+  animation: showSubmenu 0.2s ease-in-out forwards;
+}
+
+@keyframes showSubmenu {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hideSubmenu {
+  from {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  to {
+    opacity: 0;
+    pointer-events: none;
+  }
 }

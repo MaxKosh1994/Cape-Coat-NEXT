@@ -6,9 +6,15 @@ const {
   getAll,
   getCollection,
   getNewArrivals,
+  getAllCollections,
+  getBestSellers,
+  getStock,
 } = require('../controllers/catalogController');
 
 module.exports = catalogRouter
   .get('/categories', getAll)
   .get('/collection', getCollection)
-  .get('/new-arrivals', getNewArrivals);
+  .get('/collection/all', getAllCollections)
+  .get('/new-arrivals', getNewArrivals)
+  .get('/bestsellers', getBestSellers)
+  .get('/sale', getStock);

@@ -3,13 +3,25 @@
   justify-content: center;
   align-items: center;
   height: 80vh;
-  width: 30vw;
+  width: 28vw;
   margin: 0 auto;
 }
 
+.signInForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.signInForm > button {
+  margin-top: 10px;
+  font-family: 'Ysabeau Infant';
+}
+
 .redirect {
-  text-decoration: underline;
-  text-decoration-thickness: 0.01rem;
+  font-style: italic;
 }
 
 .redirMsg {
@@ -19,29 +31,40 @@
 }
 
 .header {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-@media only screen and (min-width: 120px) and (max-width: 599px) {
+@media only screen and (min-width: 120px) and (max-width: 800px) {
   .formContainer {
-    width: 80%;
-  }
-}
-
-@media only screen and (min-width: 600px) and (max-width: 900px) {
-  .formContainer {
-    width: 80%;
+    width: 80vw;
   }
 
   .signInForm {
-    width: 90%;
+    width: 100%;
     font-size: 2rem;
-  }
-  .redirMsg {
-    font-size: 1.7rem;
   }
 
   .header {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+}
+
+@media only screen and (min-width: 750px) and (max-width: 1100px) {
+  .formContainer {
+    width: 70vw;
+  }
+
+  .header {
+    font-size: 2rem;
+  }
+
+  .signInForm > button {
+    font-size: 1.3rem;
+  }
+
+  .redirMsg {
+    font-size: 1.5rem;
   }
 }

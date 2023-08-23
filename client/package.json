@@ -13,7 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.3",
     "@mui/lab": "^5.0.0-alpha.136",
-    "@mui/material": "^5.14.4",
+    "@mui/material": "^5.14.5",
     "@mui/system": "^5.14.0",
     "@pbe/react-yandex-maps": "^1.2.4",
     "@reduxjs/toolkit": "^1.9.5",
@@ -29,5 +29,10 @@
     "react-redux": "^8.1.2",
     "react-router-dom": "^6.14.2",
     "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.10",
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-react": "^7.22.5"
   }
 }

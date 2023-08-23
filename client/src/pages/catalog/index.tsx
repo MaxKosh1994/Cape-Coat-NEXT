@@ -18,11 +18,10 @@ export default function Catalog() {
             credentials: 'include',
           }
         );
-        console.log(response);
         if (response.status === 200) {
           const allCategs = await response.json();
           setAllCategories(allCategs);
-        }
+        } 
       })();
     } catch (err) {
       console.log(err);
@@ -44,15 +43,14 @@ export default function Catalog() {
       </Typography>
       <div className={styles.catalogueContainer}>
         {allCategories.map((cat) => (
-          // <Link href={`catalog/${cat.name}`} key={cat.id}>
           <CategoryList
             key={cat.id}
             id={cat.id}
             imageUrl={`${process.env.NEXT_PUBLIC_CATEGORY_URL}${cat.photo}`}
             category={cat.name}
+            urlName={cat.urlName}
             allCategory={allCategories}
           />
-          // </Link>
         ))}
       </div>
     </>

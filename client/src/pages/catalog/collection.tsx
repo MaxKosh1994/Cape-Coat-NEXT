@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-// import ProductCard from '../ProductCard/ProductCard';
-import styles from '../../styles/Collection.module.css';
-import { Typography, Pagination } from '@mui/material';
+import { Pagination } from '@mui/material';
 import { styled } from '@mui/system';
-import Head from 'next/head';
+import BasePage from '@/components/ItemPage/BasePage';
 
 const CollectionContainer = styled('div')({
   display: 'grid',
@@ -46,31 +44,7 @@ export default function CollectionPage() {
 
   return (
     <>
-      <Head>
-        <title>Cape&Coat | {collectionName}</title>
-        <meta name="title" content="Cape and Coat" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Typography className={styles.collectionText} variant="h3" align="center">
-        <strong> {collectionName}</strong>
-      </Typography>
-      <div className={styles.collectionContainer}>
-        {/* {currentItems.map((item) => (
-          <ProductCard
-            key={item.id}
-            id={item.id}
-            photo={item.Photos[0].photo}
-            name={item.name}
-            color={item.color}
-            price={item.price}
-            isFavorite={false}
-            isCart={false}
-            width={window.innerWidth < 830 ? '300px' : '400px'}
-            height={window.innerWidth < 500 ? '415px' : '540px'}
-          />
-        ))} */}
-      </div>
+      <BasePage pageName={collectionName} itemsArr={currentItems} />
       <div
         style={{
           display: 'flex',

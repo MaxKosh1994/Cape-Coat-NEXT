@@ -39,6 +39,17 @@ module.exports.addFavorite = async (req, res) => {
     const { user } = req.session;
     const favCard = req.body;
 
+    if (!user) {
+      // Если нет сессии, записываем данные в localStorage
+      const localStorageFavorites =
+        JSON.parse(localStorage.getItem('favorites')) || [];
+      localStorageFavorites.push(favCard);
+      localStorage.setItem('favorites', JSON.stringify(localStorageFavorites));
+
+      res.status(200).json({ message: 'Данные добавлены в localStorage' });
+      return;
+    }
+
     const userId = await User.findOne({
       where: {
         email: user,
