@@ -1,13 +1,5 @@
-import { useState, useEffect } from 'react';
-import { GetServerSideProps, GetStaticProps } from 'next';
-import { Typography } from '@mui/material';
 import Head from 'next/head';
-import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import Link from 'next/link';
-import TelegramIcon from '@mui/icons-material/Telegram';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import Social from '@/components/Social/Social';
 import HorizontalBlock from '@/components/main/HorizontalBlock';
 import VerticalBlock from '@/components/main/VerticalBlock';
 import BottomBlock from '@/components/main/BottomBlock';
@@ -19,10 +11,7 @@ const Home = () => {
         <title>Cape&Coat | Главная</title>
         <meta name="title" content="Cape and Coat" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Ysabeau+Infant&display=swap"
-          rel="stylesheet"
-        />
+
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
