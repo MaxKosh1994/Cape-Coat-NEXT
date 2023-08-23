@@ -42,7 +42,6 @@ interface IMenuItem {
   label: string;
   link?: string;
   submenu?: (ICategories | ICollections | IFaqMenuItem)[];
-  onClick?: () => void;
 }
 
 const NavigationMenu: React.FC<IProps> = ({
@@ -63,11 +62,9 @@ const NavigationMenu: React.FC<IProps> = ({
     const getData = async () => {
       const categoryData = await fetchNavigationMenuCategoryData();
       setCategories(categoryData.categories);
-      console.log('categoryData', categoryData);
 
       const collectionsData = await fetchNavigationMenuCollectionData();
       setCollections(collectionsData.collections);
-      console.log('collectionsData', collectionsData);
     };
 
     getData();
@@ -85,7 +82,7 @@ const NavigationMenu: React.FC<IProps> = ({
     { label: 'Коллекции', link: '/catalog/collection', submenu: collections },
     { label: 'Sale', link: '/sale' },
     { label: 'FAQ', link: '/FAQ', submenu: faqSubMenu },
-    { label: 'Контакты', onClick: handleScrollAndHighlight },
+    { label: 'Контакты', link: '/address' },
   ];
 
   const handleMouseEnter = (index: number) => {
@@ -107,48 +104,38 @@ const NavigationMenu: React.FC<IProps> = ({
           onMouseEnter={() => handleMouseEnter(index)}
           onMouseLeave={() => handleMouseLeave(index)}
         >
-          {item.onClick ? (
-            <Link href="#" onClick={item.onClick} className={styles.menuLink}>
+          <>
+            <Link href={item.link || '#'} passHref className={styles.menuLink}>
               {item.label}
             </Link>
-          ) : (
-            <>
-              <Link
-                href={item.link || '#'}
-                passHref
-                className={styles.menuLink}
+            {item.submenu && (
+              <ul
+                className={`${styles.dropdownMenu} ${
+                  submenuStates[index] ? styles.dropdownVisible : ''
+                }`}
               >
-                {item.label}
-              </Link>
-              {item.submenu && (
-                <ul
-                  className={`${styles.dropdownMenu} ${
-                    submenuStates[index] ? styles.dropdownVisible : ''
-                  }`}
-                >
-                  {item.submenu.map((el) => (
-                    <li key={el.id} className={styles.dropdownMenuItem}>
-                      {el.link ? (
-                        <Link href={el.link} passHref>
-                          {el.name}
-                        </Link>
-                      ) : (
-                        <Link
-                          href={{
-                            pathname: `${item.link}/${el.urlName}`,
-                            query: { id: el.id },
-                          }}
-                          passHref
-                        >
-                          {el.name}
-                        </Link>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </>
-          )}
+                {item.submenu.map((el) => (
+                  <li key={el.id} className={styles.dropdownMenuItem}>
+                    {el.link ? (
+                      <Link href={el.link} passHref>
+                        {el.name}
+                      </Link>
+                    ) : (
+                      <Link
+                        href={{
+                          pathname: `${item.link}/${el.urlName}`,
+                          query: { id: el.id },
+                        }}
+                        passHref
+                      >
+                        {el.name}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
         </li>
       ))}
     </ul>

@@ -8,6 +8,8 @@ import { category, categoryClear } from '../../app/CategorySlice';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
+import { useLocation } from 'react-router-dom';
+import Link from 'next/link';
 
 export default function Category() {
   const [catName, setCatName] = useState('');
@@ -18,7 +20,6 @@ export default function Category() {
     (state: RootState) => state.CategorySlice.categoryItems
   );
 
-  
   useEffect(() => {
     try {
       (async function (): Promise<void> {

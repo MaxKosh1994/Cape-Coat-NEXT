@@ -1,6 +1,7 @@
 .menu {
   margin-top: 20px;
   transition: top 0.5s;
+  transition: all 0.3s;
 }
 
 .submenu,

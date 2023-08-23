@@ -87,18 +87,15 @@ export default function Navbar() {
     };
   }, []);
 
-  const muiTheme = createTheme(theme);
   const isMobile = useMediaQuery('(max-width:1095px)');
-  const isTablet = useMediaQuery('(max-width:768px)');
 
   const router = useRouter();
-  const isHomePage = router.pathname === '/';
 
   const dispatch = useAppDispatch();
   const isUserLogin = useSelector(
     (state: RootState) => state.sessionSlice.session
   );
-  const user = useSelector((state: RootState) => state.sessionSlice.user);
+
   const isAdmin = useSelector((state: RootState) => state.sessionSlice.isAdmin);
   const favouriteItems = useSelector(
     (state: RootState) => state.favouriteSlice.favourites
@@ -111,16 +108,16 @@ export default function Navbar() {
   const [amountOfCartItem, setAmountOfCartItem] = useState(0);
   const [isNavbarWhite, setIsNavbarWhite] = useState(false);
   const onSearchIconClick = () => {
-    console.log('1123124124');
     setIsNavbarWhite(!isNavbarWhite);
   };
 
   useEffect(() => {
     if (isUserLogin) {
+      dispatch(isUserLoginThunk());
       dispatch(fetchFavouritesData());
       dispatch(checkCartItemThunk());
     }
-  }, [isUserLogin, user, dispatch]);
+  }, [dispatch, isUserLogin]);
 
   useEffect(() => {
     dispatch(isUserLoginThunk());
