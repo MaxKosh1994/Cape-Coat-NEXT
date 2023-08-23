@@ -1,6 +1,6 @@
 import TextField from "@mui/material/TextField";
 
-export default function ItemInput(props) {
+export default function AdminInput(props) {
 
   return (
     <>
