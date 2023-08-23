@@ -88,10 +88,8 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
       <MobileMenuItem label="FAQ" link="/FAQ" onClick={handleMobileMenuClose} />
       <MobileMenuItem
         label="Контакты"
-        onClick={() => {
-          handleScrollAndHighlight();
-          handleMobileMenuClose();
-        }}
+        link="/address"
+        onClick={handleMobileMenuClose}
       />
     </Menu>
   );

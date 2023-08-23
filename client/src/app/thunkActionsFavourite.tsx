@@ -33,7 +33,7 @@ export const fetchItemData = createAsyncThunk(
   'item/fetchItemData',
   async (id: number, { dispatch }) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_URL}item/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}item/${id}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -99,3 +99,24 @@ export const fetchAllFavorites = createAsyncThunk(
     }
   }
 );
+export const fetchOneFavourite =
+  (item: number) => async (dispatch: Dispatch, getState: () => RootState) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}item/favourites/${item}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+        }
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+
+        dispatch(setFavourites(data));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
