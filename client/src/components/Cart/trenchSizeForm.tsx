@@ -1,7 +1,12 @@
 import React from 'react';
 import styles from '../../styles/Cart.module.css';
 
-export default function TrenchSizeForm({ itemId }) {
+export default function TrenchSizeForm({ itemId, onTrenchSizeChange }) {
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    onTrenchSizeChange({ [name]: checked });
+  };
+
   return (
     <>
       <div>
@@ -10,6 +15,7 @@ export default function TrenchSizeForm({ itemId }) {
           name="loops"
           id={`loops${itemId}`}
           className={styles.sizesFormCheckbox}
+          onChange={handleCheckboxChange}
         />
         <label htmlFor={`loops${itemId}`} className={styles.sizesFormLabel}>
           Хочу шлёвки
@@ -22,6 +28,7 @@ export default function TrenchSizeForm({ itemId }) {
           id={`buttons${itemId}`}
           value="pugovitsy"
           className={styles.sizesFormCheckbox}
+          onChange={handleCheckboxChange}
         />
         <label htmlFor={`buttons${itemId}`} className={styles.sizesFormLabel}>
           Хочу пуговицы

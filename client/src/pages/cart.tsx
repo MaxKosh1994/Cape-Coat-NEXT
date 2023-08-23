@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import Head from 'next/head';
-import TrousersSizeForm from '@/components/Cart/coatSizeForm';
+import TrousersSizeForm from '@/components/Cart/trousersSizeForm';
 import TrenchSizeForm from '@/components/Cart/trenchSizeForm';
 import CoatSizeForm from '@/components/Cart/coatSizeForm';
 import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
@@ -35,8 +35,36 @@ export default function CartPage() {
     flat: '',
   });
   const [deliveryCost, setDeliveryCost] = useState(0);
-  const [userMeasurements, setUserMeasurements] = useState(undefined);
   const [showParamsForm, setShowParamsForm] = useState({});
+  const [paramsFormData, setParamsFormData] = useState({
+    itemId: 0,
+    height: '',
+    length: '',
+    sleeve: '',
+    bust: '',
+    waist: '',
+    hips: '',
+    saddle: '',
+    loops: '',
+    buttons: '',
+    lining: '',
+  });
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setParamsFormData({ ...paramsFormData, [e.target.name]: e.target.value });
+  };
+
+  const handleCustomFormChange = (updatedFields) => {
+    setParamsFormData((prevState) => ({
+      ...prevState,
+      ...updatedFields,
+    }));
+  };
+
+  const handleSaveSizesInputs = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log(paramsFormData);
+  };
 
   function sendMail(name, user, order) {
     Email.send({
@@ -85,31 +113,6 @@ export default function CartPage() {
         router.push('/account/orders');
       }, 2000);
       sendMail(name, user, re.message);
-    }
-  };
-  const fetchMeasurementsData = async () => {
-    try {
-      const responseFetch = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}account/profile/measurement`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-        }
-      );
-      const response = await responseFetch.json();
-      if (
-        response.message ===
-          'Произошла ошибка при поиске данных пользователя' ||
-        response.message === 'Вы еще не заполняли свои данные' ||
-        response.error
-      ) {
-        setUserMeasurements(undefined);
-      } else if (response && Object.keys(response).length > 0) {
-        setUserMeasurements(response);
-      }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -165,10 +168,6 @@ export default function CartPage() {
     }
   }, [selectedDelivery]);
 
-  useEffect(() => {
-    fetchMeasurementsData();
-  }, []);
-
   const handleDeleteItemFromCart = async (itemId) => {
     try {
       const data = { itemId, user };
@@ -187,7 +186,7 @@ export default function CartPage() {
     }));
   };
 
-  const handleSaveSizesInputs = (e: ChangeEvent<HTMLInputElement>) => {};
+  // const handleSaveSizesInputs = (e: ChangeEvent<HTMLInputElement>) => {};
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAddressInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -212,13 +211,8 @@ export default function CartPage() {
         addressString,
         commentsInput,
       };
-      if (addressString.length > 18 && userMeasurements) {
+      if (addressString.length > 18) {
         createOrder(orderData);
-      } else if (!userMeasurements) {
-        setOrderStatus('Пожалуйста, введите свои мерки');
-        setTimeout(() => {
-          setOrderStatus('');
-        }, 2000);
       } else {
         setOrderStatus('Пожалуйста, заполните адрес доставки');
         setTimeout(() => {
@@ -277,7 +271,6 @@ export default function CartPage() {
       }, 1000);
     }
   };
-  console.log(cartItemsList);
 
   return (
     <>
@@ -287,7 +280,7 @@ export default function CartPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {cartItemsList.length === 0 ? (
+      {cartItemsList?.length === 0 ? (
         <>
           {orderStatus && <p className="order-status-cart">{orderStatus}</p>}
           <p className="empty-cart-msg">
@@ -366,6 +359,19 @@ export default function CartPage() {
                             </div>
                           </>
                         ) : (
+                          //     {есть мерки в бд ? (
+                          //       мерки
+                          //       <button
+                          //         className={styles.showSizeFormBtn}
+                          //         onClick={() => handleDisplaySizesForm(item.id)}
+                          //       >
+                          //         Изменить мерки
+                          //       </button>
+                          //     )
+                          //   :(
+
+                          //   )
+                          // }
                           <>
                             <button
                               className={styles.showSizeFormBtn}
@@ -401,6 +407,7 @@ export default function CartPage() {
                                       type="text"
                                       name="height"
                                       className={styles.sizesFormInput}
+                                      onChange={handleChange}
                                     />
                                   </div>
                                   <div>
@@ -414,6 +421,7 @@ export default function CartPage() {
                                       type="text"
                                       name="length"
                                       className={styles.sizesFormInput}
+                                      onChange={handleChange}
                                     />
                                   </div>
                                   <div>
@@ -427,6 +435,7 @@ export default function CartPage() {
                                       type="text"
                                       name="sleeve"
                                       className={styles.sizesFormInput}
+                                      onChange={handleChange}
                                     />
                                   </div>
                                   <div>
@@ -440,6 +449,7 @@ export default function CartPage() {
                                       type="text"
                                       name="bust"
                                       className={styles.sizesFormInput}
+                                      onChange={handleChange}
                                     />
                                   </div>
                                   <div>
@@ -453,6 +463,7 @@ export default function CartPage() {
                                       type="text"
                                       name="waist"
                                       className={styles.sizesFormInput}
+                                      onChange={handleChange}
                                     />
                                   </div>
                                   <div>
@@ -466,19 +477,37 @@ export default function CartPage() {
                                       type="text"
                                       name="hips"
                                       className={styles.sizesFormInput}
+                                      onChange={handleChange}
                                     />
                                   </div>
                                   {item.category_id === 4 && (
-                                    <TrousersSizeForm />
+                                    <TrousersSizeForm
+                                      onTrousersSizeChange={
+                                        handleCustomFormChange
+                                      }
+                                    />
                                   )}
                                   {item.category_id === 1 && (
-                                    <TrenchSizeForm itemId={item.id} />
+                                    <TrenchSizeForm
+                                      itemId={item.id}
+                                      onTrenchSizeChange={
+                                        handleCustomFormChange
+                                      }
+                                    />
                                   )}
                                   {item.category_id === 2 && (
-                                    <CoatSizeForm itemId={item.id} />
+                                    <CoatSizeForm
+                                      itemId={item.id}
+                                      onCoatSizeChange={handleCustomFormChange}
+                                    />
                                   )}
                                   {item.category_id === 5 && (
-                                    <FurCoatSizeForm itemId={item.id} />
+                                    <FurCoatSizeForm
+                                      itemId={item.id}
+                                      onFurCoatSizeChange={
+                                        handleCustomFormChange
+                                      }
+                                    />
                                   )}
                                 </div>
                                 <button
@@ -495,47 +524,7 @@ export default function CartPage() {
                     </div>
                   ))}
                 </section>
-                {/* <section
-                  className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
-                >
-                  <h2 className={styles.headerItemCart}>Ваши мерки</h2>
-                  <div className={styles.formBlock}>
-                    <label
-                      className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
-                      // modelmodifiers="[object Object]"
-                    >
-                      <>
-                        {userMeasurements ? (
-                          <span className={styles.checkboxLabel}>
-                            <span className={styles.checkboxHeader}>
-                              Рост: {userMeasurements.height}см, рукав:{' '}
-                              {userMeasurements.sleeve}см, грудь:{' '}
-                              {userMeasurements.bust}см, талия:{' '}
-                              {userMeasurements.waist}см, бедра:{' '}
-                              {userMeasurements.hips}см, желаемая длина изделия:{' '}
-                              {userMeasurements.length}см
-                            </span>
-                            <span className={styles.checkboxDescription}>
-                              Измените ваши данные в{' '}
-                              <Link href="/account/measurements">
-                                личном кабинете
-                              </Link>
-                            </span>
-                          </span>
-                        ) : (
-                          <span className={styles.checkboxLabel}>
-                            <span className={styles.checkboxHeader}>
-                              Заполните ваши данные в{' '}
-                              <Link href="/account/measurements">
-                                личном кабинете
-                              </Link>
-                            </span>
-                          </span>
-                        )}
-                      </>
-                    </label>
-                  </div>
-                </section> */}
+
                 <section
                   className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
                 >
