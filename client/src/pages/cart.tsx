@@ -7,6 +7,12 @@ import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import Head from 'next/head';
+import TrousersSizeForm from '@/components/Cart/trousersSizeForm';
+import TrenchSizeForm from '@/components/Cart/trenchSizeForm';
+import CoatSizeForm from '@/components/Cart/coatSizeForm';
+import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
+import LikeButton from '@/components/likeButton/LikeButton';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 export default function CartPage() {
   const user = useSelector((state) => state.sessionSlice.user);
@@ -31,7 +37,23 @@ export default function CartPage() {
     flat: '',
   });
   const [deliveryCost, setDeliveryCost] = useState(0);
-  const [userMeasurements, setUserMeasurements] = useState(undefined);
+  const [showParamsForm, setShowParamsForm] = useState({});
+  const [paramsFormData, setParamsFormData] = useState({
+    itemId: 0,
+    height: '',
+    length: '',
+    sleeve: '',
+    bust: '',
+    waist: '',
+    hips: '',
+    saddle: '',
+    loops: '',
+    buttons: '',
+    lining: '',
+  });
+  const [userParams, setUserParams] = useState(
+    Array(cartItemsList.length).fill('')
+  );
 
   function sendMail(name, user, order) {
     Email.send({
@@ -71,40 +93,10 @@ export default function CartPage() {
         setOrderStatus('');
       }, 2000);
     } else {
-      setOrderStatus(re.message);
-      // TODO либо убрать таймаут
-      // но тогда будет меняться на долю секунды кнопка на "заказ создан блабла"
-      setTimeout(() => {
-        emptyCart();
-        dispatch(getCartItems([]));
-        router.push('/account/orders');
-      }, 2000);
+      emptyCart();
+      dispatch(getCartItems([]));
+      router.push('/thankyou');
       sendMail(name, user, re.message);
-    }
-  };
-  const fetchMeasurementsData = async () => {
-    try {
-      const responseFetch = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}account/profile/measurement`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-        }
-      );
-      const response = await responseFetch.json();
-      if (
-        response.message ===
-          'Произошла ошибка при поиске данных пользователя' ||
-        response.message === 'Вы еще не заполняли свои данные' ||
-        response.error
-      ) {
-        setUserMeasurements(undefined);
-      } else if (response && Object.keys(response).length > 0) {
-        setUserMeasurements(response);
-      }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -160,10 +152,6 @@ export default function CartPage() {
     }
   }, [selectedDelivery]);
 
-  useEffect(() => {
-    fetchMeasurementsData();
-  }, []);
-
   const handleDeleteItemFromCart = async (itemId) => {
     try {
       const data = { itemId, user };
@@ -173,6 +161,50 @@ export default function CartPage() {
     } catch (err) {
       console.log(err);
       setDelError('Не получилось удалить товар, попробуйте позже.');
+    }
+  };
+  const handleDisplaySizesForm = (index, itemId: number) => {
+    setShowParamsForm((prevState) => ({
+      ...prevState,
+      [itemId]: !prevState[itemId],
+    }));
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setParamsFormData({ ...paramsFormData, [e.target.name]: e.target.value });
+  };
+
+  const handleCustomFormChange = (updatedFields) => {
+    setParamsFormData((prevState) => ({
+      ...prevState,
+      ...updatedFields,
+    }));
+  };
+
+  const handleSaveSizesInputs = async (index: number, itemId: number) => {
+    setParamsFormData((prevState) => ({
+      ...prevState,
+      itemId: itemId,
+    }));
+    console.log(paramsFormData);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}cart/measures/${itemId}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(paramsFormData),
+      }
+    );
+    const res = await response.json();
+    if (response.status === 200) {
+      const userParams = `Ваш рост: ${res.height}см, длина изделия: ${res.length}см, длина рукава: ${res.sleeve}см, объем груди: ${res.bust}см, объем талии: ${res.waist}см, объем бедер: ${res.hips}см`;
+      setUserParams((prevTexts) => {
+        const updatedTexts = [...prevTexts];
+        updatedTexts[index] = userParams;
+        return updatedTexts;
+      });
+      setShowParamsForm(false);
     }
   };
 
@@ -199,13 +231,8 @@ export default function CartPage() {
         addressString,
         commentsInput,
       };
-      if (addressString.length > 18 && userMeasurements) {
+      if (addressString.length > 18) {
         createOrder(orderData);
-      } else if (!userMeasurements) {
-        setOrderStatus('Пожалуйста, введите свои мерки');
-        setTimeout(() => {
-          setOrderStatus('');
-        }, 2000);
       } else {
         setOrderStatus('Пожалуйста, заполните адрес доставки');
         setTimeout(() => {
@@ -264,7 +291,8 @@ export default function CartPage() {
       }, 1000);
     }
   };
-
+  console.log(cartItemsList);
+  // console.log(cartItemsList.map((item) => item.Carts[0].CartItem.measurements));
   return (
     <>
       <Head>
@@ -273,10 +301,10 @@ export default function CartPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {cartItemsList.length === 0 ? (
+      {cartItemsList?.length === 0 ? (
         <>
           {orderStatus && <p className="order-status-cart">{orderStatus}</p>}
-          <p className="empty-cart-msg">
+          <p className={styles.emptyCartMsg}>
             Сейчас в вашей корзине пусто.{' '}
             <Link href="/catalog">Загляните в каталог</Link>
           </p>
@@ -293,7 +321,7 @@ export default function CartPage() {
                 <section
                   className={`${styles.orderBlock} ${styles.orderBlockBasket}`}
                 >
-                  {cartItemsList.map((item) => (
+                  {cartItemsList.map((item, index) => (
                     <div className={styles.basketItem} key={item.id}>
                       <div className={styles.basketItemLeft}>
                         <Link
@@ -310,90 +338,231 @@ export default function CartPage() {
                         </Link>
                       </div>
                       <div className={styles.basketItemRight}>
-                        <div
-                          className={`${styles.basketItemContent} ${styles.basketItemContentCenter}`}
-                        >
+                        <div className={styles.basketItemContent}>
                           <Link
                             href={`/catalog/categoryName/${item.id}`}
                             className={styles.basketItemTitle}
                           >
                             {item.name}
                           </Link>
-                          <button
-                            className={styles.basketItemDeleteButton}
-                            type="button"
-                            onClick={() => handleDeleteItemFromCart(item.id)}
-                          >
-                            <Image
-                              src="/delicon.png"
-                              alt="Удалить"
-                              fill={true}
-                            />
-                          </button>
+                          <div className={styles.iconsContainer}>
+                            <LikeButton item={item.id} />
+                            <button
+                              className={styles.basketItemDeleteButton}
+                              type="button"
+                              onClick={() => handleDeleteItemFromCart(item.id)}
+                            >
+                              <DeleteOutlineIcon
+                                sx={{ fontSize: '2rem', color: '#656565' }}
+                              />
+                            </button>
+                          </div>
                         </div>
-                        <div
-                          className={`${styles.basketItemContent} ${styles.basketItemContentCenter}`}
-                        >
+                        <div className={styles.basketItemContent}>
                           <div className={styles.basketItemProperties}>
                             <div>Артикул: {item.article}</div>
                           </div>
                         </div>
-                        <div
-                          className={`${styles.basketItemContent} ${styles.basketItemContentCenter}`}
-                        >
-                          <div className={styles.basketItemPrices}>
-                            <div className={styles.itemPrices}>
-                              <span className={styles.itemPricesPrice}>
-                                {item.price.toLocaleString()} &#8381;
-                              </span>
-                            </div>
+                        <div className={styles.basketItemContent}>
+                          <div className={styles.itemPrices}>
+                            <span className={styles.itemPricesPrice}>
+                              {item.price.toLocaleString()} &#8381;
+                            </span>
                           </div>
                         </div>
+                        {item.in_stock ? (
+                          <>
+                            <div className={styles.basketItemContent}>
+                              <div className={styles.itemPrices}>
+                                <span className={styles.itemPricesPrice}>
+                                  {item.model_params}
+                                </span>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            {userParams[index] ||
+                            item.Carts[0].CartItem.added ? (
+                              <>
+                                <div className={styles.userParameters}>
+                                  <div className={styles.itemPrices}>
+                                    <span className={styles.itemPricesPrice}>
+                                      {userParams[index] ||
+                                        `Ваш рост: ${item.Carts[0].CartItem.height}см, Длина изделия: ${item.Carts[0].CartItem.length}см, Длина рукава: ${item.Carts[0].CartItem.sleeve}см, Объем груди: ${item.Carts[0].CartItem.bust}см, Объем талии: ${item.Carts[0].CartItem.waist}см, Объем бедер: ${item.Carts[0].CartItem.hips}см`}
+                                    </span>
+                                  </div>
+                                </div>
+                                <button
+                                  className={styles.showSizeFormBtn}
+                                  onClick={() =>
+                                    handleDisplaySizesForm(index, item.id)
+                                  }
+                                >
+                                  Изменить мерки
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  className={styles.showSizeFormBtn}
+                                  onClick={() =>
+                                    handleDisplaySizesForm(index, item.id)
+                                  }
+                                >
+                                  Ввести мерки
+                                </button>
+                              </>
+                            )}
+                          </>
+                        )}
+                        {showParamsForm[item.id] && (
+                          <>
+                            <div className={styles.basketItemContent}>
+                              <div className={styles.itemPrices}>
+                                <Link
+                                  className={styles.faqLink}
+                                  href="/FAQ/measurementsFAQ"
+                                >
+                                  Посмотреть как снимать мерки
+                                </Link>
+                              </div>
+                            </div>
+                            <div className={styles.sizesForm}>
+                              <form action="">
+                                <div className={styles.sizesFormBlock}>
+                                  <div>
+                                    <label
+                                      htmlFor="height"
+                                      className={styles.sizesFormLabel}
+                                    >
+                                      Ваш рост
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="height"
+                                      className={styles.sizesFormInput}
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label
+                                      htmlFor="length"
+                                      className={styles.sizesFormLabel}
+                                    >
+                                      Длина изделия
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="length"
+                                      className={styles.sizesFormInput}
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label
+                                      htmlFor="sleeve"
+                                      className={styles.sizesFormLabel}
+                                    >
+                                      Длина рукава
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="sleeve"
+                                      className={styles.sizesFormInput}
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label
+                                      htmlFor="bust"
+                                      className={styles.sizesFormLabel}
+                                    >
+                                      Объем груди
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="bust"
+                                      className={styles.sizesFormInput}
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label
+                                      htmlFor="waist"
+                                      className={styles.sizesFormLabel}
+                                    >
+                                      Объем талии
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="waist"
+                                      className={styles.sizesFormInput}
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label
+                                      htmlFor="hips"
+                                      className={styles.sizesFormLabel}
+                                    >
+                                      Объем бедер
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="hips"
+                                      className={styles.sizesFormInput}
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                  {item.category_id === 4 && (
+                                    <TrousersSizeForm
+                                      onTrousersSizeChange={
+                                        handleCustomFormChange
+                                      }
+                                    />
+                                  )}
+                                  {item.category_id === 1 && (
+                                    <TrenchSizeForm
+                                      itemId={item.id}
+                                      onTrenchSizeChange={
+                                        handleCustomFormChange
+                                      }
+                                    />
+                                  )}
+                                  {item.category_id === 2 && (
+                                    <CoatSizeForm
+                                      itemId={item.id}
+                                      onCoatSizeChange={handleCustomFormChange}
+                                    />
+                                  )}
+                                  {item.category_id === 5 && (
+                                    <FurCoatSizeForm
+                                      itemId={item.id}
+                                      onFurCoatSizeChange={
+                                        handleCustomFormChange
+                                      }
+                                    />
+                                  )}
+                                </div>
+                                <button
+                                  className={styles.sizesFormBtn}
+                                  onClick={(event) => {
+                                    event.preventDefault();
+                                    handleSaveSizesInputs(index, item.id);
+                                  }}
+                                >
+                                  Сохранить
+                                </button>
+                              </form>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   ))}
                 </section>
-                {/* <section
-                  className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
-                >
-                  <h2 className={styles.headerItemCart}>Ваши мерки</h2>
-                  <div className={styles.formBlock}>
-                    <label
-                      className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
-                      // modelmodifiers="[object Object]"
-                    >
-                      <>
-                        {userMeasurements ? (
-                          <span className={styles.checkboxLabel}>
-                            <span className={styles.checkboxHeader}>
-                              Рост: {userMeasurements.height}см, рукав:{' '}
-                              {userMeasurements.sleeve}см, грудь:{' '}
-                              {userMeasurements.bust}см, талия:{' '}
-                              {userMeasurements.waist}см, бедра:{' '}
-                              {userMeasurements.hips}см, желаемая длина изделия:{' '}
-                              {userMeasurements.length}см
-                            </span>
-                            <span className={styles.checkboxDescription}>
-                              Измените ваши данные в{' '}
-                              <Link href="/account/measurements">
-                                личном кабинете
-                              </Link>
-                            </span>
-                          </span>
-                        ) : (
-                          <span className={styles.checkboxLabel}>
-                            <span className={styles.checkboxHeader}>
-                              Заполните ваши данные в{' '}
-                              <Link href="/account/measurements">
-                                личном кабинете
-                              </Link>
-                            </span>
-                          </span>
-                        )}
-                      </>
-                    </label>
-                  </div>
-                </section> */}
+
                 <section
                   className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
                 >
@@ -412,7 +581,7 @@ export default function CartPage() {
                           Укажите желаемую длину изделия или другие пожелания
                         </label>
                         <textarea
-                          className={`${styles.commentInput} ${styles.formControlControl}`}
+                          className={`${styles.commentInput} ${styles.formInput}`}
                           role="text"
                           title="Комментарии"
                           placeholder=""
@@ -421,7 +590,6 @@ export default function CartPage() {
                           cols="50"
                           onChange={handleCommentChange}
                         />
-                        <div className={styles.formControlMessages}></div>
                       </div>
                     </label>
                   </div>
@@ -477,10 +645,16 @@ export default function CartPage() {
                       />
                       <span className={styles.checkboxLabel}>
                         <span className={styles.checkboxHeader}>
-                          Доставка СДЭК
+                          Доставка СДЭК или Почтой России
                         </span>
                         <span className={styles.checkboxDescription}>
                           <strong>от 300 рублей</strong>, от 3 дней
+                        </span>
+                        <span className={styles.checkboxDescription}>
+                          <em>
+                            Точную стоимость доставки вам сообщит менеджер.
+                            Итоговая сумма заказа может измениться.
+                          </em>
                         </span>
                       </span>
                     </label>
@@ -498,17 +672,12 @@ export default function CartPage() {
                                   title="Город"
                                   placeholder=""
                                   name="city"
-                                  className={styles.formControlControl}
+                                  className={styles.formInput}
                                   onChange={handleInputChange}
                                 />
-                                <div
-                                  className={styles.formControlMessages}
-                                ></div>
                               </div>
                               <div className={styles.formControl}>
-                                <label
-                                  className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
-                                >
+                                <label className={styles.formControlLabel}>
                                   Улица
                                 </label>
                                 <input
@@ -516,22 +685,15 @@ export default function CartPage() {
                                   title="Улица*"
                                   placeholder=""
                                   name="street"
-                                  className={styles.formControlControl}
+                                  className={styles.formInput}
                                   onChange={handleInputChange}
                                 />
-                                <div
-                                  className={styles.formControlMessages}
-                                ></div>
                               </div>
                             </div>
                             <div className={styles.inputGroup}>
                               <div className={styles.inputLocation}>
-                                <div
-                                  className={`${styles.formControl} ${styles.formControlDisabled}`}
-                                >
-                                  <label
-                                    className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
-                                  >
+                                <div className={styles.formControl}>
+                                  <label className={styles.formControlLabel}>
                                     Дом
                                   </label>
                                   <input
@@ -539,24 +701,17 @@ export default function CartPage() {
                                     title="Дом"
                                     name="number"
                                     placeholder=""
-                                    className={styles.formControlControl}
+                                    className={styles.formInput}
                                     onChange={handleInputChange}
                                     disabled=""
                                   />
                                   <div
                                     className={styles.formControlButtons}
                                   ></div>
-                                  <div
-                                    className={styles.formControlMessages}
-                                  ></div>
                                 </div>
                               </div>
-                              <div
-                                className={`${styles.formControl} ${styles.formControlDisabled}`}
-                              >
-                                <label
-                                  className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
-                                >
+                              <div className={styles.formControl}>
+                                <label className={styles.formControlLabel}>
                                   Квартира/Офис
                                 </label>
                                 <input
@@ -564,15 +719,12 @@ export default function CartPage() {
                                   name="flat"
                                   title="Квартира/Офис"
                                   placeholder=""
-                                  className={styles.formControlControl}
+                                  className={styles.formInput}
                                   onChange={handleInputChange}
                                   disabled=""
                                 />
                                 <div
                                   className={styles.formControlButtons}
-                                ></div>
-                                <div
-                                  className={styles.formControlMessages}
                                 ></div>
                               </div>
                             </div>
