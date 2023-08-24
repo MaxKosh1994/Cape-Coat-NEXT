@@ -52,6 +52,7 @@ const ProductCard: React.FC<IProductCard> = ({
 
         <div className={styles.Icons}>
           <FavoriteIconButton
+            itemId={id}
             isFavorite={isFavorite}
             onClick={favoriteHandler}
           />
