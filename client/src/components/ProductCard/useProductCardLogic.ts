@@ -38,25 +38,25 @@ const useProductCardLogic = (
     // }
     setIsFavorite(!isFavorite);
     dispatch(toggleFavorite(id));
-    const localStorageData = localStorage.getItem('favorites');
+    // const localStorageData = localStorage.getItem('favorites');
 
     if (!user) {
       const favoritesFromStorage =
         JSON.parse(localStorage.getItem('favorites')) || [];
       // console.log(favoritesFromStorage)
       if (isFavorite) {
-        console.log(isFavorite)
+        console.log(isFavorite);
         const updatedFavorites = favoritesFromStorage.filter(
           (favId) => favId !== id
         );
-        console.log('updatedFavorites');
+        console.log('updatedFavorites', updatedFavorites);
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
       } else {
         const updatedFavorites = [...favoritesFromStorage, id];
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
       }
       dispatch(setLikedStatus(!isFavorite));
-    } else { 
+    } else {
       try {
         const favoriteData = {
           id,
@@ -67,13 +67,34 @@ const useProductCardLogic = (
           price,
           isFavorite: !isFavorite,
         };
-        const favoriteAction = isFavorite
-          ? removeFromFavorites
-          : addToFavorites;
-        const favorite = await favoriteAction(favoriteData);
-        setFavCard(favorite);
-        dispatch(fetchFavouritesData(favorite));
-        dispatch(setLikedStatus(!isFavorite));
+
+        const favoritesFromStorage =
+          JSON.parse(localStorage.getItem('favorites')) || [];
+
+        if (favoritesFromStorage.length > 0) {
+          // Отправить на сервер каждый товар из localStorage
+          await Promise.all(
+            favoritesFromStorage.map(async (favId) => {
+              const favData = { ...favoriteData, id: favId };
+              return addToFavorites(favData); // Ваша функция addToFavorites
+            })
+          );
+
+          // Удалить данные из localStorage после успешной отправки
+          localStorage.removeItem('favorites');
+
+          // Запросить обновленные данные об избранных с сервера
+          dispatch(fetchFavouritesData());
+          dispatch(setLikedStatus(true)); // Обновить статус "избранности"
+        } else {
+          const favoriteAction = isFavorite
+            ? removeFromFavorites
+            : addToFavorites;
+          const favorite = await favoriteAction(favoriteData);
+          setFavCard(favorite);
+          dispatch(fetchFavouritesData(favorite));
+          dispatch(setLikedStatus(!isFavorite));
+        }
       } catch (err) {
         console.log(err);
       }
