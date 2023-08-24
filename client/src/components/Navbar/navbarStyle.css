@@ -6,7 +6,7 @@
   height: 79px;
   padding: 21px 0;
   z-index: 10;
-  transition: background 0.3s, height 0.5s;
+  transition: all 0.3s;
 }
 .header {
   flex: 0 0 auto;
@@ -19,7 +19,7 @@
   margin: 0 auto;
   padding: 0 30px;
   max-width: 1350px;
-  transition: top 0.5s;
+  transition: all 0.3s;
 }
 .logo {
   display: inline-block;
@@ -40,12 +40,12 @@
   top: 35px;
   right: 10px;
   text-align: right;
-  transition: top 0.5s;
+  transition: all 0.3s;
 }
 
 .header-right.fix {
   top: 22px;
-  transition: top 0.5s;
+  transition: all 0.3s;
 }
 
 .header-basket,

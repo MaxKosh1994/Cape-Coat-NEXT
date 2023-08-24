@@ -31,9 +31,9 @@ interface IFetchFavouritesData {
 
 export const fetchItemData = createAsyncThunk(
   'item/fetchItemData',
-  async (id: number, { dispatch }) => {
+  async (item: string | string[], { dispatch }) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_URL}item/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}item/${item}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -41,6 +41,7 @@ export const fetchItemData = createAsyncThunk(
 
       if (res.ok) {
         const data: ItemState = await res.json();
+        console.log('itemDat1111a', data);
         dispatch(setItem(data.item));
         dispatch(setMaterials(data.materials));
       }
@@ -99,3 +100,24 @@ export const fetchAllFavorites = createAsyncThunk(
     }
   }
 );
+export const fetchOneFavourite =
+  (item: number) => async (dispatch: Dispatch, getState: () => RootState) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}item/favourites/${item}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+        }
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+
+        dispatch(setFavourites(data));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };

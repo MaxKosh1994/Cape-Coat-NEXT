@@ -39,3 +39,21 @@ export type DataResponse = {
   info: string;
   orders: IOrder[];
 };
+
+export interface IUser {
+  id: number;
+  email: string;
+  password: string;
+  phone: string;
+  full_name: string;
+  address: string;
+  telegram: string;
+  admin: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  Orders: IOrder[];
+}
+
+export type DataUsersResponse = {
+  allUsers: IUser[];
+};

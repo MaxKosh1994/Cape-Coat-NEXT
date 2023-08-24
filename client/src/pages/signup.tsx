@@ -58,60 +58,73 @@ export default function SignUp() {
       </Head>
       <div className={styles.formContainer}>
         <form className={styles.signInForm}>
-          <Typography variant="h3" textAlign="center" className={styles.header}>
-            Создайте аккаунт
-            {errorMsg && <p>{error}</p>}
-            <TextField
-              className={styles.textField}
-              label="Имя и фамилия"
-              name="full_name"
-              value={formData.name}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-            />
-            <TextField
-              className={styles.textField}
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-            />
-            <TextField
-              className={styles.textField}
-              label="Пароль"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-            />
-            <Button
-              type="submit"
-              variant="text"
-              color="primary"
-              style={{
-                backgroundColor: 'black',
-                color: 'white',
-              }}
-              onClick={handleSignUp}
-            >
-              Зарегистрироваться
-            </Button>
-            <p className={styles.redirMsg}>
-              Уже зарегистрированы?{' '}
-              <Link href="/signin" className="redirect">
-                Войдите в аккаунт
-              </Link>
-            </p>
-          </Typography>
+          <h3 className={styles.header}>Создайте аккаунт</h3>
+          {errorMsg && <p>{error}</p>}
+          <TextField
+            className={styles.textField}
+            placeholder="Имя и фамилия"
+            name="full_name"
+            inputProps={{
+              style: {
+                fontFamily: 'Ysabeau Infant',
+              },
+            }}
+            value={formData.name}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            className={styles.textField}
+            placeholder="Email"
+            name="email"
+            type="email"
+            inputProps={{
+              style: {
+                fontFamily: 'Ysabeau Infant',
+              },
+            }}
+            value={formData.email}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            className={styles.textField}
+            placeholder="Пароль"
+            name="password"
+            type="password"
+            inputProps={{
+              style: {
+                fontFamily: 'Ysabeau Infant',
+              },
+            }}
+            value={formData.password}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <Button
+            type="submit"
+            variant="text"
+            color="primary"
+            style={{
+              backgroundColor: 'black',
+              color: 'white',
+            }}
+            onClick={handleSignUp}
+          >
+            Зарегистрироваться
+          </Button>
+          <p className={styles.redirMsg}>
+            Уже зарегистрированы?{' '}
+            <Link href="/signin" className={styles.redirect}>
+              Войдите в аккаунт
+            </Link>
+          </p>
         </form>
       </div>
     </>
