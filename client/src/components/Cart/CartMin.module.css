@@ -40,6 +40,14 @@
   flex-wrap: wrap;
 }
 
+.strikethrough {
+  text-decoration: line-through #656565;
+}
+
+.red {
+  color: red;
+}
+
 .basketItem {
   width: 100%;
   display: flex;

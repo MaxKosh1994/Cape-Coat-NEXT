@@ -36,26 +36,14 @@ export default function CartMin({ show }) {
   }, [dispatch, user]);
 
   useEffect(() => {
-    const jacketItems = cartItemsList.filter((item) => item.category_id === 3);
-    if (cartItemsList.length > 2) {
-      const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
-      const discountPercentage = 0.05;
-      const discountAmount = subtotal * discountPercentage;
-      setDiscount(discountAmount);
-      const updatedTotal = subtotal - discountAmount;
-      setCartTotal(updatedTotal);
-    } else if (jacketItems.length >= 2) {
-      const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
-      const subtotalJackets = jacketItems.reduce(
-        (sum, item) => sum + item.price,
-        0
-      );
-      const discountPercentage = 0.05;
-      const discountAmount = subtotalJackets * discountPercentage;
-      setDiscount(discountAmount);
-      const updatedTotal = subtotal - discountAmount;
-      setCartTotal(updatedTotal);
-    }
+    const subtotalStock = cartItemsList
+      .filter((item) => item.in_stock)
+      .reduce((sum, item) => sum + item.new_price, 0);
+    const subtotal = cartItemsList
+      .filter((item) => !item.in_stock)
+      .reduce((sum, item) => sum + item.price, 0);
+
+    setCartTotal(subtotal + subtotalStock);
   }, [cartItemsList]);
 
   const handleDeleteItemFromCart = async (itemId) => {
@@ -76,6 +64,7 @@ export default function CartMin({ show }) {
       setCartItemsList([]);
     }
   };
+  console.log(cartTotal);
 
   return (
     <div
@@ -136,17 +125,36 @@ export default function CartMin({ show }) {
                           />
                         </button>
                       </div>
-                      <div className={styles.itemPrice}>
-                        <span className={styles.itemPricesPrice}>
-                          {item.price.toLocaleString()} &#8381;
-                        </span>
-                      </div>
+                      {item.in_stock ? (
+                        <>
+                          <div className={styles.itemPrice}>
+                            <span
+                              className={`${styles.itemPricesPrice}  ${styles.strikethrough}`}
+                            >
+                              {item.price.toLocaleString()} &#8381;
+                            </span>
+                          </div>
+                          <div className={styles.itemPrice}>
+                            <span
+                              className={`${styles.itemPricesPrice} ${styles.red}`}
+                            >
+                              {item.new_price.toLocaleString()} &#8381;
+                            </span>
+                          </div>
+                        </>
+                      ) : (
+                        <div className={styles.itemPrice}>
+                          <span className={styles.itemPricesPrice}>
+                            {item.price.toLocaleString()} &#8381;
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               ))}
               <div className={styles.totalOrder}>
-                Подытог: {cartTotal.toLocaleString()} &#8381;
+                Сумма заказа: {cartTotal.toLocaleString()} &#8381;
               </div>
               <Link href="/cart">
                 <button className={styles.orderButton}>
