@@ -37,10 +37,10 @@ const LikeButton: React.FC<LikeButtonProps> = ({ item }) => {
     <IconButton onClick={favHandler} size="small">
       <Badge>
         {isLiked ? (
-          <FavoriteOutlinedIcon sx={{ fontSize: '2rem', color: 'red' }} />
+          <FavoriteOutlinedIcon sx={{ fontSize: '2rem', color: '#656565' }} />
         ) : (
           <FavoriteBorderOutlinedIcon
-            sx={{ fontSize: '2rem', color: 'black' }}
+            sx={{ fontSize: '2rem', color: '#656565' }}
           />
         )}
       </Badge>

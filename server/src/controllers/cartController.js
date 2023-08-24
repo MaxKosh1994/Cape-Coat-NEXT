@@ -96,6 +96,58 @@ module.exports.emptyCart = async (req, res) => {
   }
 };
 
+module.exports.addMeasures = async (req, res) => {
+  try {
+    const { user } = req.session;
+    const { id } = req.params;
+    const {
+      height,
+      length,
+      sleeve,
+      bust,
+      waist,
+      hips,
+      saddle,
+      loops,
+      buttons,
+      lining,
+    } = req.body;
+    const currUser = await findUserByEmail(user);
+    const userCart = await findUserCart(currUser.id);
+    if (userCart) {
+      const updMeasures = await CartItem.update(
+        {
+          height,
+          length,
+          sleeve,
+          bust,
+          waist,
+          hips,
+          saddle,
+          loops: Boolean(loops),
+          buttons,
+          lining,
+          added: true,
+        },
+        { where: { item_id: id } },
+      );
+      if (updMeasures) {
+        const updCartItem = await CartItem.findOne({
+          where: { item_id: id },
+        });
+        console.log(updCartItem);
+        res.status(200).json(updCartItem);
+      } else {
+        res
+          .status(500)
+          .json({ message: 'Что-то пошло не так, попробуйте позже' });
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 module.exports.addToCart = async (req, res) => {
   try {
     const email = req?.session?.user;
@@ -106,28 +158,11 @@ module.exports.addToCart = async (req, res) => {
 
       if (userCart) {
         const existingCartItem = await findCartItem(userCart.id, id);
-        // const existingCartItem = await CartItem.findOne({
-        //   where: {
-        //     cart_id: userCart.id,
-        //     item_id: id,
-        //   },
-        // });
         const newCartItem = await createCartItem(userCart.id, id);
-        // const newCartItem = await CartItem.create({
-        //   cart_id: userCart.id,
-        //   item_id: id,
-        // });
         res.status(200).json({ newCartItem });
       } else {
         const newCart = await createUserCart(currUser.id);
-        // const newCart = await Cart.create({
-        //   user_id: currUser.id,
-        // });
         const newCartItem = await createCartItem(userCart.id, id);
-        // const newCartItem = await CartItem.create({
-        //   cart_id: newCart.id,
-        //   item_id: id,
-        // });
         res.status(200).json({ newCartItem });
       }
     } else {
