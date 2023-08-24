@@ -16,25 +16,18 @@ module.exports.createOrder = async (req, res) => {
       const orderItemsData = req.body.cartItemsList.map((oneItem) => ({
         item_id: oneItem.id,
         order_id: newOrder.id,
-        measurements: `Рост: ${oneItem.Carts.map(
-          (item) => item.CartItem.height,
-        )}см, длина изделия: ${oneItem.Carts.map(
-          (item) => item.CartItem.length,
-        )}см, длина рукава: ${oneItem.Carts.map(
-          (item) => item.CartItem.sleeve,
-        )}см, объем груди: ${oneItem.Carts.map(
-          (item) => item.CartItem.bust,
-        )}см, объем талии: ${oneItem.Carts.map(
-          (item) => item.CartItem.waist,
-        )}см, объем бедер: ${oneItem.Carts.map(
-          (item) => item.CartItem.hips,
-        )}см, седло: ${oneItem.Carts.map(
-          (item) => item.CartItem.saddle,
-        )}, пуговицы: ${oneItem.Carts.map(
-          (item) => item.CartItem.buttons,
-        )}, утепление: ${oneItem.Carts.map((item) => item.CartItem.lining)}`,
+        height: oneItem.Carts.map((item) => item.CartItem.height).toString(),
+        length: oneItem.Carts.map((item) => item.CartItem.length).toString(),
+        sleeve: oneItem.Carts.map((item) => item.CartItem.sleeve).toString(),
+        bust: oneItem.Carts.map((item) => item.CartItem.bust).toString(),
+        waist: oneItem.Carts.map((item) => item.CartItem.waist).toString(),
+        hips: oneItem.Carts.map((item) => item.CartItem.hips).toString(),
+        saddle: oneItem.Carts.map((item) => item.CartItem.saddle).toString(),
+        loops: Boolean(oneItem.Carts.map((item) => item.CartItem.loops)),
+        buttons: oneItem.Carts.map((item) => item.CartItem.buttons).toString(),
+        lining: oneItem.Carts.map((item) => item.CartItem.lining).toString(),
       }));
-
+      // console.log(orderItemsData);
       await OrderItem.bulkCreate(orderItemsData);
 
       res.json({
