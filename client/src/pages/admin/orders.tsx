@@ -14,6 +14,7 @@ import {
   TableRow,
   Paper,
   Button,
+  TextField,
 } from '@mui/material';
 import InfoModal from '../../components/Admin/InfoModal';
 import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
@@ -104,10 +105,10 @@ export default function Order() {
                 </TableCell>
                 <TableCell className={styles.tableCellBig}>Размеры</TableCell>
                 <TableCell className={styles.tableCell}>Товары</TableCell>
-                <TableCell className={styles.tableCell}>Статус</TableCell>
                 <TableCell className={styles.tableCellBig}>
                   Комментарии менеджера
                 </TableCell>
+                <TableCell className={styles.tableCell}>Статус</TableCell>
                 <TableCell className={styles.tableCell}>
                   Варианты статуса
                 </TableCell>
@@ -211,28 +212,39 @@ export default function Order() {
                       </div>
                     ))}
                   </TableCell>
-                  <TableCell className={styles.tableCell}>
-                    {order.status}
-                  </TableCell>
-                  <TableCell className={styles.tableCell}>
+                  <TableCell
+                    className={styles.tableCell}
+                    onClick={() =>
+                      handleCommentClick(order.id, order.admin_comments)
+                    }
+                  >
                     {order.id === editingOrderId ? (
-                      <div>
-                        <input
+                      <div className={styles.inputContainer}>
+                        <TextField
                           type='text'
+                          className='text-field'
+                          fullWidth
+                          required
+                          multiline
+                          rows={4}
                           value={newAdminComment}
                           onChange={handleCommentChange}
                         />
-                        <button onClick={handleCommentConfirm}>Confirm</button>
+                        <Button
+                          className={styles.buttonInput}
+                          type='submit'
+                          variant='contained'
+                          onClick={handleCommentConfirm}
+                        >
+                          Сохранить
+                        </Button>
                       </div>
                     ) : (
-                      <span
-                        onClick={() =>
-                          handleCommentClick(order.id, order.admin_comments)
-                        }
-                      >
-                        {order.admin_comments}
-                      </span>
+                      <span>{order.admin_comments}</span>
                     )}
+                  </TableCell>
+                  <TableCell className={styles.tableCell}>
+                    {order.status}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
                     <select
