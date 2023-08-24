@@ -46,3 +46,44 @@ module.exports.updateOrderComments = async (req, res) => {
     res.status(404).json({ message: 'Не удалось найти обновленный заказ' });
   }
 };
+
+module.exports.updateOrderPrepayment = async (req, res) => {
+  const orderPrepayment = await req.body.updatedPrepayment;
+  const orderId = await req.params.id;
+
+  await Order.update(
+    { prepayment: orderPrepayment },
+    { where: { id: orderId } },
+  );
+
+  const updatedOrder = await Order.findOne({
+    where: { id: orderId },
+    include: [{ model: User }, { model: Item }],
+    nest: true,
+  });
+
+  if (updatedOrder) {
+    res.status(200).json(updatedOrder);
+  } else {
+    res.status(404).json({ message: 'Не удалось найти обновленный заказ' });
+  }
+};
+
+module.exports.updateOrderTotal = async (req, res) => {
+  const updatedTotal = await req.body.updatedTotal;
+  const orderId = await req.params.id;
+
+  await Order.update({ total: updatedTotal }, { where: { id: orderId } });
+
+  const updatedOrder = await Order.findOne({
+    where: { id: orderId },
+    include: [{ model: User }, { model: Item }],
+    nest: true,
+  });
+
+  if (updatedOrder) {
+    res.status(200).json(updatedOrder);
+  } else {
+    res.status(404).json({ message: 'Не удалось найти обновленный заказ' });
+  }
+};

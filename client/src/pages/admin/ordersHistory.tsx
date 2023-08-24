@@ -5,6 +5,8 @@ import {
   allOrderDataFetch,
   updateOrderCommentsFetch,
   updateOrderDataFetch,
+  updateOrderPrepaymentFetch,
+  updateOrderTotalFetch,
 } from '../../components/Admin/HTTP/adminApi';
 import styles from '../../styles/admin/OrdersAdmin.module.css';
 import {
@@ -17,9 +19,6 @@ import {
   Paper,
   Button,
   TextField,
-  Pagination,
-  PaginationItem,
-  Stack,
 } from '@mui/material';
 import InfoModal from '../../components/Admin/InfoModal';
 import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
@@ -58,6 +57,64 @@ export default function Order() {
         setNewAdminComment('');
       }
     );
+  };
+
+  //! ---------------------Изменение предоплаты-------------------------------------------
+
+  const [newPrepayment, setNewPrepayment] = useState('');
+
+  const handlePrepaymentClick = (orderId, currentPrepayment) => {
+    setEditingOrderId(orderId);
+    setNewPrepayment(currentPrepayment.toString());
+  };
+
+  const handlePrepaymentChange = (event) => {
+    setNewPrepayment(event.target.value);
+  };
+
+  const handlePrepaymentConfirm = () => {
+    const updatedPrepayment = Number(newPrepayment);
+
+    updateOrderPrepaymentFetch(editingOrderId, updatedPrepayment).then(
+      (updatedOrder) => {
+        if (updatedOrder) {
+          const newOrders = orders.map((order) =>
+            order.id === editingOrderId ? updatedOrder : order
+          );
+          setOrders(newOrders);
+        }
+        setEditingOrderId(null);
+        setNewPrepayment('');
+      }
+    );
+  };
+
+  //! -------------------------Изменение полной стоимости---------------------------------------
+
+  const [newTotal, setNewTotal] = useState('');
+
+  const handleTotalClick = (orderId, currentTotal) => {
+    setEditingOrderId(orderId);
+    setNewTotal(currentTotal.toString());
+  };
+
+  const handleTotalChange = (event) => {
+    setNewTotal(event.target.value);
+  };
+
+  const handleTotalConfirm = () => {
+    const updatedTotal = Number(newTotal);
+
+    updateOrderTotalFetch(editingOrderId, updatedTotal).then((updatedOrder) => {
+      if (updatedOrder) {
+        const newOrders = orders.map((order) =>
+          order.id === editingOrderId ? updatedOrder : order
+        );
+        setOrders(newOrders);
+      }
+      setEditingOrderId(null);
+      setNewTotal('');
+    });
   };
 
   //! ----------------------------------------------------------------
@@ -130,8 +187,6 @@ export default function Order() {
 
   const [pageNumber, setPageNumber] = useState(0);
 
-  console.log(orders);
-
   return (
     <>
       <NavAdminComp />
@@ -145,7 +200,7 @@ export default function Order() {
         >
           <select
             onChange={(event) => setPageNumber(event.target.selectedIndex)}
-            value={ordersByMonth[pageNumber]?.date}
+            value={ordersByMonth[ordersByMonth.length - 1]?.date}
             style={{
               padding: '5px 10px',
               fontSize: '16px',
@@ -256,11 +311,61 @@ export default function Order() {
                   <TableCell className={styles.tableCell}>
                     {order.User?.phone}
                   </TableCell>
-                  <TableCell className={styles.tableCell}>
-                    {order.total?.toLocaleString()}
+                  <TableCell
+                    className={styles.tableCell}
+                    onClick={() => handleTotalClick(order?.id, order?.total)}
+                  >
+                    {order?.id === editingOrderId ? (
+                      <div className={styles.inputContainer}>
+                        <TextField
+                          type='number'
+                          className='text-field'
+                          fullWidth
+                          required
+                          value={newTotal}
+                          onChange={handleTotalChange}
+                        />
+                        <Button
+                          className={styles.buttonInput}
+                          type='submit'
+                          variant='contained'
+                          onClick={handleTotalConfirm}
+                        >
+                          Сохранить
+                        </Button>
+                      </div>
+                    ) : (
+                      <span>{order?.total}</span>
+                    )}
                   </TableCell>
-                  <TableCell className={styles.tableCell}>
-                    {order.prepayment?.toLocaleString()}
+                  <TableCell
+                    className={styles.tableCell}
+                    onClick={() =>
+                      handlePrepaymentClick(order?.id, order?.prepayment)
+                    }
+                  >
+                    {order?.id === editingOrderId ? (
+                      <div className={styles.inputContainer}>
+                        <TextField
+                          type='number'
+                          className='text-field'
+                          fullWidth
+                          required
+                          value={newPrepayment}
+                          onChange={handlePrepaymentChange}
+                        />
+                        <Button
+                          className={styles.buttonInput}
+                          type='submit'
+                          variant='contained'
+                          onClick={handlePrepaymentConfirm}
+                        >
+                          Сохранить
+                        </Button>
+                      </div>
+                    ) : (
+                      <span>{order?.prepayment}</span>
+                    )}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
                     {order.residual_amount?.toLocaleString()}
@@ -300,7 +405,7 @@ export default function Order() {
                         }}
                         key={item?.article}
                       >
-                        {item?.name}, {item?.article}
+                        {item?.name}, арт:{item?.article}
                       </div>
                     ))}
                   </TableCell>

@@ -167,3 +167,35 @@ export const updateOrderCommentsFetch = async (
   );
   return await response.json();
 };
+
+export const updateOrderPrepaymentFetch = async (
+  editingOrderId: number,
+  updatedPrepayment: string
+): Promise<object> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}admin/order/updateOrderPrepayment/${editingOrderId}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ updatedPrepayment: updatedPrepayment }),
+    }
+  );
+  return await response.json();
+};
+
+export const updateOrderTotalFetch = async (
+  editingOrderId: number,
+  updatedTotal: string
+): Promise<object> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}admin/order/updateOrderTotal/${editingOrderId}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ updatedTotal: updatedTotal }),
+    }
+  );
+  return await response.json();
+};

@@ -34,37 +34,17 @@ export default function NavAdminComp() {
                 router.pathname === '/admin/cat-col-mat' ? styles.active : ''
               }`}
             >
-              Все товары
-            </Button>
-          </NextLink>
-
-          <NextLink href='/admin/cat-col-mat'>
-            <Button
-              className={`${styles.button} ${
-                router.pathname === '/admin/cat-col-mat' ? styles.active : ''
-              }`}
-            >
               Категории/Коллекции/Материалы
             </Button>
           </NextLink>
 
-          <NextLink href='/admin/orders'>
+          <NextLink href='/admin/ordersHistory'>
             <Button
               className={`${styles.button} ${
-                router.pathname === '/admin/orders' ? styles.active : ''
+                router.pathname === '/admin/ordersHistory' ? styles.active : ''
               }`}
             >
-              Заказы
-            </Button>
-          </NextLink>
-
-          <NextLink href='/admin/users'>
-            <Button
-              className={`${styles.button} ${
-                router.pathname === '/admin/users' ? styles.active : ''
-              }`}
-            >
-              Клиенты
+              История заказов
             </Button>
           </NextLink>
 
@@ -74,7 +54,7 @@ export default function NavAdminComp() {
                 router.pathname === '/admin/tasks' ? styles.active : ''
               }`}
             >
-              Задания
+              Заказы в работе
             </Button>
           </NextLink>
         </div>
