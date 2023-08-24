@@ -17,10 +17,6 @@ module.exports = {
           key: 'id',
         },
       },
-      measurements: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-      },
       item_id: {
         type: Sequelize.INTEGER,
         references: {
@@ -29,6 +25,36 @@ module.exports = {
           },
           key: 'id',
         },
+      },
+      height: {
+        type: Sequelize.TEXT,
+      },
+      length: {
+        type: Sequelize.TEXT,
+      },
+      sleeve: {
+        type: Sequelize.TEXT,
+      },
+      bust: {
+        type: Sequelize.TEXT,
+      },
+      waist: {
+        type: Sequelize.TEXT,
+      },
+      hips: {
+        type: Sequelize.TEXT,
+      },
+      saddle: {
+        type: Sequelize.TEXT,
+      },
+      loops: {
+        type: Sequelize.BOOLEAN,
+      },
+      buttons: {
+        type: Sequelize.TEXT,
+      },
+      lining: {
+        type: Sequelize.TEXT,
       },
       createdAt: {
         allowNull: false,
