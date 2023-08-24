@@ -23,6 +23,7 @@ import { checkCartItemThunk } from '../../app/thunkActionsCart';
 import './navbarStyle.css';
 import NavigationMenu from './NavigationMenu/NavigationMenu';
 import MobileMenu from './MobileMenu/MobileMenu';
+import CartMin from '../Cart/CartMin';
 
 const theme = createTheme({
   palette: {
@@ -71,6 +72,7 @@ const handleScrollAndHighlight = () => {
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showCart, setShowCart] = useState(false);
 
   const handleScroll = () => {
     if (window.scrollY > 0) {
@@ -151,6 +153,10 @@ export default function Navbar() {
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const handleCartIconClick = (e: MouseEvent<HTMLButtonElement>) => {
+    setShowCart((prev) => !prev);
   };
 
   const menuId = 'primary-search-account-menu';
@@ -261,24 +267,25 @@ export default function Navbar() {
                 </Badge>
               </IconButton>
             </Link>
-            <Link
+            {/* <Link
               className="header-basket"
               href={isUserLogin ? '/cart' : '/signin'}
               passHref
+            > */}
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              sx={{ color: iconColour, padding: '8px' }}
+              onClick={handleCartIconClick}
             >
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                sx={{ color: iconColour, padding: '8px' }}
-              >
-                <Badge badgeContent={amountOfCartItem} color="error">
-                  <AddShoppingCart />
-                </Badge>
-              </IconButton>
-            </Link>
+              <Badge badgeContent={amountOfCartItem} color="error">
+                <AddShoppingCart />
+              </Badge>
+            </IconButton>
+            {/* </Link> */}
 
             <a href="javascript:;" className="search-ico"></a>
           </div>
@@ -293,6 +300,7 @@ export default function Navbar() {
         onSearchIconClick={onSearchIconClick}
       />
       {renderMenu}
+      {showCart && <CartMin show={showCart} />}
     </>
   );
 }

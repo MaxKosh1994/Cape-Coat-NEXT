@@ -1,6 +1,10 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { delCartItemThunk, getCartItemsThunk } from '../app/thunkActionsCart';
+import {
+  delCartItemThunk,
+  emptyCartThunk,
+  getCartItemsThunk,
+} from '../app/thunkActionsCart';
 import { getCartItems } from '../app/cartSlice';
 import styles from '../styles/Cart.module.css';
 import Link from 'next/link';
@@ -64,21 +68,14 @@ export default function CartPage() {
       Body: `Уважаемый(ая) ${name}, вы указали этот почтовый ящик (${user}) при оформлении заказа на сайте Cape&Coat. ${order}`,
     });
   }
+
   const emptyCart = async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}cart/emptyCart/${user}`,
-      {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-      }
-    );
-    const re = await response.json();
-    if (re.success) {
+    const empty = await dispatch(emptyCartThunk(user));
+    if (empty === 200) {
       setCartItemsList([]);
     }
-    // TODO если корзина не удалилась
   };
+
   const createOrder = async (data) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}order/new`, {
       method: 'POST',
@@ -292,7 +289,7 @@ export default function CartPage() {
     }
   };
   console.log(cartItemsList);
-  // console.log(cartItemsList.map((item) => item.Carts[0].CartItem.measurements));
+
   return (
     <>
       <Head>
