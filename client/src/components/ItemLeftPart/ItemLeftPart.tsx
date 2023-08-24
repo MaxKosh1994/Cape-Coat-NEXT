@@ -18,7 +18,7 @@ export default function ItemLeftPart({
     <div className="product__media">
       <div className="product__media-list">
         {imageData.map((item, index) => (
-          <div className="product__media-item">
+          <div className="product__media-item" key={`img-${item.id}`}>
             <div
               className={`product-img swiper-slide ${
                 index === 0 ? 'active' : ''

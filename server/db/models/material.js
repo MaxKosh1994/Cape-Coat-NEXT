@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Material.init(
     {
+      name: DataTypes.STRING,
       photo: DataTypes.STRING,
       category_id: DataTypes.INTEGER,
     },

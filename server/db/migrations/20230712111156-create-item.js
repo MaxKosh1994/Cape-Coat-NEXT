@@ -64,6 +64,7 @@ module.exports = {
           key: 'id',
         },
       },
+
       category_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
