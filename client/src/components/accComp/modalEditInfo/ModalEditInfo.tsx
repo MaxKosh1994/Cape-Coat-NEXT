@@ -14,7 +14,7 @@ export default function ModalEditInfo({
     full_name: userInfo?.full_name || '',
     phone: userInfo?.phone || '',
     address: userInfo?.address || '',
-    telegram: userInfo?.telegram || '',
+    telegram_instagram: userInfo?.telegram_instagram || '',
   });
 
   const [info, setInfo] = useState('');
@@ -24,7 +24,7 @@ export default function ModalEditInfo({
       full_name: userInfo?.full_name,
       phone: userInfo?.phone,
       address: userInfo?.address,
-      telegram: userInfo?.telegram,
+      telegram_instagram: userInfo?.telegram_instagram,
     });
   }, [userInfo]);
 
@@ -92,10 +92,10 @@ export default function ModalEditInfo({
             <TextField
               autoComplete='off'
               className='text-field'
-              label='Ваш Telegram'
-              name='telegram'
+              label='Ваш Telegram/Instagram'
+              name='telegram_instagram'
               type='text'
-              value={inputsUserInfo?.telegram || ''}
+              value={inputsUserInfo?.telegram_instagram || ''}
               fullWidth
               margin='normal'
               onChange={changeHandler}

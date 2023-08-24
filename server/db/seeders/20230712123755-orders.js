@@ -1,107 +1,30 @@
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-     */
-    await queryInterface.bulkInsert(
-      'Orders',
-      [
-        {
-          user_id: 1,
-          status: 'Заказ создан',
-          address: 'Улица Академика Пилюгина, дом 1, кв 777',
-          total: 15400,
-          comments: 'Сделайте красиво!',
-          createdAt: Sequelize.DataTypes.NOW().toString(),
-          updatedAt: Sequelize.DataTypes.NOW().toString(),
-        },
-        {
-          user_id: 1,
-          status: 'Заказ создан',
-          address: 'Улица Андрея ВротБерущего, дом 12, кв 7',
-          total: 33400,
-          comments:
-            'Хочу, чтобы на спине были крылья, как у ебаного старого летучего динозавра!',
-          createdAt: Sequelize.DataTypes.NOW().toString(),
-          updatedAt: Sequelize.DataTypes.NOW().toString(),
-        },
-        {
-          user_id: 1,
-          status: 'Заказ создан',
-          address: 'Улица Андрея ВротБерущего, дом 12, кв 7',
-          total: 33400,
-          comments:
-            'Хочу, чтобы на спине были крылья, как у ебаного старого летучего динозавра!',
-          createdAt: new Date(2023, 6, 1).toISOString(),
-          updatedAt: Sequelize.DataTypes.NOW().toString(),
-        },
-        {
-          user_id: 1,
-          status: 'Заказ создан',
-          address: 'Улица Андрея ВротБерущего, дом 12, кв 7',
-          total: 33400,
-          comments:
-            'Хочу, чтобы на спине были крылья, как у ебаного старого летучего динозавра!',
-          createdAt: new Date(2023, 4, 1).toISOString(),
-          updatedAt: Sequelize.DataTypes.NOW().toString(),
-        },
-        {
-          user_id: 1,
-          status: 'Заказ создан',
-          address: 'Улица Андрея ВротБерущего, дом 12, кв 7',
-          total: 33400,
-          comments:
-            'Хочу, чтобы на спине были крылья, как у ебаного старого летучего динозавра!',
-          createdAt: new Date(2022, 3, 1).toISOString(),
-          updatedAt: Sequelize.DataTypes.NOW().toString(),
-        },
+    const orders = [];
 
-        //   {
-        //     user_id: 1,
-        //     status: 'Заказ принят',
-        //     address: 'Улица Пушкина, дом Колотушкина',
-        //     total: 154500,
-        //     comments: '2 Заказ',
-        //     createdAt: Sequelize.DataTypes.NOW().toString(),
-        //     updatedAt: Sequelize.DataTypes.NOW().toString(),
-        //   },
-        //   {
-        //     user_id: 2,
-        //     status: 'Заказ принят',
-        //     address: 'Улица Пушкина, дом Колотушкина',
-        //     total: 4888,
-        //     comments: '3 Заказ',
-        //     createdAt: Sequelize.DataTypes.NOW().toString(),
-        //     updatedAt: Sequelize.DataTypes.NOW().toString(),
-        //   },
-        //   {
-        //     user_id: 3,
-        //     status: 'Заказ принят',
-        //     address: 'Улица Пилюгина, дом Колотушкина',
-        //     total: 8950560,
-        //     comments: '4 Заказ',
-        //     createdAt: Sequelize.DataTypes.NOW().toString(),
-        //     updatedAt: Sequelize.DataTypes.NOW().toString(),
-        //   },
-      ],
-      {},
-    );
+    for (let i = 0; i < 24; i++) {
+      const month = Math.ceil((i + 1) / 4);
+      const date = new Date(2023, month);
+      const getReadyAt = new Date(
+        date.getTime() + Math.random() * 10 * 24 * 60 * 60 * 1000,
+      );
+
+      orders.push({
+        user_id: 1,
+        status: 'Заказ создан',
+        address: 'Улица Академика Пилюгина, дом 1, кв 777',
+        total: 15400,
+        comments: 'Сделайте красиво!',
+        getReadyAt,
+        createdAt: date,
+        updatedAt: date,
+      });
+    }
+
+    return queryInterface.bulkInsert('Orders', orders, {});
   },
 
   async down(queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('Measurements', null, {});
-     */
     await queryInterface.bulkDelete('Orders', null, {});
   },
 };

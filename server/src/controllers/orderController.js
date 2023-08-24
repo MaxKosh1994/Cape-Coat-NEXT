@@ -9,12 +9,10 @@ module.exports.createOrder = async (req, res) => {
         address: req.body.addressString,
         total: req.body.cartTotal,
         comments: req.body.commentsInput,
+        getReadyAt: new Date(new Date().getTime() + 20 * 24 * 60 * 60 * 1000),
       },
       { raw: true },
     );
-    // TODO чтобы не создать заказ два раза одинаковый ?
-    // если на 6 строке заменить на findOrCreate
-    // и поиск по user_id то нельзя будет сделать второй заказ
     if (newOrder) {
       const orderItemsData = req.body.cartItemsList.map((cartItem) => ({
         item_id: cartItem.id,

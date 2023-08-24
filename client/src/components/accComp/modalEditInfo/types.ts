@@ -4,7 +4,7 @@ export interface IInputsEditInfo {
   full_name: string;
   phone: string;
   address?: string;
-  telegram?: string;
+  telegram_instagram?: string;
 }
 
 export interface IModalProps {

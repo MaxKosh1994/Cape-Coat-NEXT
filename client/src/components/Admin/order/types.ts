@@ -10,7 +10,10 @@ export interface IOrderAdmin {
   id: number;
   status: string;
   total: number;
+  prepayment: number;
+  residual_amount: number;
   updatedAt: Date;
+  getReadyAt: Date;
   user_id: number;
 }
 

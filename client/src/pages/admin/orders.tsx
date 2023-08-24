@@ -130,6 +130,8 @@ export default function Order() {
 
   const [pageNumber, setPageNumber] = useState(0);
 
+  console.log(orders);
+
   return (
     <>
       <NavAdminComp />
@@ -161,13 +163,22 @@ export default function Order() {
             <TableHead>
               <TableRow className={styles.tableRow}>
                 <TableCell className={styles.tableCell}>№</TableCell>
-                <TableCell className={styles.tableMiddleCell}>Дата</TableCell>
+                <TableCell className={styles.tableMiddleCell}>
+                  Дата оформления
+                </TableCell>
+                <TableCell className={styles.tableMiddleCell}>
+                  Дата готовности
+                </TableCell>
                 <TableCell className={styles.tableCell}>ФИО</TableCell>
-                <TableCell className={styles.tableCell}>Telegram</TableCell>
+                <TableCell className={styles.tableCell}>
+                  Telegram/Insta
+                </TableCell>
                 <TableCell className={styles.tableCell}>Email</TableCell>
                 <TableCell className={styles.tableCell}>Телефон</TableCell>
                 <TableCell className={styles.tableCell}>Стоимость</TableCell>
-                <TableCell className={styles.tableCell}>Адрес</TableCell>
+                <TableCell className={styles.tableCell}>Предоплата</TableCell>
+                <TableCell className={styles.tableCell}>Остаток</TableCell>
+                <TableCell className={styles.tableMiddleCell}>Адрес</TableCell>
                 <TableCell className={styles.tableCellBig}>
                   Комментарии
                 </TableCell>
@@ -224,39 +235,50 @@ export default function Order() {
                 >
                   <TableCell className={styles.tableCell}>{order.id}</TableCell>
                   <TableCell className={styles.tableCell}>
-                    {format(parseISO(order.createdAt), "dd MMMM yyyy'г'", {
+                    {format(parseISO(order?.createdAt), "dd MMMM yyyy'г'", {
                       locale: ru,
                     })}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
-                    {order.User.full_name}
+                    {format(parseISO(order.getReadyAt), "dd MMMM yyyy'г'", {
+                      locale: ru,
+                    })}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
-                    {order.User.telegram}
+                    {order?.User?.full_name}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
-                    {order.User.email}
+                    {order?.User?.telegram_instagram}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
-                    {order.User.phone}
+                    {order.User?.email}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
-                    {order.total.toLocaleString()}
+                    {order.User?.phone}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
-                    {order.address}
+                    {order.total?.toLocaleString()}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
-                    {order.comments}
+                    {order.prepayment?.toLocaleString()}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
-                    {order.Items.map((item) => (
+                    {order.residual_amount?.toLocaleString()}
+                  </TableCell>
+                  <TableCell className={styles.tableCell}>
+                    {order?.address}
+                  </TableCell>
+                  <TableCell className={styles.tableCell}>
+                    {order?.comments}
+                  </TableCell>
+                  <TableCell className={styles.tableCell}>
+                    {order?.Items?.map((item) => (
                       <div
                         style={{
                           display: 'flex',
                           flexDirection: 'column',
                         }}
-                        key={item.article}
+                        key={item?.article}
                       >
                         <p
                           style={{
@@ -264,31 +286,31 @@ export default function Order() {
                             marginBottom: '5px',
                           }}
                         >
-                          {item.article}: {item.OrderItem.measurements}
+                          {item?.article}: {item?.OrderItem?.measurements}
                         </p>
                       </div>
                     ))}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
-                    {order.Items.map((item) => (
+                    {order?.Items?.map((item) => (
                       <div
                         style={{
                           display: 'flex',
                           flexDirection: 'column',
                         }}
-                        key={item.article}
+                        key={item?.article}
                       >
-                        {item.name}, {item.article}
+                        {item?.name}, {item?.article}
                       </div>
                     ))}
                   </TableCell>
                   <TableCell
                     className={styles.tableCell}
                     onClick={() =>
-                      handleCommentClick(order.id, order.admin_comments)
+                      handleCommentClick(order?.id, order?.admin_comments)
                     }
                   >
-                    {order.id === editingOrderId ? (
+                    {order?.id === editingOrderId ? (
                       <div className={styles.inputContainer}>
                         <TextField
                           type='text'
@@ -310,11 +332,11 @@ export default function Order() {
                         </Button>
                       </div>
                     ) : (
-                      <span>{order.admin_comments}</span>
+                      <span>{order?.admin_comments}</span>
                     )}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
-                    {order.status}
+                    {order?.status}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
                     <select
@@ -368,7 +390,7 @@ export default function Order() {
                   <TableCell className={styles.tableCell}>
                     <Button
                       className={styles.button}
-                      onClick={() => updateHandler(order.id)}
+                      onClick={() => updateHandler(order?.id)}
                       type='submit'
                       variant='contained'
                     >
