@@ -10,24 +10,24 @@ import Link from 'next/link';
 
 const ProductCard: React.FC<IProductCard> = ({
   id,
-  article,
-  photo,
-  name,
-  price,
+  // article,
+  // photo,
+  // name,
+  // price,
   isFavorite: initialIsFavorite,
   isCart: initialIsCart,
-  newPrice,
+  // newPrice,
 }: IProductCard) => {
   const { isFavorite, isCart, favoriteHandler, cartHandler } =
     useProductCardLogic(
       id,
-      article,
-      photo,
-      name,
-      price,
+      // article,
+      // photo,
+      // name,
+      // price,
       initialIsFavorite,
       initialIsCart,
-      newPrice
+      // newPrice
     );
 
   const itemLink = useRouter().query.category;

@@ -35,11 +35,11 @@ export default function Category() {
             dispatch(
               category({
                 id: item.id,
-                article: item.article,
-                photo: item.Photos[0]?.photo || '',
-                name: item.name,
-                price: item.price,
-                categoryName: item.categoryName,
+                // article: item.article,
+                // photo: item.Photos[0]?.photo || '',
+                // name: item.name,
+                // price: item.price,
+                // categoryName: item.categoryName,
                 isFavorite: false,
                 isCart: false,
               })
