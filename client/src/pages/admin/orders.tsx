@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { format, parseISO } from 'date-fns';
+import { ru } from 'date-fns/locale';
 import {
   allOrderDataFetch,
   updateOrderCommentsFetch,
@@ -15,6 +17,9 @@ import {
   Paper,
   Button,
   TextField,
+  Pagination,
+  PaginationItem,
+  Stack,
 } from '@mui/material';
 import InfoModal from '../../components/Admin/InfoModal';
 import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
@@ -26,7 +31,6 @@ export default function Order() {
   const [statusVal, setStatus] = useState({
     status: 'Заказ принят',
   });
-
   //! ---------------------Изменение админского коммента-------------------------------------------
 
   const [editingOrderId, setEditingOrderId] = useState(null);
@@ -82,18 +86,82 @@ export default function Order() {
     }, 1000);
   };
 
-  console.log(orders);
+  //! --------------------Логика пагинации-------------------------------------------
+
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  let ordersByMonth = orders.reduce((acc, order) => {
+    let date = format(parseISO(order.createdAt), 'MMMM yyyy');
+    let found = acc.find((a) => a.date === date);
+
+    if (!found) {
+      acc.push({ date: date, orders: [order] });
+    } else {
+      found.orders.push(order);
+    }
+
+    return acc;
+  }, []);
+
+  ordersByMonth = ordersByMonth.sort((a, b) => {
+    const dateA = new Date(
+      a.date.split(' ')[1],
+      months.indexOf(a.date.split(' ')[0])
+    );
+    const dateB = new Date(
+      b.date.split(' ')[1],
+      months.indexOf(b.date.split(' ')[0])
+    );
+    return dateA - dateB;
+  });
+
+  const [pageNumber, setPageNumber] = useState(0);
 
   return (
     <>
       <NavAdminComp />
       <div className={styles.mainDiv}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            margin: '10px 0',
+          }}
+        >
+          <select
+            onChange={(event) => setPageNumber(event.target.selectedIndex)}
+            value={ordersByMonth[pageNumber]?.date}
+            style={{
+              padding: '5px 10px',
+              fontSize: '16px',
+            }}
+          >
+            {ordersByMonth.map((item, index) => (
+              <option key={index} value={item.date}>
+                {item.date}
+              </option>
+            ))}
+          </select>
+        </div>
         <TableContainer className={styles.tableContainer} component={Paper}>
           <Table className={styles.table} aria-label='simple table'>
             <TableHead>
               <TableRow className={styles.tableRow}>
                 <TableCell className={styles.tableCell}>№</TableCell>
-                <TableCell className={styles.tableCell}>Дата</TableCell>
+                <TableCell className={styles.tableMiddleCell}>Дата</TableCell>
                 <TableCell className={styles.tableCell}>ФИО</TableCell>
                 <TableCell className={styles.tableCell}>Telegram</TableCell>
                 <TableCell className={styles.tableCell}>Email</TableCell>
@@ -108,7 +176,7 @@ export default function Order() {
                 <TableCell className={styles.tableCellBig}>
                   Комментарии менеджера
                 </TableCell>
-                <TableCell className={styles.tableCell}>Статус</TableCell>
+                <TableCell className={styles.tableMiddleCell}>Статус</TableCell>
                 <TableCell className={styles.tableCell}>
                   Варианты статуса
                 </TableCell>
@@ -121,7 +189,7 @@ export default function Order() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders?.map((order: IOrderAdmin) => (
+              {ordersByMonth[pageNumber]?.orders.map((order: IOrderAdmin) => (
                 <TableRow
                   key={order.id}
                   sx={{
@@ -156,7 +224,9 @@ export default function Order() {
                 >
                   <TableCell className={styles.tableCell}>{order.id}</TableCell>
                   <TableCell className={styles.tableCell}>
-                    {order.createdAt.toString().slice(0, 10).replace(/-/g, '.')}
+                    {format(parseISO(order.createdAt), "dd MMMM yyyy'г'", {
+                      locale: ru,
+                    })}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
                     {order.User.full_name}

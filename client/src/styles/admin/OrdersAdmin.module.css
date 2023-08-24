@@ -5,8 +5,14 @@
   margin-bottom: 30px;
 }
 
+.paginationContainer {
+  margin-bottom: 20px;
+  flex-direction: column;
+}
+
 .tableContainer {
   width: 98%;
+  min-height: 500px;
 }
 
 .table {
@@ -15,12 +21,20 @@
 
 .tableRow {
   background-color: rgb(229, 229, 229);
+  max-height: 20px;
 }
 
 .tableCell {
   font-size: small;
   border-right: 0.5px solid black;
   border-bottom: 0.5px solid black;
+}
+
+.tableMiddleCell {
+  font-size: small;
+  border-right: 0.5px solid black;
+  border-bottom: 0.5px solid black;
+  min-width: 150px;
 }
 
 .tableCellBig {
@@ -56,6 +70,10 @@
   height: 30px;
   border: 0.5px solid black;
   margin-top: 5px;
+}
+
+.buttonPagination {
+  font-size: xx-small;
 }
 
 .messageP {

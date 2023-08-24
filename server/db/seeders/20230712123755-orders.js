@@ -32,6 +32,37 @@ module.exports = {
           createdAt: Sequelize.DataTypes.NOW().toString(),
           updatedAt: Sequelize.DataTypes.NOW().toString(),
         },
+        {
+          user_id: 1,
+          status: 'Заказ создан',
+          address: 'Улица Андрея ВротБерущего, дом 12, кв 7',
+          total: 33400,
+          comments:
+            'Хочу, чтобы на спине были крылья, как у ебаного старого летучего динозавра!',
+          createdAt: new Date(2023, 6, 1).toISOString(),
+          updatedAt: Sequelize.DataTypes.NOW().toString(),
+        },
+        {
+          user_id: 1,
+          status: 'Заказ создан',
+          address: 'Улица Андрея ВротБерущего, дом 12, кв 7',
+          total: 33400,
+          comments:
+            'Хочу, чтобы на спине были крылья, как у ебаного старого летучего динозавра!',
+          createdAt: new Date(2023, 4, 1).toISOString(),
+          updatedAt: Sequelize.DataTypes.NOW().toString(),
+        },
+        {
+          user_id: 1,
+          status: 'Заказ создан',
+          address: 'Улица Андрея ВротБерущего, дом 12, кв 7',
+          total: 33400,
+          comments:
+            'Хочу, чтобы на спине были крылья, как у ебаного старого летучего динозавра!',
+          createdAt: new Date(2022, 3, 1).toISOString(),
+          updatedAt: Sequelize.DataTypes.NOW().toString(),
+        },
+
         //   {
         //     user_id: 1,
         //     status: 'Заказ принят',
