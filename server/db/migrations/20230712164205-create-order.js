@@ -32,6 +32,10 @@ module.exports = {
       comments: {
         type: Sequelize.TEXT,
       },
+      admin_comments: {
+        type: Sequelize.TEXT,
+        defaultValue: 'Комментарии к заказам',
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

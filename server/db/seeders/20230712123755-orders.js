@@ -15,10 +15,20 @@ module.exports = {
       [
         {
           user_id: 1,
-          status: 'Заказ принят',
+          status: 'Заказ создан',
           address: 'Улица Академика Пилюгина, дом 1, кв 777',
           total: 15400,
           comments: 'Сделайте красиво!',
+          createdAt: Sequelize.DataTypes.NOW().toString(),
+          updatedAt: Sequelize.DataTypes.NOW().toString(),
+        },
+        {
+          user_id: 1,
+          status: 'Заказ создан',
+          address: 'Улица Андрея ВротБерущего, дом 12, кв 7',
+          total: 33400,
+          comments:
+            'Хочу, чтобы на спине были крылья, как у ебаного старого летучего динозавра!',
           createdAt: Sequelize.DataTypes.NOW().toString(),
           updatedAt: Sequelize.DataTypes.NOW().toString(),
         },

@@ -18,18 +18,21 @@ export default function Favorites() {
     dispatch(fetchAllFavorites());
   }, [dispatch]);
 
-  const renderProductCards = itemData.map((item) => (
-    <ProductCard
-      key={item.id}
-      id={item.id}
-      article={item.article}
-      photo={item.Photos[0].photo}
-      name={item.name}
-      price={item.price}
-      isFavorite={item.isFavorite}
-      isCart={item.isCart}
-    />
-  ));
+  const renderProductCards =
+    itemData && Array.isArray(itemData)
+      ? itemData.map((item) => (
+          <ProductCard
+            key={item.id}
+            id={item.id}
+            article={item.article}
+            photo={item.Photos[0].photo}
+            name={item.name}
+            price={item.price}
+            isFavorite={item.isFavorite}
+            isCart={item.isCart}
+          />
+        ))
+      : null;
 
   return (
     <>

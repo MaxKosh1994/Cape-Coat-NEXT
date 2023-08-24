@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       address: DataTypes.TEXT,
       total: DataTypes.INTEGER,
       comments: DataTypes.TEXT,
+      admin_comments: DataTypes.TEXT,
     },
     {
       sequelize,

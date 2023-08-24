@@ -18,20 +18,20 @@ export default function NavAdminComp() {
       </Head>
       <div className={styles.mainDiv}>
         <div className={styles.routesDiv}>
-          <NextLink href='/admin/item'>
+          <NextLink href='/admin/cat-col-mat'>
             <Button
               className={`${styles.button} ${
-                router.pathname === '/admin/item' ? styles.active : ''
+                router.pathname === '/admin/cat-col-mat' ? styles.active : ''
               }`}
             >
-              Добавление товара
+              Контент
             </Button>
           </NextLink>
 
-          <NextLink href='/admin/allItems'>
+          <NextLink href='/admin/cat-col-mat'>
             <Button
               className={`${styles.button} ${
-                router.pathname === '/FAQ/allItems' ? styles.active : ''
+                router.pathname === '/admin/cat-col-mat' ? styles.active : ''
               }`}
             >
               Все товары
