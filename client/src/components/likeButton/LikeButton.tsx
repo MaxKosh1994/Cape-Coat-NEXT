@@ -27,8 +27,10 @@ const LikeButton: React.FC<LikeButtonProps> = ({ item }) => {
   }, [favourites, item]);
 
   const favHandler = async () => {
-    dispatch(fetchOneFavourite(item));
-    setIsLiked(!isLiked);
+    if (item) {
+      dispatch(fetchOneFavourite(item));
+      setIsLiked(!isLiked);
+    }
   };
 
   return (

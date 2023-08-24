@@ -1,5 +1,5 @@
 .product__media {
-  flex: 1 1 1100px;
+  flex: 1 1 3100px;
   position: relative;
 }
 .product__media-list {
@@ -20,4 +20,10 @@
 }
 img {
   border-style: none;
+}
+@media (max-width: 1200px) {
+  .product__media-list {
+    grid-template-columns: repeat(1, 1fr);
+    grid-column-gap: 0;
+  }
 }

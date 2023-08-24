@@ -55,6 +55,7 @@ export default function Item() {
   // const location = useLocation().state;
 
   const itemData = useSelector((state: RootState) => state.itemSlice.item);
+  console.log('itemData', itemData);
   const cartData = useSelector((state: RootState) => state.cartSlice.cartItems);
   const materialsData = useSelector(
     (state: RootState) => state.itemSlice.materials
@@ -65,9 +66,11 @@ export default function Item() {
   );
 
   useEffect(() => {
-    dispatch(fetchItemData(item));
-    dispatch(fetchFavouritesData(item));
-    dispatch(checkCartItemThunk(item));
+    if (item) {
+      dispatch(fetchItemData(item));
+      dispatch(fetchFavouritesData());
+      dispatch(checkCartItemThunk());
+    }
     // dispatch(getCartItemsThunk(id))
   }, [dispatch, item]);
 

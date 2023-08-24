@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from 'react';
 import {
   Box,
   Collapse,
@@ -8,23 +8,23 @@ import {
   ListItemText,
   Paper,
   Typography,
-} from "@mui/material"
-import { ExpandLess, ExpandMore } from "@mui/icons-material"
+} from '@mui/material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 interface CustomListProps {
-  name: string
-  data: string
+  name: string;
+  data: string;
 }
 
 export default function CustomList({
   name,
   data,
 }: CustomListProps): JSX.Element {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   const handleClick = () => {
-    setOpen(!open)
-  }
+    setOpen(!open);
+  };
 
   return (
     <>
@@ -33,22 +33,23 @@ export default function CustomList({
           margin: 0,
           padding: 0,
           width: 360,
-          bgcolor: "background.paper",
+          bgcolor: 'background.paper',
           borderRadius: 0,
+          alignItems: 'start',
         }}
         component={Paper}
         elevation={3}
       >
         <ListItemButton onClick={handleClick}>
-          <ListItemText primary={name} sx={{ textAlign: "left" }} />
+          <ListItemText primary={name} sx={{ textAlign: 'left' }} />
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <ListItemButton>
-            <Typography sx={{ textAlign: "left" }}>{data}</Typography>
+            <Typography sx={{ textAlign: 'left' }}>{data}</Typography>
           </ListItemButton>
         </Collapse>
       </List>
     </>
-  )
+  );
 }
