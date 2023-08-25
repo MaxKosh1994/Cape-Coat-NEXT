@@ -18,6 +18,8 @@ export default function Category() {
     (state: RootState) => state.CategorySlice.category
   );
 
+  console.log(card)
+
   useEffect(() => {
     try {
       (async function (): Promise<void> {

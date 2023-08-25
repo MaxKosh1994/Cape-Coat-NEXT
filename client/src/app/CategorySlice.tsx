@@ -18,13 +18,12 @@ export interface ICategory {
   isCart: boolean;
 }
 
-export interface IItem extends ICategory{
+export interface IItem{
   id: number;
   article: string;
   photo: IPhoto | undefined;
   name: string;
   price: number;
-  categoryName: string;
   isFavorite: boolean;
   isCart: boolean;
 
@@ -54,15 +53,13 @@ const rtkSlice = createSlice({
   reducers: {
     category(state, action: PayloadAction<ICategory>) 
     {
-      console.log( state.category),
       state.category.push(action.payload);
-      // console.log(action.payload)
     },
     itemInCategory(state, action:PayloadAction<IItem>) {
       state.itemInCategory.push(action.payload);
 
       // console.log('state', state)
-      // console.log('action.payload', action.payload)
+      console.log('action.payload', action.payload)
     },
     toggleFavorite(state, action: PayloadAction<number>) {
       const id = action.payload;
