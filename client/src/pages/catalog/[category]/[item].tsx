@@ -129,7 +129,7 @@ export default function Item() {
           dispatch(addCartItem(addToCart));
         }
       } else {
-        // navigate('/cart');
+        // navigate('/checkout');
       }
     } catch (error) {
       console.log(error);

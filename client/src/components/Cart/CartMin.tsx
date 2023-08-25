@@ -174,7 +174,7 @@ export default function CartMin({ show, handleCartIconClick }) {
               <div className={styles.totalOrder}>
                 Сумма: {cartTotal.toLocaleString()} &#8381;
               </div>
-              <Link href="/cart">
+              <Link href="/checkout">
                 <button className={styles.orderButton}>
                   <span className={styles.buttonContent}>
                     Перейти к оформлению

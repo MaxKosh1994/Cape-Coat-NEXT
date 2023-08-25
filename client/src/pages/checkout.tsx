@@ -6,7 +6,7 @@ import {
   getCartItemsThunk,
 } from '../app/thunkActionsCart';
 import { getCartItems } from '../app/cartSlice';
-import styles from '../styles/Cart.module.css';
+import styles from '../styles/Checkout.module.css';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
@@ -18,7 +18,7 @@ import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
 import LikeButton from '@/components/likeButton/LikeButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-export default function CartPage() {
+export default function CheckoutPage() {
   const user = useSelector((state) => state.sessionSlice.user);
   const name = useSelector((state) => state.sessionSlice.name);
   const router = useRouter();
@@ -130,7 +130,7 @@ export default function CartPage() {
       const updatedTotal = subtotal - discountAmount + deliveryCost;
       setCartTotal(updatedTotal);
     }
-  }, [cartItemsList]);
+  }, [cartItemsList, dispatch]);
 
   useEffect(() => {
     const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
