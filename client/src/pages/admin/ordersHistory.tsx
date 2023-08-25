@@ -196,18 +196,12 @@ export default function Order() {
                 </TableCell>
                 <TableCell className={styles.tableMiddleCell}>Статус</TableCell>
                 <TableCell className={styles.tableCell}>
-                  Варианты статуса
-                </TableCell>
-                <TableCell className={styles.tableCell}>
-                  Изменение статуса
-                </TableCell>
-                <TableCell className={styles.tableCell}>
                   Формирование задания
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {ordersByMonth[pageNumber]?.orders.map((order: IOrderAdmin) => (
+              {ordersByMonth[pageNumber]?.orders?.map((order: IOrderAdmin) => (
                 <TableRow
                   key={order.id}
                   sx={{
@@ -361,11 +355,65 @@ export default function Order() {
                   <TableCell className={styles.tableCell}>
                     {order.residual_amount?.toLocaleString()}
                   </TableCell>
-                  <TableCell className={styles.tableCell}>
-                    {order?.address}
+                  <TableCell
+                    className={styles.tableCell}
+                    onClick={() =>
+                      handleFieldClick(order?.id, 'address', order?.address)
+                    }
+                  >
+                    {editingOrderData.id === order?.id &&
+                    editingOrderData.field === 'address' ? (
+                      <div className={styles.inputContainer}>
+                        <input
+                          onChange={handleFieldChange}
+                          className={styles.input}
+                          type='text'
+                          name='address'
+                          placeholder='Введите адрес...'
+                          value={editingOrderData.value}
+                        />
+                        <Button
+                          className={styles.buttonInput}
+                          type='submit'
+                          variant='contained'
+                          onClick={handleFieldConfirm}
+                        >
+                          Сохранить
+                        </Button>
+                      </div>
+                    ) : (
+                      <span>{order?.address}</span>
+                    )}
                   </TableCell>
-                  <TableCell className={styles.tableCell}>
-                    {order?.comments}
+                  <TableCell
+                    className={styles.tableCell}
+                    onClick={() =>
+                      handleFieldClick(order?.id, 'comments', order?.comments)
+                    }
+                  >
+                    {editingOrderData.id === order?.id &&
+                    editingOrderData.field === 'comments' ? (
+                      <div className={styles.inputContainer}>
+                        <input
+                          onChange={handleFieldChange}
+                          className={styles.input}
+                          type='text'
+                          name='comments'
+                          placeholder='Введите комментарии...'
+                          value={editingOrderData.value}
+                        />
+                        <Button
+                          className={styles.buttonInput}
+                          type='submit'
+                          variant='contained'
+                          onClick={handleFieldConfirm}
+                        >
+                          Сохранить
+                        </Button>
+                      </div>
+                    ) : (
+                      <span>{order?.comments}</span>
+                    )}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
                     {order?.Items?.map((item) => (
@@ -436,67 +484,80 @@ export default function Order() {
                       <span>{order?.admin_comments}</span>
                     )}
                   </TableCell>
-                  <TableCell className={styles.tableCell}>
-                    {order?.status}
-                  </TableCell>
-                  <TableCell className={styles.tableCell}>
-                    <select
-                      onChange={changeHandler}
-                      className={styles.select}
-                      name='status'
-                    >
-                      <option value='Заказ создан'>{'Заказ создан'}</option>
-                      <option value='Уточнение мерок, отправка реквизитов для внесения предоплаты'>
-                        {
-                          'Уточнение мерок, отправка реквизитов для внесения предоплаты'
-                        }
-                      </option>
-                      <option value='Ожидание предоплаты'>
-                        {'Ожидание предоплаты'}
-                      </option>
-                      <option value='Предоплата получена'>
-                        {'Предоплата получена'}
-                      </option>
-                      <option value='Задание сформировано'>
-                        {'Задание сформировано'}
-                      </option>
-                      <option value='Задание передано на производство'>
-                        {'Задание передано на производство'}
-                      </option>
-                      <option value='Обратная связь по заданию от производства'>
-                        {'Обратная связь по заданию от производства'}
-                      </option>
-                      <option value='Изделия в производстве'>
-                        {'Изделия в производстве'}
-                      </option>
-                      <option value='Изделие отшито'>{'Изделие отшито'}</option>
-                      <option value='Забрали заказ с производства'>
-                        {'Забрали заказ с производства'}
-                      </option>
-                      <option value='Оповещение клиента, отправка реквизитов для внесения полной оплаты'>
-                        {
-                          'Оповещение клиента, отправка реквизитов для внесения полной оплаты'
-                        }
-                      </option>
-                      <option value='Получена полная оплата'>
-                        {'Получена полная оплата'}
-                      </option>
-                      <option value='Заказ отправлен'>
-                        {'Заказ отправлен'}
-                      </option>
-                      <option value='Возврат заказа'>{'Возврат заказа'}</option>
-                      <option value='Перешив заказа'>{'Перешив заказа'}</option>
-                    </select>
-                  </TableCell>
-                  <TableCell className={styles.tableCell}>
-                    <Button
-                      className={styles.button}
-                      onClick={() => updateHandler(order?.id)}
-                      type='submit'
-                      variant='contained'
-                    >
-                      Изменить
-                    </Button>
+                  <TableCell
+                    className={styles.tableCell}
+                    onClick={() =>
+                      handleFieldClick(order?.id, 'status', order?.status)
+                    }
+                  >
+                    {editingOrderData.id === order?.id &&
+                    editingOrderData.field === 'status' ? (
+                      <div className={styles.inputContainer}>
+                        <select
+                          onChange={handleFieldChange}
+                          className={styles.select}
+                          name='status'
+                        >
+                          <option value='Заказ создан'>{'Заказ создан'}</option>
+                          <option value='Уточнение мерок, отправка реквизитов для внесения предоплаты'>
+                            {
+                              'Уточнение мерок, отправка реквизитов для внесения предоплаты'
+                            }
+                          </option>
+                          <option value='Ожидание предоплаты'>
+                            {'Ожидание предоплаты'}
+                          </option>
+                          <option value='Предоплата получена'>
+                            {'Предоплата получена'}
+                          </option>
+                          <option value='Задание сформировано'>
+                            {'Задание сформировано'}
+                          </option>
+                          <option value='Задание передано на производство'>
+                            {'Задание передано на производство'}
+                          </option>
+                          <option value='Обратная связь по заданию от производства'>
+                            {'Обратная связь по заданию от производства'}
+                          </option>
+                          <option value='Изделия в производстве'>
+                            {'Изделия в производстве'}
+                          </option>
+                          <option value='Изделие отшито'>
+                            {'Изделие отшито'}
+                          </option>
+                          <option value='Забрали заказ с производства'>
+                            {'Забрали заказ с производства'}
+                          </option>
+                          <option value='Оповещение клиента, отправка реквизитов для внесения полной оплаты'>
+                            {
+                              'Оповещение клиента, отправка реквизитов для внесения полной оплаты'
+                            }
+                          </option>
+                          <option value='Получена полная оплата'>
+                            {'Получена полная оплата'}
+                          </option>
+                          <option value='Заказ отправлен'>
+                            {'Заказ отправлен'}
+                          </option>
+                          <option value='Возврат заказа'>
+                            {'Возврат заказа'}
+                          </option>
+                          <option value='Перешив заказа'>
+                            {'Перешив заказа'}
+                          </option>
+                        </select>
+                        <Button
+                          className={styles.buttonInput}
+                          type='submit'
+                          variant='contained'
+                          onClick={handleFieldConfirm}
+                        >
+                          Сохранить
+                        </Button>
+                      </div>
+                    ) : (
+                      <span>{order?.status}</span>
+                    )}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
                     <Button
