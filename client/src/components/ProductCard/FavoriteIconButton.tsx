@@ -3,6 +3,8 @@ import { IconButton } from '@mui/material';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
+import styles from './ProductCard.module.css';
+
 interface FavoriteIconButtonProps {
   isFavorite: boolean;
   onClick: () => void;
@@ -21,17 +23,23 @@ const FavoriteIconButton: React.FC<FavoriteIconButtonProps> = ({
   const favoriteItems = JSON.parse(localStorageData || '[]');
   // console.log(favoriteItems)
 
-
   // Проверка наличия товара в локальном хранилище
-const isItemInFavorites = favoriteItems.includes(itemId);
+  const isItemInFavorites = favoriteItems.includes(itemId);
   // console.log('icon', isItemInFavorites);
 
   return (
-    <IconButton aria-label="Add to favorites" onClick={onClick}>
+    <IconButton
+      className={styles.IconImage}
+      aria-label="Add to favorites"
+      onClick={onClick}
+    >
       {isFavorite || isItemInFavorites ? (
-        <FavoriteIcon style={{ color: 'rgb(0 0 0 / 70%)' }} />
+        <FavoriteIcon
+          className={styles.IconImage}
+          style={{ color: 'rgb(0 0 0 / 70%)' }}
+        />
       ) : (
-        <FavoriteBorderOutlinedIcon />
+        <FavoriteBorderOutlinedIcon className={styles.IconImage} />
       )}
     </IconButton>
   );

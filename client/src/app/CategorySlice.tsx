@@ -1,7 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 // import { stateType, userType } from "../types"
 
-
 export interface IPhoto {
   photo: string; // Поле для фотографии товара
   // Дополнительные свойства фотографии, если есть
@@ -9,40 +8,23 @@ export interface IPhoto {
 
 export interface ICategory {
   id: number;
-  // article: string;
-  // photo: IPhoto | undefined;
-  // name: string;
-  // price: number;
-  // categoryName: string;
-  isFavorite: boolean;
-  isCart: boolean;
-}
-
-export interface IItem{
-  id: number;
   article: string;
   photo: IPhoto | undefined;
   name: string;
   price: number;
+  categoryName: string;
   isFavorite: boolean;
   isCart: boolean;
-
 }
-// export interface IFavorite {
-//   id: number
-//   isFavorite: boolean
-// }
 
 export type stateType = {
-  category: ICategory[];
-  itemInCategory: IItem[]
-  favorites: IItem[];
-  itemsInCart: IItem[];
+  categoryItems: ICategory[];
+  favorites: ICategory[];
+  itemsInCart: ICategory[];
 };
 
 const initialState: stateType = {
-  category: [],
-  itemInCategory: [],
+  categoryItems: [],
   favorites: [],
   itemsInCart: [],
 };
@@ -51,15 +33,8 @@ const rtkSlice = createSlice({
   name: 'CategorySlice',
   initialState,
   reducers: {
-    category(state, action: PayloadAction<ICategory>) 
-    {
-      state.category.push(action.payload);
-    },
-    itemInCategory(state, action:PayloadAction<IItem>) {
-      state.itemInCategory.push(action.payload);
-
-      // console.log('state', state)
-      console.log('action.payload', action.payload)
+    category(state, action: PayloadAction<ICategory>) {
+      state.categoryItems.push(action.payload);
     },
     toggleFavorite(state, action: PayloadAction<number>) {
       const id = action.payload;
@@ -98,5 +73,10 @@ const rtkSlice = createSlice({
 });
 
 export default rtkSlice.reducer;
-export const { category, itemInCategory, toggleFavorite, categoryClear, toggleCart } =
-  rtkSlice.actions;
+export const {
+  category,
+  itemInCategory,
+  toggleFavorite,
+  categoryClear,
+  toggleCart,
+} = rtkSlice.actions;
