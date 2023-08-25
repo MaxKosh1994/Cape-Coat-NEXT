@@ -152,49 +152,18 @@ export const updateOrderDataFetch = async (
   }
 };
 
-export const updateOrderCommentsFetch = async (
+export const updateOrderFieldFetch = async (
   id: number,
-  admin_comments: string
+  fieldName: string,
+  fieldValue: string
 ): Promise<object> => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}admin/order/updateOrderComments/${id}`,
+    `${process.env.NEXT_PUBLIC_URL}admin/order/updateOrderField/${id}`,
     {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ admin_comments: admin_comments }),
-    }
-  );
-  return await response.json();
-};
-
-export const updateOrderPrepaymentFetch = async (
-  editingOrderId: number,
-  updatedPrepayment: string
-): Promise<object> => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}admin/order/updateOrderPrepayment/${editingOrderId}`,
-    {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ updatedPrepayment: updatedPrepayment }),
-    }
-  );
-  return await response.json();
-};
-
-export const updateOrderTotalFetch = async (
-  editingOrderId: number,
-  updatedTotal: string
-): Promise<object> => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}admin/order/updateOrderTotal/${editingOrderId}`,
-    {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ updatedTotal: updatedTotal }),
+      body: JSON.stringify({ [fieldName]: fieldValue }),
     }
   );
   return await response.json();

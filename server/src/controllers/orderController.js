@@ -9,6 +9,7 @@ module.exports.createOrder = async (req, res) => {
         address: req.body.addressString,
         total: req.body.cartTotal,
         comments: req.body.commentsInput,
+        //! Дефолтно создается через 20 дней, меняется при завершении заказа
         getReadyAt: new Date(new Date().getTime() + 20 * 24 * 60 * 60 * 1000),
       },
       { raw: true },

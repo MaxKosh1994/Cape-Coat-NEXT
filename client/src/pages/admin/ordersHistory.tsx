@@ -3,10 +3,11 @@ import { format, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import {
   allOrderDataFetch,
-  updateOrderCommentsFetch,
+  updateOrderFieldFetch,
   updateOrderDataFetch,
-  updateOrderPrepaymentFetch,
-  updateOrderTotalFetch,
+  //   updateOrderCommentsFetch,
+  //   updateOrderPrepaymentFetch,
+  //   updateOrderTotalFetch,
 } from '../../components/Admin/HTTP/adminApi';
 import styles from '../../styles/admin/OrdersAdmin.module.css';
 import {
@@ -44,19 +45,20 @@ export default function Order() {
     setNewAdminComment(event.target.value);
   };
 
-  const handleCommentConfirm = () => {
-    updateOrderCommentsFetch(editingOrderId, newAdminComment).then(
-      (updatedOrder) => {
-        if (updatedOrder) {
-          const newOrders = orders.map((order) =>
-            order.id === editingOrderId ? updatedOrder : order
-          );
-          setOrders(newOrders);
-        }
-        setEditingOrderId(null);
-        setNewAdminComment('');
-      }
+  const handleCommentConfirm = async () => {
+    const updatedOrder = await updateOrderFieldFetch(
+      editingOrderId,
+      'admin_comments',
+      newAdminComment
     );
+    if (updatedOrder) {
+      const newOrders = orders.map((order) =>
+        order.id === editingOrderId ? updatedOrder : order
+      );
+      setOrders(newOrders);
+    }
+    setEditingOrderId(null);
+    setNewAdminComment('');
   };
 
   //! ---------------------Изменение предоплаты-------------------------------------------
@@ -72,21 +74,20 @@ export default function Order() {
     setNewPrepayment(event.target.value);
   };
 
-  const handlePrepaymentConfirm = () => {
-    const updatedPrepayment = Number(newPrepayment);
-
-    updateOrderPrepaymentFetch(editingOrderId, updatedPrepayment).then(
-      (updatedOrder) => {
-        if (updatedOrder) {
-          const newOrders = orders.map((order) =>
-            order.id === editingOrderId ? updatedOrder : order
-          );
-          setOrders(newOrders);
-        }
-        setEditingOrderId(null);
-        setNewPrepayment('');
-      }
+  const handlePrepaymentConfirm = async () => {
+    const updatedOrder = await updateOrderFieldFetch(
+      editingOrderId,
+      'prepayment',
+      newPrepayment
     );
+    if (updatedOrder) {
+      const newOrders = orders.map((order) =>
+        order.id === editingOrderId ? updatedOrder : order
+      );
+      setOrders(newOrders);
+    }
+    setEditingOrderId(null);
+    setNewPrepayment('');
   };
 
   //! -------------------------Изменение полной стоимости---------------------------------------
@@ -101,20 +102,20 @@ export default function Order() {
   const handleTotalChange = (event) => {
     setNewTotal(event.target.value);
   };
-
-  const handleTotalConfirm = () => {
-    const updatedTotal = Number(newTotal);
-
-    updateOrderTotalFetch(editingOrderId, updatedTotal).then((updatedOrder) => {
-      if (updatedOrder) {
-        const newOrders = orders.map((order) =>
-          order.id === editingOrderId ? updatedOrder : order
-        );
-        setOrders(newOrders);
-      }
-      setEditingOrderId(null);
-      setNewTotal('');
-    });
+  const handleTotalConfirm = async () => {
+    const updatedOrder = await updateOrderFieldFetch(
+      editingOrderId,
+      'total',
+      newTotal
+    );
+    if (updatedOrder) {
+      const newOrders = orders.map((order) =>
+        order.id === editingOrderId ? updatedOrder : order
+      );
+      setOrders(newOrders);
+    }
+    setEditingOrderId(null);
+    setNewTotal('');
   };
 
   //! ----------------------------------------------------------------
@@ -133,6 +134,7 @@ export default function Order() {
     const index = orders.findIndex((order) => order.id === id);
     if (index !== -1) {
       orders[index].status = statusVal.status;
+      // orders[index].getReadyAt = statusVal.getReadyAt;
     }
     setOrders([...orders]);
     updateOrderDataFetch(id, statusVal.status, setMessage);
@@ -200,7 +202,7 @@ export default function Order() {
         >
           <select
             onChange={(event) => setPageNumber(event.target.selectedIndex)}
-            value={ordersByMonth[ordersByMonth.length - 1]?.date}
+            value={ordersByMonth[pageNumber]?.date}
             style={{
               padding: '5px 10px',
               fontSize: '16px',
