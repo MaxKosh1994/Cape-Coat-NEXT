@@ -1,8 +1,12 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { delCartItemThunk, getCartItemsThunk } from '../app/thunkActionsCart';
+import {
+  delCartItemThunk,
+  emptyCartThunk,
+  getCartItemsThunk,
+} from '../app/thunkActionsCart';
 import { getCartItems } from '../app/cartSlice';
-import styles from '../styles/Cart.module.css';
+import styles from '../styles/Checkout.module.css';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
@@ -14,7 +18,7 @@ import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
 import LikeButton from '@/components/likeButton/LikeButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-export default function CartPage() {
+export default function CheckoutPage() {
   const user = useSelector((state) => state.sessionSlice.user);
   const name = useSelector((state) => state.sessionSlice.name);
   const router = useRouter();
@@ -30,6 +34,8 @@ export default function CartPage() {
   const [orderStatus, setOrderStatus] = useState('');
   const [selectedDelivery, setSelectedDelivery] = useState('showroom');
   const [showAddressInputs, setShowAddressInputs] = useState(false);
+  const [urgentMaking, setUrgentMaking] = useState('');
+  const [urgencyFee, setUrgencyFee] = useState(0);
   const [addressInputs, setAddressInputs] = useState({
     city: '',
     street: '',
@@ -64,21 +70,14 @@ export default function CartPage() {
       Body: `Уважаемый(ая) ${name}, вы указали этот почтовый ящик (${user}) при оформлении заказа на сайте Cape&Coat. ${order}`,
     });
   }
+
   const emptyCart = async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}cart/emptyCart/${user}`,
-      {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-      }
-    );
-    const re = await response.json();
-    if (re.success) {
+    const empty = await dispatch(emptyCartThunk(user));
+    if (empty === 200) {
       setCartItemsList([]);
     }
-    // TODO если корзина не удалилась
   };
+
   const createOrder = async (data) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}order/new`, {
       method: 'POST',
@@ -119,8 +118,17 @@ export default function CartPage() {
       const discountPercentage = 0.05;
       const discountAmount = subtotal * discountPercentage;
       setDiscount(discountAmount);
-      const updatedTotal = subtotal - discountAmount + deliveryCost;
-      setCartTotal(updatedTotal);
+      if (urgentMaking) {
+        const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+        setUrgencyFee(twentyPercentOfSubtotal);
+        const updatedTotal =
+          subtotal - discountAmount + deliveryCost + twentyPercentOfSubtotal;
+        setCartTotal(updatedTotal);
+      } else {
+        const updatedTotal = subtotal - discountAmount + deliveryCost;
+        setCartTotal(updatedTotal);
+        setUrgencyFee(0);
+      }
     } else if (jacketItems.length >= 2) {
       const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
       const subtotalJackets = jacketItems.reduce(
@@ -130,16 +138,34 @@ export default function CartPage() {
       const discountPercentage = 0.05;
       const discountAmount = subtotalJackets * discountPercentage;
       setDiscount(discountAmount);
-      const updatedTotal = subtotal - discountAmount + deliveryCost;
-      setCartTotal(updatedTotal);
+      if (urgentMaking) {
+        const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+        setUrgencyFee(twentyPercentOfSubtotal);
+        const updatedTotal =
+          subtotal - discountAmount + deliveryCost + twentyPercentOfSubtotal;
+        setCartTotal(updatedTotal);
+        setUrgencyFee(0);
+      } else {
+        const updatedTotal = subtotal - discountAmount + deliveryCost;
+        setCartTotal(updatedTotal);
+      }
     }
-  }, [cartItemsList, dispatch]);
+  }, [cartItemsList, dispatch, urgentMaking]);
 
   useEffect(() => {
     const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
-    const updatedTotal = subtotal - discount + deliveryCost;
-    setCartTotal(updatedTotal);
-  }, [cartItemsList, discount, deliveryCost]);
+    if (urgentMaking) {
+      const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+      setUrgencyFee(twentyPercentOfSubtotal);
+      const updatedTotal =
+        subtotal - discount + deliveryCost + twentyPercentOfSubtotal;
+      setCartTotal(updatedTotal);
+    } else {
+      const updatedTotal = subtotal - discount + deliveryCost;
+      setCartTotal(updatedTotal);
+      setUrgencyFee(0);
+    }
+  }, [cartItemsList, discount, deliveryCost, urgentMaking, dispatch]);
 
   useEffect(() => {
     if (selectedDelivery === 'showroom') {
@@ -163,6 +189,7 @@ export default function CartPage() {
       setDelError('Не получилось удалить товар, попробуйте позже.');
     }
   };
+
   const handleDisplaySizesForm = (index, itemId: number) => {
     setShowParamsForm((prevState) => ({
       ...prevState,
@@ -212,6 +239,10 @@ export default function CartPage() {
     setAddressInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleUrgentChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setUrgentMaking(e.target.checked);
+  };
+
   const handleDeliveryChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedDelivery(e.target.value);
   };
@@ -230,6 +261,7 @@ export default function CartPage() {
         cartTotal,
         addressString,
         commentsInput,
+        urgentMaking,
       };
       if (addressString.length > 18) {
         createOrder(orderData);
@@ -291,7 +323,8 @@ export default function CartPage() {
       }, 1000);
     }
   };
-  // console.log(cartItemsList.map((item) => item.Carts[0].CartItem.measurements));
+  console.log(cartItemsList);
+
   return (
     <>
       <Head>
@@ -565,6 +598,32 @@ export default function CartPage() {
                 <section
                   className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
                 >
+                  <h2 className={styles.headerItemCart}>Срочный пошив</h2>
+                  <div className={styles.formBlock}>
+                    <label
+                      id="urgent"
+                      className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+                    >
+                      <input
+                        type="checkbox"
+                        name="urgent"
+                        className={styles.checkboxIcon}
+                        onChange={handleUrgentChange}
+                      />
+                      <span className={styles.checkboxLabel}>
+                        <span className={styles.checkboxHeader}>
+                          Изготовление изделия за 5 дней
+                        </span>
+                        <span className={styles.checkboxDescription}>
+                          <em>+20% к стоимости изделия</em>
+                        </span>
+                      </span>
+                    </label>
+                  </div>
+                </section>
+                <section
+                  className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
+                >
                   <h2 className={styles.headerItemCart}>
                     Комментарии к заказу
                   </h2>
@@ -806,6 +865,18 @@ export default function CartPage() {
                         </span>
                       </div>
                     </div>
+                    {urgencyFee ? (
+                      <div className={styles.orderSummaryRow}>
+                        <span>Срочность:</span>
+                        <div className={styles.itemPrices}>
+                          <span className={styles.itemPricesPrice}>
+                            {urgencyFee.toLocaleString()} &#8381;
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 </div>
                 <div

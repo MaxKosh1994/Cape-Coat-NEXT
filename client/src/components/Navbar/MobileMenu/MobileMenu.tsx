@@ -67,7 +67,7 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
       />
       <MobileMenuItem
         label="Избранное"
-        link="/account/favorites"
+        link="/favorites"
         onClick={handleMobileMenuClose}
       />
       <MobileMenuItem
@@ -82,7 +82,7 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
       />
       <MobileMenuItem
         label="Sale"
-        link="/sale"
+        link="/catalog/sale"
         onClick={handleMobileMenuClose}
       />
       <MobileMenuItem label="FAQ" link="/FAQ" onClick={handleMobileMenuClose} />

@@ -17,6 +17,9 @@ const rtkSlice = createSlice({
         (el) => el.item_id !== +action.payload
       );
     },
+    emptyCart(state, action) {
+      state.cartItems = [];
+    },
     addCartItem(state, action) {
       state.cartItems = [...state.cartItems, action.payload];
     },
@@ -24,7 +27,8 @@ const rtkSlice = createSlice({
 });
 
 export default rtkSlice.reducer;
-export const { getCartItems, delCartItem, addCartItem } = rtkSlice.actions;
+export const { getCartItems, delCartItem, addCartItem, emptyCart } =
+  rtkSlice.actions;
 
 // import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { Item } from './itemSlice';

@@ -9,6 +9,7 @@ module.exports.createOrder = async (req, res) => {
         address: req.body.addressString,
         total: req.body.cartTotal,
         comments: req.body.commentsInput,
+        urgent: req.body.urgentDelivery,
       },
       { raw: true },
     );
