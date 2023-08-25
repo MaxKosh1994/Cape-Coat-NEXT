@@ -266,11 +266,7 @@ export default function Navbar() {
                 <Person2Icon />
               </IconButton>
             </Link>
-            <Link
-              className="header-favorite"
-              href="/account/favorites"
-              passHref
-            >
+            <Link className="header-favorite" href="/favorites" passHref>
               <IconButton
                 size="large"
                 aria-label="show 17 new notifications"
