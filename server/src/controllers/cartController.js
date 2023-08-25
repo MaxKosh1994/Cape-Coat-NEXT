@@ -17,7 +17,7 @@ const {
 
 module.exports.getCart = async (req, res) => {
   try {
-    const userEmail = req.params.user;
+    const userEmail = req.session.user;
     const user = await findUserByEmail(userEmail);
 
     if (user) {
