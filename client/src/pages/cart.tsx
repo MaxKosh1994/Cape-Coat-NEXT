@@ -133,7 +133,7 @@ export default function CartPage() {
       const updatedTotal = subtotal - discountAmount + deliveryCost;
       setCartTotal(updatedTotal);
     }
-  }, [cartItemsList]);
+  }, [cartItemsList, dispatch]);
 
   useEffect(() => {
     const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
@@ -291,7 +291,6 @@ export default function CartPage() {
       }, 1000);
     }
   };
-  console.log(cartItemsList);
   // console.log(cartItemsList.map((item) => item.Carts[0].CartItem.measurements));
   return (
     <>
