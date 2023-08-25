@@ -32,6 +32,9 @@ module.exports = {
       comments: {
         type: Sequelize.TEXT,
       },
+      urgent: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

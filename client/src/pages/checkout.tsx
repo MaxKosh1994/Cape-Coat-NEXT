@@ -34,6 +34,8 @@ export default function CheckoutPage() {
   const [orderStatus, setOrderStatus] = useState('');
   const [selectedDelivery, setSelectedDelivery] = useState('showroom');
   const [showAddressInputs, setShowAddressInputs] = useState(false);
+  const [urgentMaking, setUrgentMaking] = useState('');
+  const [urgencyFee, setUrgencyFee] = useState(0);
   const [addressInputs, setAddressInputs] = useState({
     city: '',
     street: '',
@@ -116,8 +118,17 @@ export default function CheckoutPage() {
       const discountPercentage = 0.05;
       const discountAmount = subtotal * discountPercentage;
       setDiscount(discountAmount);
-      const updatedTotal = subtotal - discountAmount + deliveryCost;
-      setCartTotal(updatedTotal);
+      if (urgentMaking) {
+        const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+        setUrgencyFee(twentyPercentOfSubtotal);
+        const updatedTotal =
+          subtotal - discountAmount + deliveryCost + twentyPercentOfSubtotal;
+        setCartTotal(updatedTotal);
+      } else {
+        const updatedTotal = subtotal - discountAmount + deliveryCost;
+        setCartTotal(updatedTotal);
+        setUrgencyFee(0);
+      }
     } else if (jacketItems.length >= 2) {
       const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
       const subtotalJackets = jacketItems.reduce(
@@ -127,16 +138,34 @@ export default function CheckoutPage() {
       const discountPercentage = 0.05;
       const discountAmount = subtotalJackets * discountPercentage;
       setDiscount(discountAmount);
-      const updatedTotal = subtotal - discountAmount + deliveryCost;
-      setCartTotal(updatedTotal);
+      if (urgentMaking) {
+        const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+        setUrgencyFee(twentyPercentOfSubtotal);
+        const updatedTotal =
+          subtotal - discountAmount + deliveryCost + twentyPercentOfSubtotal;
+        setCartTotal(updatedTotal);
+        setUrgencyFee(0);
+      } else {
+        const updatedTotal = subtotal - discountAmount + deliveryCost;
+        setCartTotal(updatedTotal);
+      }
     }
-  }, [cartItemsList, dispatch]);
+  }, [cartItemsList, dispatch, urgentMaking]);
 
   useEffect(() => {
     const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
-    const updatedTotal = subtotal - discount + deliveryCost;
-    setCartTotal(updatedTotal);
-  }, [cartItemsList, discount, deliveryCost]);
+    if (urgentMaking) {
+      const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+      setUrgencyFee(twentyPercentOfSubtotal);
+      const updatedTotal =
+        subtotal - discount + deliveryCost + twentyPercentOfSubtotal;
+      setCartTotal(updatedTotal);
+    } else {
+      const updatedTotal = subtotal - discount + deliveryCost;
+      setCartTotal(updatedTotal);
+      setUrgencyFee(0);
+    }
+  }, [cartItemsList, discount, deliveryCost, urgentMaking, dispatch]);
 
   useEffect(() => {
     if (selectedDelivery === 'showroom') {
@@ -160,6 +189,7 @@ export default function CheckoutPage() {
       setDelError('Не получилось удалить товар, попробуйте позже.');
     }
   };
+
   const handleDisplaySizesForm = (index, itemId: number) => {
     setShowParamsForm((prevState) => ({
       ...prevState,
@@ -209,6 +239,10 @@ export default function CheckoutPage() {
     setAddressInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleUrgentChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setUrgentMaking(e.target.checked);
+  };
+
   const handleDeliveryChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedDelivery(e.target.value);
   };
@@ -227,6 +261,7 @@ export default function CheckoutPage() {
         cartTotal,
         addressString,
         commentsInput,
+        urgentMaking,
       };
       if (addressString.length > 18) {
         createOrder(orderData);
@@ -563,6 +598,32 @@ export default function CheckoutPage() {
                 <section
                   className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
                 >
+                  <h2 className={styles.headerItemCart}>Срочный пошив</h2>
+                  <div className={styles.formBlock}>
+                    <label
+                      id="urgent"
+                      className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+                    >
+                      <input
+                        type="checkbox"
+                        name="urgent"
+                        className={styles.checkboxIcon}
+                        onChange={handleUrgentChange}
+                      />
+                      <span className={styles.checkboxLabel}>
+                        <span className={styles.checkboxHeader}>
+                          Изготовление изделия за 5 дней
+                        </span>
+                        <span className={styles.checkboxDescription}>
+                          <em>+20% к стоимости изделия</em>
+                        </span>
+                      </span>
+                    </label>
+                  </div>
+                </section>
+                <section
+                  className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
+                >
                   <h2 className={styles.headerItemCart}>
                     Комментарии к заказу
                   </h2>
@@ -804,6 +865,18 @@ export default function CheckoutPage() {
                         </span>
                       </div>
                     </div>
+                    {urgencyFee ? (
+                      <div className={styles.orderSummaryRow}>
+                        <span>Срочность:</span>
+                        <div className={styles.itemPrices}>
+                          <span className={styles.itemPricesPrice}>
+                            {urgencyFee.toLocaleString()} &#8381;
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 </div>
                 <div
