@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 'Заказ создан',
       },
       address: DataTypes.TEXT,
+      payment_type: DataTypes.TEXT,
       total: DataTypes.INTEGER,
       prepayment: DataTypes.INTEGER,
       residual_amount: {

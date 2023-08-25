@@ -183,6 +183,7 @@ export default function Order() {
                 <TableCell className={styles.tableCell}>Email</TableCell>
                 <TableCell className={styles.tableCell}>Телефон</TableCell>
                 <TableCell className={styles.tableCell}>Стоимость</TableCell>
+                <TableCell className={styles.tableCell}>Тип оплаты</TableCell>
                 <TableCell className={styles.tableCell}>Предоплата</TableCell>
                 <TableCell className={styles.tableCell}>Остаток</TableCell>
                 <TableCell className={styles.tableMiddleCell}>Адрес</TableCell>
@@ -287,6 +288,40 @@ export default function Order() {
                   </TableCell>
                   <TableCell className={styles.tableCell}>
                     {order.User?.phone}
+                  </TableCell>
+                  <TableCell
+                    className={styles.tableCell}
+                    onClick={() =>
+                      handleFieldClick(
+                        order?.id,
+                        'payment_type',
+                        order?.payment_type
+                      )
+                    }
+                  >
+                    {editingOrderData.id === order?.id &&
+                    editingOrderData.field === 'payment_type' ? (
+                      <div className={styles.inputContainer}>
+                        <TextField
+                          type='text'
+                          className='text-field'
+                          fullWidth
+                          required
+                          value={editingOrderData.value}
+                          onChange={handleFieldChange}
+                        />
+                        <Button
+                          className={styles.buttonInput}
+                          type='submit'
+                          variant='contained'
+                          onClick={handleFieldConfirm}
+                        >
+                          Сохранить
+                        </Button>
+                      </div>
+                    ) : (
+                      <span>{order?.payment_type}</span>
+                    )}
                   </TableCell>
                   <TableCell
                     className={styles.tableCell}

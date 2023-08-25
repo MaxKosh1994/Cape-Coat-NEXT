@@ -26,6 +26,10 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      payment_type: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
       total: {
         type: Sequelize.INTEGER,
       },

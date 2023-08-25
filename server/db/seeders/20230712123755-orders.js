@@ -13,6 +13,7 @@ module.exports = {
         user_id: 1,
         status: 'Заказ создан',
         address: 'Улица Академика Пилюгина, дом 1, кв 777',
+        payment_type: 'Тинькофф',
         total: 15400,
         comments: 'Сделайте красиво!',
         getReadyAt,
