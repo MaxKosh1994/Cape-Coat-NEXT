@@ -15,7 +15,16 @@ module.exports = (sequelize, DataTypes) => {
     {
       order_id: DataTypes.INTEGER,
       item_id: DataTypes.INTEGER,
-      measurements: DataTypes.TEXT,
+      height: DataTypes.TEXT,
+      length: DataTypes.TEXT,
+      sleeve: DataTypes.TEXT,
+      bust: DataTypes.TEXT,
+      waist: DataTypes.TEXT,
+      hips: DataTypes.TEXT,
+      saddle: DataTypes.TEXT,
+      loops: DataTypes.BOOLEAN,
+      buttons: DataTypes.TEXT,
+      lining: DataTypes.TEXT,
     },
     {
       sequelize,
