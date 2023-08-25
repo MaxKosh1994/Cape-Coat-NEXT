@@ -31,100 +31,13 @@ export default function Order() {
   const [statusVal, setStatus] = useState({
     status: 'Заказ принят',
   });
-  //! ---------------------Изменение админского коммента-------------------------------------------
-
-  const [editingOrderId, setEditingOrderId] = useState(null);
-  const [newAdminComment, setNewAdminComment] = useState('');
-
-  const handleCommentClick = (orderId, currentAdminComment) => {
-    setEditingOrderId(orderId);
-    setNewAdminComment(currentAdminComment);
-  };
-
-  const handleCommentChange = (event) => {
-    setNewAdminComment(event.target.value);
-  };
-
-  const handleCommentConfirm = async () => {
-    const updatedOrder = await updateOrderFieldFetch(
-      editingOrderId,
-      'admin_comments',
-      newAdminComment
-    );
-    if (updatedOrder) {
-      const newOrders = orders.map((order) =>
-        order.id === editingOrderId ? updatedOrder : order
-      );
-      setOrders(newOrders);
-    }
-    setEditingOrderId(null);
-    setNewAdminComment('');
-  };
-
-  //! ---------------------Изменение предоплаты-------------------------------------------
-
-  const [newPrepayment, setNewPrepayment] = useState('');
-
-  const handlePrepaymentClick = (orderId, currentPrepayment) => {
-    setEditingOrderId(orderId);
-    setNewPrepayment(currentPrepayment.toString());
-  };
-
-  const handlePrepaymentChange = (event) => {
-    setNewPrepayment(event.target.value);
-  };
-
-  const handlePrepaymentConfirm = async () => {
-    const updatedOrder = await updateOrderFieldFetch(
-      editingOrderId,
-      'prepayment',
-      newPrepayment
-    );
-    if (updatedOrder) {
-      const newOrders = orders.map((order) =>
-        order.id === editingOrderId ? updatedOrder : order
-      );
-      setOrders(newOrders);
-    }
-    setEditingOrderId(null);
-    setNewPrepayment('');
-  };
-
-  //! -------------------------Изменение полной стоимости---------------------------------------
-
-  const [newTotal, setNewTotal] = useState('');
-
-  const handleTotalClick = (orderId, currentTotal) => {
-    setEditingOrderId(orderId);
-    setNewTotal(currentTotal.toString());
-  };
-
-  const handleTotalChange = (event) => {
-    setNewTotal(event.target.value);
-  };
-  const handleTotalConfirm = async () => {
-    const updatedOrder = await updateOrderFieldFetch(
-      editingOrderId,
-      'total',
-      newTotal
-    );
-    if (updatedOrder) {
-      const newOrders = orders.map((order) =>
-        order.id === editingOrderId ? updatedOrder : order
-      );
-      setOrders(newOrders);
-    }
-    setEditingOrderId(null);
-    setNewTotal('');
-  };
-
-  //! ----------------------------------------------------------------
-
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     allOrderDataFetch(setOrders);
   }, []);
+
+  //! ----------------------------------------------------------------
 
   const changeHandler = (e) => {
     setStatus({ [e.target.name]: e.target.value });
@@ -134,7 +47,6 @@ export default function Order() {
     const index = orders.findIndex((order) => order.id === id);
     if (index !== -1) {
       orders[index].status = statusVal.status;
-      // orders[index].getReadyAt = statusVal.getReadyAt;
     }
     setOrders([...orders]);
     updateOrderDataFetch(id, statusVal.status, setMessage);
@@ -143,6 +55,44 @@ export default function Order() {
       setMessage('');
       setOpen(false);
     }, 1000);
+  };
+  //! ---------------------------ЛОГИКА ИЗМЕНЕНИЯ ПОЛЕЙ ЗАКАЗА-------------------------------------
+
+  const [editingOrderData, setEditingOrderData] = useState({
+    id: null,
+    field: '',
+    value: '',
+  });
+
+  const handleFieldClick = (orderId, currentField, currentFieldValue) => {
+    setEditingOrderData({
+      id: orderId,
+      field: currentField,
+      value: currentFieldValue.toString(),
+    });
+  };
+
+  const handleFieldChange = (event) => {
+    setEditingOrderData((prev) => ({
+      ...prev,
+      value: event.target.value,
+    }));
+  };
+
+  const handleFieldConfirm = async () => {
+    const { id, field, value } = editingOrderData;
+    const updatedOrder = await updateOrderFieldFetch(id, field, value);
+    if (updatedOrder) {
+      const newOrders = orders.map((order) =>
+        order.id === id ? updatedOrder : order
+      );
+      setOrders(newOrders);
+    }
+    setEditingOrderData({
+      id: null,
+      field: '',
+      value: '',
+    });
   };
 
   //! --------------------Логика пагинации-------------------------------------------
@@ -296,10 +246,41 @@ export default function Order() {
                       locale: ru,
                     })}
                   </TableCell>
-                  <TableCell className={styles.tableCell}>
-                    {format(parseISO(order.getReadyAt), "dd MMMM yyyy'г'", {
-                      locale: ru,
-                    })}
+                  <TableCell
+                    className={styles.tableCell}
+                    onClick={() =>
+                      handleFieldClick(
+                        order?.id,
+                        'getReadyAt',
+                        order?.getReadyAt
+                      )
+                    }
+                  >
+                    {editingOrderData.id === order?.id &&
+                    editingOrderData.field === 'getReadyAt' ? (
+                      <div className={styles.inputContainer}>
+                        <TextField
+                          type='date'
+                          className='text-field'
+                          fullWidth
+                          required
+                          value={editingOrderData.value}
+                          onChange={handleFieldChange}
+                        />
+                        <Button
+                          className={styles.buttonInput}
+                          type='submit'
+                          variant='contained'
+                          onClick={handleFieldConfirm}
+                        >
+                          Сохранить
+                        </Button>
+                      </div>
+                    ) : (
+                      format(parseISO(order.getReadyAt), "dd MMMM yyyy'г'", {
+                        locale: ru,
+                      })
+                    )}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
                     {order?.User?.full_name}
@@ -315,23 +296,26 @@ export default function Order() {
                   </TableCell>
                   <TableCell
                     className={styles.tableCell}
-                    onClick={() => handleTotalClick(order?.id, order?.total)}
+                    onClick={() =>
+                      handleFieldClick(order?.id, 'total', order?.total)
+                    }
                   >
-                    {order?.id === editingOrderId ? (
+                    {editingOrderData.id === order?.id &&
+                    editingOrderData.field === 'total' ? (
                       <div className={styles.inputContainer}>
                         <TextField
                           type='number'
                           className='text-field'
                           fullWidth
                           required
-                          value={newTotal}
-                          onChange={handleTotalChange}
+                          value={editingOrderData.value}
+                          onChange={handleFieldChange}
                         />
                         <Button
                           className={styles.buttonInput}
                           type='submit'
                           variant='contained'
-                          onClick={handleTotalConfirm}
+                          onClick={handleFieldConfirm}
                         >
                           Сохранить
                         </Button>
@@ -343,24 +327,29 @@ export default function Order() {
                   <TableCell
                     className={styles.tableCell}
                     onClick={() =>
-                      handlePrepaymentClick(order?.id, order?.prepayment)
+                      handleFieldClick(
+                        order?.id,
+                        'prepayment',
+                        order?.prepayment
+                      )
                     }
                   >
-                    {order?.id === editingOrderId ? (
+                    {editingOrderData.id === order?.id &&
+                    editingOrderData.field === 'prepayment' ? (
                       <div className={styles.inputContainer}>
                         <TextField
                           type='number'
                           className='text-field'
                           fullWidth
                           required
-                          value={newPrepayment}
-                          onChange={handlePrepaymentChange}
+                          value={editingOrderData.value}
+                          onChange={handleFieldChange}
                         />
                         <Button
                           className={styles.buttonInput}
                           type='submit'
                           variant='contained'
-                          onClick={handlePrepaymentConfirm}
+                          onClick={handleFieldConfirm}
                         >
                           Сохранить
                         </Button>
@@ -414,10 +403,15 @@ export default function Order() {
                   <TableCell
                     className={styles.tableCell}
                     onClick={() =>
-                      handleCommentClick(order?.id, order?.admin_comments)
+                      handleFieldClick(
+                        order?.id,
+                        'admin_comments',
+                        order?.admin_comments
+                      )
                     }
                   >
-                    {order?.id === editingOrderId ? (
+                    {editingOrderData.id === order?.id &&
+                    editingOrderData.field === 'admin_comments' ? (
                       <div className={styles.inputContainer}>
                         <TextField
                           type='text'
@@ -426,14 +420,14 @@ export default function Order() {
                           required
                           multiline
                           rows={4}
-                          value={newAdminComment}
-                          onChange={handleCommentChange}
+                          value={editingOrderData.value}
+                          onChange={handleFieldChange}
                         />
                         <Button
                           className={styles.buttonInput}
                           type='submit'
                           variant='contained'
-                          onClick={handleCommentConfirm}
+                          onClick={handleFieldConfirm}
                         >
                           Сохранить
                         </Button>
