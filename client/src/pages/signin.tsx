@@ -35,7 +35,7 @@ export default function SignIn() {
         } else {
           // TODO временный костыль чтобы открывалась корзина на логине
           if (user) {
-            router.push('/cart');
+            router.push('/');
           } else {
             router.back();
           }

@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import styles from '../../styles/Cart.module.css';
+import styles from '../../styles/Checkout.module.css';
 
 export default function CoatSizeForm({ itemId, onCoatSizeChange }) {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
