@@ -17,7 +17,8 @@
 }
 
 .container.empty {
-  height: fit-content;
+  /* height: fit-content; */
+  /* margin: auto; */
 }
 
 .showdiv {
@@ -189,7 +190,8 @@
 
 .emptyCartMsg {
   text-align: center;
-  margin: 25% auto;
+  margin: 50% auto;
+  padding: 20px;
   font-size: 1.7rem;
 }
 
@@ -309,22 +311,8 @@
     height: 100%;
   }
 
-  .basketItemLeft {
-    width: 70%;
-    text-align: left;
-  }
-
   .basketItemLeft img {
-    height: 100%;
     width: 70px;
-  }
-
-  .basketItemTitle {
-    font-size: 1rem;
-  }
-
-  .basketItemContentLeft {
-    font-size: 1rem;
   }
 
   .basketItemContentRight {
@@ -341,5 +329,11 @@
 
   .iconsContainer button {
     padding: 0;
+  }
+}
+
+@media screen and (min-width: 901px) and (max-width: 1095px) {
+  .container {
+    top: 55px;
   }
 }
