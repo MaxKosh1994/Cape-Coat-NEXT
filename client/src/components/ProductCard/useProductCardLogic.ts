@@ -16,10 +16,10 @@ import { RootState } from '../../app/store';
 
 const useProductCardLogic = (
   id: number,
-  article: string,
-  photo: string,
-  name: string,
-  price: number,
+  // article: string,
+  // photo: string,
+  // name: string,
+  // price: number,
   initialIsFavorite: boolean,
   initialIsCart: boolean,
   newPrice?: number
@@ -49,7 +49,7 @@ const useProductCardLogic = (
         const updatedFavorites = favoritesFromStorage.filter(
           (favId) => favId !== id
         );
-        console.log('updatedFavorites', updatedFavorites);
+ 
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
       } else {
         const updatedFavorites = [...favoritesFromStorage, id];
@@ -60,11 +60,11 @@ const useProductCardLogic = (
       try {
         const favoriteData = {
           id,
-          article,
-          photo,
-          name,
-          newPrice,
-          price,
+          // article,
+          // photo,
+          // name,
+          // newPrice,
+          // price,
           isFavorite: !isFavorite,
         };
 
@@ -121,11 +121,11 @@ const useProductCardLogic = (
       try {
         const cartData = {
           id,
-          article,
-          photo,
-          name,
-          newPrice,
-          price,
+          // article,
+          // photo,
+          // name,
+          // newPrice,
+          // price,
           isFavorite,
           isCart: !isCart,
         };
