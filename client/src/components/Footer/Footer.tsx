@@ -90,7 +90,7 @@ export default function Footer() {
           <div className={styles.footerSection}>
             <div className={styles.footerTitle}>Покупателям:</div>
             <div className={styles.footerItem}>
-              <Link href="/FAQ">Информация о снятии мерок</Link>
+              <Link href="/FAQ/measurementsFAQ">Информация о снятии мерок</Link>
             </div>
             <div className={styles.footerItem}>
               <Link href="/privacy">Политика конфиденциальности</Link>

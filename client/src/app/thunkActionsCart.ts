@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addCartItem, delCartItem, getCartItems } from './cartSlice';
+import { addCartItem, delCartItem, emptyCart, getCartItems } from './cartSlice';
 
 import { RootState } from './store';
 import { useSelector } from 'react-redux';
@@ -7,9 +7,9 @@ import { Dispatch } from '@reduxjs/toolkit';
 
 export const getCartItemsThunk = () => async (dispatch, getState) => {
   try {
-    const { user } = getState().sessionSlice;
-    // console.log('user in thunk', user);
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}cart/${user}`, {
+    // const { user } = getState().sessionSlice;
+    console.log(getState().sessionSlice);
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}cart/`, {
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
@@ -47,6 +47,28 @@ export const delCartItemThunk = (data) => async (dispatch) => {
     return err;
   }
 };
+
+export const emptyCartThunk = (user) => async (dispatch) => {
+  try {
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_URL}cart/emptyCart/${user}`,
+      {
+        method: 'DELETE',
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    dispatch(emptyCart(res));
+    return res.status;
+  } catch (err) {
+    // dispatch(handleError(err))
+    console.log(err);
+    return err;
+  }
+};
+
 export const addCartItemsThunk = (id) => async (dispatch) => {
   try {
     const res = await axios.post(
