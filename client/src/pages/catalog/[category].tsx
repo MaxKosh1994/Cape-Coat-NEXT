@@ -15,7 +15,7 @@ export default function Category() {
   const dispatch = useDispatch();
 
   const card = useSelector(
-    (state: RootState) => state.CategorySlice.categoryItems
+    (state: RootState) => state.CategorySlice.category
   );
 
   useEffect(() => {
