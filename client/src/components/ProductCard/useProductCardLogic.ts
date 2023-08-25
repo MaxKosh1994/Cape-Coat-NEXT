@@ -30,65 +30,126 @@ const useProductCardLogic = (
   const [favCard, setFavCard] = useState();
 
   const { user } = useSelector((state: RootState) => state.sessionSlice);
+  // console.log(user);
 
   const favoriteHandler = async () => {
+    // if (isItemInFavorites) {
+    //   return;
+    // }
     setIsFavorite(!isFavorite);
     dispatch(toggleFavorite(id));
-    try {
-      const favoriteData = {
-        id,
-        article,
-        photo,
-        name,
-        newPrice,
-        price,
-        isFavorite: !isFavorite,
-      };
-      const favoriteAction = isFavorite ? removeFromFavorites : addToFavorites;
-      const favorite = await favoriteAction(favoriteData);
-      setFavCard(favorite);
-      dispatch(fetchFavouritesData(favorite));
+    // const localStorageData = localStorage.getItem('favorites');
+
+    if (!user) {
+      const favoritesFromStorage =
+        JSON.parse(localStorage.getItem('favorites')) || [];
+      // console.log(favoritesFromStorage)
+      if (isFavorite) {
+        console.log(isFavorite);
+        const updatedFavorites = favoritesFromStorage.filter(
+          (favId) => favId !== id
+        );
+ 
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      } else {
+        const updatedFavorites = [...favoritesFromStorage, id];
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      }
       dispatch(setLikedStatus(!isFavorite));
-    } catch (err) {
-      console.log(err);
+    } else {
+      try {
+        const favoriteData = {
+          id,
+          article,
+          photo,
+          name,
+          newPrice,
+          price,
+          isFavorite: !isFavorite,
+        };
+
+        const favoritesFromStorage =
+          JSON.parse(localStorage.getItem('favorites')) || [];
+
+        if (favoritesFromStorage.length > 0) {
+          // Отправить на сервер каждый товар из localStorage
+          await Promise.all(
+            favoritesFromStorage.map(async (favId) => {
+              const favData = { ...favoriteData, id: favId };
+              return addToFavorites(favData); // Ваша функция addToFavorites
+            })
+          );
+
+          // Удалить данные из localStorage после успешной отправки
+          localStorage.removeItem('favorites');
+
+          // Запросить обновленные данные об избранных с сервера
+          dispatch(fetchFavouritesData());
+          dispatch(setLikedStatus(true)); // Обновить статус "избранности"
+        } else {
+          const favoriteAction = isFavorite
+            ? removeFromFavorites
+            : addToFavorites;
+          const favorite = await favoriteAction(favoriteData);
+          setFavCard(favorite);
+          dispatch(fetchFavouritesData(favorite));
+          dispatch(setLikedStatus(!isFavorite));
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
   const cartHandler = async () => {
-    setIsCart((prevIsCart) => !prevIsCart);
+    setIsCart(!isCart);
     dispatch(toggleCart(id));
-    try {
-      if (!user) {
-        return;
-      }
 
-      const cartData = {
-        id,
-        article,
-        photo,
-        name,
-        newPrice,
-        price,
-        isFavorite,
-        isCart: !isCart,
-      };
-
+    if (!user) {
+      const cartItemsFromStorage =
+        JSON.parse(localStorage.getItem('cartItems')) || [];
       if (!isCart) {
-        const inCart = await addToCart(cartData);
-        const itemInCart = inCart[0];
-        setIsCart(itemInCart);
-        dispatch(addCartItem(inCart));
+        const updatedCartItems = [...cartItemsFromStorage, id];
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       } else {
-        const delCart = await removeFromCart(cartData);
-        dispatch(removeItem(delCart));
-        await dispatch(getCartItemsThunk(user));
+        const updatedCartItems = cartItemsFromStorage.filter(
+          (cartId) => cartId !== id
+        );
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       }
-    } catch (err) {
-      console.log(err);
+    } else {
+      try {
+        const cartData = {
+          id,
+          article,
+          photo,
+          name,
+          newPrice,
+          price,
+          isFavorite,
+          isCart: !isCart,
+        };
+
+        if (!isCart) {
+          const inCart = await addToCart(cartData);
+          const itemInCart = inCart[0];
+          setIsCart(itemInCart);
+          dispatch(addCartItem(inCart));
+        } else {
+          const delCart = await removeFromCart(cartData);
+          dispatch(removeItem(delCart));
+          await dispatch(getCartItemsThunk(user));
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
-
   useEffect(() => {
+    // if(user) {
+    //   console.log('hello')
+    //   localStorage.clear()
+    // }
     try {
       (async function (): Promise<void> {
         if (!user) {
@@ -119,13 +180,10 @@ const useProductCardLogic = (
         if (!user) {
           return;
         }
-        const response = await fetch(
-          process.env.NEXT_PUBLIC_URL + 'favorite',
-          {
-            method: 'GET',
-            credentials: 'include',
-          }
-        );
+        const response = await fetch(process.env.NEXT_PUBLIC_URL + 'favorite', {
+          method: 'GET',
+          credentials: 'include',
+        });
         if (response.status === 200) {
           const favorites = await response.json();
           const isProductFavorite = favorites.includes(id);

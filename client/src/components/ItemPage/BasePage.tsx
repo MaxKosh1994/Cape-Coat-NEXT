@@ -3,6 +3,7 @@ import styles from '../../styles/BasePage.module.css';
 import ProductCard from '@/components/ProductCard/ProductCard';
 
 export default function BasePage({ pageName, itemsArr }) {
+  // console.log(itemsArr);
   return (
     <>
       <Head>
@@ -19,11 +20,12 @@ export default function BasePage({ pageName, itemsArr }) {
               key={item.id}
               id={item.id}
               article={item.article}
-              photo={item?.photo || item?.Photos[0].photo}
+              photo={item?.photo || item?.Photos[0]?.photo}
               name={item.name}
               price={item.price}
               isFavorite={item.isFavorite}
               isCart={item.isCart}
+              newPrice={item.new_price}
             />
           ))}
         </div>
