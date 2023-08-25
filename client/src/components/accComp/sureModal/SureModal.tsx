@@ -6,9 +6,11 @@ import styles from './sureModal.module.css';
 import { signOutUserThunk } from '../../../app/thunkActionsAuth';
 import { useDispatch } from 'react-redux';
 import { checkSession } from '../../../app/sessionSlice';
+import { useRouter } from 'next/router';
 
 export default function SureModal({ open, setOpen }: ISureModal) {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [info, setInfo] = useState('');
 
   const logOutHandler = async (event: MouseEvent<HTMLButtonElement>) => {
@@ -18,6 +20,7 @@ export default function SureModal({ open, setOpen }: ISureModal) {
       setInfo('Вы вышли из аккаунта');
       setOpen(false);
       dispatch(checkSession(false));
+      router.push('/');
     } catch (Error) {
       console.log(Error);
     }
@@ -27,8 +30,8 @@ export default function SureModal({ open, setOpen }: ISureModal) {
     <Modal
       open={open}
       onClose={() => setOpen(false)}
-      aria-labelledby='modal-modal-title'
-      aria-describedby='modal-modal-description'
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
     >
       <Box className={styles.box}>
         <div className={styles.mainContainer}>
@@ -40,18 +43,18 @@ export default function SureModal({ open, setOpen }: ISureModal) {
             <Button
               onClick={() => setOpen(false)}
               className={styles.button}
-              type='submit'
-              variant='contained'
-              color='secondary'
+              type="submit"
+              variant="contained"
+              color="secondary"
             >
               Отмена
             </Button>
             <Button
               onClick={logOutHandler}
               className={styles.buttonExit}
-              type='submit'
-              variant='contained'
-              color='primary'
+              type="submit"
+              variant="contained"
+              color="primary"
             >
               Выйти
             </Button>
