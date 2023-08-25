@@ -3,14 +3,17 @@
   text-align: center;
   position: fixed;
   top: 65px;
+  right: 0;
+  /* left: 100; */
+  bottom: 0;
   margin-left: -400px;
-  width: 30.5%;
+  margin-right: -20px;
+  width: 40%;
   height: 100vh;
-  padding: 20px;
+  padding: 20px 20px 60px;
   background: white;
-  left: 90%;
   z-index: 99999999;
-  animation: emergeFromRight 1s forwards;
+  overflow: auto;
 }
 
 .container.empty {
@@ -25,6 +28,11 @@
 .hidediv {
   animation: hideToRight 1s forwards;
   opacity: 0;
+}
+
+.headerCart {
+  display: flex;
+  justify-content: space-between;
 }
 
 .headerItemCart {
@@ -209,5 +217,129 @@
   100% {
     right: -120px; /* Ending position */
     opacity: 0; /* Hidden */
+  }
+}
+
+@media screen and (min-width: 540px) and (max-width: 900px) {
+  .container {
+    width: 100%;
+    top: 0;
+  }
+
+  .basketItem {
+    height: 300px;
+  }
+
+  .basketItemLeft,
+  .basketItemRight {
+    height: 100%;
+  }
+  .basketItemLeft {
+    width: 70%;
+  }
+
+  .basketItemLeft img {
+    height: 100%;
+    width: 200px;
+  }
+
+  .basketItemTitle {
+    font-size: 1.3rem;
+  }
+
+  .basketItemContentLeft {
+    font-size: 1.3rem;
+  }
+
+  .basketItemContentRight {
+    font-size: 1.3rem;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .container {
+    width: 100%;
+    top: 0;
+  }
+
+  .basketItem {
+    height: 200px;
+  }
+
+  .basketItemLeft,
+  .basketItemRight {
+    height: 100%;
+  }
+
+  .basketItemLeft {
+    width: 70%;
+    text-align: left;
+  }
+
+  .basketItemLeft img {
+    height: 100%;
+    width: 100px;
+  }
+
+  .basketItemTitle {
+    font-size: 1rem;
+  }
+
+  .basketItemContentLeft {
+    font-size: 1rem;
+  }
+
+  .basketItemContentRight {
+    font-size: 1.3rem;
+  }
+}
+
+@media screen and (max-width: 340px) {
+  .container {
+    width: 100%;
+    top: 0;
+  }
+
+  .basketItem {
+    height: 200px;
+  }
+
+  .basketItemLeft,
+  .basketItemRight {
+    height: 100%;
+  }
+
+  .basketItemLeft {
+    width: 70%;
+    text-align: left;
+  }
+
+  .basketItemLeft img {
+    height: 100%;
+    width: 70px;
+  }
+
+  .basketItemTitle {
+    font-size: 1rem;
+  }
+
+  .basketItemContentLeft {
+    font-size: 1rem;
+  }
+
+  .basketItemContentRight {
+    font-size: 1rem;
+  }
+  .iconsContainer {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+  .iconsContainer svg {
+    width: 0.8em;
+    height: 0.8em;
+  }
+
+  .iconsContainer button {
+    padding: 0;
   }
 }

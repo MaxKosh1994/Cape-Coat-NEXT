@@ -72,7 +72,6 @@ const handleScrollAndHighlight = () => {
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showCart, setShowCart] = useState(false);
 
   const handleScroll = () => {
     if (window.scrollY > 0) {
@@ -92,7 +91,6 @@ export default function Navbar() {
   const isMobile = useMediaQuery('(max-width:1095px)');
 
   const router = useRouter();
-
   const dispatch = useAppDispatch();
   const isUserLogin = useSelector(
     (state: RootState) => state.sessionSlice.session
@@ -155,9 +153,25 @@ export default function Navbar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const [showCart, setShowCart] = useState(false);
+  const [prevAsPath, setPrevAsPath] = useState(router.asPath);
+
   const handleCartIconClick = (e: MouseEvent<HTMLButtonElement>) => {
-    setShowCart((prev) => !prev);
+    setShowCart((prev) =>
+      prev
+        ? !prev
+        : setTimeout(() => {
+            !prev;
+          }, 1001)
+    );
   };
+
+  useEffect(() => {
+    if (router.asPath !== prevAsPath) {
+      setShowCart(false);
+      setPrevAsPath(router.asPath);
+    }
+  }, [router.asPath, prevAsPath]);
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -300,7 +314,9 @@ export default function Navbar() {
         onSearchIconClick={onSearchIconClick}
       />
       {renderMenu}
-      {showCart && <CartMin show={showCart} />}
+      {showCart && (
+        <CartMin show={showCart} handleCartIconClick={handleCartIconClick} />
+      )}
     </>
   );
 }

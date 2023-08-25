@@ -12,8 +12,9 @@ import { getCartItems } from '../../app/cartSlice';
 import Image from 'next/image';
 import LikeButton from '@/components/likeButton/LikeButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CloseIcon from '@mui/icons-material/Close';
 
-export default function CartMin({ show }) {
+export default function CartMin({ show, handleCartIconClick }) {
   const user = useSelector((state) => state.sessionSlice.user);
   const name = useSelector((state) => state.sessionSlice.name);
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function CartMin({ show }) {
   const [cartTotal, setCartTotal] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [delError, setDelError] = useState('');
+  const [showDiv, setShowDiv] = useState(show);
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -64,13 +66,19 @@ export default function CartMin({ show }) {
       setCartItemsList([]);
     }
   };
-  console.log(cartTotal);
+
+  const handleCloseCart = () => {
+    setShowDiv((prev) => !prev);
+    setTimeout(() => {
+      handleCartIconClick();
+    }, 1001);
+  };
 
   return (
     <div
       className={`${styles.container}  ${
         cartItemsList.length === 0 ? styles.empty : ''
-      } ${show ? styles.showdiv : styles.hidediv}`}
+      } ${showDiv ? styles.showdiv : styles.hidediv}`}
     >
       <>
         {cartItemsList?.length === 0 ? (
@@ -82,9 +90,19 @@ export default function CartMin({ show }) {
           </>
         ) : (
           <>
-            <h1 className={styles.headerItemCart}>
-              Корзина&nbsp;<span>({cartItemsList.length})</span>
-            </h1>
+            <div className={styles.headerCart}>
+              <h1 className={styles.headerItemCart}>
+                Корзина&nbsp;<span>({cartItemsList.length})</span>
+              </h1>
+              <button
+                className={styles.basketItemDeleteButton}
+                type="button"
+                onClick={handleCloseCart}
+              >
+                <CloseIcon sx={{ fontSize: '2rem', color: '#656565' }} />
+              </button>
+            </div>
+
             <p className={styles.errorMsgCart}>{delError}</p>
             <div className={styles.cartContainer}>
               {cartItemsList.map((item) => (
@@ -154,7 +172,7 @@ export default function CartMin({ show }) {
                 </div>
               ))}
               <div className={styles.totalOrder}>
-                Сумма заказа: {cartTotal.toLocaleString()} &#8381;
+                Сумма: {cartTotal.toLocaleString()} &#8381;
               </div>
               <Link href="/cart">
                 <button className={styles.orderButton}>
