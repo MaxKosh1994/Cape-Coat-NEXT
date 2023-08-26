@@ -2,7 +2,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const orders = [];
 
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 12; i++) {
       const month = Math.ceil((i + 1) / 4);
       const date = new Date(2023, month);
       const getReadyAt = new Date(

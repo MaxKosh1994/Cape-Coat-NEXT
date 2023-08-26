@@ -3,7 +3,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const orderItems = [];
 
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 12; i++) {
       orderItems.push({
         order_id: i + 1,
         height: '180',
@@ -17,6 +17,20 @@ module.exports = {
         buttons: 'knopki',
         lining: '',
         item_id: i + 1,
+      });
+      orderItems.push({
+        order_id: i + 1,
+        height: '180',
+        length: '100',
+        sleeve: '40',
+        bust: '90',
+        waist: '60',
+        hips: '90',
+        saddle: '',
+        loops: true,
+        buttons: 'knopki',
+        lining: '',
+        item_id: i + 2,
       });
     }
 

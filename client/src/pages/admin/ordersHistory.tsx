@@ -6,9 +6,6 @@ import {
   updateOrderFieldFetch,
   updateOrderDataFetch,
   updateOrderItemFieldFetch,
-  //   updateOrderCommentsFetch,
-  //   updateOrderPrepaymentFetch,
-  //   updateOrderTotalFetch,
 } from '../../components/Admin/HTTP/adminApi';
 import styles from '../../styles/admin/OrdersAdmin.module.css';
 import {
@@ -26,7 +23,6 @@ import {
 import InfoModal from '../../components/Admin/InfoModal';
 import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
 import { IOrderAdmin } from '@/components/Admin/order/types';
-// import Checkbox from '@material-ui/core/Checkbox';
 
 export default function Order() {
   const [orders, setOrders] = useState([]);
@@ -85,7 +81,7 @@ export default function Order() {
   const handleFieldChangeBoolean = (event) => {
     setEditingOrderData((prev) => ({
       ...prev,
-      value: event.target.checked, // Измените здесь
+      value: event.target.checked,
     }));
   };
 
@@ -218,23 +214,28 @@ export default function Order() {
           <Table className={styles.table} aria-label='simple table'>
             <TableHead>
               <TableRow className={styles.tableRow}>
-                <TableCell className={styles.tableCell}>№</TableCell>
+                <TableCell sx={{ padding: '0px' }} className={styles.tableCell}>
+                  №
+                </TableCell>
+                <TableCell sx={{ padding: '0px' }} className={styles.tableCell}>
+                  Срочность
+                </TableCell>
                 <TableCell className={styles.tableMiddleCell}>
-                  Дата оформления
+                  Дата оформления*
                 </TableCell>
                 <TableCell className={styles.tableMiddleCell}>
                   Дата готовности
                 </TableCell>
-                <TableCell className={styles.tableCell}>ФИО</TableCell>
+                <TableCell className={styles.tableCell}>ФИО*</TableCell>
                 <TableCell className={styles.tableCell}>
-                  Telegram/Insta
+                  Telegram/Insta*
                 </TableCell>
-                <TableCell className={styles.tableCell}>Email</TableCell>
-                <TableCell className={styles.tableCell}>Телефон</TableCell>
-                <TableCell className={styles.tableCell}>Стоимость</TableCell>
+                <TableCell className={styles.tableCell}>Email*</TableCell>
+                <TableCell className={styles.tableCell}>Телефон*</TableCell>
                 <TableCell className={styles.tableCell}>Тип оплаты</TableCell>
+                <TableCell className={styles.tableCell}>Стоимость</TableCell>
                 <TableCell className={styles.tableCell}>Предоплата</TableCell>
-                <TableCell className={styles.tableCell}>Остаток</TableCell>
+                <TableCell className={styles.tableCell}>Остаток*</TableCell>
                 <TableCell className={styles.tableMiddleCell}>Адрес</TableCell>
                 <TableCell className={styles.tableCellBig}>
                   Комментарии
@@ -253,14 +254,12 @@ export default function Order() {
                   Подкладка
                 </TableCell>
 
-                <TableCell className={styles.tableCell}>Товары</TableCell>
+                <TableCell className={styles.tableCell}>Товары*</TableCell>
                 <TableCell className={styles.tableCellBig}>
                   Комментарии менеджера
                 </TableCell>
                 <TableCell className={styles.tableMiddleCell}>Статус</TableCell>
-                <TableCell className={styles.tableCell}>
-                  Формирование задания
-                </TableCell>
+                <TableCell className={styles.tableCell}>Задание</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -298,11 +297,49 @@ export default function Order() {
                   }}
                 >
                   <TableCell className={styles.tableCell}>{order.id}</TableCell>
+
+                  <TableCell
+                    sx={{
+                      backgroundColor: order?.urgent ? 'red' : 'inherit',
+                    }}
+                    className={styles.tableCell}
+                    onClick={() =>
+                      handleFieldClick(order?.id, 'urgent', !order?.urgent)
+                    }
+                  >
+                    {editingOrderData.id === order?.id &&
+                    editingOrderData.field === 'urgent' ? (
+                      <div className={styles.checkBoxContainer}>
+                        <Checkbox
+                          className={styles.checkBox}
+                          checked={
+                            editingOrderData.value === 'urgent'
+                              ? order?.urgent
+                              : editingOrderData.value
+                          }
+                          onChange={handleFieldChangeBoolean}
+                          inputProps={{ 'aria-label': 'primary checkbox' }}
+                        />
+                        <Button
+                          className={styles.buttonInput}
+                          type='submit'
+                          variant='contained'
+                          onClick={handleFieldConfirm}
+                        >
+                          Изменить
+                        </Button>
+                      </div>
+                    ) : (
+                      <div>{order.urgent ? 'Срочно' : 'Не срочно'}</div>
+                    )}
+                  </TableCell>
+
                   <TableCell className={styles.tableCell}>
                     {format(parseISO(order?.createdAt), "dd MMMM yyyy'г'", {
                       locale: ru,
                     })}
                   </TableCell>
+
                   <TableCell
                     className={styles.tableCell}
                     onClick={() =>
@@ -318,7 +355,7 @@ export default function Order() {
                       <div className={styles.inputContainer}>
                         <TextField
                           type='date'
-                          className='text-field'
+                          className={styles.dateInput}
                           fullWidth
                           required
                           value={editingOrderData.value}
@@ -364,13 +401,14 @@ export default function Order() {
                     {editingOrderData.id === order?.id &&
                     editingOrderData.field === 'payment_type' ? (
                       <div className={styles.inputContainer}>
-                        <TextField
+                        <input
+                          style={{ width: '100px' }}
+                          onChange={handleFieldChange}
+                          className={styles.inputText}
                           type='text'
-                          className='text-field'
                           fullWidth
                           required
                           value={editingOrderData.value}
-                          onChange={handleFieldChange}
                         />
                         <Button
                           className={styles.buttonInput}
@@ -394,13 +432,13 @@ export default function Order() {
                     {editingOrderData.id === order?.id &&
                     editingOrderData.field === 'total' ? (
                       <div className={styles.inputContainer}>
-                        <TextField
+                        <input
+                          style={{ width: '100px', fontSize: 'medium' }}
+                          onChange={handleFieldChange}
+                          className={styles.inputText}
                           type='number'
-                          className='text-field'
-                          fullWidth
                           required
                           value={editingOrderData.value}
-                          onChange={handleFieldChange}
                         />
                         <Button
                           className={styles.buttonInput}
@@ -428,13 +466,13 @@ export default function Order() {
                     {editingOrderData.id === order?.id &&
                     editingOrderData.field === 'prepayment' ? (
                       <div className={styles.inputContainer}>
-                        <TextField
+                        <input
+                          style={{ width: '100px', fontSize: 'medium' }}
+                          onChange={handleFieldChange}
+                          className={styles.inputText}
                           type='number'
-                          className='text-field'
-                          fullWidth
                           required
                           value={editingOrderData.value}
-                          onChange={handleFieldChange}
                         />
                         <Button
                           className={styles.buttonInput}
@@ -463,7 +501,7 @@ export default function Order() {
                       <div className={styles.inputContainer}>
                         <input
                           onChange={handleFieldChange}
-                          className={styles.input}
+                          className={styles.inputText}
                           type='text'
                           name='address'
                           placeholder='Введите адрес...'
@@ -491,13 +529,28 @@ export default function Order() {
                     {editingOrderData.id === order?.id &&
                     editingOrderData.field === 'comments' ? (
                       <div className={styles.inputContainer}>
-                        <input
-                          onChange={handleFieldChange}
-                          className={styles.input}
+                        <TextField
+                          sx={{
+                            height: '80px',
+                            fontSize: '14px',
+                            paddingTop: '4px',
+                            paddingBottom: '4px',
+                          }}
                           type='text'
-                          name='comments'
-                          placeholder='Введите комментарии...'
+                          className='text-field'
+                          fullWidth
+                          required
+                          multiline
+                          rows={4}
                           value={editingOrderData.value}
+                          onChange={handleFieldChange}
+                          InputProps={{
+                            sx: {
+                              fontSize: '14px',
+                              paddingTop: '2px',
+                              paddingBottom: '2px',
+                            },
+                          }}
                         />
                         <Button
                           className={styles.buttonInput}
@@ -526,13 +579,12 @@ export default function Order() {
                         editingOrderData.itemId === item?.id &&
                         editingOrderData.field === 'height' ? (
                           <div className={styles.inputContainer}>
-                            <TextField
-                              type='text'
+                            <input
+                              style={{ width: '100px', fontSize: 'medium' }}
+                              type='number'
                               className='text-field'
-                              fullWidth
                               required
-                              multiline
-                              rows={1}
+                              autoFocus
                               value={editingOrderData.value}
                               onChange={handleFieldChange}
                             />
@@ -549,7 +601,8 @@ export default function Order() {
                           <p
                             style={{
                               borderBottom: '0.5px solid black',
-                              marginBottom: '5px',
+                              marginBottom: '10px',
+                              marginTop: '5px',
                             }}
                             onClick={() =>
                               handleFieldClickMeasurements(
@@ -580,13 +633,12 @@ export default function Order() {
                         editingOrderData.itemId === item?.id &&
                         editingOrderData.field === 'length' ? (
                           <div className={styles.inputContainer}>
-                            <TextField
-                              type='text'
+                            <input
+                              style={{ width: '100px', fontSize: 'medium' }}
+                              type='number'
                               className='text-field'
-                              fullWidth
                               required
-                              multiline
-                              rows={1}
+                              autoFocus
                               value={editingOrderData.value}
                               onChange={handleFieldChange}
                             />
@@ -603,7 +655,8 @@ export default function Order() {
                           <p
                             style={{
                               borderBottom: '0.5px solid black',
-                              marginBottom: '5px',
+                              marginBottom: '10px',
+                              marginTop: '5px',
                             }}
                             onClick={() =>
                               handleFieldClickMeasurements(
@@ -634,13 +687,12 @@ export default function Order() {
                         editingOrderData.itemId === item?.id &&
                         editingOrderData.field === 'sleeve' ? (
                           <div className={styles.inputContainer}>
-                            <TextField
-                              type='text'
+                            <input
+                              style={{ width: '100px', fontSize: 'medium' }}
+                              type='number'
                               className='text-field'
-                              fullWidth
                               required
-                              multiline
-                              rows={1}
+                              autoFocus
                               value={editingOrderData.value}
                               onChange={handleFieldChange}
                             />
@@ -657,7 +709,8 @@ export default function Order() {
                           <p
                             style={{
                               borderBottom: '0.5px solid black',
-                              marginBottom: '5px',
+                              marginBottom: '10px',
+                              marginTop: '5px',
                             }}
                             onClick={() =>
                               handleFieldClickMeasurements(
@@ -688,13 +741,12 @@ export default function Order() {
                         editingOrderData.itemId === item?.id &&
                         editingOrderData.field === 'bust' ? (
                           <div className={styles.inputContainer}>
-                            <TextField
-                              type='text'
+                            <input
+                              style={{ width: '100px', fontSize: 'medium' }}
+                              type='number'
                               className='text-field'
-                              fullWidth
                               required
-                              multiline
-                              rows={1}
+                              autoFocus
                               value={editingOrderData.value}
                               onChange={handleFieldChange}
                             />
@@ -711,7 +763,8 @@ export default function Order() {
                           <p
                             style={{
                               borderBottom: '0.5px solid black',
-                              marginBottom: '5px',
+                              marginBottom: '10px',
+                              marginTop: '5px',
                             }}
                             onClick={() =>
                               handleFieldClickMeasurements(
@@ -742,13 +795,12 @@ export default function Order() {
                         editingOrderData.itemId === item?.id &&
                         editingOrderData.field === 'waist' ? (
                           <div className={styles.inputContainer}>
-                            <TextField
-                              type='text'
+                            <input
+                              style={{ width: '100px', fontSize: 'medium' }}
+                              type='number'
                               className='text-field'
-                              fullWidth
                               required
-                              multiline
-                              rows={1}
+                              autoFocus
                               value={editingOrderData.value}
                               onChange={handleFieldChange}
                             />
@@ -765,7 +817,8 @@ export default function Order() {
                           <p
                             style={{
                               borderBottom: '0.5px solid black',
-                              marginBottom: '5px',
+                              marginBottom: '10px',
+                              marginTop: '5px',
                             }}
                             onClick={() =>
                               handleFieldClickMeasurements(
@@ -796,13 +849,12 @@ export default function Order() {
                         editingOrderData.itemId === item?.id &&
                         editingOrderData.field === 'hips' ? (
                           <div className={styles.inputContainer}>
-                            <TextField
-                              type='text'
+                            <input
+                              style={{ width: '100px', fontSize: 'medium' }}
+                              type='number'
                               className='text-field'
-                              fullWidth
                               required
-                              multiline
-                              rows={1}
+                              autoFocus
                               value={editingOrderData.value}
                               onChange={handleFieldChange}
                             />
@@ -819,7 +871,8 @@ export default function Order() {
                           <p
                             style={{
                               borderBottom: '0.5px solid black',
-                              marginBottom: '5px',
+                              marginBottom: '10px',
+                              marginTop: '5px',
                             }}
                             onClick={() =>
                               handleFieldClickMeasurements(
@@ -850,13 +903,12 @@ export default function Order() {
                         editingOrderData.itemId === item?.id &&
                         editingOrderData.field === 'saddle' ? (
                           <div className={styles.inputContainer}>
-                            <TextField
-                              type='text'
+                            <input
+                              style={{ width: '100px', fontSize: 'medium' }}
+                              type='number'
                               className='text-field'
-                              fullWidth
                               required
-                              multiline
-                              rows={1}
+                              autoFocus
                               value={editingOrderData.value}
                               onChange={handleFieldChange}
                             />
@@ -873,7 +925,8 @@ export default function Order() {
                           <p
                             style={{
                               borderBottom: '0.5px solid black',
-                              marginBottom: '5px',
+                              marginBottom: '10px',
+                              marginTop: '5px',
                             }}
                             onClick={() =>
                               handleFieldClickMeasurements(
@@ -903,14 +956,18 @@ export default function Order() {
                         {editingOrderData.id === order?.id &&
                         editingOrderData.itemId === item?.id &&
                         editingOrderData.field === 'loops' ? (
-                          <div className={styles.inputContainer}>
+                          <div className={styles.checkBoxContainer}>
                             <Checkbox
-                              className='checkbox-field'
-                              checked={editingOrderData.value}
+                              className={styles.checkBox}
+                              checked={
+                                editingOrderData.value === undefined
+                                  ? item?.OrderItem?.loops
+                                  : editingOrderData.value
+                              }
                               onChange={handleFieldChangeBoolean}
                             />
                             <Button
-                              className={styles.buttonInput}
+                              className={styles.buttonCheckBox}
                               type='submit'
                               variant='contained'
                               onClick={handleFieldConfirmMeasurements}
@@ -922,19 +979,21 @@ export default function Order() {
                           <p
                             style={{
                               borderBottom: '0.5px solid black',
-                              marginBottom: '5px',
+                              marginBottom: '10px',
+                              marginTop: '5px',
                             }}
                             onClick={() =>
                               handleFieldClickMeasurements(
                                 order?.id,
                                 item?.id,
                                 'loops',
-                                item?.OrderItem?.loops
+                                !item?.OrderItem?.loops
                               )
                             }
                           >
                             {item?.article}:
                             <Checkbox
+                              className={styles.checkBox}
                               checked={item?.OrderItem?.loops}
                               disabled
                             />
@@ -957,13 +1016,12 @@ export default function Order() {
                         editingOrderData.itemId === item?.id &&
                         editingOrderData.field === 'buttons' ? (
                           <div className={styles.inputContainer}>
-                            <TextField
+                            <input
                               type='text'
+                              style={{ width: '100px', fontSize: 'medium' }}
                               className='text-field'
-                              fullWidth
                               required
-                              multiline
-                              rows={1}
+                              autoFocus
                               value={editingOrderData.value}
                               onChange={handleFieldChange}
                             />
@@ -980,7 +1038,8 @@ export default function Order() {
                           <p
                             style={{
                               borderBottom: '0.5px solid black',
-                              marginBottom: '5px',
+                              marginBottom: '10px',
+                              marginTop: '5px',
                             }}
                             onClick={() =>
                               handleFieldClickMeasurements(
@@ -1011,13 +1070,12 @@ export default function Order() {
                         editingOrderData.itemId === item?.id &&
                         editingOrderData.field === 'lining' ? (
                           <div className={styles.inputContainer}>
-                            <TextField
+                            <input
                               type='text'
+                              style={{ width: '100px', fontSize: 'medium' }}
                               className='text-field'
-                              fullWidth
                               required
-                              multiline
-                              rows={1}
+                              autoFocus
                               value={editingOrderData.value}
                               onChange={handleFieldChange}
                             />
@@ -1034,7 +1092,8 @@ export default function Order() {
                           <p
                             style={{
                               borderBottom: '0.5px solid black',
-                              marginBottom: '5px',
+                              marginBottom: '10px',
+                              marginTop: '5px',
                             }}
                             onClick={() =>
                               handleFieldClickMeasurements(
@@ -1058,6 +1117,9 @@ export default function Order() {
                         style={{
                           display: 'flex',
                           flexDirection: 'column',
+                          borderBottom: '0.5px solid black',
+                          marginBottom: '10px',
+                          marginTop: '5px',
                         }}
                         key={item?.article}
                       >
@@ -1079,6 +1141,12 @@ export default function Order() {
                     editingOrderData.field === 'admin_comments' ? (
                       <div className={styles.inputContainer}>
                         <TextField
+                          sx={{
+                            height: '80px',
+                            fontSize: '14px',
+                            paddingTop: '4px',
+                            paddingBottom: '4px',
+                          }}
                           type='text'
                           className='text-field'
                           fullWidth
@@ -1087,6 +1155,13 @@ export default function Order() {
                           rows={4}
                           value={editingOrderData.value}
                           onChange={handleFieldChange}
+                          InputProps={{
+                            sx: {
+                              fontSize: '14px',
+                              paddingTop: '2px',
+                              paddingBottom: '2px',
+                            },
+                          }}
                         />
                         <Button
                           className={styles.buttonInput}
@@ -1182,7 +1257,7 @@ export default function Order() {
                       type='submit'
                       variant='contained'
                     >
-                      Задание
+                      Сформировать
                     </Button>
                   </TableCell>
                 </TableRow>
