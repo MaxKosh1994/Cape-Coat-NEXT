@@ -249,7 +249,7 @@ export default function Order() {
                 <TableCell className={styles.tableCellMini}>Бёдра</TableCell>
                 <TableCell className={styles.tableCellMini}>Седло</TableCell>
                 <TableCell className={styles.tableCellMini}>Петли</TableCell>
-                <TableCell className={styles.tableCellMini}>Кнопки</TableCell>
+                <TableCell className={styles.tableCellMini}>Кнопки/Пуговицы</TableCell>
                 <TableCell className={styles.tableCellMini}>
                   Подкладка
                 </TableCell>
