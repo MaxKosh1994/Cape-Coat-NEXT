@@ -59,16 +59,16 @@ export default function CoatSizeForm({ itemId, onCoatSizeChange }) {
           className={styles.sizesFormSelect}
           onChange={handleInputChange}
         >
-          <option value="none">Без утепления (до 0 градусов) 16.500₽</option>
+          <option value="none">Без утепления (до 0 градусов)</option>
           <option value="minus5">
-            Тонкое утепление (до -5 градусов) 17.900₽
+            Тонкое утепление (до -5 градусов) +1.400₽
           </option>
           <option value="minus10">
-            Утепление с мембраной (до -10 градусов) *идеально для зимы* 17.900₽
+            Утепление с мембраной (до -10 градусов) *идеально для зимы* +1.400₽
           </option>
           <option value="minus20">
             Утепление двойным слоем с мембраной (до -20 градусов) *обьемное
-            утепление* 17.900₽
+            утепление* +1.400₽
           </option>
         </select>
       </div>
