@@ -6,7 +6,16 @@ module.exports = {
     for (let i = 0; i < 24; i++) {
       orderItems.push({
         order_id: i + 1,
-        measurements: 'тут мерки заказчика, пока строкой, это изменится!',
+        height: '180',
+        length: '100',
+        sleeve: '40',
+        bust: '90',
+        waist: '60',
+        hips: '90',
+        saddle: '',
+        loops: true,
+        buttons: 'knopki',
+        lining: '',
         item_id: i + 1,
       });
     }

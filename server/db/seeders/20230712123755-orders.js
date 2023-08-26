@@ -12,6 +12,7 @@ module.exports = {
       orders.push({
         user_id: 1,
         status: 'Заказ создан',
+        urgent: true,
         address: 'Улица Академика Пилюгина, дом 1, кв 777',
         payment_type: 'Тинькофф',
         total: 15400,

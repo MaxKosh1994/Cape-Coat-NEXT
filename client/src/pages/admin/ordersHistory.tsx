@@ -5,6 +5,7 @@ import {
   allOrderDataFetch,
   updateOrderFieldFetch,
   updateOrderDataFetch,
+  updateOrderItemFieldFetch,
   //   updateOrderCommentsFetch,
   //   updateOrderPrepaymentFetch,
   //   updateOrderTotalFetch,
@@ -20,10 +21,12 @@ import {
   Paper,
   Button,
   TextField,
+  Checkbox,
 } from '@mui/material';
 import InfoModal from '../../components/Admin/InfoModal';
 import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
 import { IOrderAdmin } from '@/components/Admin/order/types';
+// import Checkbox from '@material-ui/core/Checkbox';
 
 export default function Order() {
   const [orders, setOrders] = useState([]);
@@ -79,6 +82,13 @@ export default function Order() {
     }));
   };
 
+  const handleFieldChangeBoolean = (event) => {
+    setEditingOrderData((prev) => ({
+      ...prev,
+      value: event.target.checked, // Измените здесь
+    }));
+  };
+
   const handleFieldConfirm = async () => {
     const { id, field, value } = editingOrderData;
     const updatedOrder = await updateOrderFieldFetch(id, field, value);
@@ -90,6 +100,45 @@ export default function Order() {
     }
     setEditingOrderData({
       id: null,
+      field: '',
+      value: '',
+    });
+  };
+
+  //! --------------------Логика изменения полей с мерками--------------------------
+
+  const handleFieldClickMeasurements = (
+    orderId,
+    itemId,
+    currentField,
+    currentFieldValue
+  ) => {
+    setEditingOrderData({
+      id: orderId,
+      itemId: itemId,
+      field: currentField,
+      value: currentFieldValue.toString(),
+    });
+  };
+
+  const handleFieldConfirmMeasurements = async () => {
+    const { id, itemId, field, value } = editingOrderData;
+
+    const updatedOrder = await updateOrderItemFieldFetch(
+      id,
+      itemId,
+      field,
+      value
+    );
+    if (updatedOrder) {
+      const newOrders = orders.map((order) =>
+        order.id === id ? updatedOrder : order
+      );
+      setOrders(newOrders);
+    }
+    setEditingOrderData({
+      id: null,
+      itemId: null,
       field: '',
       value: '',
     });
@@ -113,7 +162,7 @@ export default function Order() {
   ];
 
   let ordersByMonth = orders.reduce((acc, order) => {
-    let date = format(parseISO(order.createdAt), 'MMMM yyyy');
+    let date = format(parseISO(order?.createdAt), 'MMMM yyyy');
     let found = acc.find((a) => a.date === date);
 
     if (!found) {
@@ -190,7 +239,20 @@ export default function Order() {
                 <TableCell className={styles.tableCellBig}>
                   Комментарии
                 </TableCell>
-                <TableCell className={styles.tableCellBig}>Размеры</TableCell>
+
+                <TableCell className={styles.tableCellMini}>Рост</TableCell>
+                <TableCell className={styles.tableCellMini}>Длина</TableCell>
+                <TableCell className={styles.tableCellMini}>Рукав</TableCell>
+                <TableCell className={styles.tableCellMini}>Об.груди</TableCell>
+                <TableCell className={styles.tableCellMini}>Талия</TableCell>
+                <TableCell className={styles.tableCellMini}>Бёдра</TableCell>
+                <TableCell className={styles.tableCellMini}>Седло</TableCell>
+                <TableCell className={styles.tableCellMini}>Петли</TableCell>
+                <TableCell className={styles.tableCellMini}>Кнопки</TableCell>
+                <TableCell className={styles.tableCellMini}>
+                  Подкладка
+                </TableCell>
+
                 <TableCell className={styles.tableCell}>Товары</TableCell>
                 <TableCell className={styles.tableCellBig}>
                   Комментарии менеджера
@@ -450,6 +512,7 @@ export default function Order() {
                       <span>{order?.comments}</span>
                     )}
                   </TableCell>
+
                   <TableCell className={styles.tableCell}>
                     {order?.Items?.map((item) => (
                       <div
@@ -459,17 +522,536 @@ export default function Order() {
                         }}
                         key={item?.article}
                       >
-                        <p
-                          style={{
-                            borderBottom: '0.5px solid black',
-                            marginBottom: '5px',
-                          }}
-                        >
-                          {item?.article}: {item?.OrderItem?.measurements}
-                        </p>
+                        {editingOrderData.id === order?.id &&
+                        editingOrderData.itemId === item?.id &&
+                        editingOrderData.field === 'height' ? (
+                          <div className={styles.inputContainer}>
+                            <TextField
+                              type='text'
+                              className='text-field'
+                              fullWidth
+                              required
+                              multiline
+                              rows={1}
+                              value={editingOrderData.value}
+                              onChange={handleFieldChange}
+                            />
+                            <Button
+                              className={styles.buttonInput}
+                              type='submit'
+                              variant='contained'
+                              onClick={handleFieldConfirmMeasurements}
+                            >
+                              Сохранить
+                            </Button>
+                          </div>
+                        ) : (
+                          <p
+                            style={{
+                              borderBottom: '0.5px solid black',
+                              marginBottom: '5px',
+                            }}
+                            onClick={() =>
+                              handleFieldClickMeasurements(
+                                order?.id,
+                                item?.id,
+                                'height',
+                                item?.OrderItem?.height
+                              )
+                            }
+                          >
+                            {item?.article}: {item?.OrderItem?.height}
+                          </p>
+                        )}
                       </div>
                     ))}
                   </TableCell>
+
+                  <TableCell className={styles.tableCell}>
+                    {order?.Items?.map((item) => (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                        key={item?.id}
+                      >
+                        {editingOrderData.id === order?.id &&
+                        editingOrderData.itemId === item?.id &&
+                        editingOrderData.field === 'length' ? (
+                          <div className={styles.inputContainer}>
+                            <TextField
+                              type='text'
+                              className='text-field'
+                              fullWidth
+                              required
+                              multiline
+                              rows={1}
+                              value={editingOrderData.value}
+                              onChange={handleFieldChange}
+                            />
+                            <Button
+                              className={styles.buttonInput}
+                              type='submit'
+                              variant='contained'
+                              onClick={handleFieldConfirmMeasurements}
+                            >
+                              Сохранить
+                            </Button>
+                          </div>
+                        ) : (
+                          <p
+                            style={{
+                              borderBottom: '0.5px solid black',
+                              marginBottom: '5px',
+                            }}
+                            onClick={() =>
+                              handleFieldClickMeasurements(
+                                order?.id,
+                                item?.id,
+                                'length',
+                                item?.OrderItem?.length
+                              )
+                            }
+                          >
+                            {item?.article}: {item?.OrderItem?.length}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </TableCell>
+
+                  <TableCell className={styles.tableCell}>
+                    {order?.Items?.map((item) => (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                        key={item?.id}
+                      >
+                        {editingOrderData.id === order?.id &&
+                        editingOrderData.itemId === item?.id &&
+                        editingOrderData.field === 'sleeve' ? (
+                          <div className={styles.inputContainer}>
+                            <TextField
+                              type='text'
+                              className='text-field'
+                              fullWidth
+                              required
+                              multiline
+                              rows={1}
+                              value={editingOrderData.value}
+                              onChange={handleFieldChange}
+                            />
+                            <Button
+                              className={styles.buttonInput}
+                              type='submit'
+                              variant='contained'
+                              onClick={handleFieldConfirmMeasurements}
+                            >
+                              Сохранить
+                            </Button>
+                          </div>
+                        ) : (
+                          <p
+                            style={{
+                              borderBottom: '0.5px solid black',
+                              marginBottom: '5px',
+                            }}
+                            onClick={() =>
+                              handleFieldClickMeasurements(
+                                order?.id,
+                                item?.id,
+                                'sleeve',
+                                item?.OrderItem?.sleeve
+                              )
+                            }
+                          >
+                            {item?.article}: {item?.OrderItem?.sleeve}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </TableCell>
+
+                  <TableCell className={styles.tableCell}>
+                    {order?.Items?.map((item) => (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                        key={item?.id}
+                      >
+                        {editingOrderData.id === order?.id &&
+                        editingOrderData.itemId === item?.id &&
+                        editingOrderData.field === 'bust' ? (
+                          <div className={styles.inputContainer}>
+                            <TextField
+                              type='text'
+                              className='text-field'
+                              fullWidth
+                              required
+                              multiline
+                              rows={1}
+                              value={editingOrderData.value}
+                              onChange={handleFieldChange}
+                            />
+                            <Button
+                              className={styles.buttonInput}
+                              type='submit'
+                              variant='contained'
+                              onClick={handleFieldConfirmMeasurements}
+                            >
+                              Сохранить
+                            </Button>
+                          </div>
+                        ) : (
+                          <p
+                            style={{
+                              borderBottom: '0.5px solid black',
+                              marginBottom: '5px',
+                            }}
+                            onClick={() =>
+                              handleFieldClickMeasurements(
+                                order?.id,
+                                item?.id,
+                                'bust',
+                                item?.OrderItem?.bust
+                              )
+                            }
+                          >
+                            {item?.article}: {item?.OrderItem?.bust}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </TableCell>
+
+                  <TableCell className={styles.tableCell}>
+                    {order?.Items?.map((item) => (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                        key={item?.id}
+                      >
+                        {editingOrderData.id === order?.id &&
+                        editingOrderData.itemId === item?.id &&
+                        editingOrderData.field === 'waist' ? (
+                          <div className={styles.inputContainer}>
+                            <TextField
+                              type='text'
+                              className='text-field'
+                              fullWidth
+                              required
+                              multiline
+                              rows={1}
+                              value={editingOrderData.value}
+                              onChange={handleFieldChange}
+                            />
+                            <Button
+                              className={styles.buttonInput}
+                              type='submit'
+                              variant='contained'
+                              onClick={handleFieldConfirmMeasurements}
+                            >
+                              Сохранить
+                            </Button>
+                          </div>
+                        ) : (
+                          <p
+                            style={{
+                              borderBottom: '0.5px solid black',
+                              marginBottom: '5px',
+                            }}
+                            onClick={() =>
+                              handleFieldClickMeasurements(
+                                order?.id,
+                                item?.id,
+                                'waist',
+                                item?.OrderItem?.waist
+                              )
+                            }
+                          >
+                            {item?.article}: {item?.OrderItem?.waist}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </TableCell>
+
+                  <TableCell className={styles.tableCell}>
+                    {order?.Items?.map((item) => (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                        key={item?.id}
+                      >
+                        {editingOrderData.id === order?.id &&
+                        editingOrderData.itemId === item?.id &&
+                        editingOrderData.field === 'hips' ? (
+                          <div className={styles.inputContainer}>
+                            <TextField
+                              type='text'
+                              className='text-field'
+                              fullWidth
+                              required
+                              multiline
+                              rows={1}
+                              value={editingOrderData.value}
+                              onChange={handleFieldChange}
+                            />
+                            <Button
+                              className={styles.buttonInput}
+                              type='submit'
+                              variant='contained'
+                              onClick={handleFieldConfirmMeasurements}
+                            >
+                              Сохранить
+                            </Button>
+                          </div>
+                        ) : (
+                          <p
+                            style={{
+                              borderBottom: '0.5px solid black',
+                              marginBottom: '5px',
+                            }}
+                            onClick={() =>
+                              handleFieldClickMeasurements(
+                                order?.id,
+                                item?.id,
+                                'hips',
+                                item?.OrderItem?.hips
+                              )
+                            }
+                          >
+                            {item?.article}: {item?.OrderItem?.hips}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </TableCell>
+
+                  <TableCell className={styles.tableCell}>
+                    {order?.Items?.map((item) => (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                        key={item?.id}
+                      >
+                        {editingOrderData.id === order?.id &&
+                        editingOrderData.itemId === item?.id &&
+                        editingOrderData.field === 'saddle' ? (
+                          <div className={styles.inputContainer}>
+                            <TextField
+                              type='text'
+                              className='text-field'
+                              fullWidth
+                              required
+                              multiline
+                              rows={1}
+                              value={editingOrderData.value}
+                              onChange={handleFieldChange}
+                            />
+                            <Button
+                              className={styles.buttonInput}
+                              type='submit'
+                              variant='contained'
+                              onClick={handleFieldConfirmMeasurements}
+                            >
+                              Сохранить
+                            </Button>
+                          </div>
+                        ) : (
+                          <p
+                            style={{
+                              borderBottom: '0.5px solid black',
+                              marginBottom: '5px',
+                            }}
+                            onClick={() =>
+                              handleFieldClickMeasurements(
+                                order?.id,
+                                item?.id,
+                                'saddle',
+                                item?.OrderItem?.saddle
+                              )
+                            }
+                          >
+                            {item?.article}: {item?.OrderItem?.saddle}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </TableCell>
+
+                  <TableCell className={styles.tableCell}>
+                    {order?.Items?.map((item) => (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                        key={item?.id}
+                      >
+                        {editingOrderData.id === order?.id &&
+                        editingOrderData.itemId === item?.id &&
+                        editingOrderData.field === 'loops' ? (
+                          <div className={styles.inputContainer}>
+                            <Checkbox
+                              className='checkbox-field'
+                              checked={editingOrderData.value}
+                              onChange={handleFieldChangeBoolean}
+                            />
+                            <Button
+                              className={styles.buttonInput}
+                              type='submit'
+                              variant='contained'
+                              onClick={handleFieldConfirmMeasurements}
+                            >
+                              Сохранить
+                            </Button>
+                          </div>
+                        ) : (
+                          <p
+                            style={{
+                              borderBottom: '0.5px solid black',
+                              marginBottom: '5px',
+                            }}
+                            onClick={() =>
+                              handleFieldClickMeasurements(
+                                order?.id,
+                                item?.id,
+                                'loops',
+                                item?.OrderItem?.loops
+                              )
+                            }
+                          >
+                            {item?.article}:
+                            <Checkbox
+                              checked={item?.OrderItem?.loops}
+                              disabled
+                            />
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </TableCell>
+
+                  <TableCell className={styles.tableCell}>
+                    {order?.Items?.map((item) => (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                        key={item?.id}
+                      >
+                        {editingOrderData.id === order?.id &&
+                        editingOrderData.itemId === item?.id &&
+                        editingOrderData.field === 'buttons' ? (
+                          <div className={styles.inputContainer}>
+                            <TextField
+                              type='text'
+                              className='text-field'
+                              fullWidth
+                              required
+                              multiline
+                              rows={1}
+                              value={editingOrderData.value}
+                              onChange={handleFieldChange}
+                            />
+                            <Button
+                              className={styles.buttonInput}
+                              type='submit'
+                              variant='contained'
+                              onClick={handleFieldConfirmMeasurements}
+                            >
+                              Сохранить
+                            </Button>
+                          </div>
+                        ) : (
+                          <p
+                            style={{
+                              borderBottom: '0.5px solid black',
+                              marginBottom: '5px',
+                            }}
+                            onClick={() =>
+                              handleFieldClickMeasurements(
+                                order?.id,
+                                item?.id,
+                                'buttons',
+                                item?.OrderItem?.buttons
+                              )
+                            }
+                          >
+                            {item?.article}: {item?.OrderItem?.buttons}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </TableCell>
+
+                  <TableCell className={styles.tableCell}>
+                    {order?.Items?.map((item) => (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                        key={item?.id}
+                      >
+                        {editingOrderData.id === order?.id &&
+                        editingOrderData.itemId === item?.id &&
+                        editingOrderData.field === 'lining' ? (
+                          <div className={styles.inputContainer}>
+                            <TextField
+                              type='text'
+                              className='text-field'
+                              fullWidth
+                              required
+                              multiline
+                              rows={1}
+                              value={editingOrderData.value}
+                              onChange={handleFieldChange}
+                            />
+                            <Button
+                              className={styles.buttonInput}
+                              type='submit'
+                              variant='contained'
+                              onClick={handleFieldConfirmMeasurements}
+                            >
+                              Сохранить
+                            </Button>
+                          </div>
+                        ) : (
+                          <p
+                            style={{
+                              borderBottom: '0.5px solid black',
+                              marginBottom: '5px',
+                            }}
+                            onClick={() =>
+                              handleFieldClickMeasurements(
+                                order?.id,
+                                item?.id,
+                                'lining',
+                                item?.OrderItem?.lining
+                              )
+                            }
+                          >
+                            {item?.article}: {item?.OrderItem?.lining}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </TableCell>
+
                   <TableCell className={styles.tableCell}>
                     {order?.Items?.map((item) => (
                       <div

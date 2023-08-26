@@ -30,6 +30,13 @@
   border-bottom: 0.5px solid black;
 }
 
+.tableCellMini {
+  font-size: small;
+  border-right: 0.5px solid black;
+  border-bottom: 0.5px solid black;
+  min-width: 80px;
+}
+
 .tableMiddleCell {
   font-size: small;
   border-right: 0.5px solid black;

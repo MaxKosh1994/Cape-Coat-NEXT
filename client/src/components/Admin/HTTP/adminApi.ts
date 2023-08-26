@@ -168,3 +168,21 @@ export const updateOrderFieldFetch = async (
   );
   return await response.json();
 };
+
+export const updateOrderItemFieldFetch = async (
+  id: number,
+  itemId: number,
+  fieldName: string,
+  fieldValue: string
+): Promise<object> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}admin/order/updateOrderItemField/${id}/${itemId}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ [fieldName]: fieldValue }),
+    }
+  );
+  return await response.json();
+};
