@@ -30,6 +30,8 @@ export default function CheckoutPage() {
   const [promoUsed, setPromoUsed] = useState(false);
   const [promocodeErr, setPromocodeErr] = useState('');
   const [discount, setDiscount] = useState(0);
+  const [discountPercent, setDiscountPercent] = useState(0);
+  const [twoItemDiscount, setTwoItemDiscount] = useState(0);
   const [commentsInput, setCommentsInput] = useState('');
   const [orderStatus, setOrderStatus] = useState('');
   const [selectedDelivery, setSelectedDelivery] = useState('showroom');
@@ -112,60 +114,134 @@ export default function CheckoutPage() {
   }, [dispatch, user]);
 
   useEffect(() => {
+    const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
     const jacketItems = cartItemsList.filter((item) => item.category_id === 3);
+
     if (cartItemsList.length > 2) {
-      const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
       const discountPercentage = 0.05;
       const discountAmount = subtotal * discountPercentage;
-      setDiscount(discountAmount);
-      if (urgentMaking) {
-        const twentyPercentOfSubtotal = (subtotal * 20) / 100;
-        setUrgencyFee(twentyPercentOfSubtotal);
-        const updatedTotal =
-          subtotal - discountAmount + deliveryCost + twentyPercentOfSubtotal;
-        setCartTotal(updatedTotal);
+      setTwoItemDiscount(discountAmount);
+      if (discount) {
+        const newDisc = discountPercent * subtotal;
+        setDiscount(newDisc);
+        const updTotal = subtotal - newDisc - discountAmount + deliveryCost;
+        setCartTotal(updTotal);
+        if (urgentMaking) {
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          const updatedTotal =
+            subtotal -
+            newDisc -
+            discountAmount +
+            deliveryCost +
+            twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          const updatedTotal =
+            subtotal - newDisc - discountAmount + deliveryCost + deliveryCost;
+          setDiscount(newDisc);
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
       } else {
-        const updatedTotal = subtotal - discountAmount + deliveryCost;
-        setCartTotal(updatedTotal);
-        setUrgencyFee(0);
+        if (urgentMaking) {
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          const updatedTotal =
+            subtotal -
+            discount -
+            discountAmount +
+            deliveryCost +
+            twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          const updatedTotal =
+            subtotal - discount - discountAmount + deliveryCost + deliveryCost;
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
       }
-    } else if (jacketItems.length >= 2) {
-      const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
+    } else if (jacketItems.length > 2) {
       const subtotalJackets = jacketItems.reduce(
         (sum, item) => sum + item.price,
         0
       );
       const discountPercentage = 0.05;
       const discountAmount = subtotalJackets * discountPercentage;
-      setDiscount(discountAmount);
-      if (urgentMaking) {
-        const twentyPercentOfSubtotal = (subtotal * 20) / 100;
-        setUrgencyFee(twentyPercentOfSubtotal);
-        const updatedTotal =
-          subtotal - discountAmount + deliveryCost + twentyPercentOfSubtotal;
-        setCartTotal(updatedTotal);
-        setUrgencyFee(0);
+      setTwoItemDiscount(discountAmount);
+      if (discount) {
+        const newDisc = discountPercent * subtotal;
+        setDiscount(newDisc);
+        const updTotal = subtotal - newDisc - discountAmount + deliveryCost;
+        setCartTotal(updTotal);
+        if (urgentMaking) {
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          const updatedTotal =
+            subtotal -
+            newDisc -
+            discountAmount +
+            deliveryCost +
+            twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          const updatedTotal =
+            subtotal - newDisc - discountAmount + deliveryCost + deliveryCost;
+          setDiscount(newDisc);
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
       } else {
-        const updatedTotal = subtotal - discountAmount + deliveryCost;
-        setCartTotal(updatedTotal);
+        if (urgentMaking) {
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          const updatedTotal =
+            subtotal -
+            discount -
+            discountAmount +
+            deliveryCost +
+            twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          const updatedTotal =
+            subtotal - discount - discountAmount + deliveryCost + deliveryCost;
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
+      }
+    } else {
+      setTwoItemDiscount(0);
+      if (discount) {
+        const newDisc = discountPercent * subtotal;
+        setDiscount(newDisc);
+        const updTotal = subtotal - newDisc + deliveryCost;
+        setCartTotal(updTotal);
+        if (urgentMaking) {
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          const updatedTotal =
+            subtotal - discount + deliveryCost + twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          const updatedTotal = subtotal - discount + deliveryCost;
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
       }
     }
-  }, [cartItemsList, dispatch, urgentMaking]);
+  }, [
+    cartItemsList,
+    discount,
+    twoItemDiscount,
+    deliveryCost,
+    urgentMaking,
+    dispatch,
+    cartTotal,
+  ]);
 
-  useEffect(() => {
-    const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
-    if (urgentMaking) {
-      const twentyPercentOfSubtotal = (subtotal * 20) / 100;
-      setUrgencyFee(twentyPercentOfSubtotal);
-      const updatedTotal =
-        subtotal - discount + deliveryCost + twentyPercentOfSubtotal;
-      setCartTotal(updatedTotal);
-    } else {
-      const updatedTotal = subtotal - discount + deliveryCost;
-      setCartTotal(updatedTotal);
-      setUrgencyFee(0);
-    }
-  }, [cartItemsList, discount, deliveryCost, urgentMaking, dispatch]);
+  console.log('disc', discount);
+  console.log('2 item', twoItemDiscount);
+  console.log('total', cartTotal);
 
   useEffect(() => {
     if (selectedDelivery === 'showroom') {
@@ -296,10 +372,13 @@ export default function CheckoutPage() {
       const response = await isValidPromo.json();
       if (isValidPromo.status === 200) {
         if (discount === 0) {
+          //! fix?
+          setDiscountPercent(response.percent / 100);
           const disc = (response.percent / 100) * subtotal;
           setDiscount(disc);
           setPromoUsed(true);
         } else {
+          setDiscountPercent(response.percent / 100);
           const disc = discount + (response.percent / 100) * subtotal;
           setDiscount(disc);
           setPromoUsed(true);
@@ -825,7 +904,7 @@ export default function CheckoutPage() {
                     <div className={styles.orderSummaryRow}>
                       <span>Товары ({cartItemsList.length}):</span>
                       <div className={styles.itemPrices}>
-                        {!promocodeErr && discount ? (
+                        {(!promocodeErr && discount) || twoItemDiscount ? (
                           <>
                             <span
                               className={styles.itemPricesPrice}
@@ -852,9 +931,16 @@ export default function CheckoutPage() {
                     <div className={styles.orderSummaryRow}>
                       <span>Скидка:</span>
                       <div className={styles.itemPrices}>
-                        <span className={styles.itemPricesPrice}>
-                          {discount.toLocaleString()} &#8381;
-                        </span>
+                        {twoItemDiscount ? (
+                          <span className={styles.itemPricesPrice}>
+                            {(discount + twoItemDiscount).toLocaleString()}{' '}
+                            &#8381;
+                          </span>
+                        ) : (
+                          <span className={styles.itemPricesPrice}>
+                            {discount.toLocaleString()} &#8381;
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className={styles.orderSummaryRow}>
