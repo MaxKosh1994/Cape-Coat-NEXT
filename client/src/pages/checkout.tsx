@@ -239,10 +239,6 @@ export default function CheckoutPage() {
     cartTotal,
   ]);
 
-  console.log('disc', discount);
-  console.log('2 item', twoItemDiscount);
-  console.log('total', cartTotal);
-
   useEffect(() => {
     if (selectedDelivery === 'showroom') {
       setDeliveryCost(0);
@@ -333,7 +329,6 @@ export default function CheckoutPage() {
       }
       const orderData = {
         user,
-        cartItemsList,
         cartTotal,
         addressString,
         commentsInput,
