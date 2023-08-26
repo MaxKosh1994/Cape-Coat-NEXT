@@ -1,4 +1,5 @@
-const { Item, Order, User, OrderItem } = require('../../db/models');
+const { Order, User, OrderItem } = require('../../db/models');
+const { getItemsInUserCart } = require('../services/cartItemService');
 
 module.exports.createOrder = async (req, res) => {
   try {
@@ -13,22 +14,25 @@ module.exports.createOrder = async (req, res) => {
       },
       { raw: true },
     );
+
+    const cartItems = await getItemsInUserCart(currUser.id);
+
     if (newOrder) {
-      const orderItemsData = req.body.cartItemsList.map((oneItem) => ({
-        item_id: oneItem.id,
+      const orderItemsData = cartItems.map((oneItem) => ({
+        item_id: oneItem.item_id,
         order_id: newOrder.id,
-        height: oneItem.Carts.map((item) => item.CartItem.height).toString(),
-        length: oneItem.Carts.map((item) => item.CartItem.length).toString(),
-        sleeve: oneItem.Carts.map((item) => item.CartItem.sleeve).toString(),
-        bust: oneItem.Carts.map((item) => item.CartItem.bust).toString(),
-        waist: oneItem.Carts.map((item) => item.CartItem.waist).toString(),
-        hips: oneItem.Carts.map((item) => item.CartItem.hips).toString(),
-        saddle: oneItem.Carts.map((item) => item.CartItem.saddle).toString(),
-        loops: Boolean(oneItem.Carts.map((item) => item.CartItem.loops)),
-        buttons: oneItem.Carts.map((item) => item.CartItem.buttons).toString(),
-        lining: oneItem.Carts.map((item) => item.CartItem.lining).toString(),
+        height: oneItem.height.toString(),
+        length: oneItem.length.toString(),
+        sleeve: oneItem.sleeve.toString(),
+        bust: oneItem.bust.toString(),
+        waist: oneItem.waist.toString(),
+        hips: oneItem.hips.toString(),
+        saddle: oneItem.saddle.toString(),
+        loops: Boolean(oneItem.loops),
+        buttons: oneItem.buttons.toString(),
+        lining: oneItem.lining.toString(),
       }));
-      // console.log(orderItemsData);
+
       await OrderItem.bulkCreate(orderItemsData);
 
       res.json({
