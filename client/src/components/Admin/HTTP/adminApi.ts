@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const formDataIteamAxios = async (
   formData: object,
@@ -10,7 +10,7 @@ export const formDataIteamAxios = async (
       formData,
       {
         withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 'Content-Type': 'multipart/form-data' },
       }
     );
     const responseData: object = await response.data;
@@ -31,7 +31,7 @@ export const formDataCategoryAxios = async (
       formData,
       {
         withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 'Content-Type': 'multipart/form-data' },
       }
     );
     const responseData: object = await response.data;
@@ -53,7 +53,7 @@ export const formDataCollectionAxios = async (
       formData,
       {
         withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 'Content-Type': 'multipart/form-data' },
       }
     );
     const responseData: object = await response.data;
@@ -72,9 +72,9 @@ export const categoryDataFetch = async (
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}admin/category/allcategory`,
       {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
       }
     );
     const data = await response.json();
@@ -97,9 +97,9 @@ export const collectionDataFetch = async (
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}admin/collection/allcollection`,
       {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
       }
     );
     const data = await response.json();
@@ -118,15 +118,13 @@ export const allOrderDataFetch = async (setOrder): Promise<object> => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}admin/order/allorder`,
       {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
       }
     );
     const data = await response.json();
-    await data.allOrder.map((el) => {
-      setOrder((prev) => [...prev, el]);
-    });
+    setOrder(data.allOrder);
   } catch (error) {
     console.log(error);
   }
@@ -141,9 +139,9 @@ export const updateOrderDataFetch = async (
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}admin/order/update/${id}`,
       {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ status: status }),
       }
     );
@@ -152,4 +150,39 @@ export const updateOrderDataFetch = async (
   } catch (error) {
     console.log(error);
   }
+};
+
+export const updateOrderFieldFetch = async (
+  id: number,
+  fieldName: string,
+  fieldValue: string
+): Promise<object> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}admin/order/updateOrderField/${id}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ [fieldName]: fieldValue }),
+    }
+  );
+  return await response.json();
+};
+
+export const updateOrderItemFieldFetch = async (
+  id: number,
+  itemId: number,
+  fieldName: string,
+  fieldValue: string
+): Promise<object> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}admin/order/updateOrderItemField/${id}/${itemId}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ [fieldName]: fieldValue }),
+    }
+  );
+  return await response.json();
 };

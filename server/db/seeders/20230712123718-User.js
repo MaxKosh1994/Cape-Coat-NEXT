@@ -13,7 +13,7 @@ module.exports = {
           phone: '89505558888',
           full_name: 'бибус',
           address: 'бирибус',
-          telegram: '@',
+          telegram_instagram: '@',
           admin: false,
         },
         {
@@ -22,7 +22,7 @@ module.exports = {
           phone: '89505558888',
           full_name: 'юзер2',
           address: 'улица бассейная',
-          telegram: '@biba',
+          telegram_instagram: '@biba',
           admin: false,
         },
         {
@@ -31,7 +31,7 @@ module.exports = {
           phone: '89505558888',
           full_name: 'Алена или Паша',
           address: 'Ницца',
-          telegram: '@user3',
+          telegram_instagram: '@user3',
           admin: false,
         },
         {
@@ -40,7 +40,7 @@ module.exports = {
           phone: '89505558888',
           full_name: 'Max',
           address: 'кокойто адрес',
-          telegram: '@user4',
+          telegram_instagram: '@user4',
           admin: false,
         },
       ],

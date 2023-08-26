@@ -26,11 +26,27 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      payment_type: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
       total: {
         type: Sequelize.INTEGER,
       },
+      prepayment: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
       comments: {
         type: Sequelize.TEXT,
+      },
+      admin_comments: {
+        type: Sequelize.TEXT,
+        defaultValue: 'Комментарии к заказам',
+      },
+      getReadyAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
       },
       urgent: {
         type: Sequelize.BOOLEAN,

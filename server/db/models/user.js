@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       phone: DataTypes.STRING,
       full_name: DataTypes.STRING,
       address: DataTypes.STRING,
-      telegram: DataTypes.STRING,
+      telegram_instagram: DataTypes.STRING,
       admin: DataTypes.BOOLEAN,
     },
     {
