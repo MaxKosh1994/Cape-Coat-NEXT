@@ -9,15 +9,26 @@ module.exports.createOrder = async (req, res) => {
         address: req.body.addressString,
         total: req.body.cartTotal,
         comments: req.body.commentsInput,
+        urgent: req.body.urgentDelivery,
       },
       { raw: true },
     );
     if (newOrder) {
-      const orderItemsData = req.body.cartItemsList.map((cartItem) => ({
-        item_id: cartItem.id,
+      const orderItemsData = req.body.cartItemsList.map((oneItem) => ({
+        item_id: oneItem.id,
         order_id: newOrder.id,
+        height: oneItem.Carts.map((item) => item.CartItem.height).toString(),
+        length: oneItem.Carts.map((item) => item.CartItem.length).toString(),
+        sleeve: oneItem.Carts.map((item) => item.CartItem.sleeve).toString(),
+        bust: oneItem.Carts.map((item) => item.CartItem.bust).toString(),
+        waist: oneItem.Carts.map((item) => item.CartItem.waist).toString(),
+        hips: oneItem.Carts.map((item) => item.CartItem.hips).toString(),
+        saddle: oneItem.Carts.map((item) => item.CartItem.saddle).toString(),
+        loops: Boolean(oneItem.Carts.map((item) => item.CartItem.loops)),
+        buttons: oneItem.Carts.map((item) => item.CartItem.buttons).toString(),
+        lining: oneItem.Carts.map((item) => item.CartItem.lining).toString(),
       }));
-
+      // console.log(orderItemsData);
       await OrderItem.bulkCreate(orderItemsData);
 
       res.json({

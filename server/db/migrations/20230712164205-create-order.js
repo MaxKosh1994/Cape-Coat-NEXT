@@ -22,9 +22,6 @@ module.exports = {
         allowNull: false,
         defaultValue: 'Заказ создан',
       },
-      urgent: {
-        type: Sequelize.BOOLEAN,
-      },
       address: {
         type: Sequelize.TEXT,
         allowNull: false,
@@ -50,6 +47,9 @@ module.exports = {
       getReadyAt: {
         allowNull: true,
         type: Sequelize.DATE,
+      },
+      urgent: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,

@@ -6,6 +6,8 @@ import { ICategory, category, categoryClear } from '../../app/CategorySlice';
 import { useRouter } from 'next/router';
 import BasePage from '@/components/ItemPage/BasePage';
 import Custom404 from '../404';
+import { useLocation } from 'react-router-dom';
+import Link from 'next/link';
 
 export default function Category() {
   const [catName, setCatName] = useState('');

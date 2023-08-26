@@ -15,6 +15,7 @@ const rtkSlice = createSlice({
     startSession(state, action) {
       state.user = action.payload.email;
       state.name = action.payload.name;
+      state.session = true;
       state.isAdmin = action.payload.isAdmin;
     },
     endSession(state) {

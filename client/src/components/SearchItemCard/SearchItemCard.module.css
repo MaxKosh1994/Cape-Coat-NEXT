@@ -10,14 +10,14 @@
 .imageContainer {
   display: flex;
   flex-direction: column;
-  justify-content: start;
-  align-items: start;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .textContainer {
   display: flex;
   flex-direction: column;
-  align-items: end;
+  align-items: flex-end;
   width: 120%;
   padding-right: 0px;
 }

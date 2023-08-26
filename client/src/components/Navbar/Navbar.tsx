@@ -23,6 +23,7 @@ import { checkCartItemThunk } from '../../app/thunkActionsCart';
 import './navbarStyle.css';
 import NavigationMenu from './NavigationMenu/NavigationMenu';
 import MobileMenu from './MobileMenu/MobileMenu';
+import CartMin from '../Cart/CartMin';
 
 const theme = createTheme({
   palette: {
@@ -87,18 +88,14 @@ export default function Navbar() {
     };
   }, []);
 
-  const muiTheme = createTheme(theme);
   const isMobile = useMediaQuery('(max-width:1095px)');
-  const isTablet = useMediaQuery('(max-width:768px)');
 
   const router = useRouter();
-  const isHomePage = router.pathname === '/';
-
   const dispatch = useAppDispatch();
   const isUserLogin = useSelector(
     (state: RootState) => state.sessionSlice.session
   );
-  const user = useSelector((state: RootState) => state.sessionSlice.user);
+
   const isAdmin = useSelector((state: RootState) => state.sessionSlice.isAdmin);
   const favouriteItems = useSelector(
     (state: RootState) => state.favouriteSlice.favourites
@@ -111,16 +108,16 @@ export default function Navbar() {
   const [amountOfCartItem, setAmountOfCartItem] = useState(0);
   const [isNavbarWhite, setIsNavbarWhite] = useState(false);
   const onSearchIconClick = () => {
-    // console.log('1123124124');
     setIsNavbarWhite(!isNavbarWhite);
   };
 
   useEffect(() => {
     if (isUserLogin) {
+      dispatch(isUserLoginThunk());
       dispatch(fetchFavouritesData());
       dispatch(checkCartItemThunk());
     }
-  }, [isUserLogin, user, dispatch]);
+  }, [dispatch, isUserLogin]);
 
   useEffect(() => {
     dispatch(isUserLoginThunk());
@@ -155,6 +152,26 @@ export default function Navbar() {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  const [showCart, setShowCart] = useState(false);
+  const [prevAsPath, setPrevAsPath] = useState(router.asPath);
+
+  const handleCartIconClick = (e: MouseEvent<HTMLButtonElement>) => {
+    setShowCart((prev) =>
+      prev
+        ? !prev
+        : setTimeout(() => {
+            !prev;
+          }, 1001)
+    );
+  };
+
+  useEffect(() => {
+    if (router.asPath !== prevAsPath) {
+      setShowCart(false);
+      setPrevAsPath(router.asPath);
+    }
+  }, [router.asPath, prevAsPath]);
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -249,11 +266,7 @@ export default function Navbar() {
                 <Person2Icon />
               </IconButton>
             </Link>
-            <Link
-              className="header-favorite"
-              href="/account/favorites"
-              passHref
-            >
+            <Link className="header-favorite" href="/favorites" passHref>
               <IconButton
                 size="large"
                 aria-label="show 17 new notifications"
@@ -264,24 +277,25 @@ export default function Navbar() {
                 </Badge>
               </IconButton>
             </Link>
-            <Link
+            {/* <Link
               className="header-basket"
               href={isUserLogin ? '/cart' : '/signin'}
               passHref
+            > */}
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              sx={{ color: iconColour, padding: '8px' }}
+              onClick={handleCartIconClick}
             >
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                sx={{ color: iconColour, padding: '8px' }}
-              >
-                <Badge badgeContent={amountOfCartItem} color="error">
-                  <AddShoppingCart />
-                </Badge>
-              </IconButton>
-            </Link>
+              <Badge badgeContent={amountOfCartItem} color="error">
+                <AddShoppingCart />
+              </Badge>
+            </IconButton>
+            {/* </Link> */}
 
             <a href="javascript:;" className="search-ico"></a>
           </div>
@@ -296,6 +310,9 @@ export default function Navbar() {
         onSearchIconClick={onSearchIconClick}
       />
       {renderMenu}
+      {showCart && (
+        <CartMin show={showCart} handleCartIconClick={handleCartIconClick} />
+      )}
     </>
   );
 }
