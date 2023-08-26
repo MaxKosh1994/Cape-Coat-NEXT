@@ -475,11 +475,28 @@ export default function CheckoutPage() {
                           </div>
                         </div>
                         <div className={styles.basketItemContent}>
-                          <div className={styles.itemPrices}>
-                            <span className={styles.itemPricesPrice}>
-                              {item.price.toLocaleString()} &#8381;
-                            </span>
-                          </div>
+                          {item.in_stock ? (
+                            <>
+                              <div className={styles.itemPrices}>
+                                <span
+                                  className={`${styles.itemPricesPrice} ${styles.red}`}
+                                >
+                                  {item.new_price.toLocaleString()} &#8381;
+                                </span>
+                                <span
+                                  className={`${styles.itemPricesPrice}  ${styles.strikethrough}`}
+                                >
+                                  {item.price.toLocaleString()} &#8381;
+                                </span>
+                              </div>
+                            </>
+                          ) : (
+                            <div className={styles.itemPrice}>
+                              <span className={styles.itemPricesPrice}>
+                                {item.price.toLocaleString()} &#8381;
+                              </span>
+                            </div>
+                          )}
                         </div>
                         {item.in_stock ? (
                           <>
