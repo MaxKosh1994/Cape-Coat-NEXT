@@ -169,6 +169,7 @@ module.exports.addToCart = async (req, res) => {
       res.status(401).json({ message: 'Unauthorized' });
     }
   } catch (error) {
+    console.log('cart error', error);
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 };

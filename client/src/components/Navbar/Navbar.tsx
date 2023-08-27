@@ -210,7 +210,7 @@ export default function Navbar() {
                 height: '30px',
                 objectFit: 'cover',
                 marginBottom: isMobile ? '5px' : '0',
-                marginTop: isMobile && '0',
+                marginTop: isMobile ? '0' : '10px',
               }}
             />
           </Link>
@@ -279,8 +279,6 @@ export default function Navbar() {
                 </Badge>
               </IconButton>
             </Link>
-
-            <a href="javascript:;" className="search-ico"></a>
           </div>
         </div>
       </div>

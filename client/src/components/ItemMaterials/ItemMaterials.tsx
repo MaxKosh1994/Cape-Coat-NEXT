@@ -1,9 +1,11 @@
+// ItemMaterials.js
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 import './ItemMaterialsStyle.css';
+import CartButton from '../CartButton/CartButton';
 
-export default function ItemMaterials() {
+export default function ItemMaterials({ item }) {
   const materialsData = useSelector(
     (state: RootState) => state.itemSlice.materials
   );
@@ -14,13 +16,19 @@ export default function ItemMaterials() {
     url: `${materialsUrl}${material.photo}`,
     name: material.name,
   }));
-  const [openModal, setOpenModal] = useState(false);
+
   const [selectedImage, setSelectedImage] = useState('');
-  const handleImageClick = (imageUrl) => {
-    setSelectedImage(imageUrl);
-    setOpenModal(true);
+  const [materialName, setMaterialName] = useState('');
+  const [selectedMaterialId, setSelectedMaterialId] = useState(null);
+  const [materialAlert, setMaterialAlert] = useState('');
+
+  const handleImageClick = (url, name, materialId) => {
+    setSelectedImage(url);
+    setMaterialName(name);
+    setSelectedMaterialId(materialId);
+    setMaterialAlert('');
   };
-  console.log('textileData', materialsData);
+
   return (
     <div
       className="textile_choose_div"
@@ -29,17 +37,19 @@ export default function ItemMaterials() {
         flexDirection: 'column',
       }}
     >
-      <span className="textile_choose">Примеры материалов изделия</span>
+      <span className={`textile_choose ${materialAlert}`}>
+        Выберите материал: {materialName}
+      </span>
       <div className="materials">
         {textileData.map((textile, index) => (
-          <div className="one_material_div">
-            <span>{textile.name}</span>
+          <div className="one_material_div" key={textile.id}>
             <div
               className={`textile_icons${index === 0 ? ' first' : ''}${
                 index === textileData.length - 1 ? ' last' : ''
-              }`}
-              key={textile.id}
-              onClick={() => handleImageClick(textile.url)}
+              } ${selectedImage === textile.url ? 'selected' : ''}`}
+              onClick={() =>
+                handleImageClick(textile.url, textile.name, textile.id)
+              }
             >
               <img
                 src={textile.url}
@@ -55,6 +65,11 @@ export default function ItemMaterials() {
           </div>
         ))}
       </div>
+      <CartButton
+        item={item}
+        selectedMaterialId={selectedMaterialId}
+        setMaterialAlert={setMaterialAlert}
+      />
     </div>
   );
 }

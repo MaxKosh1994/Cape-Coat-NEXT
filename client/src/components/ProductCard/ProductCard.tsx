@@ -30,11 +30,11 @@ const ProductCard: React.FC<IProductCard> = ({
       newPrice
     );
 
-  const itemLink = useRouter().query.category;
-
+  const router = useRouter();
+  const { category } = router.query;
   return (
     <div className={styles.Card} key={id}>
-      <Link key={id} href={`${itemLink}/${id}`}>
+      <Link href={`/${category}/${id}`} as={`/catalog/${category}/${id}`}>
         <span className={styles.CardMedia}>
           <img
             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${photo}`}
