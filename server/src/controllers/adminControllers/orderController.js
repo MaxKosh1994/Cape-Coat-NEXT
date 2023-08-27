@@ -1,9 +1,15 @@
-const { Item, Order, User, OrderItem } = require('../../../db/models');
+const {
+  Item,
+  Order,
+  User,
+  OrderItem,
+  Material,
+} = require('../../../db/models');
 
 module.exports.readOrder = async (req, res) => {
   try {
     const allOrder = await Order.findAll({
-      include: [{ model: User }, { model: Item }],
+      include: [{ model: User }, { model: Item, include: { model: Material } }],
       nest: true,
     });
     res.status(200).json({ allOrder, message: 'success' });

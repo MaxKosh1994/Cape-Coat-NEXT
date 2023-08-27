@@ -20,7 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       urgent: DataTypes.BOOLEAN,
       address: DataTypes.TEXT,
-      payment_type: DataTypes.TEXT,
+      payment_type: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        defaultValue: 'Тинькофф',
+      },
       total: DataTypes.INTEGER,
       prepayment: DataTypes.INTEGER,
       residual_amount: {
@@ -34,7 +38,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         defaultValue: 'Комментарии к заказам',
       },
-      getReadyAt: DataTypes.DATE,
+      getReadyAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
