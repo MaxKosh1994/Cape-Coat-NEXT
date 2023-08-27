@@ -17,6 +17,7 @@ import CoatSizeForm from '@/components/Cart/coatSizeForm';
 import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
 import LikeButton from '@/components/likeButton/LikeButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import BackToTopArrow from '@/components/ToTopArrow/ToTopArrow';
 
 export default function CheckoutPage() {
   const user = useSelector((state) => state.sessionSlice.user);
@@ -227,6 +228,18 @@ export default function CheckoutPage() {
           setCartTotal(updatedTotal);
           setUrgencyFee(0);
         }
+      } else {
+        if (urgentMaking) {
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          const updatedTotal =
+            subtotal - discount + deliveryCost + twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          const updatedTotal = subtotal + deliveryCost;
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
       }
     }
   }, [
@@ -334,9 +347,33 @@ export default function CheckoutPage() {
         commentsInput,
         urgentMaking,
       };
+      const isMeasuresAdded = cartItemsList
+        .filter((item) => !item.in_stock)
+        .every((item) => {
+          const cartItems = item.Carts.map((cart) => cart.CartItem);
+          return cartItems.every((cartItem) => {
+            return (
+              cartItem.height !== null &&
+              cartItem.length !== null &&
+              cartItem.sleeve !== null &&
+              cartItem.bust !== null &&
+              cartItem.waist !== null &&
+              cartItem.hips !== null
+            );
+          });
+        });
+      console.log(isMeasuresAdded);
       if (addressString.length > 18) {
-        createOrder(orderData);
+        if (!isMeasuresAdded) {
+          setOrderStatus('Пожалуйста, введите все мерки для пошива изделия');
+          setTimeout(() => {
+            setOrderStatus('');
+          }, 2000);
+        } else {
+          createOrder(orderData);
+        }
       } else {
+        setOrderStatus;
         setOrderStatus('Пожалуйста, заполните адрес доставки');
         setTimeout(() => {
           setOrderStatus('');
@@ -372,6 +409,7 @@ export default function CheckoutPage() {
           const disc = (response.percent / 100) * subtotal;
           setDiscount(disc);
           setPromoUsed(true);
+          setPromocode('');
         } else {
           setDiscountPercent(response.percent / 100);
           const disc = discount + (response.percent / 100) * subtotal;
@@ -397,7 +435,6 @@ export default function CheckoutPage() {
       }, 1000);
     }
   };
-  console.log(cartItemsList);
 
   return (
     <>
@@ -721,19 +758,16 @@ export default function CheckoutPage() {
                   <div className={`${styles.formBlock} ${styles.commentCart}`}>
                     <label
                       className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
-                      // modelmodifiers="[object Object]"
                     >
                       <div className={styles.formControl}>
                         <label
                           className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
-                        >
-                          Укажите желаемую длину изделия или другие пожелания
-                        </label>
+                        ></label>
                         <textarea
                           className={`${styles.commentInput} ${styles.formInput}`}
                           role="text"
                           title="Комментарии"
-                          placeholder=""
+                          placeholder="Ваши пожелания..."
                           name="comments"
                           rows="5"
                           cols="50"
@@ -882,6 +916,7 @@ export default function CheckoutPage() {
                       </div>
                     )}
                   </div>
+                  <BackToTopArrow />
                 </section>
               </div>
               <div
@@ -896,6 +931,7 @@ export default function CheckoutPage() {
                       className={styles.promocodeInput}
                       type="text"
                       placeholder="Промокод"
+                      value={promocode}
                       onChange={handlePromocodeChange}
                     />
                   </p>
@@ -909,6 +945,11 @@ export default function CheckoutPage() {
                 {promocodeErr && (
                   <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
                     {promocodeErr}
+                  </p>
+                )}
+                {promoUsed && (
+                  <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
+                    Вы использовали промокод
                   </p>
                 )}
                 <div className={styles.orderSummary}>
