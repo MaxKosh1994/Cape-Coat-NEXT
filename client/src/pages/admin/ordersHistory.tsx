@@ -23,6 +23,7 @@ import {
 import InfoModal from '../../components/Admin/InfoModal';
 import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
 import { IOrderAdmin } from '@/components/Admin/order/types';
+import InfoContainer from '@/components/Admin/infoContainer/infoContainer';
 
 export default function Order() {
   const [orders, setOrders] = useState([]);
@@ -184,9 +185,12 @@ export default function Order() {
 
   const [pageNumber, setPageNumber] = useState(0);
 
+  console.log(orders);
+
   return (
     <>
       <NavAdminComp />
+      <InfoContainer />
       <div className={styles.mainDiv}>
         <div
           style={{
@@ -249,12 +253,19 @@ export default function Order() {
                 <TableCell className={styles.tableCellMini}>Бёдра</TableCell>
                 <TableCell className={styles.tableCellMini}>Седло</TableCell>
                 <TableCell className={styles.tableCellMini}>Петли</TableCell>
-                <TableCell className={styles.tableCellMini}>Кнопки/Пуговицы</TableCell>
+                <TableCell className={styles.tableCellMini}>
+                  Кнопки/Пуговицы
+                </TableCell>
                 <TableCell className={styles.tableCellMini}>
                   Подкладка
                 </TableCell>
 
-                <TableCell className={styles.tableCell}>Товары*</TableCell>
+                <TableCell className={styles.tableMiddleCell}>
+                  Товары*
+                </TableCell>
+                <TableCell className={styles.tableMiddleCell}>
+                  Материалы*
+                </TableCell>
                 <TableCell className={styles.tableCellBig}>
                   Комментарии менеджера
                 </TableCell>
@@ -273,30 +284,32 @@ export default function Order() {
                         'Уточнение мерок, отправка реквизитов для внесения предоплаты' ||
                       order?.status === 'Ожидание предоплаты' ||
                       order?.status === 'Предоплата получена'
-                        ? 'lightblue'
+                        ? 'rgba(147, 215, 255, 0.392)'
                         : order?.status === 'Задание сформировано' ||
                           order?.status ===
                             'Задание передано на производство' ||
                           order?.status ===
                             'Обратная связь по заданию от производства' ||
                           order?.status === 'Изделия в производстве'
-                        ? 'lightyellow'
+                        ? 'rgba(237, 255, 186, 0.39)'
                         : order?.status === 'Изделие отшито' ||
                           order?.status === 'Забрали заказ с производства'
-                        ? 'pink'
+                        ? 'rgba(222, 142, 230, 0.49)'
                         : order?.status ===
                             'Оповещение клиента, отправка реквизитов для внесения полной оплаты' ||
                           order?.status === 'Получена полная оплата'
                         ? 'rgba(158, 255, 158, 0.39)'
                         : order?.status === 'Заказ отправлен'
-                        ? 'lightgreen'
+                        ? 'rgba(133, 317, 130, 0.69)'
                         : order?.status === 'Возврат заказа' ||
                           order?.status === 'Перешив заказа'
-                        ? 'rgba(255, 0, 0, 0.409)'
+                        ? 'rgba(220, 61, 61, 0.79)'
                         : 'inherit',
                   }}
                 >
-                  <TableCell className={styles.tableCell}>{order.id}</TableCell>
+                  <TableCell className={styles.tableCell}>
+                    {order?.id}
+                  </TableCell>
 
                   <TableCell
                     sx={{
@@ -330,16 +343,17 @@ export default function Order() {
                         </Button>
                       </div>
                     ) : (
-                      <div>{order.urgent ? 'Срочно' : 'Не срочно'}</div>
+                      <div>{order?.urgent ? 'Срочно' : 'Не срочно'}</div>
                     )}
                   </TableCell>
 
                   <TableCell className={styles.tableCell}>
-                    {format(parseISO(order?.createdAt), "dd MMMM yyyy'г'", {
-                      locale: ru,
-                    })}
+                    <span>
+                      {format(parseISO(order?.createdAt), "dd MMMM yyyy'г'", {
+                        locale: ru,
+                      })}
+                    </span>
                   </TableCell>
-
                   <TableCell
                     className={styles.tableCell}
                     onClick={() =>
@@ -370,12 +384,21 @@ export default function Order() {
                           Сохранить
                         </Button>
                       </div>
+                    ) : order?.getReadyAt ? (
+                      <span>
+                        {format(
+                          parseISO(order?.getReadyAt),
+                          "dd MMMM yyyy'г'",
+                          {
+                            locale: ru,
+                          }
+                        )}
+                      </span>
                     ) : (
-                      format(parseISO(order.getReadyAt), "dd MMMM yyyy'г'", {
-                        locale: ru,
-                      })
+                      <span></span>
                     )}
                   </TableCell>
+
                   <TableCell className={styles.tableCell}>
                     {order?.User?.full_name}
                   </TableCell>
@@ -488,7 +511,7 @@ export default function Order() {
                     )}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
-                    {order.residual_amount?.toLocaleString()}
+                    {order?.residual_amount?.toLocaleString()}
                   </TableCell>
                   <TableCell
                     className={styles.tableCell}
@@ -1127,6 +1150,24 @@ export default function Order() {
                       </div>
                     ))}
                   </TableCell>
+
+                  <TableCell className={styles.tableCell}>
+                    {order?.Items?.map((item) => (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          borderBottom: '0.5px solid black',
+                          marginBottom: '10px',
+                          marginTop: '5px',
+                        }}
+                        key={item?.article}
+                      >
+                        арт {item?.article}: {item?.Material?.name}
+                      </div>
+                    ))}
+                  </TableCell>
+
                   <TableCell
                     className={styles.tableCell}
                     onClick={() =>

@@ -28,7 +28,8 @@ module.exports = {
       },
       payment_type: {
         type: Sequelize.TEXT,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: 'Тинькофф',
       },
       total: {
         type: Sequelize.INTEGER,
@@ -45,8 +46,9 @@ module.exports = {
         defaultValue: 'Комментарии к заказам',
       },
       getReadyAt: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW'),
       },
       urgent: {
         type: Sequelize.BOOLEAN,
