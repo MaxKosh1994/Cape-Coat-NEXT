@@ -52,11 +52,7 @@ export default function ItemMaterials({ item, itemData }) {
               .filter((el) => el.id === itemData.material_id)
               .map((textile, index) => (
                 <div className="one_material_div" key={textile.id}>
-                  <div
-                    className={`textile_icons${index === 0 ? ' first' : ''}${
-                      index === textileData.length - 1 ? ' last' : ''
-                    } ${selectedImage === textile.url ? 'selected' : ''}`}
-                  >
+                  <div className={`textile_icons selected`}>
                     <img
                       src={textile.url}
                       alt={`Textile ${textile.id}`}
@@ -107,6 +103,7 @@ export default function ItemMaterials({ item, itemData }) {
 
       <CartButton
         item={item}
+        itemData={itemData}
         selectedMaterialId={selectedMaterialId}
         setMaterialAlert={setMaterialAlert}
       />
