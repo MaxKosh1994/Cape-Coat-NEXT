@@ -74,6 +74,7 @@ export default function CheckoutPage() {
     });
   }
 
+  // Очищает корзину при успешном заказе
   const emptyCart = async () => {
     const empty = await dispatch(emptyCartThunk(user));
     if (empty === 200) {
@@ -81,6 +82,7 @@ export default function CheckoutPage() {
     }
   };
 
+  // Стучится на бек и создает заказ, если все проверки прошли
   const createOrder = async (data) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}order/new`, {
       method: 'POST',
@@ -90,11 +92,13 @@ export default function CheckoutPage() {
     });
     const re = await response.json();
     if (re.message === 'Что-то пошло не так, попробуйте позже') {
+      // если ошибка на беке
       setOrderStatus(re.message);
       setTimeout(() => {
         setOrderStatus('');
       }, 2000);
     } else {
+      // если все ок - очищает корзину, массив в редаксе и редиректит на спасибку
       emptyCart();
       dispatch(getCartItems([]));
       router.push('/thankyou');
@@ -102,6 +106,7 @@ export default function CheckoutPage() {
     }
   };
 
+  // стукается через санку на бек, грузит список товаров добавленных в корзину
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -114,22 +119,33 @@ export default function CheckoutPage() {
     fetchCartItems();
   }, [dispatch, user]);
 
+  // подсчет ИТОГО заказа
   useEffect(() => {
     const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
+    // фильтруем только жакеты
     const jacketItems = cartItemsList.filter((item) => item.category_id === 3);
 
     if (cartItemsList.length > 2) {
+      // если больше 2х товаров в корзине скидка 5%
       const discountPercentage = 0.05;
+      // считаем размер скидки
       const discountAmount = subtotal * discountPercentage;
+      // устанавливаем размер скидки для двух+ товаров
       setTwoItemDiscount(discountAmount);
+      // если есть скидка по промокоду, то считаем с учетом той скидки
       if (discount) {
+        // считает размер новой скидки по ее проценту
         const newDisc = discountPercent * subtotal;
+        // записываем размер скидки в стейт
         setDiscount(newDisc);
+        // пересчитываем и устанавливаем новый тотал
         const updTotal = subtotal - newDisc - discountAmount + deliveryCost;
         setCartTotal(updTotal);
         if (urgentMaking) {
+          // если срочный пошив, считает 20% от корзины и устанавливаем размер стоимости пошива
           const twentyPercentOfSubtotal = (subtotal * 20) / 100;
           setUrgencyFee(twentyPercentOfSubtotal);
+          // обновляем ИТОГО с учетом скидок, срочного пошива и доставки
           const updatedTotal =
             subtotal -
             newDisc -
@@ -138,13 +154,15 @@ export default function CheckoutPage() {
             twentyPercentOfSubtotal;
           setCartTotal(updatedTotal);
         } else {
+          // если несрочно - то считаем тотал с учетом скидок и доставки
           const updatedTotal =
-            subtotal - newDisc - discountAmount + deliveryCost + deliveryCost;
+            subtotal - newDisc - discountAmount + deliveryCost;
           setDiscount(newDisc);
           setCartTotal(updatedTotal);
           setUrgencyFee(0);
         }
       } else {
+        // если скидки нет (от промокода), то считаем так же срочную и несрочную доставку
         if (urgentMaking) {
           const twentyPercentOfSubtotal = (subtotal * 20) / 100;
           setUrgencyFee(twentyPercentOfSubtotal);
@@ -157,25 +175,29 @@ export default function CheckoutPage() {
           setCartTotal(updatedTotal);
         } else {
           const updatedTotal =
-            subtotal - discount - discountAmount + deliveryCost + deliveryCost;
+            subtotal - discount - discountAmount + deliveryCost;
           setCartTotal(updatedTotal);
           setUrgencyFee(0);
         }
       }
     } else if (jacketItems.length > 2) {
+      // если больше 2 товаров категории жакет, то подсчитываем их стоимость
       const subtotalJackets = jacketItems.reduce(
         (sum, item) => sum + item.price,
         0
       );
+      // считаем размер скидки 5% и пишем в стейт
       const discountPercentage = 0.05;
       const discountAmount = subtotalJackets * discountPercentage;
       setTwoItemDiscount(discountAmount);
       if (discount) {
+        // те же расчеты если есть скидка по промокоду
         const newDisc = discountPercent * subtotal;
         setDiscount(newDisc);
         const updTotal = subtotal - newDisc - discountAmount + deliveryCost;
         setCartTotal(updTotal);
         if (urgentMaking) {
+          // те же расчеты если срочный пошив
           const twentyPercentOfSubtotal = (subtotal * 20) / 100;
           setUrgencyFee(twentyPercentOfSubtotal);
           const updatedTotal =
@@ -186,14 +208,18 @@ export default function CheckoutPage() {
             twentyPercentOfSubtotal;
           setCartTotal(updatedTotal);
         } else {
+          // те же расчеты если несрочный пошив
           const updatedTotal =
-            subtotal - newDisc - discountAmount + deliveryCost + deliveryCost;
+            subtotal - newDisc - discountAmount + deliveryCost;
           setDiscount(newDisc);
           setCartTotal(updatedTotal);
           setUrgencyFee(0);
         }
       } else {
+        // если нет скидки по промокоду
         if (urgentMaking) {
+          // те же расчеты если срочный пошив
+
           const twentyPercentOfSubtotal = (subtotal * 20) / 100;
           setUrgencyFee(twentyPercentOfSubtotal);
           const updatedTotal =
@@ -204,38 +230,46 @@ export default function CheckoutPage() {
             twentyPercentOfSubtotal;
           setCartTotal(updatedTotal);
         } else {
+          // те же расчеты несрочный пошив
           const updatedTotal =
-            subtotal - discount - discountAmount + deliveryCost + deliveryCost;
+            subtotal - discount - discountAmount + deliveryCost;
           setCartTotal(updatedTotal);
           setUrgencyFee(0);
         }
       }
     } else {
+      // рассчитываем итоговую стоимость, если нет автоматических скидок по 2+ товарам категории
       setTwoItemDiscount(0);
       if (discount) {
+        // те же расчеты с учетом скидки по промокоду
         const newDisc = discountPercent * subtotal;
         setDiscount(newDisc);
         const updTotal = subtotal - newDisc + deliveryCost;
         setCartTotal(updTotal);
         if (urgentMaking) {
+          // те же расчеты со срочным пошивом
           const twentyPercentOfSubtotal = (subtotal * 20) / 100;
           setUrgencyFee(twentyPercentOfSubtotal);
           const updatedTotal =
             subtotal - discount + deliveryCost + twentyPercentOfSubtotal;
           setCartTotal(updatedTotal);
         } else {
+          // те же расчеты с несрочным пошивом
           const updatedTotal = subtotal - discount + deliveryCost;
           setCartTotal(updatedTotal);
           setUrgencyFee(0);
         }
       } else {
+        // те же расчеты когда нет скидки по промокоду
         if (urgentMaking) {
+          // те же расчеты со срочным пошивом
           const twentyPercentOfSubtotal = (subtotal * 20) / 100;
           setUrgencyFee(twentyPercentOfSubtotal);
           const updatedTotal =
             subtotal - discount + deliveryCost + twentyPercentOfSubtotal;
           setCartTotal(updatedTotal);
         } else {
+          // те же расчеты с несрочным пошивом
           const updatedTotal = subtotal + deliveryCost;
           setCartTotal(updatedTotal);
           setUrgencyFee(0);
@@ -253,6 +287,7 @@ export default function CheckoutPage() {
   ]);
 
   useEffect(() => {
+    // рассчитывает стоимость доставки, если в шоурум - 0, если по адресу считает 300
     if (selectedDelivery === 'showroom') {
       setDeliveryCost(0);
       setShowAddressInputs(false);
@@ -263,6 +298,8 @@ export default function CheckoutPage() {
     }
   }, [selectedDelivery]);
 
+  // отрабатыват по клику на иконку удаления
+  // удаляет из массива и с бека через санку
   const handleDeleteItemFromCart = async (itemId) => {
     try {
       const data = { itemId, user };
@@ -275,6 +312,7 @@ export default function CheckoutPage() {
     }
   };
 
+  // отображает форму введения мерок под товаром
   const handleDisplaySizesForm = (index, itemId: number) => {
     setShowParamsForm((prevState) => ({
       ...prevState,
@@ -282,10 +320,14 @@ export default function CheckoutPage() {
     }));
   };
 
+  // записывает изменения в инпутах формы введения мерок
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setParamsFormData({ ...paramsFormData, [e.target.name]: e.target.value });
   };
 
+  // дозаписывает изменения в кастомизированных формах
+  // имеется в виду для брюк добавляет седло
+  // для пальто и шуб утепление, etc
   const handleCustomFormChange = (updatedFields) => {
     setParamsFormData((prevState) => ({
       ...prevState,
@@ -293,12 +335,14 @@ export default function CheckoutPage() {
     }));
   };
 
+  // отрабатывает по клику на СОХРАНИТЬ при введении мерок
   const handleSaveSizesInputs = async (index: number, itemId: number) => {
     setParamsFormData((prevState) => ({
       ...prevState,
       itemId: itemId,
     }));
-    console.log(paramsFormData);
+
+    // записывает мерки к товару в CartItems
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}cart/measures/${itemId}`,
       {
@@ -310,6 +354,8 @@ export default function CheckoutPage() {
     );
     const res = await response.json();
     if (response.status === 200) {
+      // выводит мерки, если всё ок
+      // и прячет форму
       const userParams = `Ваш рост: ${res.height}см, длина изделия: ${res.length}см, длина рукава: ${res.sleeve}см, объем груди: ${res.bust}см, объем талии: ${res.waist}см, объем бедер: ${res.hips}см`;
       setUserParams((prevTexts) => {
         const updatedTexts = [...prevTexts];
@@ -320,26 +366,35 @@ export default function CheckoutPage() {
     }
   };
 
+  // отслеживает изменения в инпутах формы адреса доставки
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAddressInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  // отслеживает чекбокс Срочный пошив
   const handleUrgentChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUrgentMaking(e.target.checked);
   };
 
+  // отслеживает радио кнопки доставки - шоурум или сдек
   const handleDeliveryChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedDelivery(e.target.value);
   };
 
+  // отрабатывает по нажатию на ОФОРМИТЬ
   const handleCreateOrder = () => {
+    // проверяет введен ли адрес
     if (selectedDelivery !== '') {
       let addressString;
+      // если доставка выбрана сдек, то склеивает данные в строку
       if (selectedDelivery === 'post') {
         addressString = `${addressInputs.city}, ${addressInputs.street} дом ${addressInputs.number}, квартира ${addressInputs.flat}`;
       } else {
+        // если в шоурум, то записывает в переменную адрес шоурума
         addressString = 'Нижний Новгород, ул. Малая Покровская, 20';
       }
+      // создаем объект, который передадим на бек,
+      // в нем email клиента, сумма заказа, адрес, комментарии и срочный ли пошив
       const orderData = {
         user,
         cartTotal,
@@ -347,6 +402,7 @@ export default function CheckoutPage() {
         commentsInput,
         urgentMaking,
       };
+      // проверяем заполнил ли клиент мерки для всех товаров на пошив
       const isMeasuresAdded = cartItemsList
         .filter((item) => !item.in_stock)
         .every((item) => {
@@ -362,17 +418,20 @@ export default function CheckoutPage() {
             );
           });
         });
-      console.log(isMeasuresAdded);
+      // если адрес корректный
       if (addressString.length > 18) {
+        // проверяем мерки
         if (!isMeasuresAdded) {
           setOrderStatus('Пожалуйста, введите все мерки для пошива изделия');
           setTimeout(() => {
             setOrderStatus('');
           }, 2000);
         } else {
+          // если адрес и мерки в порядке - вызываем функцию создания заказа
           createOrder(orderData);
         }
       } else {
+        // если адрес доставки некорректный
         setOrderStatus;
         setOrderStatus('Пожалуйста, заполните адрес доставки');
         setTimeout(() => {
@@ -380,6 +439,7 @@ export default function CheckoutPage() {
         }, 2000);
       }
     } else {
+      // если не выбран способ доставки
       setOrderStatus('Пожалуйста, выберите способ доставки');
       setTimeout(() => {
         setOrderStatus('');
@@ -387,36 +447,47 @@ export default function CheckoutPage() {
     }
   };
 
+  // отслеживает изменения в блоке Комментарии
   const handleCommentChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setCommentsInput(e.target.value);
   };
 
+  // отслеживает инпут промокода
   const handlePromocodeChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setPromocode(e.target.value.trim());
   };
 
+  // отрабатывает по нажатию на ПРИМЕНИТЬ (промокод)
   const handleApplyPromocode = async (e: MouseEvent<HTMLButtonElement>) => {
+    // считаем подытог корзины
     const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
+    // если введен промокод и это первый введенный промокод
     if (promocode && !promoUsed) {
+      // проверяем на беке есть ли такой промокод
       const isValidPromo = await fetch(
         `${process.env.NEXT_PUBLIC_URL}cart/promocode/${promocode}`
       );
       const response = await isValidPromo.json();
       if (isValidPromo.status === 200) {
+        // если такой промокод есть, то считаем скидку
         if (discount === 0) {
-          //! fix?
+          // если до этого была ноль
           setDiscountPercent(response.percent / 100);
           const disc = (response.percent / 100) * subtotal;
           setDiscount(disc);
           setPromoUsed(true);
           setPromocode('');
         } else {
+          // если до этого уже была скидка
           setDiscountPercent(response.percent / 100);
+          // плюсуем существующую скидку
           const disc = discount + (response.percent / 100) * subtotal;
           setDiscount(disc);
           setPromoUsed(true);
+          setPromocode('');
         }
       } else {
+        // если ошибка с бека
         setPromocodeErr(response);
         setTimeout(() => {
           setPromocodeErr('');
@@ -424,11 +495,13 @@ export default function CheckoutPage() {
         setCartTotal(subtotal);
       }
     } else if (promoUsed) {
+      // если пользователь уже ввел 1 промокод
       setPromocodeErr('Вы уже использовали промокод');
       setTimeout(() => {
         setPromocodeErr('');
       }, 1000);
     } else {
+      // если отправляет пустую строку
       setPromocodeErr('Вы не ввели промокод');
       setTimeout(() => {
         setPromocodeErr('');
