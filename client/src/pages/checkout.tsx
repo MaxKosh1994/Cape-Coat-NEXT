@@ -17,6 +17,7 @@ import CoatSizeForm from '@/components/Cart/coatSizeForm';
 import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
 import LikeButton from '@/components/likeButton/LikeButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import BackToTopArrow from '@/components/ToTopArrow/ToTopArrow';
 
 export default function CheckoutPage() {
   const user = useSelector((state) => state.sessionSlice.user);
@@ -227,6 +228,18 @@ export default function CheckoutPage() {
           setCartTotal(updatedTotal);
           setUrgencyFee(0);
         }
+      } else {
+        if (urgentMaking) {
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          const updatedTotal =
+            subtotal - discount + deliveryCost + twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          const updatedTotal = subtotal + deliveryCost;
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
       }
     }
   }, [
@@ -396,6 +409,7 @@ export default function CheckoutPage() {
           const disc = (response.percent / 100) * subtotal;
           setDiscount(disc);
           setPromoUsed(true);
+          setPromocode('');
         } else {
           setDiscountPercent(response.percent / 100);
           const disc = discount + (response.percent / 100) * subtotal;
@@ -421,7 +435,6 @@ export default function CheckoutPage() {
       }, 1000);
     }
   };
-  console.log(cartItemsList);
 
   return (
     <>
@@ -903,6 +916,7 @@ export default function CheckoutPage() {
                       </div>
                     )}
                   </div>
+                  <BackToTopArrow />
                 </section>
               </div>
               <div
@@ -917,6 +931,7 @@ export default function CheckoutPage() {
                       className={styles.promocodeInput}
                       type="text"
                       placeholder="Промокод"
+                      value={promocode}
                       onChange={handlePromocodeChange}
                     />
                   </p>
@@ -930,6 +945,11 @@ export default function CheckoutPage() {
                 {promocodeErr && (
                   <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
                     {promocodeErr}
+                  </p>
+                )}
+                {promoUsed && (
+                  <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
+                    Вы использовали промокод
                   </p>
                 )}
                 <div className={styles.orderSummary}>
