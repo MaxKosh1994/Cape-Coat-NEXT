@@ -24,29 +24,48 @@ export default function CheckoutPage() {
   const name = useSelector((state) => state.sessionSlice.name);
   const router = useRouter();
   const dispatch = useDispatch();
+  // товары в корзине
   const [cartItemsList, setCartItemsList] = useState([]);
+  // ошибка при удалении товара из корзины
   const [delError, setDelError] = useState('');
+  // сумма корзины
   const [cartTotal, setCartTotal] = useState(0);
+  // введенный промокод
   const [promocode, setPromocode] = useState('');
+  // использовал ли юзер промокод
   const [promoUsed, setPromoUsed] = useState(false);
+  // ошибка с промокодом
   const [promocodeErr, setPromocodeErr] = useState('');
+  // размер скидки
   const [discount, setDiscount] = useState(0);
+  // размер скидки в %
   const [discountPercent, setDiscountPercent] = useState(0);
+  // скидка за 2+ товара
   const [twoItemDiscount, setTwoItemDiscount] = useState(0);
+  // комментарии к заказу
   const [commentsInput, setCommentsInput] = useState('');
+  // ошибка заказа или статус
   const [orderStatus, setOrderStatus] = useState('');
+  // какая выбрана доставка
   const [selectedDelivery, setSelectedDelivery] = useState('showroom');
+  // отображать или нет форму адреса
   const [showAddressInputs, setShowAddressInputs] = useState(false);
+  // чекбокс срочного пошива
   const [urgentMaking, setUrgentMaking] = useState('');
+  // стоимость срочного пошива
   const [urgencyFee, setUrgencyFee] = useState(0);
+  // форма адреса
   const [addressInputs, setAddressInputs] = useState({
     city: '',
     street: '',
     number: '',
     flat: '',
   });
+  // стоимость доставки
   const [deliveryCost, setDeliveryCost] = useState(0);
+  // отображать форму мерок, записывает индекс в массиве
   const [showParamsForm, setShowParamsForm] = useState({});
+  // введенные в форму мерки
   const [paramsFormData, setParamsFormData] = useState({
     itemId: 0,
     height: '',
@@ -60,10 +79,12 @@ export default function CheckoutPage() {
     buttons: '',
     lining: '',
   });
+  // записывет параметры товаров по индексу в массиве
   const [userParams, setUserParams] = useState(
     Array(cartItemsList.length).fill('')
   );
 
+  // отправляет письмо с подтверждением заказа
   function sendMail(name, user, order) {
     Email.send({
       SecureToken: 'ef79f30f-8ef6-4205-979a-b8e46f36a527',
