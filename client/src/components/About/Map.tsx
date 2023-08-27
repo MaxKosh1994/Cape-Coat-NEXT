@@ -53,7 +53,7 @@ const MapComp = () => {
     return null;
   }
 
-  return <div style={{ height: 400, width: 600 }} ref={mapRef}></div>;
+  return <div style={{ height: 700, width: 600 }} ref={mapRef}></div>;
 };
 
 export default MapComp;

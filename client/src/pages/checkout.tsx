@@ -1,8 +1,12 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { delCartItemThunk, getCartItemsThunk } from '../app/thunkActionsCart';
+import {
+  delCartItemThunk,
+  emptyCartThunk,
+  getCartItemsThunk,
+} from '../app/thunkActionsCart';
 import { getCartItems } from '../app/cartSlice';
-import styles from '../styles/Cart.module.css';
+import styles from '../styles/Checkout.module.css';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
@@ -13,31 +17,60 @@ import CoatSizeForm from '@/components/Cart/coatSizeForm';
 import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
 import LikeButton from '@/components/likeButton/LikeButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import BackToTopArrow from '@/components/ToTopArrow/ToTopArrow';
 
-export default function CartPage() {
+export default function CheckoutPage() {
   const user = useSelector((state) => state.sessionSlice.user);
   const name = useSelector((state) => state.sessionSlice.name);
   const router = useRouter();
   const dispatch = useDispatch();
+  // товары в корзине
   const [cartItemsList, setCartItemsList] = useState([]);
+  // ошибка при удалении товара из корзины
   const [delError, setDelError] = useState('');
+  // сумма корзины
   const [cartTotal, setCartTotal] = useState(0);
+  // введенный промокод
   const [promocode, setPromocode] = useState('');
+  // использовал ли юзер промокод
   const [promoUsed, setPromoUsed] = useState(false);
+  // ошибка с промокодом
   const [promocodeErr, setPromocodeErr] = useState('');
+  // размер скидки
   const [discount, setDiscount] = useState(0);
+  // размер скидки в %
+  const [discountPercent, setDiscountPercent] = useState(0);
+  // скидка за 2+ товара
+  const [twoItemDiscount, setTwoItemDiscount] = useState(0);
+  // комментарии к заказу
   const [commentsInput, setCommentsInput] = useState('');
+  // ошибка заказа или статус
   const [orderStatus, setOrderStatus] = useState('');
+  // какая выбрана доставка
   const [selectedDelivery, setSelectedDelivery] = useState('showroom');
+  // отображать или нет форму адреса
   const [showAddressInputs, setShowAddressInputs] = useState(false);
+  // чекбокс срочного пошива
+  const [urgentMaking, setUrgentMaking] = useState('');
+  // стоимость срочного пошива
+  const [urgencyFee, setUrgencyFee] = useState(0);
+  const [personalData, setPersonalData] = useState({
+    name: '',
+    email: '',
+    number: '',
+  });
+  // форма адреса
   const [addressInputs, setAddressInputs] = useState({
     city: '',
     street: '',
     number: '',
     flat: '',
   });
+  // стоимость доставки
   const [deliveryCost, setDeliveryCost] = useState(0);
+  // отображать форму мерок, записывает индекс в массиве
   const [showParamsForm, setShowParamsForm] = useState({});
+  // введенные в форму мерки
   const [paramsFormData, setParamsFormData] = useState({
     itemId: 0,
     height: '',
@@ -51,10 +84,12 @@ export default function CartPage() {
     buttons: '',
     lining: '',
   });
+  // записывет параметры товаров по индексу в массиве
   const [userParams, setUserParams] = useState(
     Array(cartItemsList.length).fill('')
   );
 
+  //!  отправляет письмо с подтверждением заказа
   function sendMail(name, user, order) {
     Email.send({
       SecureToken: 'ef79f30f-8ef6-4205-979a-b8e46f36a527',
@@ -64,21 +99,16 @@ export default function CartPage() {
       Body: `Уважаемый(ая) ${name}, вы указали этот почтовый ящик (${user}) при оформлении заказа на сайте Cape&Coat. ${order}`,
     });
   }
+
+  // Очищает корзину при успешном заказе
   const emptyCart = async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}cart/emptyCart/${user}`,
-      {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-      }
-    );
-    const re = await response.json();
-    if (re.success) {
+    const empty = await dispatch(emptyCartThunk(user));
+    if (empty === 200) {
       setCartItemsList([]);
     }
-    // TODO если корзина не удалилась
   };
+
+  // Стучится на бек и создает заказ, если все проверки прошли
   const createOrder = async (data) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}order/new`, {
       method: 'POST',
@@ -88,11 +118,13 @@ export default function CartPage() {
     });
     const re = await response.json();
     if (re.message === 'Что-то пошло не так, попробуйте позже') {
+      // если ошибка на беке
       setOrderStatus(re.message);
       setTimeout(() => {
         setOrderStatus('');
       }, 2000);
     } else {
+      // если все ок - очищает корзину, массив в редаксе и редиректит на спасибку
       emptyCart();
       dispatch(getCartItems([]));
       router.push('/thankyou');
@@ -100,6 +132,7 @@ export default function CartPage() {
     }
   };
 
+  // стукается через санку на бек, грузит список товаров добавленных в корзину
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -112,36 +145,175 @@ export default function CartPage() {
     fetchCartItems();
   }, [dispatch, user]);
 
+  // подсчет ИТОГО заказа
   useEffect(() => {
+    const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
+    // фильтруем только жакеты
     const jacketItems = cartItemsList.filter((item) => item.category_id === 3);
+
     if (cartItemsList.length > 2) {
-      const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
+      // если больше 2х товаров в корзине скидка 5%
       const discountPercentage = 0.05;
+      // считаем размер скидки
       const discountAmount = subtotal * discountPercentage;
-      setDiscount(discountAmount);
-      const updatedTotal = subtotal - discountAmount + deliveryCost;
-      setCartTotal(updatedTotal);
-    } else if (jacketItems.length >= 2) {
-      const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
+      // устанавливаем размер скидки для двух+ товаров
+      setTwoItemDiscount(discountAmount);
+      // если есть скидка по промокоду, то считаем с учетом той скидки
+      if (discount) {
+        // считает размер новой скидки по ее проценту
+        const newDisc = discountPercent * subtotal;
+        // записываем размер скидки в стейт
+        setDiscount(newDisc);
+        // пересчитываем и устанавливаем новый тотал
+        const updTotal = subtotal - newDisc - discountAmount + deliveryCost;
+        setCartTotal(updTotal);
+        if (urgentMaking) {
+          // если срочный пошив, считает 20% от корзины и устанавливаем размер стоимости пошива
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          // обновляем ИТОГО с учетом скидок, срочного пошива и доставки
+          const updatedTotal =
+            subtotal -
+            newDisc -
+            discountAmount +
+            deliveryCost +
+            twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          // если несрочно - то считаем тотал с учетом скидок и доставки
+          const updatedTotal =
+            subtotal - newDisc - discountAmount + deliveryCost;
+          setDiscount(newDisc);
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
+      } else {
+        // если скидки нет (от промокода), то считаем так же срочную и несрочную доставку
+        if (urgentMaking) {
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          const updatedTotal =
+            subtotal -
+            discount -
+            discountAmount +
+            deliveryCost +
+            twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          const updatedTotal =
+            subtotal - discount - discountAmount + deliveryCost;
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
+      }
+    } else if (jacketItems.length > 2) {
+      // если больше 2 товаров категории жакет, то подсчитываем их стоимость
       const subtotalJackets = jacketItems.reduce(
         (sum, item) => sum + item.price,
         0
       );
+      // считаем размер скидки 5% и пишем в стейт
       const discountPercentage = 0.05;
       const discountAmount = subtotalJackets * discountPercentage;
-      setDiscount(discountAmount);
-      const updatedTotal = subtotal - discountAmount + deliveryCost;
-      setCartTotal(updatedTotal);
+      setTwoItemDiscount(discountAmount);
+      if (discount) {
+        // те же расчеты если есть скидка по промокоду
+        const newDisc = discountPercent * subtotal;
+        setDiscount(newDisc);
+        const updTotal = subtotal - newDisc - discountAmount + deliveryCost;
+        setCartTotal(updTotal);
+        if (urgentMaking) {
+          // те же расчеты если срочный пошив
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          const updatedTotal =
+            subtotal -
+            newDisc -
+            discountAmount +
+            deliveryCost +
+            twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          // те же расчеты если несрочный пошив
+          const updatedTotal =
+            subtotal - newDisc - discountAmount + deliveryCost;
+          setDiscount(newDisc);
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
+      } else {
+        // если нет скидки по промокоду
+        if (urgentMaking) {
+          // те же расчеты если срочный пошив
+
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          const updatedTotal =
+            subtotal -
+            discount -
+            discountAmount +
+            deliveryCost +
+            twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          // те же расчеты несрочный пошив
+          const updatedTotal =
+            subtotal - discount - discountAmount + deliveryCost;
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
+      }
+    } else {
+      // рассчитываем итоговую стоимость, если нет автоматических скидок по 2+ товарам категории
+      setTwoItemDiscount(0);
+      if (discount) {
+        // те же расчеты с учетом скидки по промокоду
+        const newDisc = discountPercent * subtotal;
+        setDiscount(newDisc);
+        const updTotal = subtotal - newDisc + deliveryCost;
+        setCartTotal(updTotal);
+        if (urgentMaking) {
+          // те же расчеты со срочным пошивом
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          const updatedTotal =
+            subtotal - discount + deliveryCost + twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          // те же расчеты с несрочным пошивом
+          const updatedTotal = subtotal - discount + deliveryCost;
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
+      } else {
+        // те же расчеты когда нет скидки по промокоду
+        if (urgentMaking) {
+          // те же расчеты со срочным пошивом
+          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
+          setUrgencyFee(twentyPercentOfSubtotal);
+          const updatedTotal =
+            subtotal - discount + deliveryCost + twentyPercentOfSubtotal;
+          setCartTotal(updatedTotal);
+        } else {
+          // те же расчеты с несрочным пошивом
+          const updatedTotal = subtotal + deliveryCost;
+          setCartTotal(updatedTotal);
+          setUrgencyFee(0);
+        }
+      }
     }
-  }, [cartItemsList]);
+  }, [
+    cartItemsList,
+    discount,
+    twoItemDiscount,
+    deliveryCost,
+    urgentMaking,
+    dispatch,
+    cartTotal,
+  ]);
 
   useEffect(() => {
-    const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
-    const updatedTotal = subtotal - discount + deliveryCost;
-    setCartTotal(updatedTotal);
-  }, [cartItemsList, discount, deliveryCost]);
-
-  useEffect(() => {
+    // рассчитывает стоимость доставки, если в шоурум - 0, если по адресу считает 300
     if (selectedDelivery === 'showroom') {
       setDeliveryCost(0);
       setShowAddressInputs(false);
@@ -152,6 +324,8 @@ export default function CartPage() {
     }
   }, [selectedDelivery]);
 
+  // отрабатыват по клику на иконку удаления
+  // удаляет из массива и с бека через санку
   const handleDeleteItemFromCart = async (itemId) => {
     try {
       const data = { itemId, user };
@@ -163,6 +337,8 @@ export default function CartPage() {
       setDelError('Не получилось удалить товар, попробуйте позже.');
     }
   };
+
+  // отображает форму введения мерок под товаром
   const handleDisplaySizesForm = (index, itemId: number) => {
     setShowParamsForm((prevState) => ({
       ...prevState,
@@ -170,10 +346,19 @@ export default function CartPage() {
     }));
   };
 
+  // записывает изменения в форме персональных данных (если клиент не залогинен)
+  const handlePersonalDataInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPersonalData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  // записывает изменения в инпутах формы введения мерок
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setParamsFormData({ ...paramsFormData, [e.target.name]: e.target.value });
   };
 
+  // дозаписывает изменения в кастомизированных формах
+  // имеется в виду для брюк добавляет седло
+  // для пальто и шуб утепление, etc
   const handleCustomFormChange = (updatedFields) => {
     setParamsFormData((prevState) => ({
       ...prevState,
@@ -181,12 +366,14 @@ export default function CartPage() {
     }));
   };
 
+  // отрабатывает по клику на СОХРАНИТЬ при введении мерок
   const handleSaveSizesInputs = async (index: number, itemId: number) => {
     setParamsFormData((prevState) => ({
       ...prevState,
       itemId: itemId,
     }));
-    console.log(paramsFormData);
+
+    // записывает мерки к товару в CartItems
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}cart/measures/${itemId}`,
       {
@@ -198,6 +385,8 @@ export default function CartPage() {
     );
     const res = await response.json();
     if (response.status === 200) {
+      // выводит мерки, если всё ок
+      // и прячет форму
       const userParams = `Ваш рост: ${res.height}см, длина изделия: ${res.length}см, длина рукава: ${res.sleeve}см, объем груди: ${res.bust}см, объем талии: ${res.waist}см, объем бедер: ${res.hips}см`;
       setUserParams((prevTexts) => {
         const updatedTexts = [...prevTexts];
@@ -208,38 +397,97 @@ export default function CartPage() {
     }
   };
 
+  // отслеживает изменения в инпутах формы адреса доставки
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAddressInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  // отслеживает чекбокс Срочный пошив
+  const handleUrgentChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setUrgentMaking(e.target.checked);
+  };
+
+  // отслеживает радио кнопки доставки - шоурум или сдек
   const handleDeliveryChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedDelivery(e.target.value);
   };
 
+  // отрабатывает по нажатию на ОФОРМИТЬ
   const handleCreateOrder = () => {
+    // проверяет введен ли адрес
     if (selectedDelivery !== '') {
       let addressString;
+      // если доставка выбрана сдек, то склеивает данные в строку
       if (selectedDelivery === 'post') {
         addressString = `${addressInputs.city}, ${addressInputs.street} дом ${addressInputs.number}, квартира ${addressInputs.flat}`;
       } else {
+        // если в шоурум, то записывает в переменную адрес шоурума
         addressString = 'Нижний Новгород, ул. Малая Покровская, 20';
       }
-      const orderData = {
-        user,
-        cartItemsList,
-        cartTotal,
-        addressString,
-        commentsInput,
-      };
+
+      // проверяем заполнил ли клиент мерки для всех товаров на пошив
+      const isMeasuresAdded = cartItemsList
+        .filter((item) => !item.in_stock)
+        .every((item) => {
+          const cartItems = item.Carts.map((cart) => cart.CartItem);
+          return cartItems.every((cartItem) => {
+            return (
+              cartItem.height !== null &&
+              cartItem.length !== null &&
+              cartItem.sleeve !== null &&
+              cartItem.bust !== null &&
+              cartItem.waist !== null &&
+              cartItem.hips !== null
+            );
+          });
+        });
+      // если адрес корректный
       if (addressString.length > 18) {
-        createOrder(orderData);
+        // проверяем мерки
+        if (!isMeasuresAdded) {
+          setOrderStatus('Пожалуйста, введите все мерки для пошива изделия');
+          setTimeout(() => {
+            setOrderStatus('');
+          }, 2000);
+        } else {
+          // если адрес и мерки в порядке
+
+          // создаем объект, который передадим на бек,
+          // в нем email клиента, сумма заказа, адрес, комментарии и срочный ли пошив
+          if (user) {
+            // если клиент залогинен, собираем объект
+            const orderData = {
+              user,
+              cartTotal,
+              addressString,
+              commentsInput,
+              urgentMaking,
+            };
+            // вызываем функцию создания заказа
+            createOrder(orderData);
+          } else {
+            // если клиент не залогинен - собираем объект с данными из формы персональных данных
+            const orderData = {
+              personalData,
+              cartTotal,
+              addressString,
+              commentsInput,
+              urgentMaking,
+            };
+            // вызываем функцию создания заказа
+            createOrder(orderData);
+          }
+        }
       } else {
+        // если адрес доставки некорректный
+        setOrderStatus;
         setOrderStatus('Пожалуйста, заполните адрес доставки');
         setTimeout(() => {
           setOrderStatus('');
         }, 2000);
       }
     } else {
+      // если не выбран способ доставки
       setOrderStatus('Пожалуйста, выберите способ доставки');
       setTimeout(() => {
         setOrderStatus('');
@@ -247,32 +495,47 @@ export default function CartPage() {
     }
   };
 
+  // отслеживает изменения в блоке Комментарии
   const handleCommentChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setCommentsInput(e.target.value);
   };
 
+  // отслеживает инпут промокода
   const handlePromocodeChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setPromocode(e.target.value.trim());
   };
 
+  // отрабатывает по нажатию на ПРИМЕНИТЬ (промокод)
   const handleApplyPromocode = async (e: MouseEvent<HTMLButtonElement>) => {
+    // считаем подытог корзины
     const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
+    // если введен промокод и это первый введенный промокод
     if (promocode && !promoUsed) {
+      // проверяем на беке есть ли такой промокод
       const isValidPromo = await fetch(
         `${process.env.NEXT_PUBLIC_URL}cart/promocode/${promocode}`
       );
       const response = await isValidPromo.json();
       if (isValidPromo.status === 200) {
+        // если такой промокод есть, то считаем скидку
         if (discount === 0) {
+          // если до этого была ноль
+          setDiscountPercent(response.percent / 100);
           const disc = (response.percent / 100) * subtotal;
           setDiscount(disc);
           setPromoUsed(true);
+          setPromocode('');
         } else {
+          // если до этого уже была скидка
+          setDiscountPercent(response.percent / 100);
+          // плюсуем существующую скидку
           const disc = discount + (response.percent / 100) * subtotal;
           setDiscount(disc);
           setPromoUsed(true);
+          setPromocode('');
         }
       } else {
+        // если ошибка с бека
         setPromocodeErr(response);
         setTimeout(() => {
           setPromocodeErr('');
@@ -280,19 +543,20 @@ export default function CartPage() {
         setCartTotal(subtotal);
       }
     } else if (promoUsed) {
+      // если пользователь уже ввел 1 промокод
       setPromocodeErr('Вы уже использовали промокод');
       setTimeout(() => {
         setPromocodeErr('');
       }, 1000);
     } else {
+      // если отправляет пустую строку
       setPromocodeErr('Вы не ввели промокод');
       setTimeout(() => {
         setPromocodeErr('');
       }, 1000);
     }
   };
-  console.log(cartItemsList);
-  // console.log(cartItemsList.map((item) => item.Carts[0].CartItem.measurements));
+
   return (
     <>
       <Head>
@@ -364,11 +628,28 @@ export default function CartPage() {
                           </div>
                         </div>
                         <div className={styles.basketItemContent}>
-                          <div className={styles.itemPrices}>
-                            <span className={styles.itemPricesPrice}>
-                              {item.price.toLocaleString()} &#8381;
-                            </span>
-                          </div>
+                          {item.in_stock ? (
+                            <>
+                              <div className={styles.itemPrices}>
+                                <span
+                                  className={`${styles.itemPricesPrice} ${styles.red}`}
+                                >
+                                  {item.new_price.toLocaleString()} &#8381;
+                                </span>
+                                <span
+                                  className={`${styles.itemPricesPrice}  ${styles.strikethrough}`}
+                                >
+                                  {item.price.toLocaleString()} &#8381;
+                                </span>
+                              </div>
+                            </>
+                          ) : (
+                            <div className={styles.itemPrice}>
+                              <span className={styles.itemPricesPrice}>
+                                {item.price.toLocaleString()} &#8381;
+                              </span>
+                            </div>
+                          )}
                         </div>
                         {item.in_stock ? (
                           <>
@@ -563,6 +844,93 @@ export default function CartPage() {
                   ))}
                 </section>
 
+                {!user && (
+                  <section
+                    className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
+                  >
+                    <h2 className={styles.headerItemCart}>Ваши данные</h2>
+                    <div className={styles.formBlock}>
+                      <div className={styles.deliveryService}>
+                        <div className={styles.deliveryServiceForm}>
+                          <div>
+                            <div className={styles.inputLocation}>
+                              <div className={styles.formControl}>
+                                <label className={styles.formControlLabel}>
+                                  Имя
+                                </label>
+                                <input
+                                  role="text"
+                                  title="Имя"
+                                  placeholder=""
+                                  name="name"
+                                  className={styles.formInput}
+                                  onChange={handlePersonalDataInputChange}
+                                />
+                              </div>
+                              <div className={styles.formControl}>
+                                <label className={styles.formControlLabel}>
+                                  Email
+                                </label>
+                                <input
+                                  role="text"
+                                  title="Email*"
+                                  placeholder=""
+                                  name="email"
+                                  className={styles.formInput}
+                                  onChange={handlePersonalDataInputChange}
+                                />
+                              </div>
+                            </div>
+                            <div className={styles.inputGroup}>
+                              <div className={styles.inputLocation}>
+                                <div className={styles.formControl}>
+                                  <label className={styles.formControlLabel}>
+                                    Телефон
+                                  </label>
+                                  <input
+                                    role="text"
+                                    title="Телефон"
+                                    name="phone"
+                                    placeholder=""
+                                    className={styles.formInput}
+                                    onChange={handlePersonalDataInputChange}
+                                    disabled=""
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                )}
+                <section
+                  className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
+                >
+                  <h2 className={styles.headerItemCart}>Срочный пошив</h2>
+                  <div className={styles.formBlock}>
+                    <label
+                      id="urgent"
+                      className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+                    >
+                      <input
+                        type="checkbox"
+                        name="urgent"
+                        className={styles.checkboxIcon}
+                        onChange={handleUrgentChange}
+                      />
+                      <span className={styles.checkboxLabel}>
+                        <span className={styles.checkboxHeader}>
+                          Изготовление изделия за 5 дней
+                        </span>
+                        <span className={styles.checkboxDescription}>
+                          <em>+20% к стоимости изделия</em>
+                        </span>
+                      </span>
+                    </label>
+                  </div>
+                </section>
                 <section
                   className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
                 >
@@ -572,19 +940,16 @@ export default function CartPage() {
                   <div className={`${styles.formBlock} ${styles.commentCart}`}>
                     <label
                       className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
-                      // modelmodifiers="[object Object]"
                     >
                       <div className={styles.formControl}>
                         <label
                           className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
-                        >
-                          Укажите желаемую длину изделия или другие пожелания
-                        </label>
+                        ></label>
                         <textarea
                           className={`${styles.commentInput} ${styles.formInput}`}
                           role="text"
                           title="Комментарии"
-                          placeholder=""
+                          placeholder="Ваши пожелания..."
                           name="comments"
                           rows="5"
                           cols="50"
@@ -733,6 +1098,7 @@ export default function CartPage() {
                       </div>
                     )}
                   </div>
+                  <BackToTopArrow />
                 </section>
               </div>
               <div
@@ -747,6 +1113,7 @@ export default function CartPage() {
                       className={styles.promocodeInput}
                       type="text"
                       placeholder="Промокод"
+                      value={promocode}
                       onChange={handlePromocodeChange}
                     />
                   </p>
@@ -762,12 +1129,17 @@ export default function CartPage() {
                     {promocodeErr}
                   </p>
                 )}
+                {promoUsed && (
+                  <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
+                    Вы использовали промокод
+                  </p>
+                )}
                 <div className={styles.orderSummary}>
                   <div className={styles.summary}>
                     <div className={styles.orderSummaryRow}>
                       <span>Товары ({cartItemsList.length}):</span>
                       <div className={styles.itemPrices}>
-                        {!promocodeErr && discount ? (
+                        {(!promocodeErr && discount) || twoItemDiscount ? (
                           <>
                             <span
                               className={styles.itemPricesPrice}
@@ -794,9 +1166,16 @@ export default function CartPage() {
                     <div className={styles.orderSummaryRow}>
                       <span>Скидка:</span>
                       <div className={styles.itemPrices}>
-                        <span className={styles.itemPricesPrice}>
-                          {discount.toLocaleString()} &#8381;
-                        </span>
+                        {twoItemDiscount ? (
+                          <span className={styles.itemPricesPrice}>
+                            {(discount + twoItemDiscount).toLocaleString()}{' '}
+                            &#8381;
+                          </span>
+                        ) : (
+                          <span className={styles.itemPricesPrice}>
+                            {discount.toLocaleString()} &#8381;
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className={styles.orderSummaryRow}>
@@ -807,6 +1186,18 @@ export default function CartPage() {
                         </span>
                       </div>
                     </div>
+                    {urgencyFee ? (
+                      <div className={styles.orderSummaryRow}>
+                        <span>Срочность:</span>
+                        <div className={styles.itemPrices}>
+                          <span className={styles.itemPricesPrice}>
+                            {urgencyFee.toLocaleString()} &#8381;
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 </div>
                 <div

@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      telegram: {
+      telegram_instagram: {
         type: Sequelize.STRING,
         unique: false,
         allowNull: true,

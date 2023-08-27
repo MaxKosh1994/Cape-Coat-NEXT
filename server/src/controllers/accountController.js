@@ -1,4 +1,4 @@
-const { User, Measurement, Order, Photo, Item } = require('../../db/models');
+const { User, Order, Photo, Item } = require('../../db/models');
 
 const { sendMessageToUser } = require('../../telegramBot/bot'); // ФУНКЦИЯ ДЛЯ ОТПРАВКИ СООБЩЕНИЙ БОТОМ
 
@@ -19,33 +19,6 @@ module.exports.getProfileInfo = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Ошибка на сервере' });
     console.log('Ошибка в getProfileInfo --->', err);
-  }
-};
-
-module.exports.getMeasurementInfo = async (req, res) => {
-  try {
-    const { user } = req.session;
-    const userExisting = await User.findOne({ where: { email: user } });
-
-    if (!userExisting) {
-      res
-        .status(403)
-        .json({ message: 'Произошла ошибка при поиске пользователя' });
-    }
-
-    const MeasurementInfo = await Measurement.findOne({
-      where: { user_id: userExisting.id },
-    });
-
-    if (!MeasurementInfo) {
-      res.status(402).json({ message: 'Вы еще не заполняли свои данные' });
-    }
-    if (MeasurementInfo) {
-      res.json(MeasurementInfo);
-    }
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка на сервере' });
-    console.log('Ошибка в getMeasurementInfo --->', err);
   }
 };
 
@@ -105,7 +78,7 @@ module.exports.getAllOrders = async (req, res) => {
 module.exports.updateInfo = async (req, res) => {
   try {
     const { user } = req.session;
-    const { full_name, address, phone, telegram } = req.body;
+    const { full_name, address, phone, telegram_instagram } = req.body;
 
     if (!full_name) {
       return res
@@ -128,8 +101,8 @@ module.exports.updateInfo = async (req, res) => {
     if (phone) {
       userExisting.phone = phone;
     }
-    if (telegram) {
-      userExisting.telegram = telegram;
+    if (telegram_instagram) {
+      userExisting.telegram_instagram = telegram_instagram;
     }
 
     await userExisting.save();
@@ -145,67 +118,6 @@ module.exports.updateInfo = async (req, res) => {
     res.status(200).json({ message: 'Данные успешно обновлены' });
   } catch (err) {
     console.log('Ошибка в updateInfo --->', err);
-    return res.status(500).json({ message: 'Произошла ошибка' });
-  }
-};
-
-module.exports.updateMeasurement = async (req, res) => {
-  try {
-    const { user } = req.session;
-    const { height, hips, bust, waist, sleeve } = req.body;
-
-    const userExisting = await User.findOne({
-      where: { email: user },
-      raw: true,
-    });
-
-    if (!userExisting) {
-      return res.status(404).json({ message: 'Пользователь не найден' });
-    }
-
-    const measurementForUpdate = await Measurement.findOne({
-      where: { user_id: userExisting.id },
-      raw: true,
-    });
-
-    if (measurementForUpdate) {
-      const measurementExisting = await Measurement.update(
-        {
-          height: Number(height),
-          hips: Number(hips),
-          bust: Number(bust),
-          waist: Number(waist),
-          sleeve: Number(sleeve),
-        },
-        { where: { user_id: userExisting.id } },
-      );
-      if (!measurementExisting) {
-        return res
-          .status(404)
-          .json({ message: 'Данные пользователя не найдены!' });
-      }
-      return res.status(200).json({ message: 'Данные успешно обновлены!' });
-    }
-
-    if (!measurementForUpdate) {
-      const measurementNew = await Measurement.create({
-        user_id: userExisting.id,
-        height: height ? Number(height) : 0,
-        hips: hips ? Number(hips) : 0,
-        bust: bust ? Number(bust) : 0,
-        waist: waist ? Number(waist) : 0,
-        sleeve: sleeve ? Number(sleeve) : 0,
-      });
-
-      if (!measurementNew) {
-        return res
-          .status(404)
-          .json({ message: 'Не удалось записать параметры!' });
-      }
-      return res.status(200).json({ message: 'Данные успешно записаны!' });
-    }
-  } catch (err) {
-    console.log('Ошибка в updateMeasurement --->', err);
     return res.status(500).json({ message: 'Произошла ошибка' });
   }
 };

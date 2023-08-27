@@ -80,7 +80,7 @@ const NavigationMenu: React.FC<IProps> = ({
     { label: 'О бренде', link: '/about' },
     { label: 'Каталог', link: '/catalog', submenu: categories },
     { label: 'Коллекции', link: '/catalog/collection', submenu: collections },
-    { label: 'Sale', link: '/sale' },
+    { label: 'Sale', link: '/catalog/sale' },
     { label: 'FAQ', link: '/FAQ', submenu: faqSubMenu },
     { label: 'Контакты', link: '/address' },
   ];

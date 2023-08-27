@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../styles/Cart.module.css';
+import styles from '../../styles/Checkout.module.css';
 
 export default function TrenchSizeForm({ itemId, onTrenchSizeChange }) {
   const handleCheckboxChange = (event) => {

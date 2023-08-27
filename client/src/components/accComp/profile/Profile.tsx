@@ -47,9 +47,9 @@ export default function Profile() {
             </div>
           </div>
           <div className={styles.liContainer}>
-            <h5 className={styles.headerFive}>Ваш Telegram</h5>
+            <h5 className={styles.headerFive}>Ваш Telegram/Instagram</h5>
             <div className={styles.pContainer}>
-              <p className={styles.pFive}>{userInfo?.telegram}</p>
+              <p className={styles.pFive}>{userInfo?.telegram_instagram}</p>
             </div>
           </div>
         </div>

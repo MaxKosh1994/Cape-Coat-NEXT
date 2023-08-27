@@ -24,7 +24,7 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 100%
+  height: 100%;
 }
 
 .NameCard {
@@ -32,8 +32,7 @@
   display: block;
   font-size: 20px;
   letter-spacing: 0.1em;
-    line-height: 17px;
-
+  line-height: 17px;
 }
 
 .CardContent {
@@ -51,12 +50,98 @@
   letter-spacing: 0.1em;
 }
 
+.OldPrice {
+  padding-top: 12px;
+  display: block;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 17px;
+  letter-spacing: 0.05em;
+  text-decoration-line: line-through;
+  font-weight: bold;
+  margin-left: -3px;
+  margin-right: 7px;
+}
+
+.NewPrice {
+  color: #a70909;
+  padding-top: 12px;
+  display: block;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 17px;
+  letter-spacing: 0.05em;
+  font-weight: bold;
+}
+
+.PriceOne {
+  padding-top: 12px;
+  display: block;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 17px;
+  letter-spacing: 0.1em;
+}
+
 .Icons {
   display: flex;
   justify-content: flex-end;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1300px) {
+  
+  .OldPrice {
+    font-size: 16px;
+    line-height: 18px;
+    margin-left: 3px;
+  }
+  
+  .NewPrice {
+    font-size: 16px;
+    line-height: 18px;
+    letter-spacing: 0.05em;
+  }
+}
+
+
+@media (max-width: 1255px) {
+
+  .Price {
+    font-size: 16px;
+  }
+  
+  .OldPrice {
+    font-size: 15,2px;
+    line-height: 18px;
+    margin-left: 3px;
+  }
+  
+  .NewPrice {
+    font-size: 15,2px;
+    line-height: 18px;
+  }
+}
+
+
+@media (max-width: 1235px) {
+
+  .Price {
+    font-size: 16px;
+  }
+  
+  .OldPrice {
+    font-size: 15px;
+    line-height: 18px;
+    margin-left: 3px;
+  }
+  
+  .NewPrice {
+    font-size: 15px;
+    line-height: 18px;
+  }
+}
+
+@media (max-width: 1201px) {
   .Card {
     width: calc((100% - 120px) / 3);
   }
@@ -65,7 +150,42 @@
   }
 
   .Price {
-    font-size: 15px;
+    font-size: 18px;
+    line-height: 19px;
+  }
+  
+  .OldPrice {
+    font-size: 17px;
+    line-height: 19px;
+    margin-left: 3px;
+  }
+  
+  .NewPrice {
+    font-size: 17px;
+    line-height: 19px;
+  }
+
+  .PriceOne {
+    font-size: 17px
+  }
+}
+
+
+@media (max-width: 1210px) {
+
+  .Price {
+    font-size: 17px;
+  }
+  
+  .OldPrice {
+    font-size: 16px;
+    line-height: 20px;
+    margin-left: 3px;
+  }
+  
+  .NewPrice {
+    font-size: 16px;
+    line-height: 20px;
   }
 }
 
@@ -75,17 +195,75 @@
     font-size: 16px;
   }
 
-  .Price {
-    font-size: 14px;
+
+  .PriceOne {
+    font-size: 17px;
     line-height: 15px;
     letter-spacing: 0.05em;
   }
 
   .IconImage {
-    font-size:large;
+    font-size: large;
   }
 }
 
+@media (max-width: 942px) {
+
+  .Price {
+    font-size: 16px;
+    line-height: 10px;
+  }
+  
+  .OldPrice {
+    font-size: 16px;
+    line-height: 10px;
+    margin-left: 3px;
+  }
+  
+  .NewPrice {
+    font-size: 16px;
+    line-height: 10px;
+  }
+}
+
+
+@media (max-width: 932px) {
+
+  .Price {
+    font-size: 15px;
+    line-height: 10px;
+  }
+  
+  .OldPrice {
+    font-size: 15px;
+    line-height: 10px;
+    margin-left: 3px;
+  }
+  
+  .NewPrice {
+    font-size: 15px;
+    line-height: 10px;
+  }
+}
+
+@media (max-width: 900px) {
+
+  .Price {
+    font-size: 14px;
+    line-height: 11px;
+  }
+  
+  .OldPrice {
+    font-size: 14px;
+    line-height: 11px;
+    margin-left: 3px;
+  }
+  
+  .NewPrice {
+    font-size: 14px;
+    line-height: 11px;
+  }
+}
 
 @media (max-width: 850px) {
   .Card {
@@ -103,12 +281,28 @@
     font-size: 20px;
     line-height: 20px;
   }
-
-  .IconImage {
-    font-size:1.7rem;
+  
+  .OldPrice {
+    font-size: 19px;
+    line-height: 20px;
+    margin-left: 3px;
+  }
+  
+  .NewPrice {
+    font-size: 19px;
+    line-height: 20px;
   }
 
+  .PriceOne {
+    font-size: 20px;
+    line-height: 20px;
+  }
+
+  .IconImage {
+    font-size: 1.7rem;
+  }
 }
+
 
 
 @media (max-width: 768px) {
@@ -118,10 +312,45 @@
   }
 }
 
+@media (max-width: 700px) {
+
+  .Price {
+    font-size: 19px;
+    line-height: 20px;
+  }
+  
+  .OldPrice {
+    font-size: 18px;
+    line-height: 25px;
+    margin-left: 3px;
+  }
+  
+  .NewPrice {
+    font-size: 18px;
+    line-height: 25px;
+  }
+}
+
 @media (max-width: 600px) {
   .Card {
     width: calc((100% - 45px) / 1);
     width: 100%;
     margin: 0 0 20px;
+  }
+
+  .Price {
+    font-size: 20px;
+    line-height: 20px;
+  }
+  
+  .OldPrice {
+    font-size: 20px;
+    line-height: 25px;
+    margin-left: 3px;
+  }
+  
+  .NewPrice {
+    font-size: 20px;
+    line-height: 25px;
   }
 }

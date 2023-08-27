@@ -12,7 +12,8 @@ export default function Orders() {
     const getData = async () => {
       const { info, orders } = await fetchOrderData();
       setInfoRes(info);
-      setOrders(orders);
+      const sortedOrders = orders.sort((a, b) => b.id - a.id);
+      setOrders(sortedOrders);
     };
 
     getData();
@@ -23,7 +24,7 @@ export default function Orders() {
       {infoRes?.length > 0 && <p>{infoRes}</p>}
       {orders?.length > 0 ? (
         <>
-          {orders?.map((order) => (
+          {orders.map((order) => (
             <OrderComp key={order.id} order={order} />
           ))}
         </>

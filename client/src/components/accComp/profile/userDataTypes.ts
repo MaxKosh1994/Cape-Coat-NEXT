@@ -5,6 +5,6 @@ export interface IUserInfo {
   phone: string;
   full_name: string;
   address?: string;
-  telegram?: string;
+  telegram_instagram?: string;
   admin?: boolean;
 }
