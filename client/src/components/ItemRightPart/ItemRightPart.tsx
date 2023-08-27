@@ -41,7 +41,7 @@ export default function ItemRightPart({ itemData, item }) {
             .toLocaleString()
             .replace(/,\s?/g, ' ')} РУБ.`}</div>
         )}
-        <ItemMaterials item={item} />
+        <ItemMaterials item={item} itemData={itemData} />
       </div>
 
       <Box
