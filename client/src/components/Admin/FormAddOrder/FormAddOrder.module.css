@@ -4,3 +4,701 @@
   margin: 0 auto;
   align-items: center;
 }
+
+.button {
+  width: 400px;
+  margin: 0 auto;
+}
+
+.selectedItemsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.oneItemConteiner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-right: 50px;
+}
+
+.container {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: column;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  padding-left: 60px;
+  padding-right: 60px;
+  max-width: 1240px;
+  margin-top: 80px;
+}
+
+.order {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+  grid-column-gap: 60px;
+  grid-row-gap: 40px;
+  align-items: start;
+  display: grid;
+  position: relative;
+  grid-template-columns: 1fr 320px;
+}
+
+.orderForm {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+}
+
+.orderBlock,
+.orderBlockBasket {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+  position: relative;
+  margin-bottom: 60px;
+}
+
+.basketItemLeft {
+  text-rendering: optimizeSpeed;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  box-sizing: border-box;
+  display: flex;
+  height: 500px;
+  width: 300px;
+  margin-right: 35px;
+  /* align-items: center; */
+  /* position: relative; */
+}
+
+.basketItemLeft > a > img {
+  text-rendering: optimizeSpeed;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #000;
+  text-decoration-skip-ink: auto;
+  box-sizing: border-box;
+  display: block;
+  object-fit: cover;
+  /* height: 100%;
+	width: 100%; */
+  /* max-height: 100px;
+	max-width: 72px;
+	width: 72px; */
+  /* margin-top: 10px;
+	margin-right: 10px; */
+}
+
+.basketItemRight {
+  text-rendering: optimizeSpeed;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 20px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.basketItem {
+  text-rendering: optimizeSpeed;
+  box-sizing: border-box;
+  align-items: flex-start;
+  /* border-bottom: 1px solid #e9e9e9; */
+  display: flex;
+  flex-wrap: nowrap;
+  font-weight: 400;
+  padding: 16px 0;
+  font-size: 14px;
+  line-height: 20px;
+  border-top: 1px solid #e9e9e9;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.basketItemTitle,
+.basketItemProperties {
+  text-rendering: optimizeSpeed;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 20px;
+  box-sizing: border-box;
+  color: #000;
+  width: 100%;
+  display: block;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.basketItemContent {
+  width: 100%;
+  text-rendering: optimizeSpeed;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  height: 35px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0;
+  align-items: center;
+}
+
+.basketItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #e9e9e9;
+}
+
+.basketItem::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #e9e9e9;
+}
+
+.orderBlock,
+.orderBlockSummary {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+  margin-bottom: 60px;
+  position: sticky;
+  top: 130px;
+}
+
+.orderBlock.orderBlockSummary
+  > p.orderDescription.orderDescriptionOnlinePayment {
+  text-rendering: optimizeSpeed;
+  box-sizing: border-box;
+  margin: 0;
+  margin-bottom: 20px;
+  align-items: center;
+  background-color: #f6f6f6;
+  color: #000;
+  display: flex;
+  font-size: 14px;
+  font-weight: 400;
+  gap: 10px;
+  line-height: 20px;
+  padding: 8px 12px;
+}
+
+.orderSummary {
+  text-rendering: optimizeSpeed;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin-bottom: 20px;
+}
+
+.summary {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  box-sizing: border-box;
+}
+
+.orderSummaryRow {
+  text-rendering: optimizeSpeed;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.itemPrices {
+  text-rendering: optimizeSpeed;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 20px;
+  align-items: baseline;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 6px;
+}
+
+.itemPricesPrice {
+  text-rendering: optimizeSpeed;
+  color: #000;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+  min-height: 20px;
+}
+
+.strikethrough {
+  text-decoration: line-through #656565;
+  font-size: 16px;
+}
+
+.red {
+  color: red;
+}
+
+.userParameters {
+  width: 100%;
+  text-rendering: optimizeSpeed;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  height: 60px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.faqLink {
+  text-rendering: optimizeSpeed;
+  box-sizing: border-box;
+  color: #000;
+  font-weight: 400;
+  white-space: nowrap;
+  font-size: 16px;
+}
+
+.orderSummaryTotal {
+  text-rendering: optimizeSpeed;
+  box-sizing: border-box;
+  font-weight: 400;
+  margin-bottom: 20px;
+  font-size: 20px;
+  line-height: 28px;
+  text-transform: uppercase;
+}
+
+/* .button,
+.buttonBlock,
+.buttonBig,
+.buttonBordered .orderButton {
+  box-sizing: border-box;
+  font: inherit;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: none;
+  color: #fff;
+  background-color: #000;
+  cursor: pointer;
+  flex-flow: row nowrap;
+  font-size: 14px;
+  font-weight: 500;
+  justify-content: center;
+  line-height: 18px;
+  margin: 0;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  user-select: none;
+  white-space: nowrap;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #000;
+  margin-bottom: 12px;
+} */
+
+.basketItemDeleteButton {
+  box-sizing: border-box;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  position: relative;
+  width: 28px;
+  height: 28px;
+  /* align-items: center; 
+	box-shadow: none;
+	color: #000; 
+	font-size: 14px;
+	font-weight: 500; 
+	line-height: 18px;
+	margin: 0;text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	user-select: none;
+	white-space: nowrap;
+	padding: 0; 
+	flex: 0 1 30px; */
+}
+
+.iconsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.headerItemCart {
+  margin-bottom: 20px;
+}
+
+.errorMsgCart {
+  margin-bottom: 30px;
+}
+
+.promocodeInput {
+  box-sizing: border-box;
+  font: inherit;
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  outline: none;
+  padding: 8px 16px 8px 16px;
+  width: 100%;
+  z-index: 2;
+}
+
+.promocodeInputContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.promocodeInputContainer .button.buttonBlock.buttonBordered {
+  width: 40%;
+  background-color: #6b6b6b;
+  border-color: #6b6b6b;
+  padding: 9px 0;
+}
+
+.orderBlock,
+.orderBlockDeliveries {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+  position: relative;
+  margin-bottom: 160px;
+  margin-top: -120px;
+}
+
+.orderProperty {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+}
+
+.inputLocation {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.formControl {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: none;
+  color: #000;
+  display: flex;
+  flex-flow: column nowrap;
+  /* justify-content: stretch;
+	align-items: stretch; */
+  margin-bottom: 20px;
+  margin-top: 10px;
+  /* position: relative; */
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.formControlLabel {
+  text-rendering: optimizeSpeed;
+  box-sizing: border-box;
+  display: flex;
+  font-weight: 400;
+  left: 10px;
+  line-height: 20px;
+  padding: 0 6px;
+  color: #000;
+  font-size: 14px;
+  top: -2px;
+  padding-left: 10px;
+  padding-bottom: 15px;
+  /* outline: none; 
+	border: none; */
+  width: 100%;
+  /* position: absolute; 
+	transform: translateY(-50%); */
+  transition: all 0.3s ease;
+  /* z-index: 1;
+	opacity: 1; */
+}
+
+.formInput {
+  box-sizing: border-box;
+  font: inherit;
+  background-color: transparent;
+  border: 1px solid #cccccc;
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  max-width: 100%;
+  /* outline: none; */
+  padding: 14px 16px 14px 16px;
+  /* flex: 1 0 100%; 
+	z-index: 2; */
+}
+
+.sizesForm {
+  margin-top: 10px;
+}
+.sizesFormBlock {
+  display: grid;
+  gap: 3px 15px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.sizesFormLabel {
+  box-sizing: border-box;
+  font-weight: 400;
+  line-height: 20px;
+  padding: 0 6px;
+  color: #000;
+  font-size: 14px;
+  width: 100%;
+}
+
+.sizesFormInput {
+  padding: 8px 10px;
+  border: 1px solid #cccccc;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.sizesFormCheckbox {
+  color: #cccccc;
+  accent-color: #cccccc;
+}
+
+.sizesFormSelect {
+  width: 100%;
+}
+
+.showSizeFormBtn {
+  display: block;
+  background-color: transparent;
+  border: 1px solid #6b6b6b;
+  cursor: pointer;
+  padding: 8px 18px;
+  text-transform: uppercase;
+  color: #000;
+  font-size: 14px;
+  margin-bottom: 5px;
+  margin-top: 15px;
+}
+
+.sizesFormBtn {
+  display: block;
+  margin: 12px auto;
+  width: 40%;
+  background-color: #6b6b6b;
+  border: none;
+  padding: 8px 0;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.formControlButtons {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  color: #000;
+  box-sizing: border-box;
+  bottom: 0;
+  margin: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  display: flex;
+}
+
+.formBlock {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+  border: 1px solid #e9e9e9;
+  margin-bottom: 16px;
+  padding: 16px 16px;
+  border-color: #000;
+}
+
+.formBlock.commentCart {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+  border: 1px solid #cccccc;
+  margin-bottom: 16px;
+  padding: 6px 16px 16px;
+  border-color: #000;
+}
+
+.checkboxIcon {
+  accent-color: #000;
+}
+
+.checkboxLabel {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  font-weight: 400;
+  margin-right: 10px;
+  margin-top: -1px;
+}
+
+.checkboxHeader {
+  text-rendering: optimizeSpeed;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  margin-top: -2px;
+  margin-left: 13px;
+}
+
+.checkboxDescription {
+  text-rendering: optimizeSpeed;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  display: block;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  margin-bottom: 0;
+  margin-left: 26px;
+}
+
+.checkboxControl {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  display: block;
+  height: 20px;
+  max-height: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  min-width: 20px;
+  position: relative;
+  transition: all 0.3s ease;
+  width: 20px;
+  border-radius: 50%;
+  border-color: #000;
+  margin-right: 12px;
+  order: -1;
+  background-color: rgb(255, 255, 255);
+}
+
+.deliveryService {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+}
+
+.deliveryServiceForm {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  box-sizing: border-box;
+}
+
+.formControlButtons {
+  text-rendering: optimizeSpeed;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  color: #000;
+  box-sizing: border-box;
+  bottom: 0;
+  margin: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  display: flex;
+}
+
+.emptyCartMsg {
+  margin: 25% auto;
+  font-size: 1.7rem;
+  text-align: center;
+}
+
+.emptyCartMsg > a {
+  font-style: italic;
+}
+
+.orderStatusCart {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
