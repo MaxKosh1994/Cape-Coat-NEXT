@@ -57,6 +57,16 @@ export default function NavAdminComp() {
               Заказы в работе
             </Button>
           </NextLink>
+
+          <NextLink href='/admin/newOrder'>
+            <Button
+              className={`${styles.button} ${
+                router.pathname === '/admin/newOrder' ? styles.active : ''
+              }`}
+            >
+              Создать заказ
+            </Button>
+          </NextLink>
         </div>
       </div>
     </>
