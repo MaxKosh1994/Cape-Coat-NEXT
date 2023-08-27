@@ -230,7 +230,6 @@ export default function Navbar() {
                 height: '30px',
                 objectFit: 'cover',
                 marginBottom: isMobile ? '5px' : '0',
-                marginTop: isMobile ? '0' : '10px',
               }}
             />
           </Link>
