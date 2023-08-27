@@ -84,7 +84,7 @@ export default function CheckoutPage() {
     Array(cartItemsList.length).fill('')
   );
 
-  // отправляет письмо с подтверждением заказа
+  //!  отправляет письмо с подтверждением заказа
   function sendMail(name, user, order) {
     Email.send({
       SecureToken: 'ef79f30f-8ef6-4205-979a-b8e46f36a527',
