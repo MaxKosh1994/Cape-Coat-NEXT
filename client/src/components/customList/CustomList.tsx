@@ -32,7 +32,7 @@ export default function CustomList({
         sx={{
           margin: 0,
           padding: 0,
-          width: 360,
+          width: '100%',
           bgcolor: 'background.paper',
           borderRadius: 0,
           alignItems: 'start',
