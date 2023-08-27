@@ -166,6 +166,10 @@
   top: 130px;
 }
 
+.orderBlockSummary {
+  top: 120px;
+}
+
 .orderBlock.orderBlockSummary
   > p.orderDescription.orderDescriptionOnlinePayment {
   text-rendering: optimizeSpeed;
@@ -261,6 +265,7 @@
   font-weight: 400;
   white-space: nowrap;
   font-size: 16px;
+  font-style: italic;
 }
 
 .orderSummaryTotal {
@@ -361,6 +366,7 @@
 .promocodeInputContainer {
   display: flex;
   justify-content: space-between;
+  margin-top: 40px;
 }
 
 .promocodeInputContainer .button.buttonBlock.buttonBordered {
@@ -561,7 +567,7 @@
   box-sizing: border-box;
   border: 1px solid #cccccc;
   margin-bottom: 16px;
-  padding: 6px 16px 16px;
+  padding: 3px 16px 3px;
   border-color: #000;
 }
 
@@ -846,4 +852,6 @@
 
 .commentInput {
   resize: none;
+  border: none;
+  outline: none;
 }
