@@ -10,6 +10,7 @@ export default function CartButton({
   item,
   selectedMaterialId,
   setMaterialAlert,
+  itemData,
 }) {
   const [isInCart, setIsInCart] = useState(false);
 
@@ -24,7 +25,7 @@ export default function CartButton({
   const dispatch = useAppDispatch();
   const cartHandler = async () => {
     try {
-      if (!selectedMaterialId && !isInCart) {
+      if (!selectedMaterialId && !isInCart && !itemData.in_stock) {
         setMaterialAlert('alert');
         setTimeout(() => {
           setMaterialAlert('');
