@@ -8,7 +8,6 @@ import {
 import { getCartItems } from '../app/cartSlice';
 import styles from '../styles/Checkout.module.css';
 import Link from 'next/link';
-import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import Head from 'next/head';
 import TrousersSizeForm from '@/components/Cart/trousersSizeForm';
@@ -18,60 +17,71 @@ import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
 import LikeButton from '@/components/likeButton/LikeButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import BackToTopArrow from '@/components/ToTopArrow/ToTopArrow';
+import { RootState } from '@/app/store';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { ISingleItem } from '@/app/types/cartTypes';
+import {
+  IAddressInputs,
+  ICustomFormInputs,
+  IOrderData,
+  IParamsFormData,
+  IPersonalData,
+  IShowParamsForm,
+} from '@/TypeScript/checkoutTypes';
 
 export default function CheckoutPage() {
-  const user = useSelector((state) => state.sessionSlice.user);
-  const name = useSelector((state) => state.sessionSlice.name);
+  const user = useAppSelector((state: RootState) => state.sessionSlice.user);
+  const name = useAppSelector((state: RootState) => state.sessionSlice.name);
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   // товары в корзине
-  const [cartItemsList, setCartItemsList] = useState([]);
+  const [cartItemsList, setCartItemsList] = useState<ISingleItem[]>([]);
   // ошибка при удалении товара из корзины
-  const [delError, setDelError] = useState('');
+  const [delError, setDelError] = useState<string>('');
   // сумма корзины
-  const [cartTotal, setCartTotal] = useState(0);
+  const [cartTotal, setCartTotal] = useState<number>(0);
   // введенный промокод
-  const [promocode, setPromocode] = useState('');
+  const [promocode, setPromocode] = useState<string>('');
   // использовал ли юзер промокод
-  const [promoUsed, setPromoUsed] = useState(false);
+  const [promoUsed, setPromoUsed] = useState<boolean>(false);
   // ошибка с промокодом
-  const [promocodeErr, setPromocodeErr] = useState('');
+  const [promocodeErr, setPromocodeErr] = useState<string>('');
   // размер скидки
-  const [discount, setDiscount] = useState(0);
+  const [discount, setDiscount] = useState<number>(0);
   // размер скидки в %
-  const [discountPercent, setDiscountPercent] = useState(0);
+  const [discountPercent, setDiscountPercent] = useState<number>(0);
   // скидка за 2+ товара
-  const [twoItemDiscount, setTwoItemDiscount] = useState(0);
+  const [twoItemDiscount, setTwoItemDiscount] = useState<number>(0);
   // комментарии к заказу
-  const [commentsInput, setCommentsInput] = useState('');
+  const [commentsInput, setCommentsInput] = useState<string>('');
   // ошибка заказа или статус
-  const [orderStatus, setOrderStatus] = useState('');
+  const [orderStatus, setOrderStatus] = useState<string>('');
   // какая выбрана доставка
-  const [selectedDelivery, setSelectedDelivery] = useState('showroom');
+  const [selectedDelivery, setSelectedDelivery] = useState<string>('showroom');
   // отображать или нет форму адреса
-  const [showAddressInputs, setShowAddressInputs] = useState(false);
+  const [showAddressInputs, setShowAddressInputs] = useState<boolean>(false);
   // чекбокс срочного пошива
-  const [urgentMaking, setUrgentMaking] = useState('');
+  const [urgentMaking, setUrgentMaking] = useState<boolean>(false);
   // стоимость срочного пошива
-  const [urgencyFee, setUrgencyFee] = useState(0);
-  const [personalData, setPersonalData] = useState({
+  const [urgencyFee, setUrgencyFee] = useState<number>(0);
+  const [personalData, setPersonalData] = useState<IPersonalData>({
     name: '',
     email: '',
     number: '',
   });
   // форма адреса
-  const [addressInputs, setAddressInputs] = useState({
+  const [addressInputs, setAddressInputs] = useState<IAddressInputs>({
     city: '',
     street: '',
     number: '',
     flat: '',
   });
   // стоимость доставки
-  const [deliveryCost, setDeliveryCost] = useState(0);
+  const [deliveryCost, setDeliveryCost] = useState<number>(0);
   // отображать форму мерок, записывает индекс в массиве
-  const [showParamsForm, setShowParamsForm] = useState({});
+  const [showParamsForm, setShowParamsForm] = useState<IShowParamsForm>({});
   // введенные в форму мерки
-  const [paramsFormData, setParamsFormData] = useState({
+  const [paramsFormData, setParamsFormData] = useState<IParamsFormData>({
     itemId: 0,
     height: '',
     length: '',
@@ -80,17 +90,17 @@ export default function CheckoutPage() {
     waist: '',
     hips: '',
     saddle: '',
-    loops: '',
+    loops: false,
     buttons: '',
     lining: '',
   });
   // записывет параметры товаров по индексу в массиве
-  const [userParams, setUserParams] = useState(
+  const [userParams, setUserParams] = useState<string[]>(
     Array(cartItemsList.length).fill('')
   );
 
   //!  отправляет письмо с подтверждением заказа
-  function sendMail(name, user, order) {
+  function sendMail(name: string, user: string, order: string) {
     Email.send({
       SecureToken: 'ef79f30f-8ef6-4205-979a-b8e46f36a527',
       To: user,
@@ -109,7 +119,7 @@ export default function CheckoutPage() {
   };
 
   // Стучится на бек и создает заказ, если все проверки прошли
-  const createOrder = async (data) => {
+  const createOrder = async (data: IOrderData) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}order/new`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -136,7 +146,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const cartItems = await dispatch(getCartItemsThunk(user));
+        const cartItems = await dispatch(getCartItemsThunk());
         setCartItemsList(cartItems);
       } catch (err) {
         console.log(err);
@@ -326,11 +336,11 @@ export default function CheckoutPage() {
 
   // отрабатыват по клику на иконку удаления
   // удаляет из массива и с бека через санку
-  const handleDeleteItemFromCart = async (itemId) => {
+  const handleDeleteItemFromCart = async (itemId: number) => {
     try {
       const data = { itemId, user };
       await dispatch(delCartItemThunk(data));
-      const updatedCartItems = await dispatch(getCartItemsThunk(user));
+      const updatedCartItems = await dispatch(getCartItemsThunk());
       setCartItemsList(updatedCartItems);
     } catch (err) {
       console.log(err);
@@ -339,7 +349,7 @@ export default function CheckoutPage() {
   };
 
   // отображает форму введения мерок под товаром
-  const handleDisplaySizesForm = (index, itemId: number) => {
+  const handleDisplaySizesForm = (index: number, itemId: number) => {
     setShowParamsForm((prevState) => ({
       ...prevState,
       [itemId]: !prevState[itemId],
@@ -359,7 +369,7 @@ export default function CheckoutPage() {
   // дозаписывает изменения в кастомизированных формах
   // имеется в виду для брюк добавляет седло
   // для пальто и шуб утепление, etc
-  const handleCustomFormChange = (updatedFields) => {
+  const handleCustomFormChange = (updatedFields: ICustomFormInputs) => {
     setParamsFormData((prevState) => ({
       ...prevState,
       ...updatedFields,
@@ -393,7 +403,7 @@ export default function CheckoutPage() {
         updatedTexts[index] = userParams;
         return updatedTexts;
       });
-      setShowParamsForm(false);
+      setShowParamsForm({});
     }
   };
 
@@ -429,6 +439,8 @@ export default function CheckoutPage() {
       const isMeasuresAdded = cartItemsList
         .filter((item) => !item.in_stock)
         .every((item) => {
+          // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          // TODO ошибка типизации
           const cartItems = item.Carts.map((cart) => cart.CartItem);
           return cartItems.every((cartItem) => {
             return (
