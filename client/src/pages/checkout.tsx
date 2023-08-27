@@ -54,6 +54,11 @@ export default function CheckoutPage() {
   const [urgentMaking, setUrgentMaking] = useState('');
   // стоимость срочного пошива
   const [urgencyFee, setUrgencyFee] = useState(0);
+  const [personalData, setPersonalData] = useState({
+    name: '',
+    email: '',
+    number: '',
+  });
   // форма адреса
   const [addressInputs, setAddressInputs] = useState({
     city: '',
@@ -341,6 +346,11 @@ export default function CheckoutPage() {
     }));
   };
 
+  // записывает изменения в форме персональных данных (если клиент не залогинен)
+  const handlePersonalDataInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPersonalData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   // записывает изменения в инпутах формы введения мерок
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setParamsFormData({ ...paramsFormData, [e.target.name]: e.target.value });
@@ -414,15 +424,7 @@ export default function CheckoutPage() {
         // если в шоурум, то записывает в переменную адрес шоурума
         addressString = 'Нижний Новгород, ул. Малая Покровская, 20';
       }
-      // создаем объект, который передадим на бек,
-      // в нем email клиента, сумма заказа, адрес, комментарии и срочный ли пошив
-      const orderData = {
-        user,
-        cartTotal,
-        addressString,
-        commentsInput,
-        urgentMaking,
-      };
+
       // проверяем заполнил ли клиент мерки для всех товаров на пошив
       const isMeasuresAdded = cartItemsList
         .filter((item) => !item.in_stock)
@@ -448,8 +450,33 @@ export default function CheckoutPage() {
             setOrderStatus('');
           }, 2000);
         } else {
-          // если адрес и мерки в порядке - вызываем функцию создания заказа
-          createOrder(orderData);
+          // если адрес и мерки в порядке
+
+          // создаем объект, который передадим на бек,
+          // в нем email клиента, сумма заказа, адрес, комментарии и срочный ли пошив
+          if (user) {
+            // если клиент залогинен, собираем объект
+            const orderData = {
+              user,
+              cartTotal,
+              addressString,
+              commentsInput,
+              urgentMaking,
+            };
+            // вызываем функцию создания заказа
+            createOrder(orderData);
+          } else {
+            // если клиент не залогинен - собираем объект с данными из формы персональных данных
+            const orderData = {
+              personalData,
+              cartTotal,
+              addressString,
+              commentsInput,
+              urgentMaking,
+            };
+            // вызываем функцию создания заказа
+            createOrder(orderData);
+          }
         }
       } else {
         // если адрес доставки некорректный
@@ -817,6 +844,67 @@ export default function CheckoutPage() {
                   ))}
                 </section>
 
+                {!user && (
+                  <section
+                    className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
+                  >
+                    <h2 className={styles.headerItemCart}>Ваши данные</h2>
+                    <div className={styles.formBlock}>
+                      <div className={styles.deliveryService}>
+                        <div className={styles.deliveryServiceForm}>
+                          <div>
+                            <div className={styles.inputLocation}>
+                              <div className={styles.formControl}>
+                                <label className={styles.formControlLabel}>
+                                  Имя
+                                </label>
+                                <input
+                                  role="text"
+                                  title="Имя"
+                                  placeholder=""
+                                  name="name"
+                                  className={styles.formInput}
+                                  onChange={handlePersonalDataInputChange}
+                                />
+                              </div>
+                              <div className={styles.formControl}>
+                                <label className={styles.formControlLabel}>
+                                  Email
+                                </label>
+                                <input
+                                  role="text"
+                                  title="Email*"
+                                  placeholder=""
+                                  name="email"
+                                  className={styles.formInput}
+                                  onChange={handlePersonalDataInputChange}
+                                />
+                              </div>
+                            </div>
+                            <div className={styles.inputGroup}>
+                              <div className={styles.inputLocation}>
+                                <div className={styles.formControl}>
+                                  <label className={styles.formControlLabel}>
+                                    Телефон
+                                  </label>
+                                  <input
+                                    role="text"
+                                    title="Телефон"
+                                    name="phone"
+                                    placeholder=""
+                                    className={styles.formInput}
+                                    onChange={handlePersonalDataInputChange}
+                                    disabled=""
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                )}
                 <section
                   className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
                 >

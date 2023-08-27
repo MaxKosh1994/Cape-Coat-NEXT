@@ -3,18 +3,30 @@ const { getItemsInUserCart } = require('../services/cartItemService');
 
 module.exports.createOrder = async (req, res) => {
   try {
-    const currUser = await User.findOne({ where: { email: req.body.user } });
+    let currUser;
+    if (req.body.user) {
+      currUser = await User.findOne({ where: { email: req.body.user } });
+    } else if (req.body.personalData) {
+      const { personalData } = req.body;
+      const newUser = await User.create({
+        email: personalData.email,
+        full_name: personalData.name,
+        phone: personalData.phone,
+        password: 'zhopablya',
+      });
+      currUser = newUser.get();
+    }
     const newOrder = await Order.create(
       {
         user_id: currUser.id,
         address: req.body.addressString,
         total: req.body.cartTotal,
         comments: req.body.commentsInput,
-        urgent: req.body.urgentDelivery,
+        urgent: req.body.urgentMaking,
       },
       { raw: true },
     );
-
+    // TODO исправить после введения рабочего локалсторедж
     const cartItems = await getItemsInUserCart(currUser.id);
 
     if (newOrder) {
