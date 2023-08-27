@@ -58,7 +58,7 @@
   line-height: 17px;
   letter-spacing: 0.05em;
   text-decoration-line: line-through;
-  font-weight: bold;
+  /* font-weight: bold; */
   margin-left: -3px;
   margin-right: 7px;
 }

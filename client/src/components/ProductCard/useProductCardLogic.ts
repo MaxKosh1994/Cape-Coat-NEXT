@@ -11,7 +11,11 @@ import {
 import { fetchFavouritesData } from '../../app/thunkActionsFavourite';
 import { getCartItemsThunk } from '../../app/thunkActionsCart';
 import { addCartItem } from '../../app/cartSlice';
-import { removeItem, setLikedStatus } from '../../app/favouriteSlice';
+import {
+  removeItem,
+  setFavourites,
+  setLikedStatus,
+} from '../../app/favouriteSlice';
 import { RootState } from '../../app/store';
 
 const useProductCardLogic = (
@@ -22,7 +26,8 @@ const useProductCardLogic = (
   price: number,
   initialIsFavorite: boolean,
   initialIsCart: boolean,
-  newPrice?: number
+  newPrice?: number,
+  isItemInFavoritesState?: boolean
 ) => {
   const dispatch = useAppDispatch();
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
@@ -30,33 +35,33 @@ const useProductCardLogic = (
   const [favCard, setFavCard] = useState();
 
   const { user } = useSelector((state: RootState) => state.sessionSlice);
-  // console.log(user);
 
   const favoriteHandler = async () => {
-    // if (isItemInFavorites) {
-    //   return;
-    // }
-    setIsFavorite(!isFavorite);
     dispatch(toggleFavorite(id));
-    // const localStorageData = localStorage.getItem('favorites');
 
     if (!user) {
+      setIsFavorite(false);
       const favoritesFromStorage =
         JSON.parse(localStorage.getItem('favorites')) || [];
-      // console.log(favoritesFromStorage)
-      if (isFavorite) {
-        console.log(isFavorite);
+
+      const isItemInFavorites = favoritesFromStorage.includes(id);
+      if (isItemInFavorites) {
         const updatedFavorites = favoritesFromStorage.filter(
           (favId) => favId !== id
         );
- 
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
       } else {
         const updatedFavorites = [...favoritesFromStorage, id];
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+
+        //TODO ставится сердечко в навбаре, а как его убрать?
+
+        // dispatch(setFavourites(updatedFavorites));
       }
       dispatch(setLikedStatus(!isFavorite));
     } else {
+      setIsFavorite(!isFavorite);
+      dispatch(toggleFavorite(id));
       try {
         const favoriteData = {
           id,
@@ -67,34 +72,14 @@ const useProductCardLogic = (
           price,
           isFavorite: !isFavorite,
         };
+        const favoriteAction = isFavorite
+          ? removeFromFavorites
+          : addToFavorites;
+        const favorite = await favoriteAction(favoriteData);
 
-        const favoritesFromStorage =
-          JSON.parse(localStorage.getItem('favorites')) || [];
-
-        if (favoritesFromStorage.length > 0) {
-          // Отправить на сервер каждый товар из localStorage
-          await Promise.all(
-            favoritesFromStorage.map(async (favId) => {
-              const favData = { ...favoriteData, id: favId };
-              return addToFavorites(favData); // Ваша функция addToFavorites
-            })
-          );
-
-          // Удалить данные из localStorage после успешной отправки
-          localStorage.removeItem('favorites');
-
-          // Запросить обновленные данные об избранных с сервера
-          dispatch(fetchFavouritesData());
-          dispatch(setLikedStatus(true)); // Обновить статус "избранности"
-        } else {
-          const favoriteAction = isFavorite
-            ? removeFromFavorites
-            : addToFavorites;
-          const favorite = await favoriteAction(favoriteData);
-          setFavCard(favorite);
-          dispatch(fetchFavouritesData(favorite));
-          dispatch(setLikedStatus(!isFavorite));
-        }
+        setFavCard(favorite);
+        dispatch(fetchFavouritesData(favorite));
+        dispatch(setLikedStatus(!isFavorite));
       } catch (err) {
         console.log(err);
       }
@@ -106,17 +91,27 @@ const useProductCardLogic = (
     dispatch(toggleCart(id));
 
     if (!user) {
+      setIsCart(false);
       const cartItemsFromStorage =
         JSON.parse(localStorage.getItem('cartItems')) || [];
-      if (!isCart) {
-        const updatedCartItems = [...cartItemsFromStorage, id];
-        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-      } else {
+
+      const isItemInCart = cartItemsFromStorage.includes(id);
+
+      if (isItemInCart) {
         const updatedCartItems = cartItemsFromStorage.filter(
           (cartId) => cartId !== id
         );
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+      } else {
+        const updatedCartItems = [...cartItemsFromStorage, id];
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+
+        //TODO ставится сердечко в навбаре, а как его убрать?
+
+        // dispatch(setFavourites(updatedFavorites));
       }
+
+      // dispatch(setLikedStatus(!isFavorite));
     } else {
       try {
         const cartData = {
@@ -146,56 +141,103 @@ const useProductCardLogic = (
     }
   };
   useEffect(() => {
-    // if(user) {
-    //   console.log('hello')
-    //   localStorage.clear()
-    // }
-    try {
-      (async function (): Promise<void> {
-        if (!user) {
-          return;
-        }
-        const response = await fetch(
-          process.env.NEXT_PUBLIC_URL + 'cart/cartInCat',
-          {
-            method: 'GET',
-            credentials: 'include',
+    if (user) {
+      const cartFromStorage =
+        JSON.parse(localStorage.getItem('cartItems')) || [];
+
+      if (cartFromStorage.length > 0) {
+        Promise.all(
+          cartFromStorage.map(async (cartId) => {
+            const cartData = {
+              id: cartId,
+            };
+            return addToCart(cartData);
+          })
+        )
+          .then(() => {
+            // Удалить данные из localStorage после успешной отправки
+            localStorage.removeItem('cartItems');
+
+            // Запросить обновленные данные об избранных с сервера
+            dispatch(getCartItemsThunk());
+          })
+          .catch((error) => {
+            console.error('Error while adding item in cart:', error);
+          });
+      }
+      try {
+        (async function (): Promise<void> {
+          const response = await fetch(
+            process.env.NEXT_PUBLIC_URL + 'cart/cartInCat',
+            {
+              method: 'GET',
+              credentials: 'include',
+            }
+          );
+          if (response.status === 200) {
+            const allItemInCart = await response.json();
+            const isProductInCart = allItemInCart.includes(id);
+            setIsCart(isProductInCart);
           }
-        );
-        if (response.status === 200) {
-          const allItemInCart = await response.json();
-          const isProductInCart = allItemInCart.includes(id);
-          setIsCart(isProductInCart);
-        }
-        dispatch(toggleCart(id));
-      })();
-    } catch (err) {
-      console.log(err);
+          dispatch(toggleCart(id));
+        })();
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      setIsCart(false);
     }
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!user) {
-          return;
-        }
-        const response = await fetch(process.env.NEXT_PUBLIC_URL + 'favorite', {
-          method: 'GET',
-          credentials: 'include',
-        });
-        if (response.status === 200) {
-          const favorites = await response.json();
-          const isProductFavorite = favorites.includes(id);
-          setIsFavorite(isProductFavorite);
-        }
-        dispatch(toggleFavorite(id));
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    if (user) {
+      const favoritesFromStorage =
+        JSON.parse(localStorage.getItem('favorites')) || [];
 
-    fetchData();
+      if (favoritesFromStorage.length > 0) {
+        Promise.all(
+          favoritesFromStorage.map(async (favId) => {
+            const favoriteData = {
+              id: favId,
+            };
+            return addToFavorites(favoriteData);
+          })
+        )
+          .then(() => {
+            // Удалить данные из localStorage после успешной отправки
+            localStorage.removeItem('favorites');
+
+            // Запросить обновленные данные об избранных с сервера
+            dispatch(fetchFavouritesData());
+          })
+          .catch((error) => {
+            console.error('Error while adding favorites:', error);
+          });
+      }
+      const fetchData = async () => {
+        try {
+          const response = await fetch(
+            process.env.NEXT_PUBLIC_URL + 'favorite',
+            {
+              method: 'GET',
+              credentials: 'include',
+            }
+          );
+          if (response.status === 200) {
+            const favorites = await response.json();
+            const isProductFavorite = favorites.includes(id);
+            setIsFavorite(isProductFavorite);
+          }
+          dispatch(toggleFavorite(id));
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      fetchData();
+    } else {
+      setIsFavorite(false);
+    }
   }, []);
 
   return {

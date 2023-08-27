@@ -297,7 +297,7 @@ export default function Navbar() {
             </IconButton>
             {/* </Link> */}
 
-            <a href="javascript:;" className="search-ico"></a>
+            {/* <a href="javascript:;" className="search-ico"></a> */}
           </div>
         </div>
       </div>
