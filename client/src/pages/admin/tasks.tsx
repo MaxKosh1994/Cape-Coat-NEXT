@@ -25,7 +25,7 @@ import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
 import { IOrderAdmin } from '@/components/Admin/order/types';
 import InfoContainer from '@/components/Admin/infoContainer/infoContainer';
 
-export default function Order() {
+export default function Tasks() {
   const [orders, setOrders] = useState([]);
   const [message, setMessage] = useState('');
   const [statusVal, setStatus] = useState({
@@ -36,6 +36,17 @@ export default function Order() {
   useEffect(() => {
     allOrderDataFetch(setOrders);
   }, []);
+
+  //! --------------------Логика фильтрации-------------------------------------
+
+  const filteredOrders = orders.filter(
+    (order) => order.status !== 'Заказ отправлен'
+  );
+  const sortedOrders = filteredOrders.sort((a, b) => {
+    if (a.urgent && !b.urgent) return -1;
+    if (!a.urgent && b.urgent) return 1;
+    return a.createdAt.localeCompare(b.createdAt);
+  });
 
   //! ---------------------------ЛОГИКА ИЗМЕНЕНИЯ ПОЛЕЙ ЗАКАЗА-------------------------------------
 
@@ -122,79 +133,11 @@ export default function Order() {
     });
   };
 
-  //! --------------------Логика пагинации-------------------------------------------
-
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  let ordersByMonth = orders.reduce((acc, order) => {
-    let date = format(parseISO(order?.createdAt), 'MMMM yyyy');
-    let found = acc.find((a) => a.date === date);
-
-    if (!found) {
-      acc.push({ date: date, orders: [order] });
-    } else {
-      found.orders.push(order);
-    }
-
-    return acc;
-  }, []);
-
-  ordersByMonth = ordersByMonth.sort((a, b) => {
-    const dateA = new Date(
-      a.date.split(' ')[1],
-      months.indexOf(a.date.split(' ')[0])
-    );
-    const dateB = new Date(
-      b.date.split(' ')[1],
-      months.indexOf(b.date.split(' ')[0])
-    );
-    return dateA - dateB;
-  });
-
-  const [pageNumber, setPageNumber] = useState(0);
-
-  console.log(orders);
-
   return (
     <>
       <NavAdminComp />
       <InfoContainer />
       <div className={styles.mainDiv}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            margin: '10px 0',
-          }}
-        >
-          <select
-            onChange={(event) => setPageNumber(event.target.selectedIndex)}
-            value={ordersByMonth[pageNumber]?.date}
-            style={{
-              padding: '5px 10px',
-              fontSize: '16px',
-            }}
-          >
-            {ordersByMonth.map((item, index) => (
-              <option key={index} value={item.date}>
-                {item.date}
-              </option>
-            ))}
-          </select>
-        </div>
         <TableContainer className={styles.tableContainer} component={Paper}>
           <Table className={styles.table} aria-label='simple table'>
             <TableHead>
@@ -255,7 +198,7 @@ export default function Order() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {ordersByMonth[pageNumber]?.orders?.map((order: IOrderAdmin) => (
+              {sortedOrders.map((order: IOrderAdmin) => (
                 <TableRow
                   key={order.id}
                   sx={{

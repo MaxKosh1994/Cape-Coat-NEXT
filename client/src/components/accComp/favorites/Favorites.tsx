@@ -106,7 +106,7 @@ export default function Favorites() {
         </div>
       ) : (
         <div className={styles.infoContainer}>
-          <p>У вас пока нет товаров в избранном</p>
+          <p className={styles.infoP}>У вас пока нет товаров в избранном</p>
         </div>
       )}
     </>

@@ -6,7 +6,12 @@ import { addCartItem, delCartItem } from '@/app/cartSlice';
 import { useAppDispatch } from '@/app/hooks';
 import './CartButtonStyle.css';
 
-export default function CartButton({ item }) {
+export default function CartButton({
+  item,
+  selectedMaterialId,
+  setMaterialAlert,
+  itemData,
+}) {
   const [isInCart, setIsInCart] = useState(false);
 
   const cartData = useSelector((state: RootState) => state.cartSlice.cartItems);
@@ -16,13 +21,17 @@ export default function CartButton({ item }) {
     const isInCart = cartData.some((el) => el.item_id === +item);
     setIsInCart(isInCart);
   }, [cartData, item]);
-  // const handleImageClick = (imageUrl) => {
-  //   setSelectedImage(imageUrl);
-  //   setOpenModal(true);
-  // };
+
   const dispatch = useAppDispatch();
   const cartHandler = async () => {
     try {
+      if (!selectedMaterialId && !isInCart && !itemData.in_stock) {
+        setMaterialAlert('alert');
+        setTimeout(() => {
+          setMaterialAlert('');
+        }, 1000);
+        return;
+      }
       if (!isInCart) {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_URL}cart/item/${item}`,

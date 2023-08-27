@@ -1,23 +1,24 @@
 import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import styles from '../styles/Auth.module.css';
-import { TextField, Button, Typography } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { TextField, Button } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useRouter } from 'next/router';
 import { signInUserThunk } from '../app/thunkActionsAuth';
 import Link from 'next/link';
 import Head from 'next/head';
+import { ISignInInputs } from '@/TypeScript/authTypes';
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({
+  const error = useAppSelector((state) => state.sessionSlice.error);
+  const user = useAppSelector((state) => state.sessionSlice.user);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const [formData, setFormData] = useState<ISignInInputs>({
     email: '',
     password: '',
   });
-  const error = useSelector((state) => state.sessionSlice.error);
-  const user = useSelector((state) => state.sessionSlice.user);
-
-  const [errorMsg, setErrorMsg] = useState(false);
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const [errorMsg, setErrorMsg] = useState<boolean>(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -31,9 +32,8 @@ export default function SignIn() {
         setErrorMsg(resp.response.data.message);
       } else {
         if (resp.isAdmin) {
-          router.push('/admin/orders');
+          router.push('/admin/ordersHistory');
         } else {
-          // TODO временный костыль чтобы открывалась корзина на логине
           if (user) {
             router.push('/');
           } else {

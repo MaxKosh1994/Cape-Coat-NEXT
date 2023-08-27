@@ -15,6 +15,7 @@ module.exports.register = async (req, res) => {
     }
 
     req.session.user = registrationResult.userData.email;
+    req.session.isAdmin = registrationResult.userData.isAdmin;
     res.json(registrationResult.userData.email);
   } catch (err) {
     res.status(500).json({ message: 'Ошибка сервера' });
@@ -30,6 +31,8 @@ module.exports.login = async (req, res) => {
   }
 
   req.session.user = loginResult.email;
+  req.session.isAdmin = loginResult.isAdmin;
+
   req.session.save();
   res.json({
     email: loginResult.email,
