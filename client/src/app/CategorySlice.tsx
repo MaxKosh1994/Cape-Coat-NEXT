@@ -75,7 +75,6 @@ const rtkSlice = createSlice({
 export default rtkSlice.reducer;
 export const {
   category,
-  itemInCategory,
   toggleFavorite,
   categoryClear,
   toggleCart,
