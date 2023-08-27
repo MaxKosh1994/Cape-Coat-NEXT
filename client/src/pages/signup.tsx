@@ -1,29 +1,31 @@
 import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import styles from '../styles/Auth.module.css';
-import { TextField, Button, Typography } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { TextField, Button } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { ISignUpInputs } from '@/TypeScript/authTypes';
 import { signUpUserThunk } from '../app/thunkActionsAuth';
 import Link from 'next/link';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 export default function SignUp() {
-  const [formData, setFormData] = useState({
+  const error = useAppSelector((state) => state.sessionSlice.error);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const [formData, setFormData] = useState<ISignUpInputs>({
     full_name: '',
     email: '',
     password: '',
   });
-  const error = useSelector((state) => state.sessionSlice.error);
+  const [errorMsg, setErrorMsg] = useState<boolean>(false);
 
-  const [errorMsg, setErrorMsg] = useState(false);
-  const dispatch = useDispatch();
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   //TODO в функцию ввести свой token и почту, с которой будем отправлять сообщение (https://www.youtube.com/watch?v=yP85ECOVMe8)
 
-  function sendMail(full_name, email) {
+  function sendMail(full_name: string, email: string) {
     Email.send({
       SecureToken: 'ef79f30f-8ef6-4205-979a-b8e46f36a527',
       To: email,
@@ -33,16 +35,14 @@ export default function SignUp() {
     });
   }
 
-  const handleSignUp = async (e) => {
+  const handleSignUp = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (formData.full_name && formData.email && formData.password) {
-      // console.log(formData);
       const resp = await dispatch(signUpUserThunk(formData));
       if (resp?.response?.data?.message) {
         setErrorMsg(resp.response.data.message);
       } else {
-        // TODO определить куда редирект после реги
-        window.history.go(-2);
+        router.push('/');
         sendMail(formData.full_name, formData.email);
       }
     }
@@ -69,7 +69,7 @@ export default function SignUp() {
                 fontFamily: 'Ysabeau Infant',
               },
             }}
-            value={formData.name}
+            value={formData.full_name}
             onChange={handleChange}
             fullWidth
             margin="normal"

@@ -59,7 +59,6 @@ module.exports.delItemFromCart = async (req, res) => {
     const { user, id } = req.params;
     const currUser = await findUserByEmail(user);
     const userCart = await findUserCart(currUser.id);
-    console.log(id);
     const delCartItemResult = await delUserCartItem(userCart.id, id);
     if (delCartItemResult.success) {
       res.sendStatus(200);
