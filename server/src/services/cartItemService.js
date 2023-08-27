@@ -1,4 +1,5 @@
 const { User, Item, Cart, CartItem, Photo } = require('../../db/models');
+const { findUserCart } = require('./cartServices');
 
 module.exports.getUserCartItems = async (userId) => {
   const cartItems = await Item.findAll({
@@ -8,6 +9,18 @@ module.exports.getUserCartItems = async (userId) => {
     ],
   });
   return cartItems;
+};
+
+module.exports.getItemsInUserCart = async (userId) => {
+  const userCart = await findUserCart(userId);
+  const allItems = await CartItem.findAll({
+    where: {
+      cart_id: userCart.id,
+    },
+    raw: true,
+  });
+
+  return allItems;
 };
 
 module.exports.getItemIdsInCart = async (cartId) => {
