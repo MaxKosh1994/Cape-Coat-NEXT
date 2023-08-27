@@ -41,7 +41,7 @@ export const fetchItemData = createAsyncThunk(
 
       if (res.ok) {
         const data: ItemState = await res.json();
-        console.log('itemDat1111a', data);
+
         dispatch(setItem(data.item));
         dispatch(setMaterials(data.materials));
       }
