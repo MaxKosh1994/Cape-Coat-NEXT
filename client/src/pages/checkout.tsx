@@ -42,6 +42,8 @@ export default function CheckoutPage() {
   const [cartTotal, setCartTotal] = useState<number>(0);
   // введенный промокод
   const [promocode, setPromocode] = useState<string>('');
+  // промокод для отправки на бек
+  const [dbPc, setDbPc] = useState<string>('');
   // использовал ли юзер промокод
   const [promoUsed, setPromoUsed] = useState<boolean>(false);
   // ошибка с промокодом
@@ -120,25 +122,37 @@ export default function CheckoutPage() {
 
   // Стучится на бек и создает заказ, если все проверки прошли
   const createOrder = async (data: IOrderData) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}order/new`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(data),
-    });
-    const re = await response.json();
-    if (re.message === 'Что-то пошло не так, попробуйте позже') {
-      // если ошибка на беке
-      setOrderStatus(re.message);
-      setTimeout(() => {
-        setOrderStatus('');
-      }, 2000);
-    } else {
-      // если все ок - очищает корзину, массив в редаксе и редиректит на спасибку
-      emptyCart();
-      dispatch(getCartItems([]));
-      router.push('/thankyou');
-      sendMail(name, user, re.message);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}order/new`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data),
+      });
+      const re = await response.json();
+      console.log(re);
+      if (re.message === 'Что-то пошло не так, попробуйте позже') {
+        // если ошибка на беке
+        setOrderStatus(re.message);
+        setTimeout(() => {
+          setOrderStatus('');
+        }, 2000);
+      } else if (re.message === 'Вы уже использовали этот промокод') {
+        setOrderStatus(re.message);
+        setPromoUsed(false);
+        setDiscount(0);
+        setTimeout(() => {
+          setOrderStatus('');
+        }, 2000);
+      } else {
+        // если все ок - очищает корзину, массив в редаксе и редиректит на спасибку
+        emptyCart();
+        dispatch(getCartItems([]));
+        router.push('/thankyou');
+        sendMail(name, user, re.message);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -474,6 +488,7 @@ export default function CheckoutPage() {
               addressString,
               commentsInput,
               urgentMaking,
+              dbPc,
             };
             // вызываем функцию создания заказа
             createOrder(orderData);
@@ -485,6 +500,7 @@ export default function CheckoutPage() {
               addressString,
               commentsInput,
               urgentMaking,
+              dbPc,
             };
             // вызываем функцию создания заказа
             createOrder(orderData);
@@ -525,10 +541,15 @@ export default function CheckoutPage() {
     if (promocode && !promoUsed) {
       // проверяем на беке есть ли такой промокод
       const isValidPromo = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}cart/promocode/${promocode}`
+        `${process.env.NEXT_PUBLIC_URL}cart/promocode/${promocode}`,
+        {
+          method: 'GET',
+          credentials: 'include',
+        }
       );
       const response = await isValidPromo.json();
       if (isValidPromo.status === 200) {
+        setDbPc(promocode);
         // если такой промокод есть, то считаем скидку
         if (discount === 0) {
           // если до этого была ноль
@@ -568,6 +589,7 @@ export default function CheckoutPage() {
       }, 1000);
     }
   };
+  console.log(cartItemsList);
 
   return (
     <>
@@ -637,6 +659,11 @@ export default function CheckoutPage() {
                         <div className={styles.basketItemContent}>
                           <div className={styles.basketItemProperties}>
                             <div>Артикул: {item.article}</div>
+                          </div>
+                        </div>
+                        <div className={styles.basketItemContent}>
+                          <div className={styles.basketItemProperties}>
+                            <div>Материал: {item.Material.name}</div>
                           </div>
                         </div>
                         <div className={styles.basketItemContent}>

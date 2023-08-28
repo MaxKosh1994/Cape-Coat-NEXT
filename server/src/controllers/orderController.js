@@ -1,5 +1,6 @@
 const { Order, User, OrderItem } = require('../../db/models');
 const { getItemsInUserCart } = require('../services/cartItemService');
+const { checkUserUsedPromocode } = require('../services/cartServices');
 
 module.exports.createOrder = async (req, res) => {
   try {
@@ -28,7 +29,6 @@ module.exports.createOrder = async (req, res) => {
     );
     // TODO исправить после введения рабочего локалсторедж
     const cartItems = await getItemsInUserCart(currUser.id);
-
     if (newOrder) {
       const orderItemsData = cartItems.map((oneItem) => ({
         item_id: oneItem.item_id,
@@ -47,10 +47,28 @@ module.exports.createOrder = async (req, res) => {
 
       await OrderItem.bulkCreate(orderItemsData);
 
-      res.json({
-        success: true,
-        message: `Заказ номер ${newOrder.id} создан. Мы свяжемся с вами в течение дня.`,
-      });
+      if (req.body.dbPc) {
+        const usedPCCheck = await checkUserUsedPromocode(
+          req.body.dbPc,
+          currUser.email,
+        );
+        if (usedPCCheck.success) {
+          res.json({
+            success: true,
+            message: `Заказ номер ${newOrder.id} создан. Мы свяжемся с вами в течение дня.`,
+          });
+        } else {
+          res.json({
+            success: false,
+            message: usedPCCheck.message,
+          });
+        }
+      } else {
+        res.json({
+          success: true,
+          message: `Заказ номер ${newOrder.id} создан. Мы свяжемся с вами в течение дня.`,
+        });
+      }
     } else {
       res.status(500).json({
         success: false,
