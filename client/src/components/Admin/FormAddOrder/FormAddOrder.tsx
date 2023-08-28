@@ -14,6 +14,7 @@ import { clear } from 'console';
 import { IPersonalData } from '@/TypeScript/checkoutTypes';
 
 export default function FormAddOrder() {
+  //! ВСЕ STATES
   // стейт для данных пользователя
   const [personalData, setPersonalData] = useState<IPersonalData>({
     name: '',
@@ -99,6 +100,8 @@ export default function FormAddOrder() {
 
   // отображать или нет форму адреса
   const [showAddressInputs, setShowAddressInputs] = useState(false);
+
+  //! --------------------------------
 
   //! Расчет стоимости
 
@@ -281,6 +284,8 @@ export default function FormAddOrder() {
     }
   }, [selectedDelivery]);
 
+  //! --------------------------------
+
   //! Хэндлеры
 
   // записывает изменения в инпутах формы введения мерок
@@ -311,28 +316,6 @@ export default function FormAddOrder() {
       updatedTexts[index] = paramsFormData;
       return updatedTexts;
     });
-
-    //  const userParams = `Ваш рост: ${res.height}см, длина изделия: ${res.length}см, длина рукава: ${res.sleeve}см, объем груди: ${res.bust}см, объем талии: ${res.waist}см, объем бедер: ${res.hips}см`;
-    //  const response = await fetch(
-    //    `${process.env.NEXT_PUBLIC_URL}cart/measures/${itemId}`,
-    //    {
-    //      method: 'POST',
-    //      headers: { 'Content-Type': 'application/json' },
-    //      credentials: 'include',
-    //      body: JSON.stringify(paramsFormData),
-    //    }
-    //  );
-    //  const res = await response.json();
-    //  if (response.status === 200) {
-    //    // выводит мерки, если всё ок
-    //    // и прячет форму
-    //    const userParams = `Ваш рост: ${res.height}см, длина изделия: ${res.length}см, длина рукава: ${res.sleeve}см, объем груди: ${res.bust}см, объем талии: ${res.waist}см, объем бедер: ${res.hips}см`;
-    //    setUserParams((prevTexts) => {
-    //      const updatedTexts = [...prevTexts];
-    //      updatedTexts[index] = userParams;
-    //      return updatedTexts;
-    //    });
-    //  }
   };
 
   // записывает изменения в форме персональных данных (если клиент не залогинен)
@@ -417,6 +400,7 @@ export default function FormAddOrder() {
     }
   };
 
+  //! --------------------------------
   //! подгрузка всех товаров в выпадающий список
 
   useEffect(() => {
@@ -449,6 +433,11 @@ export default function FormAddOrder() {
     setIsOpen(!isOpen);
   };
 
+  //! --------------------------------
+  //! подгрузка всех доступных материалов для товара
+
+  //! --------------------------------
+
   //! ГЛАВНАЯ ЛОГИКА СОЗДАНИЯ ЗАКАЗА
 
   const handleCreateOrder = () => {
@@ -461,232 +450,275 @@ export default function FormAddOrder() {
       addressString = 'Нижний Новгород, ул. Малая Покровская, 20';
     }
 
-    //! ВСЕ ДАННЫЕ ДЛЯ ЗАКАЗА КРОМЕ USER (каждую форму нужно сохранить)
-
-    const orderData = {
-      personalData,
-      cartTotal,
-      addressString,
-      commentsInput,
-      urgentMaking,
-      userParams,
-    };
-    console.log('====ГЛАВНАЯ КНОПКА===>', orderData);
+    if (
+      personalData &&
+      cartTotal &&
+      addressString &&
+      commentsInput &&
+      urgentMaking &&
+      userParams
+    ) {
+      const order = {
+        personalData,
+        cartTotal,
+        addressString,
+        commentsInput,
+        urgentMaking,
+        userParams,
+      };
+      console.log('====ГЛАВНАЯ КНОПКА===>', order);
+    } else {
+      console.log('Данных не хватает');
+    }
   };
 
   return (
     <>
       <FormControl sx={{ m: 1, minWidth: 250 }}>
-        <section
-          className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
-        >
-          <h2 className={styles.headerItemCart}>Ваши данные</h2>
-          <div className={styles.formBlock}>
-            <div className={styles.deliveryService}>
-              <div className={styles.deliveryServiceForm}>
-                <div>
-                  <div className={styles.inputLocation}>
-                    <div className={styles.formControl}>
-                      <label className={styles.formControlLabel}>Имя</label>
-                      <input
-                        role='text'
-                        title='Имя'
-                        placeholder=''
-                        name='name'
-                        className={styles.formInput}
-                        onChange={handlePersonalDataInputChange}
-                      />
-                    </div>
-                    <div className={styles.formControl}>
-                      <label className={styles.formControlLabel}>Email</label>
-                      <input
-                        role='text'
-                        title='Email*'
-                        placeholder=''
-                        name='email'
-                        className={styles.formInput}
-                        onChange={handlePersonalDataInputChange}
-                      />
-                    </div>
-                  </div>
-                  <div className={styles.inputGroup}>
-                    <div className={styles.inputLocation}>
-                      <div className={styles.formControl}>
-                        <label className={styles.formControlLabel}>
-                          Телефон
-                        </label>
-                        <input
-                          role='text'
-                          title='Телефон'
-                          name='phone'
-                          placeholder=''
-                          className={styles.formInput}
-                          onChange={handlePersonalDataInputChange}
-                          disabled=''
-                        />
+        <div className={styles.headerContainer}>
+          <div className={styles.userParamsContainer}>
+            <section
+              className={`${styles.orderBlockUserParams} ${styles.orderBlockDeliveries}`}
+            >
+              <h2 className={styles.headerUserParams}>Данные заказчика</h2>
+              <div style={{ height: '381px' }} className={styles.formBlock}>
+                <div className={styles.deliveryService}>
+                  <div className={styles.deliveryServiceForm}>
+                    <div>
+                      <div className={styles.inputLocation}>
+                        <div className={styles.formControl}>
+                          <label className={styles.formControlLabel}>Имя</label>
+                          <input
+                            role='text'
+                            title='Имя'
+                            placeholder=''
+                            name='name'
+                            className={styles.formInput}
+                            onChange={handlePersonalDataInputChange}
+                          />
+                        </div>
+                        <div className={styles.formControl}>
+                          <label className={styles.formControlLabel}>
+                            Email
+                          </label>
+                          <input
+                            role='text'
+                            title='Email*'
+                            placeholder=''
+                            name='email'
+                            className={styles.formInput}
+                            onChange={handlePersonalDataInputChange}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.inputGroup}>
+                        <div className={styles.inputLocation}>
+                          <div className={styles.formControl}>
+                            <label className={styles.formControlLabel}>
+                              Телефон
+                            </label>
+                            <input
+                              role='text'
+                              title='Телефон'
+                              name='phone'
+                              placeholder=''
+                              className={styles.formInput}
+                              onChange={handlePersonalDataInputChange}
+                              disabled=''
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </section>
+          </div>
+
+          <div className={styles.orderDataContainer}>
+            <div className={styles.commentsDataContainer}>
+              <section
+                className={`${styles.orderBlockUserParams} ${styles.orderBlockDeliveries}`}
+              >
+                <h2 className={styles.headerUserParams}>
+                  Комментарии к заказу
+                </h2>
+                <div className={`${styles.formBlock} ${styles.commentCart}`}>
+                  <label
+                    className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+                  >
+                    <div className={styles.formControl}>
+                      <label
+                        className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
+                      ></label>
+                      <textarea
+                        className={`${styles.commentInput} ${styles.formInput}`}
+                        role='text'
+                        title='Комментарии'
+                        placeholder='Пожелания заказчика...'
+                        name='comments'
+                        rows='5'
+                        cols='50'
+                        onChange={handleCommentChange}
+                      />
+                    </div>
+                  </label>
+                </div>
+              </section>
+            </div>
+            <div className={styles.urgentDataContainer}>
+              <section
+                className={`${styles.orderBlockUserParams} ${styles.orderBlockDeliveries}`}
+              >
+                <h2 className={styles.headerUserParams}>Срочный пошив</h2>
+                <div className={styles.formBlock}>
+                  <label
+                    id='urgent'
+                    className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+                  >
+                    <input
+                      type='checkbox'
+                      name='urgent'
+                      className={styles.checkboxIcon}
+                      onChange={handleUrgentChange}
+                    />
+                    <span className={styles.checkboxLabel}>
+                      <span className={styles.checkboxHeader}>
+                        Изготовление изделия за 5 дней
+                      </span>
+                      <span className={styles.checkboxDescription}>
+                        <em>+20% к стоимости изделия</em>
+                      </span>
+                    </span>
+                  </label>
+                </div>
+              </section>
             </div>
           </div>
-        </section>
+        </div>
 
-        <section
-          className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
-        >
-          <h2 className={styles.headerItemCart}>Срочный пошив</h2>
-          <div className={styles.formBlock}>
-            <label
-              id='urgent'
-              className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
-            >
-              <input
-                type='checkbox'
-                name='urgent'
-                className={styles.checkboxIcon}
-                onChange={handleUrgentChange}
-              />
-              <span className={styles.checkboxLabel}>
-                <span className={styles.checkboxHeader}>
-                  Изготовление изделия за 5 дней
-                </span>
-                <span className={styles.checkboxDescription}>
-                  <em>+20% к стоимости изделия</em>
-                </span>
-              </span>
-            </label>
-          </div>
-        </section>
-
-        <section
-          className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
-        >
-          <h2 className={styles.headerItemCart}>Комментарии к заказу</h2>
-          <div className={`${styles.formBlock} ${styles.commentCart}`}>
-            <label
-              className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
-            >
-              <div className={styles.formControl}>
-                <label
-                  className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
-                ></label>
-                <textarea
-                  className={`${styles.commentInput} ${styles.formInput}`}
-                  role='text'
-                  title='Комментарии'
-                  placeholder='Ваши пожелания...'
-                  name='comments'
-                  rows='5'
-                  cols='50'
-                  onChange={handleCommentChange}
+        <div className={styles.summOrderDataContainer}>
+          <section
+            className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
+          >
+            <h2 className={styles.deliveryHeader}>Способ доставки</h2>
+            <div className={styles.formBlock}>
+              <label
+                className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+              >
+                <input
+                  hidden=''
+                  role='radio'
+                  type='radio'
+                  name='delivery'
+                  value='showroom'
+                  className={styles.checkboxIcon}
+                  onChange={handleDeliveryChange}
+                  defaultChecked={true}
                 />
-              </div>
-            </label>
-          </div>
-        </section>
-
-        <section
-          className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
-        >
-          <h2 className={styles.headerItemCart}>Способ доставки</h2>
-          <div className={styles.formBlock}>
-            <label
-              className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
-              // modelmodifiers="[object Object]"
-            >
-              <input
-                hidden=''
-                role='radio'
-                type='radio'
-                name='delivery'
-                value='showroom'
-                className={styles.checkboxIcon}
-                onChange={handleDeliveryChange}
-                defaultChecked={true}
-              />
-              <span className={styles.checkboxLabel}>
-                <span className={styles.checkboxHeader}>
-                  Забрать в шоу-руме
+                <span className={styles.checkboxLabel}>
+                  <span className={styles.checkboxHeader}>
+                    Забрать в шоу-руме
+                  </span>
+                  <span className={styles.checkboxDescription}>
+                    <em>Нижний Новгород, ул. Малая Покровская, 20</em>
+                  </span>
+                  <span className={styles.checkboxDescription}>
+                    <em>Будние дни, с 10:00 до 20:00</em>
+                  </span>
+                  <span className={styles.checkboxDescription}>
+                    <strong>Бесплатно</strong>
+                  </span>
                 </span>
-                <span className={styles.checkboxDescription}>
-                  <em>Нижний Новгород, ул. Малая Покровская, 20</em>
+              </label>
+            </div>
+            <div className={styles.formBlock}>
+              <label
+                className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+              >
+                <input
+                  hidden=''
+                  role='radio'
+                  type='radio'
+                  name='delivery'
+                  value='post'
+                  className={styles.checkboxIcon}
+                  onChange={handleDeliveryChange}
+                />
+                <span className={styles.checkboxLabel}>
+                  <span className={styles.checkboxHeader}>
+                    Доставка СДЭК или Почтой России
+                  </span>
+                  <span className={styles.checkboxDescription}>
+                    <strong>от 300 рублей</strong>, от 3 дней
+                  </span>
+                  <span className={styles.checkboxDescription}>
+                    <em>
+                      Точную стоимость доставки вам сообщит менеджер. Итоговая
+                      сумма заказа может измениться.
+                    </em>
+                  </span>
                 </span>
-                <span className={styles.checkboxDescription}>
-                  <em>Будние дни, с 10:00 до 20:00</em>
-                </span>
-                <span className={styles.checkboxDescription}>
-                  <strong>Бесплатно</strong>
-                </span>
-              </span>
-            </label>
-          </div>
-          <div className={styles.formBlock}>
-            <label
-              className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
-              // modelmodifiers="[object Object]"
-            >
-              <input
-                hidden=''
-                role='radio'
-                type='radio'
-                name='delivery'
-                value='post'
-                className={styles.checkboxIcon}
-                onChange={handleDeliveryChange}
-              />
-              <span className={styles.checkboxLabel}>
-                <span className={styles.checkboxHeader}>
-                  Доставка СДЭК или Почтой России
-                </span>
-                <span className={styles.checkboxDescription}>
-                  <strong>от 300 рублей</strong>, от 3 дней
-                </span>
-                <span className={styles.checkboxDescription}>
-                  <em>
-                    Точную стоимость доставки вам сообщит менеджер. Итоговая
-                    сумма заказа может измениться.
-                  </em>
-                </span>
-              </span>
-            </label>
-            {showAddressInputs && (
-              <div className={styles.deliveryService}>
-                <div className={styles.deliveryServiceForm}>
-                  <div>
-                    <div className={styles.inputLocation}>
-                      <div className={styles.formControl}>
-                        <label className={styles.formControlLabel}>Город</label>
-                        <input
-                          role='text'
-                          title='Город'
-                          placeholder=''
-                          name='city'
-                          className={styles.formInput}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className={styles.formControl}>
-                        <label className={styles.formControlLabel}>Улица</label>
-                        <input
-                          role='text'
-                          title='Улица*'
-                          placeholder=''
-                          name='street'
-                          className={styles.formInput}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                    </div>
-                    <div className={styles.inputGroup}>
+              </label>
+              {showAddressInputs && (
+                <div className={styles.deliveryService}>
+                  <div className={styles.deliveryServiceForm}>
+                    <div>
                       <div className={styles.inputLocation}>
                         <div className={styles.formControl}>
-                          <label className={styles.formControlLabel}>Дом</label>
+                          <label className={styles.formControlLabel}>
+                            Город
+                          </label>
                           <input
                             role='text'
-                            title='Дом'
-                            name='number'
+                            title='Город'
+                            placeholder=''
+                            name='city'
+                            className={styles.formInput}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className={styles.formControl}>
+                          <label className={styles.formControlLabel}>
+                            Улица
+                          </label>
+                          <input
+                            role='text'
+                            title='Улица*'
+                            placeholder=''
+                            name='street'
+                            className={styles.formInput}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.inputGroup}>
+                        <div className={styles.inputLocation}>
+                          <div className={styles.formControl}>
+                            <label className={styles.formControlLabel}>
+                              Дом
+                            </label>
+                            <input
+                              role='text'
+                              title='Дом'
+                              name='number'
+                              placeholder=''
+                              className={styles.formInput}
+                              onChange={handleInputChange}
+                              disabled=''
+                            />
+                            <div className={styles.formControlButtons}></div>
+                          </div>
+                        </div>
+                        <div className={styles.formControl}>
+                          <label className={styles.formControlLabel}>
+                            Квартира/Офис
+                          </label>
+                          <input
+                            role='text'
+                            name='flat'
+                            title='Квартира/Офис'
                             placeholder=''
                             className={styles.formInput}
                             onChange={handleInputChange}
@@ -695,167 +727,37 @@ export default function FormAddOrder() {
                           <div className={styles.formControlButtons}></div>
                         </div>
                       </div>
-                      <div className={styles.formControl}>
-                        <label className={styles.formControlLabel}>
-                          Квартира/Офис
-                        </label>
-                        <input
-                          role='text'
-                          name='flat'
-                          title='Квартира/Офис'
-                          placeholder=''
-                          className={styles.formInput}
-                          onChange={handleInputChange}
-                          disabled=''
-                        />
-                        <div className={styles.formControlButtons}></div>
-                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-          <BackToTopArrow />
-        </section>
-
-        <div className={`${styles.orderBlock} ${styles.orderBlockSummary}`}>
-          <h1 className={styles.headerItemCart}>Ваш заказ</h1>
-          <div className={styles.promocodeInputContainer}>
-            <p
-              className={`${styles.orderDescription} ${styles.orderDescriptionOnlinePayment}`}
-            >
-              <input
-                className={styles.promocodeInput}
-                type='text'
-                placeholder='Промокод'
-                value={promocode}
-                onChange={handlePromocodeChange}
-              />
-            </p>
-            <button
-              className={`${styles.button} ${styles.buttonBlock}  ${styles.buttonBordered}`}
-              onClick={handleApplyPromocode}
-            >
-              Применить
-            </button>
-          </div>
-          {promocodeErr && (
-            <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
-              {promocodeErr}
-            </p>
-          )}
-          {promoUsed && (
-            <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
-              Вы использовали промокод
-            </p>
-          )}
-          <div className={styles.orderSummary}>
-            <div className={styles.summary}>
-              <div className={styles.orderSummaryRow}>
-                <span>Товары ({selectedItems.length}):</span>
-                <div className={styles.itemPrices}>
-                  {(!promocodeErr && discount) || twoItemDiscount ? (
-                    <>
-                      <span
-                        className={styles.itemPricesPrice}
-                        style={{ textDecoration: 'line-through' }}
-                      >
-                        {selectedItems
-                          .reduce((sum, item) => sum + item.price, 0)
-                          .toLocaleString()}{' '}
-                        &#8381;
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <span className={styles.itemPricesPrice}>
-                        {selectedItems
-                          .reduce((sum, item) => sum + item.price, 0)
-                          .toLocaleString()}{' '}
-                        &#8381;
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
-              <div className={styles.orderSummaryRow}>
-                <span>Скидка:</span>
-                <div className={styles.itemPrices}>
-                  {twoItemDiscount ? (
-                    <span className={styles.itemPricesPrice}>
-                      {(discount + twoItemDiscount).toLocaleString()} &#8381;
-                    </span>
-                  ) : (
-                    <span className={styles.itemPricesPrice}>
-                      {discount.toLocaleString()} &#8381;
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className={styles.orderSummaryRow}>
-                <span>Доставка:</span>
-                <div className={styles.itemPrices}>
-                  <span className={styles.itemPricesPrice}>
-                    {deliveryCost.toLocaleString()} &#8381;
-                  </span>
-                </div>
-              </div>
-              {urgencyFee ? (
-                <div className={styles.orderSummaryRow}>
-                  <span>Срочность:</span>
-                  <div className={styles.itemPrices}>
-                    <span className={styles.itemPricesPrice}>
-                      {urgencyFee.toLocaleString()} &#8381;
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                <></>
               )}
             </div>
-          </div>
-          <div className={`${styles.orderSummary} ${styles.orderSummaryTotal}`}>
-            <div className={styles.orderSummaryRow}>
-              <span>Итого:</span>
-              <div className={styles.itemPrices}>
-                <span className={styles.itemPrices}>
-                  {cartTotal.toLocaleString()} &#8381;
-                </span>
-              </div>
-            </div>
-          </div>
-          {!orderStatus && (
-            <button
-              className={`${styles.button} ${styles.buttonBlock} ${styles.buttonBig} ${styles.buttonBordered} ${styles.orderButton}`}
-              onClick={() => {
-                handleCreateOrder();
-              }}
-            >
-              <span className={styles.buttonContent}>Оформить заказ</span>
-            </button>
-          )}
-          {orderStatus && (
-            <p className={styles.orderStatusCart}>{orderStatus}</p>
-          )}
+            <BackToTopArrow />
+          </section>
         </div>
 
-        <Button className={styles.button} onClick={handleToggle}>
-          {isOpen ? 'Скрыть список товаров' : 'Показать список товаров'}
-        </Button>
-        <Collapse in={isOpen}>
-          <Grid container spacing={2}>
-            {allItems.map((item, index) => (
-              <Grid item xs={3} key={index}>
-                <Checkbox
-                  checked={isItemChecked(item)}
-                  onChange={() => handleCheckBox(item)}
-                />
-                <SearchItemCard item={item} />
-              </Grid>
-            ))}
-          </Grid>
-        </Collapse>
+        <div className={styles.selectItemsButtonContainer}>
+          <Button className={styles.button} onClick={handleToggle}>
+            {isOpen ? 'Скрыть список товаров' : 'Показать список товаров'}
+          </Button>
+        </div>
+
+        <div className={styles.itemListContainer}>
+          <Collapse in={isOpen}>
+            <Grid container spacing={2}>
+              {allItems.map((item, index) => (
+                <Grid item xs={3} key={index}>
+                  <Checkbox
+                    checked={isItemChecked(item)}
+                    onChange={() => handleCheckBox(item)}
+                  />
+                  <SearchItemCard item={item} />
+                </Grid>
+              ))}
+            </Grid>
+          </Collapse>
+        </div>
+
         <div className={styles.selectedItemsContainer}>
           {selectedItems.map((item, index) => (
             <div key={item.id} className={styles.oneItemConteiner}>
@@ -965,15 +867,132 @@ export default function FormAddOrder() {
             </div>
           ))}
         </div>
+
+        <div className={styles.orderSummDataContainer}>
+          <div className={`${styles.orderBlock} ${styles.orderBlockSummary}`}>
+            <h1 className={styles.headerItemCart}>Стоимость заказа</h1>
+            <div className={styles.promocodeInputContainer}>
+              <p
+                className={`${styles.orderDescription} ${styles.orderDescriptionOnlinePayment}`}
+              >
+                <input
+                  className={styles.promocodeInput}
+                  type='text'
+                  placeholder='Промокод'
+                  value={promocode}
+                  onChange={handlePromocodeChange}
+                />
+              </p>
+              <button
+                className={`${styles.button} ${styles.buttonBlock}  ${styles.buttonBordered}`}
+                onClick={handleApplyPromocode}
+              >
+                Применить
+              </button>
+            </div>
+            {promocodeErr && (
+              <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
+                {promocodeErr}
+              </p>
+            )}
+            {promoUsed && (
+              <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
+                Вы использовали промокод
+              </p>
+            )}
+            <div className={styles.orderSummary}>
+              <div className={styles.summary}>
+                <div className={styles.orderSummaryRow}>
+                  <span>Товары ({selectedItems.length}):</span>
+                  <div className={styles.itemPrices}>
+                    {(!promocodeErr && discount) || twoItemDiscount ? (
+                      <>
+                        <span
+                          className={styles.itemPricesPrice}
+                          style={{ textDecoration: 'line-through' }}
+                        >
+                          {selectedItems
+                            .reduce((sum, item) => sum + item.price, 0)
+                            .toLocaleString()}{' '}
+                          &#8381;
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className={styles.itemPricesPrice}>
+                          {selectedItems
+                            .reduce((sum, item) => sum + item.price, 0)
+                            .toLocaleString()}{' '}
+                          &#8381;
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className={styles.orderSummaryRow}>
+                  <span>Скидка:</span>
+                  <div className={styles.itemPrices}>
+                    {twoItemDiscount ? (
+                      <span className={styles.itemPricesPrice}>
+                        {(discount + twoItemDiscount).toLocaleString()} &#8381;
+                      </span>
+                    ) : (
+                      <span className={styles.itemPricesPrice}>
+                        {discount.toLocaleString()} &#8381;
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className={styles.orderSummaryRow}>
+                  <span>Доставка:</span>
+                  <div className={styles.itemPrices}>
+                    <span className={styles.itemPricesPrice}>
+                      {deliveryCost.toLocaleString()} &#8381;
+                    </span>
+                  </div>
+                </div>
+                {urgencyFee ? (
+                  <div className={styles.orderSummaryRow}>
+                    <span>Срочность:</span>
+                    <div className={styles.itemPrices}>
+                      <span className={styles.itemPricesPrice}>
+                        {urgencyFee.toLocaleString()} &#8381;
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
+            <div
+              className={`${styles.orderSummary} ${styles.orderSummaryTotal}`}
+            >
+              <div className={styles.orderSummaryRow}>
+                <span>Итого:</span>
+                <div className={styles.itemPrices}>
+                  <span className={styles.itemPrices}>
+                    {cartTotal.toLocaleString()} &#8381;
+                  </span>
+                </div>
+              </div>
+            </div>
+            {!orderStatus && (
+              <button
+                className={`${styles.button} ${styles.buttonBlock} ${styles.buttonBig} ${styles.buttonBordered} ${styles.orderButton}`}
+                onClick={() => {
+                  handleCreateOrder();
+                }}
+              >
+                <span className={styles.buttonContent}>Оформить заказ</span>
+              </button>
+            )}
+            {orderStatus && (
+              <p className={styles.orderStatusCart}>{orderStatus}</p>
+            )}
+          </div>
+        </div>
       </FormControl>
-      <button
-        className={`${styles.button} ${styles.buttonBlock} ${styles.buttonBig} ${styles.buttonBordered} ${styles.orderButton}`}
-        onClick={() => {
-          handleCreateOrder();
-        }}
-      >
-        <span className={styles.buttonContent}>Оформить заказ</span>
-      </button>
     </>
   );
 }
