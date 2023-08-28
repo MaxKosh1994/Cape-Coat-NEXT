@@ -70,8 +70,7 @@ export default function FormAddOrder() {
 
   const [selectedItemsMaterials, setSelectedItemsMaterials] = useState({});
 
-  const [paramsFormData, setParamsFormData] = useState({
-    itemId: 0,
+  const initialFormData = {
     selectedMaterial: '',
     height: '',
     length: '',
@@ -83,7 +82,10 @@ export default function FormAddOrder() {
     loops: '',
     buttons: '',
     lining: '',
-  });
+  };
+
+  // Объявление состояния
+  const [paramsFormData, setParamsFormData] = useState({});
 
   // форма адреса
   const [addressInputs, setAddressInputs] = useState({
@@ -292,8 +294,28 @@ export default function FormAddOrder() {
   //! Хэндлеры
 
   // записывает изменения в инпутах формы введения мерок
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setParamsFormData({ ...paramsFormData, [e.target.name]: e.target.value });
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, itemId: number) => {
+    setParamsFormData((prevState) => ({
+      ...prevState,
+      [itemId]: {
+        ...prevState[itemId],
+        [e.target.name]: e.target.value,
+      },
+    }));
+  };
+
+  // Изменение состояния формы при выборе материала
+  const handleMaterialChange = (
+    event: ChangeEvent<HTMLSelectElement>,
+    itemId: number
+  ) => {
+    setParamsFormData((prevState) => ({
+      ...prevState,
+      [itemId]: {
+        ...prevState[itemId],
+        [event.target.name]: event.target.value,
+      },
+    }));
   };
 
   // дозаписывает изменения в кастомизированных формах
@@ -306,21 +328,28 @@ export default function FormAddOrder() {
     }));
   };
 
-  // отрабатывает по клику на СОХРАНИТЬ при введении мерок
-  const handleSaveSizesInputs = async (index: number, itemId: number) => {
-    setParamsFormData((prevState) => ({
-      ...prevState,
-      itemId: itemId,
-      selectedMaterial: paramsFormData[itemId]?.selectedMaterial,
-    }));
-
-    //  const userParamsText = `Ваш рост: ${paramsFormData.height}см, длина изделия: ${paramsFormData.length}см, длина рукава: ${paramsFormData.sleeve}см, объем груди: ${paramsFormData.bust}см, объем талии: ${paramsFormData.waist}см, объем бедер: ${paramsFormData.hips}см`;
+  // Сохранение формы
+  const handleSaveSizesInputs = (itemId: number) => {
     setUserParams((prevTexts) => {
-      const updatedTexts = [...prevTexts];
-      updatedTexts[index] = paramsFormData;
-      return updatedTexts;
+      return { ...prevTexts, [itemId]: paramsFormData[itemId] };
     });
   };
+
+  // отрабатывает по клику на СОХРАНИТЬ при введении мерок
+  //   const handleSaveSizesInputs = async (index: number, itemId: number) => {
+  //     setParamsFormData((prevState) => ({
+  //       ...prevState,
+  //       itemId: itemId,
+  //       selectedMaterial: paramsFormData[itemId]?.selectedMaterial,
+  //     }));
+
+  //     //  const userParamsText = `Ваш рост: ${paramsFormData.height}см, длина изделия: ${paramsFormData.length}см, длина рукава: ${paramsFormData.sleeve}см, объем груди: ${paramsFormData.bust}см, объем талии: ${paramsFormData.waist}см, объем бедер: ${paramsFormData.hips}см`;
+  //     setUserParams((prevTexts) => {
+  //       const updatedTexts = [...prevTexts];
+  //       updatedTexts[index] = paramsFormData;
+  //       return updatedTexts;
+  //     });
+  //   };
 
   // записывает изменения в форме персональных данных (если клиент не залогинен)
   const handlePersonalDataInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -762,15 +791,8 @@ export default function FormAddOrder() {
               <SearchItemCard key={item.id} item={item} />
               <select
                 value={paramsFormData[item.id]?.selectedMaterial}
-                onChange={(event) => {
-                  setParamsFormData({
-                    ...paramsFormData,
-                    [item.id]: {
-                      ...paramsFormData[item.id],
-                      selectedMaterial: event.target.value,
-                    },
-                  });
-                }}
+                onChange={(event) => handleMaterialChange(event, item.id)}
+                name='selectedMaterial'
               >
                 {selectedItemsMaterials[item.id]?.map((material, index) => (
                   <option key={index} value={material.name}>
@@ -789,7 +811,7 @@ export default function FormAddOrder() {
                       type='text'
                       name='height'
                       className={styles.sizesFormInput}
-                      onChange={handleChange}
+                      onChange={(e) => handleChange(e, item.id)}
                     />
                   </div>
                   <div>
@@ -800,7 +822,7 @@ export default function FormAddOrder() {
                       type='text'
                       name='length'
                       className={styles.sizesFormInput}
-                      onChange={handleChange}
+                      onChange={(e) => handleChange(e, item.id)}
                     />
                   </div>
                   <div>
@@ -811,7 +833,7 @@ export default function FormAddOrder() {
                       type='text'
                       name='sleeve'
                       className={styles.sizesFormInput}
-                      onChange={handleChange}
+                      onChange={(e) => handleChange(e, item.id)}
                     />
                   </div>
                   <div>
@@ -822,7 +844,7 @@ export default function FormAddOrder() {
                       type='text'
                       name='bust'
                       className={styles.sizesFormInput}
-                      onChange={handleChange}
+                      onChange={(e) => handleChange(e, item.id)}
                     />
                   </div>
                   <div>
@@ -833,7 +855,7 @@ export default function FormAddOrder() {
                       type='text'
                       name='waist'
                       className={styles.sizesFormInput}
-                      onChange={handleChange}
+                      onChange={(e) => handleChange(e, item.id)}
                     />
                   </div>
                   <div>
@@ -844,38 +866,215 @@ export default function FormAddOrder() {
                       type='text'
                       name='hips'
                       className={styles.sizesFormInput}
-                      onChange={handleChange}
+                      onChange={(e) => handleChange(e, item.id)}
                     />
                   </div>
                   {item.category_id === 4 && (
-                    <TrousersSizeForm
-                      onTrousersSizeChange={handleCustomFormChange}
-                    />
+                    <div>
+                      <label htmlFor='saddle' className={styles.sizesFormLabel}>
+                        &quot;Седло&quot; брюк
+                      </label>
+                      <input
+                        type='text'
+                        name='saddle'
+                        className={styles.sizesFormInput}
+                        onChange={(e) => handleChange(e, item.id)}
+                      />
+                    </div>
                   )}
                   {item.category_id === 1 && (
-                    <TrenchSizeForm
-                      itemId={item.id}
-                      onTrenchSizeChange={handleCustomFormChange}
-                    />
+                    <>
+                      <div>
+                        <input
+                          type='checkbox'
+                          name='loops'
+                          id={`loops${item.id}`}
+                          className={styles.sizesFormCheckbox}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                        <label
+                          htmlFor={`loops${item.id}`}
+                          className={styles.sizesFormLabel}
+                        >
+                          Хочу шлёвки
+                        </label>
+                      </div>
+                      <div>
+                        <input
+                          type='checkbox'
+                          name='buttons'
+                          id={`buttons${item.id}`}
+                          value='pugovitsy'
+                          className={styles.sizesFormCheckbox}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                        <label
+                          htmlFor={`buttons${item.id}`}
+                          className={styles.sizesFormLabel}
+                        >
+                          Хочу пуговицы
+                        </label>
+                      </div>
+                    </>
                   )}
                   {item.category_id === 2 && (
-                    <CoatSizeForm
-                      itemId={item.id}
-                      onCoatSizeChange={handleCustomFormChange}
-                    />
+                    <>
+                      <div>
+                        <input
+                          type='checkbox'
+                          name='loops'
+                          id={`loops${item.id}`}
+                          className={styles.sizesFormCheckbox}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                        <label
+                          htmlFor={`loops${item.id}`}
+                          className={styles.sizesFormLabel}
+                        >
+                          Хочу шлёвки
+                        </label>
+                      </div>
+                      <div>
+                        <input
+                          type='radio'
+                          name='buttons'
+                          id={`pugovitsy${item.id}`}
+                          value='pugovitsy'
+                          className={styles.sizesFormCheckbox}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                        <label
+                          htmlFor={`pugovitsy${item.id}`}
+                          className={styles.sizesFormLabel}
+                        >
+                          Хочу пуговицы
+                        </label>
+                      </div>
+                      <div>
+                        <input
+                          type='radio'
+                          name='buttons'
+                          value='knopki'
+                          id={`knopki${item.id}`}
+                          className={styles.sizesFormCheckbox}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                        <label
+                          htmlFor={`knopki${item.id}`}
+                          className={styles.sizesFormLabel}
+                        >
+                          Хочу кнопки
+                        </label>
+                      </div>
+                      <div>
+                        <label
+                          htmlFor={`lining${item.id}`}
+                          className={styles.sizesFormLabel}
+                        >
+                          Утепление
+                        </label>
+                        <select
+                          name='lining'
+                          id={`lining${item.id}`}
+                          className={styles.sizesFormSelect}
+                          onChange={(e) => handleChange(e, item.id)}
+                        >
+                          <option value='none'>
+                            Без утепления (до 0 градусов)
+                          </option>
+                          <option value='minus5'>
+                            Тонкое утепление (до -5 градусов) +1.400₽
+                          </option>
+                          <option value='minus10'>
+                            Утепление с мембраной (до -10 градусов) *идеально
+                            для зимы* +1.400₽
+                          </option>
+                          <option value='minus20'>
+                            Утепление двойным слоем с мембраной (до -20
+                            градусов) *обьемное утепление* +1.400₽
+                          </option>
+                        </select>
+                      </div>
+                    </>
                   )}
                   {item.category_id === 5 && (
-                    <FurCoatSizeForm
-                      itemId={item.id}
-                      onFurCoatSizeChange={handleCustomFormChange}
-                    />
+                    <>
+                      <div>
+                        <input
+                          type='checkbox'
+                          name='loops'
+                          id={`loops${item.id}`}
+                          className={styles.sizesFormCheckbox}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                        <label
+                          htmlFor={`loops${item.id}`}
+                          className={styles.sizesFormLabel}
+                        >
+                          Хочу шлёвки
+                        </label>
+                      </div>
+                      <div>
+                        <input
+                          type='radio'
+                          name='buttons'
+                          id={`pugovitsy${item.id}`}
+                          value='pugovitsy'
+                          className={styles.sizesFormCheckbox}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                        <label
+                          htmlFor={`pugovitsy${item.id}`}
+                          className={styles.sizesFormLabel}
+                        >
+                          Хочу пуговицы
+                        </label>
+                      </div>
+                      <div>
+                        <input
+                          type='radio'
+                          name='buttons'
+                          value='knopki'
+                          id={`knopki${item.id}`}
+                          className={styles.sizesFormCheckbox}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                        <label
+                          htmlFor={`knopki${item.id}`}
+                          className={styles.sizesFormLabel}
+                        >
+                          Хочу кнопки
+                        </label>
+                      </div>
+                      <div>
+                        <label
+                          htmlFor='lining'
+                          className={styles.sizesFormLabel}
+                        >
+                          Утепление
+                        </label>
+                        <select
+                          name='lining'
+                          id=''
+                          className={styles.sizesFormSelect}
+                          onChange={(e) => handleChange(e, item.id)}
+                        >
+                          <option value='minus15'>
+                            Утепление до -15 градусов
+                          </option>
+                          <option value='minus25'>
+                            Утепление до -25 градусов
+                          </option>
+                        </select>
+                      </div>
+                    </>
                   )}
                 </div>
                 <button
                   className={styles.sizesFormBtn}
                   onClick={(event) => {
                     event.preventDefault();
-                    handleSaveSizesInputs(index, item.id);
+                    handleSaveSizesInputs(item.id);
                   }}
                 >
                   Сохранить
