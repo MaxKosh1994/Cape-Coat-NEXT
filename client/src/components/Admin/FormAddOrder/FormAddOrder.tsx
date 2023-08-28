@@ -12,6 +12,7 @@ import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
 import BackToTopArrow from '@/components/ToTopArrow/ToTopArrow';
 import { clear } from 'console';
 import { IPersonalData } from '@/TypeScript/checkoutTypes';
+import { getAllMaterials } from './api';
 
 export default function FormAddOrder() {
   //! ВСЕ STATES
@@ -67,9 +68,11 @@ export default function FormAddOrder() {
   // стоимость срочного пошива
   const [urgencyFee, setUrgencyFee] = useState(0);
 
-  // введенные в форму мерки
+  const [selectedItemsMaterials, setSelectedItemsMaterials] = useState({});
+
   const [paramsFormData, setParamsFormData] = useState({
     itemId: 0,
+    selectedMaterial: '',
     height: '',
     length: '',
     sleeve: '',
@@ -308,6 +311,7 @@ export default function FormAddOrder() {
     setParamsFormData((prevState) => ({
       ...prevState,
       itemId: itemId,
+      selectedMaterial: paramsFormData[itemId]?.selectedMaterial,
     }));
 
     //  const userParamsText = `Ваш рост: ${paramsFormData.height}см, длина изделия: ${paramsFormData.length}см, длина рукава: ${paramsFormData.sleeve}см, объем груди: ${paramsFormData.bust}см, объем талии: ${paramsFormData.waist}см, объем бедер: ${paramsFormData.hips}см`;
@@ -436,6 +440,19 @@ export default function FormAddOrder() {
   //! --------------------------------
   //! подгрузка всех доступных материалов для товара
 
+  useEffect(() => {
+    selectedItems.forEach(async (item) => {
+      const response = await getAllMaterials(item.id);
+      const materials = response.materials;
+      setSelectedItemsMaterials((prevMaterials) => ({
+        ...prevMaterials,
+        [item.id]: materials,
+      }));
+    });
+  }, [selectedItems]);
+
+  console.log('выбранные материалы======ЮЮЮ', selectedItemsMaterials);
+
   //! --------------------------------
 
   //! ГЛАВНАЯ ЛОГИКА СОЗДАНИЯ ЗАКАЗА
@@ -520,7 +537,7 @@ export default function FormAddOrder() {
                             <input
                               role='text'
                               title='Телефон'
-                              name='phone'
+                              name='number'
                               placeholder=''
                               className={styles.formInput}
                               onChange={handlePersonalDataInputChange}
@@ -621,15 +638,6 @@ export default function FormAddOrder() {
                   <span className={styles.checkboxHeader}>
                     Забрать в шоу-руме
                   </span>
-                  <span className={styles.checkboxDescription}>
-                    <em>Нижний Новгород, ул. Малая Покровская, 20</em>
-                  </span>
-                  <span className={styles.checkboxDescription}>
-                    <em>Будние дни, с 10:00 до 20:00</em>
-                  </span>
-                  <span className={styles.checkboxDescription}>
-                    <strong>Бесплатно</strong>
-                  </span>
                 </span>
               </label>
             </div>
@@ -649,15 +657,6 @@ export default function FormAddOrder() {
                 <span className={styles.checkboxLabel}>
                   <span className={styles.checkboxHeader}>
                     Доставка СДЭК или Почтой России
-                  </span>
-                  <span className={styles.checkboxDescription}>
-                    <strong>от 300 рублей</strong>, от 3 дней
-                  </span>
-                  <span className={styles.checkboxDescription}>
-                    <em>
-                      Точную стоимость доставки вам сообщит менеджер. Итоговая
-                      сумма заказа может измениться.
-                    </em>
                   </span>
                 </span>
               </label>
@@ -732,7 +731,6 @@ export default function FormAddOrder() {
                 </div>
               )}
             </div>
-            <BackToTopArrow />
           </section>
         </div>
 
@@ -762,6 +760,25 @@ export default function FormAddOrder() {
           {selectedItems.map((item, index) => (
             <div key={item.id} className={styles.oneItemConteiner}>
               <SearchItemCard key={item.id} item={item} />
+              <select
+                value={paramsFormData[item.id]?.selectedMaterial}
+                onChange={(event) => {
+                  setParamsFormData({
+                    ...paramsFormData,
+                    [item.id]: {
+                      ...paramsFormData[item.id],
+                      selectedMaterial: event.target.value,
+                    },
+                  });
+                }}
+              >
+                {selectedItemsMaterials[item.id]?.map((material, index) => (
+                  <option key={index} value={material.name}>
+                    {material.name}
+                  </option>
+                ))}
+              </select>
+
               <form action=''>
                 <div className={styles.sizesFormBlock}>
                   <div>

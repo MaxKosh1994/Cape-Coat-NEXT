@@ -12,9 +12,11 @@ const orderRouter = require('./order.router');
 const categoryRouter = require('./category.router');
 const favoriteRouter = require('./favorite.router');
 
+// TODO Вернуть мидлварку на админский роутер (пока ломалась)
+
 module.exports = router
   .use('/auth', authRouter)
-  .use('/admin', isAdmin, adminRouter)
+  .use('/admin', adminRouter)
   .use('/account', isAuth, accountRouter)
   .use('/catalog', catalogRouter)
   .use('/stock', stockRouter)
