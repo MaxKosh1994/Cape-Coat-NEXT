@@ -568,6 +568,7 @@ export default function CheckoutPage() {
       }, 1000);
     }
   };
+  console.log(cartItemsList);
 
   return (
     <>
@@ -637,6 +638,11 @@ export default function CheckoutPage() {
                         <div className={styles.basketItemContent}>
                           <div className={styles.basketItemProperties}>
                             <div>Артикул: {item.article}</div>
+                          </div>
+                        </div>
+                        <div className={styles.basketItemContent}>
+                          <div className={styles.basketItemProperties}>
+                            <div>Материал: {item.Material.name}</div>
                           </div>
                         </div>
                         <div className={styles.basketItemContent}>

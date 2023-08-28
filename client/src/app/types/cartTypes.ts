@@ -25,9 +25,19 @@ export interface CartItem {
   user_id: number;
 }
 
+export interface MaterialItem {
+  id: number;
+  name: string;
+  photo: string;
+  category_id: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ISingleItem {
   Carts: CartItem[];
   Photos: ItemPhoto[];
+  Material: MaterialItem[];
   article: string;
   bestseller: boolean;
   category_id: number;
