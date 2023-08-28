@@ -93,14 +93,14 @@
 .basketItemContentLeft {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .basketItemContentRight {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
   height: 100%;
 }
 
