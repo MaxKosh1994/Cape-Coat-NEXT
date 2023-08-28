@@ -39,10 +39,10 @@ export default function Tasks() {
 
   //! --------------------Логика фильтрации-------------------------------------
 
-  const filteredOrders = orders.filter(
-    (order) => order.status !== 'Заказ отправлен'
+  const filteredOrders = orders?.filter(
+    (order) => order?.status !== 'Заказ отправлен'
   );
-  const sortedOrders = filteredOrders.sort((a, b) => {
+  const sortedOrders = filteredOrders?.sort((a, b) => {
     if (a.urgent && !b.urgent) return -1;
     if (!a.urgent && b.urgent) return 1;
     return a.createdAt.localeCompare(b.createdAt);
@@ -198,7 +198,7 @@ export default function Tasks() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {sortedOrders.map((order: IOrderAdmin) => (
+              {sortedOrders?.map((order: IOrderAdmin) => (
                 <TableRow
                   key={order.id}
                   sx={{

@@ -22,7 +22,6 @@
   justify-content: space-between;
   margin-right: 50px;
 }
-
 .container {
   text-rendering: optimizeSpeed;
   font-size: 14px;
@@ -191,6 +190,10 @@
   top: 130px;
 }
 
+.orderBlockSummary {
+  top: 120px;
+}
+
 .orderBlock.orderBlockSummary
   > p.orderDescription.orderDescriptionOnlinePayment {
   text-rendering: optimizeSpeed;
@@ -286,6 +289,7 @@
   font-weight: 400;
   white-space: nowrap;
   font-size: 16px;
+  font-style: italic;
 }
 
 .orderSummaryTotal {
@@ -298,7 +302,7 @@
   text-transform: uppercase;
 }
 
-/* .button,
+.button,
 .buttonBlock,
 .buttonBig,
 .buttonBordered .orderButton {
@@ -327,7 +331,7 @@
   padding: 10px;
   border: 1px solid #000;
   margin-bottom: 12px;
-} */
+}
 
 .basketItemDeleteButton {
   box-sizing: border-box;
@@ -386,6 +390,7 @@
 .promocodeInputContainer {
   display: flex;
   justify-content: space-between;
+  margin-top: 40px;
 }
 
 .promocodeInputContainer .button.buttonBlock.buttonBordered {
@@ -586,7 +591,7 @@
   box-sizing: border-box;
   border: 1px solid #cccccc;
   margin-bottom: 16px;
-  padding: 6px 16px 16px;
+  padding: 3px 16px 3px;
   border-color: #000;
 }
 
@@ -701,4 +706,128 @@
 .orderStatusCart {
   font-size: 1.4rem;
   margin-bottom: 20px;
+}
+
+@media screen and (max-width: 499px) {
+  .container {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 0;
+    width: 100vw;
+  }
+
+  .order {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .orderForm {
+    width: 100%;
+  }
+
+  .orderBlock {
+    width: 100%;
+  }
+
+  .orderBlock.orderBlockSummary {
+    width: 100%;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    top: 0;
+    bottom: 0;
+  }
+
+  .userParameters {
+    height: 90px;
+    line-height: 23px;
+  }
+
+  .basketItemLeft > a > img {
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .basketItem {
+    flex-direction: column;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+
+  .basketItemLeft {
+    width: 300px;
+    margin: 5px auto;
+  }
+
+  .basketItemRight {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 5px auto;
+  }
+
+  .basketItemDeleteButton {
+    width: 30px;
+    height: 30px;
+  }
+
+  .orderSummaryTotal {
+    font-size: 24px;
+    line-height: 26px;
+  }
+
+  .button,
+  .buttonBlock,
+  .buttonBig,
+  .buttonBordered .orderButton {
+    font-size: 12px;
+    line-height: 16px;
+    padding: 8px;
+    width: 100%;
+  }
+
+  .orderDescription {
+    font-size: 12px;
+    line-height: 16px;
+    width: 100%;
+  }
+
+  .orderProperty {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .formControl,
+  .formControlActive {
+    font-size: 12px;
+    line-height: 16px;
+    width: 100%;
+  }
+
+  .formControlLabel {
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .formControlControl {
+    font-size: 14px;
+    line-height: 20px;
+    padding: 10px 42px 10px 12px;
+    width: 100%;
+  }
+
+  .deliveryServiceForm {
+    font-size: 12px;
+    line-height: 16px;
+    width: 100%;
+  }
+
+  .emptyCartMsg {
+    margin: 70% 10px 30%;
+    font-size: 1.3rem;
+  }
+
+  .orderStatusCart {
+    font-size: 1.2rem;
+  }
 }

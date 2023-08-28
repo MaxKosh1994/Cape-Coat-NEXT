@@ -139,7 +139,7 @@ export default function Order() {
     'December',
   ];
 
-  let ordersByMonth = orders.reduce((acc, order) => {
+  let ordersByMonth = orders?.reduce((acc, order) => {
     let date = format(parseISO(order?.createdAt), 'MMMM yyyy');
     let found = acc.find((a) => a.date === date);
 
@@ -152,7 +152,7 @@ export default function Order() {
     return acc;
   }, []);
 
-  ordersByMonth = ordersByMonth.sort((a, b) => {
+  ordersByMonth = ordersByMonth?.sort((a, b) => {
     const dateA = new Date(
       a.date.split(' ')[1],
       months.indexOf(a.date.split(' ')[0])

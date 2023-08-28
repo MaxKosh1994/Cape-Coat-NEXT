@@ -11,8 +11,16 @@ import CoatSizeForm from '@/components/Cart/coatSizeForm';
 import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
 import BackToTopArrow from '@/components/ToTopArrow/ToTopArrow';
 import { clear } from 'console';
+import { IPersonalData } from '@/TypeScript/checkoutTypes';
 
 export default function FormAddOrder() {
+  // стейт для данных пользователя
+  const [personalData, setPersonalData] = useState<IPersonalData>({
+    name: '',
+    email: '',
+    number: '',
+  });
+
   // стейт для всех товаров в выпадающий список
   const [allItems, setAllItems] = useState<IItem[]>([]);
 
@@ -327,6 +335,11 @@ export default function FormAddOrder() {
     //  }
   };
 
+  // записывает изменения в форме персональных данных (если клиент не залогинен)
+  const handlePersonalDataInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPersonalData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   // отслеживает изменения в инпутах формы адреса доставки
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAddressInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -449,8 +462,9 @@ export default function FormAddOrder() {
     }
 
     //! ВСЕ ДАННЫЕ ДЛЯ ЗАКАЗА КРОМЕ USER (каждую форму нужно сохранить)
+
     const orderData = {
-      // user,
+      personalData,
       cartTotal,
       addressString,
       commentsInput,
@@ -463,6 +477,62 @@ export default function FormAddOrder() {
   return (
     <>
       <FormControl sx={{ m: 1, minWidth: 250 }}>
+        <section
+          className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
+        >
+          <h2 className={styles.headerItemCart}>Ваши данные</h2>
+          <div className={styles.formBlock}>
+            <div className={styles.deliveryService}>
+              <div className={styles.deliveryServiceForm}>
+                <div>
+                  <div className={styles.inputLocation}>
+                    <div className={styles.formControl}>
+                      <label className={styles.formControlLabel}>Имя</label>
+                      <input
+                        role='text'
+                        title='Имя'
+                        placeholder=''
+                        name='name'
+                        className={styles.formInput}
+                        onChange={handlePersonalDataInputChange}
+                      />
+                    </div>
+                    <div className={styles.formControl}>
+                      <label className={styles.formControlLabel}>Email</label>
+                      <input
+                        role='text'
+                        title='Email*'
+                        placeholder=''
+                        name='email'
+                        className={styles.formInput}
+                        onChange={handlePersonalDataInputChange}
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <div className={styles.inputLocation}>
+                      <div className={styles.formControl}>
+                        <label className={styles.formControlLabel}>
+                          Телефон
+                        </label>
+                        <input
+                          role='text'
+                          title='Телефон'
+                          name='phone'
+                          placeholder=''
+                          className={styles.formInput}
+                          onChange={handlePersonalDataInputChange}
+                          disabled=''
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section
           className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
         >
