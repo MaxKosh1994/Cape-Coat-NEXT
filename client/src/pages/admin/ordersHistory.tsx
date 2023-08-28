@@ -26,6 +26,10 @@ import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
 import { IOrderAdmin } from '@/components/Admin/order/types';
 import InfoContainer from '@/components/Admin/infoContainer/infoContainer';
 import TasksForm from '@/components/Admin/TasksForm/TasksForm';
+import {
+  IItemData,
+  ITaskInfo,
+} from '@/components/Admin/TasksForm/taskformTypes';
 
 export default function Order() {
   const [orders, setOrders] = useState([]);
@@ -168,8 +172,8 @@ export default function Order() {
 
   const [pageNumber, setPageNumber] = useState(0);
 
-  const [openModal, setOpenModal] = useState(false);
-  const [itemInfo, setItemInfo] = useState({
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [itemInfo, setItemInfo] = useState<IItemData>({
     id: 0,
     name: '',
     article: '',
@@ -210,9 +214,13 @@ export default function Order() {
       updatedAt: '',
     },
   });
-  const [taskInfo, setTaskInfo] = useState({});
+  const [taskInfo, setTaskInfo] = useState<ITaskInfo>({
+    id: 0,
+    createdAt: '',
+    updatedAt: '',
+  });
 
-  const handleFormTask = async (item) => {
+  const handleFormTask = async (item: IItemData) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}admin/tasks/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -220,7 +228,6 @@ export default function Order() {
       body: JSON.stringify(item),
     });
     const res = await response.json();
-    console.log(res.newTask);
     setTaskInfo(res.newTask);
     setItemInfo(item);
     setOpenModal(true);

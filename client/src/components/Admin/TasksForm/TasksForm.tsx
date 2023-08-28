@@ -3,6 +3,7 @@ import { Close } from '@mui/icons-material';
 import styles from './TaskForm.module.css';
 import { jsPDF } from 'jspdf';
 import { myFont } from './myFontBinary';
+import { ITaskData } from './taskformTypes';
 
 export default function TasksForm({
   openModal,
@@ -10,7 +11,7 @@ export default function TasksForm({
   taskInfo,
   setOpenModal,
 }) {
-  const [taskData, setTaskData] = useState({
+  const [taskData, setTaskData] = useState<ITaskData>({
     taskNum: 0,
     date: '',
     itemCategory: '',
@@ -92,7 +93,7 @@ export default function TasksForm({
   const handleTaskInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTaskData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
+  console.log(itemInfo);
   const handleCreatePDF = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const doc = new jsPDF();
@@ -112,7 +113,7 @@ export default function TasksForm({
         const label = fieldNames[key];
         const value = String(taskData[key]); // Convert the value to a string
         console.log(label, typeof value);
-        if (value === 'null') {
+        if (value === 'null' || value === '') {
           continue;
         }
         const labelLines = doc.splitTextToSize(label, labelWidth);
@@ -135,7 +136,9 @@ export default function TasksForm({
       }
     }
 
-    doc.save(`Task ${taskData.taskNum}.pdf`);
+    doc.save(
+      `Задание ${taskData.taskNum}_дата ${taskData.date.slice(0, -10)}.pdf`
+    );
   };
 
   return (
@@ -192,9 +195,10 @@ export default function TasksForm({
           <input type="text" name="size" onChange={handleTaskInputChange} />
 
           <label htmlFor="sizeComments">Примечания к размеру</label>
-          <input
-            type="textarea"
+          <textarea
             name="sizeComments"
+            rows={3}
+            cols={25}
             onChange={handleTaskInputChange}
           />
           <label htmlFor="length">Длина</label>
@@ -343,9 +347,10 @@ export default function TasksForm({
             </>
           )}
           <label htmlFor="comments">Примечания</label>
-          <input
-            type="textarea"
+          <textarea
             name="comments"
+            rows={3}
+            cols={25}
             onChange={handleTaskInputChange}
           />
           <button className={styles.pdfBtn} onClick={handleCreatePDF}>
