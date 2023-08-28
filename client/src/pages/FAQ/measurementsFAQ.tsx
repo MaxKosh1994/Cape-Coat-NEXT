@@ -10,7 +10,7 @@ export default function measurementsFAQ() {
 
       <div className={styles.mainContainer}>
         <div className={styles.headerContainer}>
-          <Typography className={styles.Header} variant='h4' component='h1'>
+          <Typography className={styles.Header} variant="h4" component="h1">
             Снятие мерок
           </Typography>
         </div>
@@ -53,9 +53,9 @@ export default function measurementsFAQ() {
           <div className={styles.movieContainer}>
             <iframe
               className={styles.iframe}
-              src='https://www.youtube.com/embed/sq00YuoHGHY'
-              title='Video'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+              src="https://www.youtube.com/embed/sq00YuoHGHY"
+              title="Video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
           </div>
