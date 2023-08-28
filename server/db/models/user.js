@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         through: models.Favorite,
         foreignKey: 'user_id',
       });
+      this.belongsToMany(models.Promocode, {
+        through: models.UserPromocode,
+        foreignKey: 'user_id',
+      });
     }
   }
   User.init(
