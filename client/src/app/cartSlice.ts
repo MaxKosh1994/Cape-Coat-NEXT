@@ -1,6 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+interface Icart {
+  cart_id: number;
+  item_id: number;
+  height: string;
+  length: string;
+  sleeve: string;
+  bust: string;
+  waist: string;
+  hips: string;
+  saddle: string;
+  loops: boolean;
+  buttons: string;
+  lining: string;
+  added: boolean;
+}
+
+interface ICartItemsState {
+  cartItems: Icart[];
+}
+
+const initialState: ICartItemsState = {
   cartItems: [],
 };
 
@@ -12,7 +32,6 @@ const rtkSlice = createSlice({
       state.cartItems = action.payload;
     },
     delCartItem(state, action) {
-      console.log('ction.payload', action.payload);
       state.cartItems = state.cartItems.filter(
         (el) => el.item_id !== +action.payload
       );

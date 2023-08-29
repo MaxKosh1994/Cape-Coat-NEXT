@@ -8,7 +8,7 @@ import styles from './ProductCard.module.css';
 interface FavoriteIconButtonProps {
   isFavorite: boolean;
   onClick: () => void;
-  itemId: number;
+  itemId?: number;
 }
 
 const FavoriteIconButton: React.FC<FavoriteIconButtonProps> = ({

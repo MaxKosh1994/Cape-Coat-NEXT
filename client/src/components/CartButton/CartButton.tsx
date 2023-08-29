@@ -5,22 +5,31 @@ import { RootState } from '@/app/store';
 import { addCartItem, delCartItem } from '@/app/cartSlice';
 import { useAppDispatch } from '@/app/hooks';
 import './CartButtonStyle.css';
+import { Item } from '@/app/itemSlice';
+
+interface IcartButtonProps {
+  itemId: number;
+  selectedMaterialId: number;
+  setMaterialAlert: React.Dispatch<React.SetStateAction<string>>;
+  itemData: Item;
+}
 
 export default function CartButton({
-  item,
+  itemId,
   selectedMaterialId,
   setMaterialAlert,
   itemData,
-}) {
+}: IcartButtonProps): JSX.Element {
   const [isInCart, setIsInCart] = useState(false);
 
   const cartData = useSelector((state: RootState) => state.cartSlice.cartItems);
+
   const user = useSelector((state: RootState) => state.sessionSlice.user);
 
   useEffect(() => {
-    const isInCart = cartData.some((el) => el.item_id === +item);
+    const isInCart = cartData.some((el) => el.item_id === itemId);
     setIsInCart(isInCart);
-  }, [cartData, item]);
+  }, [cartData, itemId]);
 
   const dispatch = useAppDispatch();
   const cartHandler = async () => {
@@ -34,7 +43,7 @@ export default function CartButton({
       }
       if (!isInCart) {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_URL}cart/item/${item}`,
+          `${process.env.NEXT_PUBLIC_URL}cart/item/${itemId}`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -51,7 +60,7 @@ export default function CartButton({
         }
       } else {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_URL}cart/item/${item}/${user}`,
+          `${process.env.NEXT_PUBLIC_URL}cart/item/${itemId}/${user}`,
           {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
@@ -60,7 +69,7 @@ export default function CartButton({
         );
         if (res.ok) {
           setIsInCart(!isInCart);
-          dispatch(delCartItem(item));
+          dispatch(delCartItem(itemId));
         }
       }
     } catch (error) {
@@ -88,7 +97,7 @@ export default function CartButton({
         </div>
         <div className="product__actions-additional">
           <div className="product__favorites">
-            <LikeButton item={item} />
+            <LikeButton itemId={itemId} />
           </div>
         </div>
       </div>

@@ -132,7 +132,7 @@ export default function CartMin({ show, handleCartIconClick }) {
                   <div className={styles.basketItemRight}>
                     <div className={styles.basketItemContentRight}>
                       <div className={styles.iconsContainer}>
-                        <LikeButton item={item.id} />
+                        <LikeButton itemId={item.id} />
                         <button
                           className={styles.basketItemDeleteButton}
                           type="button"
