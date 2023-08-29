@@ -1,7 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 // import { stateType, userType } from "../types"
 
-
 export interface IPhoto {
   photo: string; // Поле для фотографии товара
   // Дополнительные свойства фотографии, если есть
@@ -17,10 +16,6 @@ export interface ICategory {
   isFavorite: boolean;
   isCart: boolean;
 }
-// export interface IFavorite {
-//   id: number
-//   isFavorite: boolean
-// }
 
 export type stateType = {
   categoryItems: ICategory[];
@@ -78,5 +73,9 @@ const rtkSlice = createSlice({
 });
 
 export default rtkSlice.reducer;
-export const { category, toggleFavorite, categoryClear, toggleCart } =
-  rtkSlice.actions;
+export const {
+  category,
+  toggleFavorite,
+  categoryClear,
+  toggleCart,
+} = rtkSlice.actions;

@@ -9,6 +9,16 @@
   margin: 0 -15px;
 }
 
+.infoContainer {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.infoP {
+  margin: 0 auto;
+}
+
 @media (max-width: 850px) {
   .ProductCardsContainer {
     margin-right: -70px;

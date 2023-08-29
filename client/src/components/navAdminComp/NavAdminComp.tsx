@@ -18,10 +18,10 @@ export default function NavAdminComp() {
       </Head>
       <div className={styles.mainDiv}>
         <div className={styles.routesDiv}>
-          <NextLink href='/admin/item'>
+          <NextLink href='/admin/cat-col-mat'>
             <Button
               className={`${styles.button} ${
-                router.pathname === '/admin/item' ? styles.active : ''
+                router.pathname === '/admin/cat-col-mat' ? styles.active : ''
               }`}
             >
               Добавить контент
@@ -39,23 +39,13 @@ export default function NavAdminComp() {
           </NextLink>
 
 
-          <NextLink href='/admin/orders'>
+          <NextLink href='/admin/ordersHistory'>
             <Button
               className={`${styles.button} ${
-                router.pathname === '/admin/orders' ? styles.active : ''
+                router.pathname === '/admin/ordersHistory' ? styles.active : ''
               }`}
             >
-              Заказы
-            </Button>
-          </NextLink>
-
-          <NextLink href='/admin/users'>
-            <Button
-              className={`${styles.button} ${
-                router.pathname === '/admin/users' ? styles.active : ''
-              }`}
-            >
-              Клиенты
+              История заказов
             </Button>
           </NextLink>
 
@@ -65,7 +55,17 @@ export default function NavAdminComp() {
                 router.pathname === '/admin/tasks' ? styles.active : ''
               }`}
             >
-              Задания
+              Заказы в работе
+            </Button>
+          </NextLink>
+
+          <NextLink href='/admin/newOrder'>
+            <Button
+              className={`${styles.button} ${
+                router.pathname === '/admin/newOrder' ? styles.active : ''
+              }`}
+            >
+              Создать заказ
             </Button>
           </NextLink>
         </div>

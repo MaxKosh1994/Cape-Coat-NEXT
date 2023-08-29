@@ -1,0 +1,83 @@
+.textile_choose {
+  font-size: 20px;
+  text-align: start;
+  margin-bottom: 50px;
+  transition: transform 0.2s ease-in-out;
+}
+.textile_choose.alert {
+  color: red;
+  animation: shake 0.3s ease 1;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.materials {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.materials {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.textile_icons {
+  height: 100px;
+  width: 100px;
+
+  width: 100%;
+}
+.textile_icons.first {
+  margin-left: 0;
+}
+
+.textile_icons.last {
+  margin-right: 0;
+}
+
+.textile_icons {
+  height: 100px;
+  width: 100px;
+  margin-left: 0px;
+}
+.one_material_div {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.one_material_div > span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 150px;
+  text-align: center;
+  top: -30px;
+}
+.one_material_div > .textile_name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+.selected {
+  box-shadow: 0 0 0 1px black; /* Creates a 2px black "border" around the image */
+  border-radius: 5px;
+}

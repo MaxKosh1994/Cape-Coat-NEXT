@@ -23,6 +23,7 @@ import { checkCartItemThunk } from '../../app/thunkActionsCart';
 import './navbarStyle.css';
 import NavigationMenu from './NavigationMenu/NavigationMenu';
 import MobileMenu from './MobileMenu/MobileMenu';
+import CartMin from '../Cart/CartMin';
 
 const theme = createTheme({
   palette: {
@@ -90,7 +91,6 @@ export default function Navbar() {
   const isMobile = useMediaQuery('(max-width:1095px)');
 
   const router = useRouter();
-
   const dispatch = useAppDispatch();
   const isUserLogin = useSelector(
     (state: RootState) => state.sessionSlice.session
@@ -153,6 +153,26 @@ export default function Navbar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const [showCart, setShowCart] = useState(false);
+  const [prevAsPath, setPrevAsPath] = useState(router.asPath);
+
+  const handleCartIconClick = (e: MouseEvent<HTMLButtonElement>) => {
+    setShowCart((prev) =>
+      prev
+        ? !prev
+        : setTimeout(() => {
+            !prev;
+          }, 1001)
+    );
+  };
+
+  useEffect(() => {
+    if (router.asPath !== prevAsPath) {
+      setShowCart(false);
+      setPrevAsPath(router.asPath);
+    }
+  }, [router.asPath, prevAsPath]);
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -210,7 +230,6 @@ export default function Navbar() {
                 height: '30px',
                 objectFit: 'cover',
                 marginBottom: isMobile ? '5px' : '0',
-                marginTop: isMobile && '0',
               }}
             />
           </Link>
@@ -246,11 +265,7 @@ export default function Navbar() {
                 <Person2Icon />
               </IconButton>
             </Link>
-            <Link
-              className="header-favorite"
-              href="/account/favorites"
-              passHref
-            >
+            <Link className="header-favorite" href="/favorites" passHref>
               <IconButton
                 size="large"
                 aria-label="show 17 new notifications"
@@ -261,26 +276,27 @@ export default function Navbar() {
                 </Badge>
               </IconButton>
             </Link>
-            <Link
+            {/* <Link
               className="header-basket"
               href={isUserLogin ? '/cart' : '/signin'}
               passHref
+            > */}
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              sx={{ color: iconColour, padding: '8px' }}
+              onClick={handleCartIconClick}
             >
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                sx={{ color: iconColour, padding: '8px' }}
-              >
-                <Badge badgeContent={amountOfCartItem} color="error">
-                  <AddShoppingCart />
-                </Badge>
-              </IconButton>
-            </Link>
+              <Badge badgeContent={amountOfCartItem} color="error">
+                <AddShoppingCart />
+              </Badge>
+            </IconButton>
+            {/* </Link> */}
 
-            <a href="javascript:;" className="search-ico"></a>
+            {/* <a href="javascript:;" className="search-ico"></a> */}
           </div>
         </div>
       </div>
@@ -293,6 +309,9 @@ export default function Navbar() {
         onSearchIconClick={onSearchIconClick}
       />
       {renderMenu}
+      {showCart && (
+        <CartMin show={showCart} handleCartIconClick={handleCartIconClick} />
+      )}
     </>
   );
 }

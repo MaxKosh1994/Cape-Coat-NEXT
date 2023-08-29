@@ -3,18 +3,38 @@ import { IconButton } from '@mui/material';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
+import styles from './ProductCard.module.css';
+
 interface CartIconButtonProps {
   isCart: boolean;
   onClick: () => void;
+  itemId: number;
 }
 
-const CartIconButton: React.FC<CartIconButtonProps> = ({ isCart, onClick }) => {
+const CartIconButton: React.FC<CartIconButtonProps> = ({
+  isCart,
+  onClick,
+  itemId,
+}) => {
+  const localStorageData = localStorage.getItem('cartItems');
+
+  const itemsInCart = JSON.parse(localStorageData || '[]');
+
+  const isItemInCart = itemsInCart.includes(itemId);
+
   return (
-    <IconButton onClick={onClick} aria-label="Add to cart">
-      {isCart ? (
-        <AddTaskIcon style={{ color: 'rgb(0 0 0 / 70%)' }} />
+    <IconButton
+      className={styles.IconImage}
+      onClick={onClick}
+      aria-label="Add to cart"
+    >
+      {isCart || isItemInCart ? (
+        <AddTaskIcon
+          className={styles.IconImage}
+          style={{ color: 'rgb(0 0 0 / 70%)' }}
+        />
       ) : (
-        <AddShoppingCartIcon />
+        <AddShoppingCartIcon className={styles.IconImage} />
       )}
     </IconButton>
   );

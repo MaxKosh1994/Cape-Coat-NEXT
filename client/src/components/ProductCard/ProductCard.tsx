@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styles from './ProductCard.module.css';
 import { IProductCard } from '@/TypeScript/ProductCard.type';
 import useProductCardLogic from './useProductCardLogic';
@@ -17,6 +16,7 @@ const ProductCard: React.FC<IProductCard> = ({
   isFavorite: initialIsFavorite,
   isCart: initialIsCart,
   newPrice,
+  isItemInFavoritesState,
 }: IProductCard) => {
   const { isFavorite, isCart, favoriteHandler, cartHandler } =
     useProductCardLogic(
@@ -27,14 +27,16 @@ const ProductCard: React.FC<IProductCard> = ({
       price,
       initialIsFavorite,
       initialIsCart,
-      newPrice
+      newPrice,
+      isItemInFavoritesState
     );
 
-  const itemLink = useRouter().query.category;
+  const router = useRouter();
+  const { category } = router.query;
 
   return (
     <div className={styles.Card} key={id}>
-      <Link key={id} href={`${itemLink}/${id}`}>
+      <Link href={`/${category}/${id}`} as={`/catalog/${category}/${id}`}>
         <span className={styles.CardMedia}>
           <img
             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${photo}`}
@@ -44,19 +46,39 @@ const ProductCard: React.FC<IProductCard> = ({
         </span>
         <h1 className={styles.NameCard}>{name}</h1>
       </Link>
-      <div className={styles.CardContent}>
-        <h3 className={styles.Price}>
-          Цена: {price?.toLocaleString().replace(/,\s?/g, ' ')} ₽
-        </h3>
-
-        <div className={styles.Icons}>
-          <FavoriteIconButton
-            isFavorite={isFavorite}
-            onClick={favoriteHandler}
-          />
-          <CartIconButton isCart={isCart} onClick={cartHandler} />
+      {newPrice ? (
+        <div className={styles.CardContent}>
+          <h3 className={styles.Price}>Цена:</h3>
+          <h3 className={styles.OldPrice}>
+            {price?.toLocaleString().replace(/,\s?/g, ' ')} ₽
+          </h3>
+          <h3 className={styles.NewPrice}>
+            {newPrice?.toLocaleString().replace(/,\s?/g, ' ')} ₽
+          </h3>
+          <div className={styles.Icons}>
+            <FavoriteIconButton
+              isFavorite={isFavorite}
+              onClick={favoriteHandler}
+              itemId={id}
+            />
+            <CartIconButton isCart={isCart} onClick={cartHandler} itemId={id} />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className={styles.CardContent}>
+          <h3 className={styles.PriceOne}>
+            Цена: {price?.toLocaleString().replace(/,\s?/g, ' ')} ₽
+          </h3>
+          <div className={styles.Icons}>
+            <FavoriteIconButton
+              isFavorite={isFavorite}
+              onClick={favoriteHandler}
+              itemId={id}
+            />
+            <CartIconButton isCart={isCart} onClick={cartHandler} itemId={id} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

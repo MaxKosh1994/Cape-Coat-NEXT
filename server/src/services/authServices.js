@@ -19,7 +19,6 @@ module.exports.registerUser = async (full_name, email, password) => {
       email,
       hashedPassword,
     );
-
     if (isCreated) {
       return { success: true, userData };
     }

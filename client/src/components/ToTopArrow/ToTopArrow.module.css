@@ -1,0 +1,25 @@
+.backToTop {
+  position: fixed;
+  bottom: 300px;
+  right: 300px;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  color: #656565;
+  text-align: center;
+  line-height: 40px;
+  font-size: 7rem;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.backToTop a {
+  color: #656565;
+  text-decoration: none;
+}
+
+.show {
+  opacity: 1;
+}

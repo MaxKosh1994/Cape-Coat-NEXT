@@ -1,13 +1,28 @@
-const { User, Item, Cart, CartItem, Photo } = require('../../db/models');
+const { Material, Item, Cart, CartItem, Photo } = require('../../db/models');
+const { findUserCart } = require('./cartServices');
 
 module.exports.getUserCartItems = async (userId) => {
   const cartItems = await Item.findAll({
     include: [
       { model: Cart, where: { user_id: userId } },
+      { model: Material },
       { model: Photo, limit: 1 },
     ],
   });
   return cartItems;
+};
+
+module.exports.getItemsInUserCart = async (userId) => {
+  // TODO исправить после введения рабочего локалсторедж
+  const userCart = await findUserCart(userId);
+  const allItems = await CartItem.findAll({
+    where: {
+      cart_id: userCart.id,
+    },
+    raw: true,
+  });
+
+  return allItems;
 };
 
 module.exports.getItemIdsInCart = async (cartId) => {

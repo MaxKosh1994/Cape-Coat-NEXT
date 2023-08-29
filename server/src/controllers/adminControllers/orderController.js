@@ -1,9 +1,15 @@
-const { Item, Order, User } = require('../../../db/models');
+const {
+  Item,
+  Order,
+  User,
+  OrderItem,
+  Material,
+} = require('../../../db/models');
 
 module.exports.readOrder = async (req, res) => {
   try {
     const allOrder = await Order.findAll({
-      include: [{ model: User }, { model: Item }],
+      include: [{ model: User }, { model: Item, include: { model: Material } }],
       nest: true,
     });
     res.status(200).json({ allOrder, message: 'success' });
@@ -13,16 +19,69 @@ module.exports.readOrder = async (req, res) => {
   }
 };
 
-module.exports.updateOrder = async (req, res) => {
+module.exports.updateOrderField = async (req, res) => {
   try {
-    const orderStatus = await req.body.status;
+    const updateField = await req.body;
     const orderId = await req.params.id;
-    console.log(orderId, orderStatus);
-    const updateOrderStatus = await Order.update(
-      { status: orderStatus },
-      { where: { id: orderId } },
-    );
-    res.status(200).json({ message: 'Статус заказа успешно изменён!' });
+
+    await Order.update(updateField, { where: { id: orderId } });
+
+    const updatedOrder = await Order.findOne({
+      where: { id: orderId },
+      include: [{ model: User }, { model: Item }],
+      nest: true,
+    });
+
+    if (updatedOrder) {
+      res.status(200).json(updatedOrder);
+    } else {
+      res.status(404).json({ message: 'Не удалось найти обновленный заказ' });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: 'Ошибка на сервере' });
+  }
+};
+
+module.exports.updateOrderItemField = async (req, res) => {
+  try {
+    const updateField = await req.body;
+    const orderId = await req.params.id;
+    const itemId = await req.params.itemId;
+
+    console.log(req.body, orderId, itemId);
+
+    const orderItem = await OrderItem.findOne({
+      where: {
+        order_id: orderId,
+        item_id: itemId,
+      },
+    });
+
+    console.log(orderItem);
+
+    if (!orderItem) {
+      res.status(404).json({ message: 'Не найдено OrderItem для обновления' });
+      return;
+    }
+
+    if (updateField === 'loops') {
+      await orderItem.update({ loops: !orderItem.loops });
+    }
+
+    await orderItem.update(updateField);
+
+    const updatedOrder = await Order.findOne({
+      where: { id: orderId },
+      include: [{ model: User }, { model: Item }],
+      nest: true,
+    });
+
+    if (updatedOrder) {
+      res.status(200).json(updatedOrder);
+    } else {
+      res.status(404).json({ message: 'Не удалось найти обновленный заказ' });
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json({ message: 'Ошибка на сервере' });

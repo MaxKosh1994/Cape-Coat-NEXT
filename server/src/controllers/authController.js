@@ -13,8 +13,9 @@ module.exports.register = async (req, res) => {
     if (!registrationResult.success) {
       return res.status(401).json({ message: registrationResult.message });
     }
-
     req.session.user = registrationResult.userData.email;
+    req.session.isAdmin = registrationResult.userData.isAdmin;
+    req.session.save();
     res.json(registrationResult.userData.email);
   } catch (err) {
     res.status(500).json({ message: 'Ошибка сервера' });
@@ -22,20 +23,26 @@ module.exports.register = async (req, res) => {
 };
 
 module.exports.login = async (req, res) => {
-  const { email, password } = req.body;
-  const loginResult = await loginUser(email, password);
+  try {
+    const { email, password } = req.body;
+    const loginResult = await loginUser(email, password);
 
-  if (!loginResult.success) {
-    return res.status(401).json({ message: loginResult.message });
+    if (!loginResult.success) {
+      return res.status(401).json({ message: loginResult.message });
+    }
+
+    req.session.user = loginResult.email;
+    req.session.isAdmin = loginResult.isAdmin;
+    req.session.save();
+
+    res.json({
+      email: loginResult.email,
+      name: loginResult.name,
+      isAdmin: loginResult.isAdmin,
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Ошибка сервера' });
   }
-
-  req.session.user = loginResult.email;
-  req.session.save();
-  res.json({
-    email: loginResult.email,
-    name: loginResult.name,
-    isAdmin: loginResult.isAdmin,
-  });
 };
 
 module.exports.logout = (req, res) => {

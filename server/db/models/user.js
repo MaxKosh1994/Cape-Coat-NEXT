@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         through: models.Favorite,
         foreignKey: 'user_id',
       });
+      this.belongsToMany(models.Promocode, {
+        through: models.UserPromocode,
+        foreignKey: 'user_id',
+      });
     }
   }
   User.init(
@@ -18,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       phone: DataTypes.STRING,
       full_name: DataTypes.STRING,
       address: DataTypes.STRING,
-      telegram: DataTypes.STRING,
+      telegram_instagram: DataTypes.STRING,
       admin: DataTypes.BOOLEAN,
     },
     {
