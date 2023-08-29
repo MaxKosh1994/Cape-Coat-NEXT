@@ -31,9 +31,9 @@ interface IFetchFavouritesData {
 
 export const fetchItemData = createAsyncThunk(
   'item/fetchItemData',
-  async (item: string | string[], { dispatch }) => {
+  async (itemId: number, { dispatch }) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}item/${item}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}item/${itemId}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
