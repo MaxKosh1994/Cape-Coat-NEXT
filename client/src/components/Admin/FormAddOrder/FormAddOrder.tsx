@@ -5,14 +5,8 @@ import { IItem } from '@/components/accComp/orders/types';
 import { getAllItems } from '@/components/SearchBar/fetchSearch';
 import SearchItemCard from '@/components/SearchItemCard/SearchItemCard';
 import styles from './FormAddOrder.module.css';
-import TrousersSizeForm from '@/components/Cart/trousersSizeForm';
-import TrenchSizeForm from '@/components/Cart/trenchSizeForm';
-import CoatSizeForm from '@/components/Cart/coatSizeForm';
-import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
-import BackToTopArrow from '@/components/ToTopArrow/ToTopArrow';
-import { clear } from 'console';
 import { IPersonalData } from '@/TypeScript/checkoutTypes';
-import { getAllMaterials } from './api';
+import { createOrderFetch, getAllMaterials } from './api';
 
 export default function FormAddOrder() {
   //! ВСЕ STATES
@@ -21,6 +15,7 @@ export default function FormAddOrder() {
     name: '',
     email: '',
     number: '',
+    telegram_instagram: '',
   });
 
   // стейт для всех товаров в выпадающий список
@@ -69,20 +64,6 @@ export default function FormAddOrder() {
   const [urgencyFee, setUrgencyFee] = useState(0);
 
   const [selectedItemsMaterials, setSelectedItemsMaterials] = useState({});
-
-  const initialFormData = {
-    selectedMaterial: '',
-    height: '',
-    length: '',
-    sleeve: '',
-    bust: '',
-    waist: '',
-    hips: '',
-    saddle: '',
-    loops: '',
-    buttons: '',
-    lining: '',
-  };
 
   // Объявление состояния
   const [paramsFormData, setParamsFormData] = useState({});
@@ -318,38 +299,12 @@ export default function FormAddOrder() {
     }));
   };
 
-  // дозаписывает изменения в кастомизированных формах
-  // имеется в виду для брюк добавляет седло
-  // для пальто и шуб утепление, etc
-  const handleCustomFormChange = (updatedFields) => {
-    setParamsFormData((prevState) => ({
-      ...prevState,
-      ...updatedFields,
-    }));
-  };
-
   // Сохранение формы
   const handleSaveSizesInputs = (itemId: number) => {
     setUserParams((prevTexts) => {
       return { ...prevTexts, [itemId]: paramsFormData[itemId] };
     });
   };
-
-  // отрабатывает по клику на СОХРАНИТЬ при введении мерок
-  //   const handleSaveSizesInputs = async (index: number, itemId: number) => {
-  //     setParamsFormData((prevState) => ({
-  //       ...prevState,
-  //       itemId: itemId,
-  //       selectedMaterial: paramsFormData[itemId]?.selectedMaterial,
-  //     }));
-
-  //     //  const userParamsText = `Ваш рост: ${paramsFormData.height}см, длина изделия: ${paramsFormData.length}см, длина рукава: ${paramsFormData.sleeve}см, объем груди: ${paramsFormData.bust}см, объем талии: ${paramsFormData.waist}см, объем бедер: ${paramsFormData.hips}см`;
-  //     setUserParams((prevTexts) => {
-  //       const updatedTexts = [...prevTexts];
-  //       updatedTexts[index] = paramsFormData;
-  //       return updatedTexts;
-  //     });
-  //   };
 
   // записывает изменения в форме персональных данных (если клиент не залогинен)
   const handlePersonalDataInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -496,23 +451,18 @@ export default function FormAddOrder() {
       addressString = 'Нижний Новгород, ул. Малая Покровская, 20';
     }
 
-    if (
-      personalData &&
-      cartTotal &&
-      addressString &&
-      commentsInput &&
-      urgentMaking &&
-      userParams
-    ) {
-      const order = {
-        personalData,
-        cartTotal,
-        addressString,
-        commentsInput,
-        urgentMaking,
-        userParams,
-      };
-      console.log('====ГЛАВНАЯ КНОПКА===>', order);
+    const data = {
+      personalData,
+      cartTotal,
+      addressString,
+      commentsInput,
+      urgentMaking,
+      userParams,
+    };
+
+    if (data) {
+      createOrderFetch(data);
+      console.log('====ГЛАВНАЯ КНОПКА===>', data);
     } else {
       console.log('Данных не хватает');
     }
@@ -527,7 +477,7 @@ export default function FormAddOrder() {
               className={`${styles.orderBlockUserParams} ${styles.orderBlockDeliveries}`}
             >
               <h2 className={styles.headerUserParams}>Данные заказчика</h2>
-              <div style={{ height: '381px' }} className={styles.formBlock}>
+              <div style={{ height: '470px' }} className={styles.formBlock}>
                 <div className={styles.deliveryService}>
                   <div className={styles.deliveryServiceForm}>
                     <div>
@@ -567,6 +517,20 @@ export default function FormAddOrder() {
                               role='text'
                               title='Телефон'
                               name='number'
+                              placeholder=''
+                              className={styles.formInput}
+                              onChange={handlePersonalDataInputChange}
+                              disabled=''
+                            />
+                          </div>
+                          <div className={styles.formControl}>
+                            <label className={styles.formControlLabel}>
+                              Telegram/Instagram
+                            </label>
+                            <input
+                              role='text'
+                              title='Telegram/Instagram'
+                              name='telegram_instagram'
                               placeholder=''
                               className={styles.formInput}
                               onChange={handlePersonalDataInputChange}

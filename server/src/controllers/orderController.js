@@ -1,6 +1,13 @@
 const { Order, User, OrderItem } = require('../../db/models');
 const { getItemsInUserCart } = require('../services/cartItemService');
 
+
+// user,
+// cartTotal,
+// addressString,
+// commentsInput,
+// urgentMaking,
+
 module.exports.createOrder = async (req, res) => {
   try {
     let currUser;
