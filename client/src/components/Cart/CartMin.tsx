@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import styles from './CartMin.module.css';
-import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import {
@@ -8,27 +7,28 @@ import {
   emptyCartThunk,
   getCartItemsThunk,
 } from '../../app/thunkActionsCart';
-import { getCartItems } from '../../app/cartSlice';
 import Image from 'next/image';
 import LikeButton from '@/components/likeButton/LikeButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CloseIcon from '@mui/icons-material/Close';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { ISingleItem } from '@/app/types/cartTypes';
 
-export default function CartMin({ show, handleCartIconClick }) {
-  const user = useSelector((state) => state.sessionSlice.user);
-  const name = useSelector((state) => state.sessionSlice.name);
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const [cartItemsList, setCartItemsList] = useState([]);
-  const [cartTotal, setCartTotal] = useState(0);
-  const [discount, setDiscount] = useState(0);
-  const [delError, setDelError] = useState('');
-  const [showDiv, setShowDiv] = useState(show);
+const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
+  show,
+  handleCartIconClick,
+}) => {
+  const user = useAppSelector((state) => state.sessionSlice.user);
+  const dispatch = useAppDispatch();
+  const [cartItemsList, setCartItemsList] = useState<ISingleItem[]>([]);
+  const [cartTotal, setCartTotal] = useState<number>(0);
+  const [delError, setDelError] = useState<string>('');
+  const [showDiv, setShowDiv] = useState<boolean>(show);
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const cartItems = await dispatch(getCartItemsThunk(user));
+        const cartItems = await dispatch(getCartItemsThunk());
         setCartItemsList(cartItems);
       } catch (err) {
         console.log(err);
@@ -48,11 +48,11 @@ export default function CartMin({ show, handleCartIconClick }) {
     setCartTotal(subtotal + subtotalStock);
   }, [cartItemsList]);
 
-  const handleDeleteItemFromCart = async (itemId) => {
+  const handleDeleteItemFromCart = async (itemId: number) => {
     try {
       const data = { itemId, user };
       await dispatch(delCartItemThunk(data));
-      const updatedCartItems = await dispatch(getCartItemsThunk(user));
+      const updatedCartItems = await dispatch(getCartItemsThunk());
       setCartItemsList(updatedCartItems);
     } catch (err) {
       console.log(err);
@@ -190,4 +190,6 @@ export default function CartMin({ show, handleCartIconClick }) {
       </>
     </div>
   );
-}
+};
+
+export default CartMin;

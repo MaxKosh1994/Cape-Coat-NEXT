@@ -1,10 +1,11 @@
-const { User, Item, Cart, CartItem, Photo } = require('../../db/models');
+const { Material, Item, Cart, CartItem, Photo } = require('../../db/models');
 const { findUserCart } = require('./cartServices');
 
 module.exports.getUserCartItems = async (userId) => {
   const cartItems = await Item.findAll({
     include: [
       { model: Cart, where: { user_id: userId } },
+      { model: Material },
       { model: Photo, limit: 1 },
     ],
   });

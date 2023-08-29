@@ -12,6 +12,7 @@ import Link from 'next/link';
 export default function Category() {
   const [catName, setCatName] = useState('');
   const nameOneCategory = useRouter().query.category;
+
   const dispatch = useDispatch();
 
   const card = useSelector(
