@@ -24,19 +24,20 @@ export default function NavAdminComp() {
                 router.pathname === '/admin/cat-col-mat' ? styles.active : ''
               }`}
             >
-              Контент
+              Добавить контент
             </Button>
           </NextLink>
 
-          <NextLink href='/admin/cat-col-mat'>
+          <NextLink href='/admin/allItems'>
             <Button
               className={`${styles.button} ${
-                router.pathname === '/admin/cat-col-mat' ? styles.active : ''
+                router.pathname === '/FAQ/allItems' ? styles.active : ''
               }`}
             >
-              Категории/Коллекции/Материалы
+              Все товары
             </Button>
           </NextLink>
+
 
           <NextLink href='/admin/ordersHistory'>
             <Button

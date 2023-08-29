@@ -5,14 +5,14 @@ import {
   formDataIteamAxios,
   categoryDataFetch,
   collectionDataFetch,
-} from "./HTTP/adminApi";
+} from "../HTTP/adminApi";
 
-import InfoModal from "./InfoModal";
-import ItemInputs from "./ItemInputs";
-import CustomFormControl from "./CustomFormControl";
-import InputFiles from "./InputFiles";
-import CheckBox from "./checkbox";
-import CustomButton from "./CustomButton";
+import InfoModal from "../InfoModal";
+import ItemInputs from "../ItemInputs";
+import CustomFormControl from "../CustomFormControl";
+import InputFiles from "../InputFiles";
+import CheckBox from "../checkbox";
+import CustomButton from "../CustomButton";
 
 import Box from "@mui/material/Box";
 
@@ -84,7 +84,7 @@ export default function ItemModal({ openChange, setOpenChange }) {
   return (
     <>
       <Modal
-        sx={{ width:"600px", margin: '0 auto'}}
+        sx={{ width: "750px", margin: "0 auto" }}
         open={openChange}
         onClose={() => setOpenChange(false)}
         aria-labelledby="modal-modal-title"
@@ -92,7 +92,7 @@ export default function ItemModal({ openChange, setOpenChange }) {
       >
         <div
           style={{
-            backgroundColor: 'white',
+            backgroundColor: "white",
             marginTop: "0px",
             marginBottom: "20px",
           }}
@@ -111,6 +111,7 @@ export default function ItemModal({ openChange, setOpenChange }) {
             >
               <div style={{ display: "flex", justifyContent: "flex-start" }}>
                 <CustomFormControl
+                  styleSize={"200"}
                   infoText={"Выберите коллекцию"}
                   arr={collection}
                   valueState={nameCol}
@@ -120,7 +121,17 @@ export default function ItemModal({ openChange, setOpenChange }) {
                   changeHandlerDescription={changeHandlerDescription}
                 />
                 <CustomFormControl
+                  styleSize={"200"}
                   infoText={"Выберите категорию"}
+                  arr={category}
+                  valueState={nameCat}
+                  name={"category_id"}
+                  label={"category"}
+                  handleChange={handleCategoryChange}
+                  changeHandlerDescription={changeHandlerDescription}
+                />
+                <CustomFormControl
+                  infoText={"Выберите материал"}
                   arr={category}
                   valueState={nameCat}
                   name={"category_id"}
@@ -135,6 +146,12 @@ export default function ItemModal({ openChange, setOpenChange }) {
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <CheckBox
                   changeHandler={changeHandlerDescript}
+                  name={"bestseller"}
+                  placeholder={"bestseller"}
+                  label={" bestseller"}
+                />
+                <CheckBox
+                  changeHandler={changeHandlerDescript}
                   name={"in_stock"}
                   placeholder={"in_stock"}
                   label={" В наличии"}
@@ -142,8 +159,9 @@ export default function ItemModal({ openChange, setOpenChange }) {
                 <InputFiles
                   file={files}
                   changeHandlerFiles={changeHandlerFiles}
+                  shouldAllowMultiple={true}
                 />
-                <CustomButton label={"Добавить"} />
+                <CustomButton label={"Сохранить"} />
               </div>
             </form>
           </div>

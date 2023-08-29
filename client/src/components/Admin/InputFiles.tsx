@@ -16,7 +16,7 @@ export default function InputFiles(props) {
             fontWeight: "700",
           }}
         >
-          Фото товара
+          {props.text}
         </h5>
         <label
           htmlFor="fileCatInput"
@@ -36,7 +36,7 @@ export default function InputFiles(props) {
           onChange={props.changeHandlerFiles}
           type="file"
           accept="image/*"
-          multiple
+          multiple={props.shouldAllowMultiple ? true : false}
           style={{ display: "none" }}
         ></input>
       </div>
