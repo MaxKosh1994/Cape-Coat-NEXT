@@ -1,12 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styles from './ItemRightPartComp.module.css';
 
 import { Box, List } from '@mui/material';
 import CustomList from '../customList/CustomList';
-import CartButton from '../CartButton/CartButton';
-import ItemMaterials from '../ItemMaterials/ItemMaterials';
 
-export default function ItemRightPart({ itemData, item }) {
+import ItemMaterials from '../ItemMaterials/ItemMaterials';
+import { Item } from '@/app/itemSlice';
+
+interface ItemRightPartProps {
+  itemData: Item;
+  itemId: number;
+}
+
+export default function ItemRightPart({
+  itemData,
+  itemId,
+}: ItemRightPartProps): JSX.Element {
   return (
     <div
       className={`${styles.grid__item} ${styles.large_one_third}`}
@@ -41,7 +50,7 @@ export default function ItemRightPart({ itemData, item }) {
             .toLocaleString()
             .replace(/,\s?/g, ' ')} РУБ.`}</div>
         )}
-        <ItemMaterials item={item} itemData={itemData} />
+        <ItemMaterials itemId={itemId} itemData={itemData} />
       </div>
 
       <Box

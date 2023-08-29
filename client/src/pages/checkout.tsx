@@ -644,7 +644,7 @@ export default function CheckoutPage() {
                             {item.name}
                           </Link>
                           <div className={styles.iconsContainer}>
-                            <LikeButton item={item.id} />
+                            <LikeButton itemId={item.id} />
                             <button
                               className={styles.basketItemDeleteButton}
                               type="button"
