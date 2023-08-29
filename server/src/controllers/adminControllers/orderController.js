@@ -145,8 +145,8 @@ module.exports.createOrder = async (req, res) => {
         user_id: currUser.id,
         address: addressString,
         total: cartTotal,
-        comments: commentsInput,
-        urgent: urgentMaking,
+        comments: commentsInput || '',
+        urgent: urgentMaking || false,
       },
       { raw: true },
     );
@@ -157,16 +157,17 @@ module.exports.createOrder = async (req, res) => {
       const orderItemsData = userParamsArray.map(([itemId, oneItem]) => ({
         item_id: itemId,
         order_id: newOrder.id,
-        height: oneItem.height?.toString(),
-        length: oneItem.length?.toString(),
-        sleeve: oneItem.sleeve?.toString(),
-        bust: oneItem.bust?.toString(),
-        waist: oneItem.waist?.toString(),
-        hips: oneItem.hips?.toString(),
-        saddle: oneItem.saddle?.toString(),
-        loops: Boolean(oneItem.loops),
-        buttons: oneItem.buttons?.toString(),
-        lining: oneItem.lining?.toString(),
+        selected_material: oneItem.selectedMaterial?.toString() || 'не выбран',
+        height: oneItem.height?.toString() || 'не выбран',
+        length: oneItem.length?.toString() || 'не выбран',
+        sleeve: oneItem.sleeve?.toString() || 'не выбран',
+        bust: oneItem.bust?.toString() || 'не выбран',
+        waist: oneItem.waist?.toString() || 'не выбран',
+        hips: oneItem.hips?.toString() || 'не выбран',
+        saddle: oneItem.saddle?.toString() || 'не выбран',
+        loops: Boolean(oneItem.loops) || false,
+        buttons: oneItem.buttons?.toString() || 'не выбран',
+        lining: oneItem.lining?.toString() || 'не выбран',
       }));
 
       await OrderItem.bulkCreate(orderItemsData);

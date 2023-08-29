@@ -106,7 +106,7 @@ export default function Tasks() {
       id: orderId,
       itemId: itemId,
       field: currentField,
-      value: currentFieldValue.toString(),
+      value: currentFieldValue?.toString(),
     });
   };
 
@@ -1081,13 +1081,51 @@ export default function Tasks() {
                         style={{
                           display: 'flex',
                           flexDirection: 'column',
-                          borderBottom: '0.5px solid black',
-                          marginBottom: '10px',
-                          marginTop: '5px',
                         }}
-                        key={item?.article}
+                        key={item?.id}
                       >
-                        арт {item?.article}: {item?.Material?.name}
+                        {editingOrderData.id === order?.id &&
+                        editingOrderData.itemId === item?.id &&
+                        editingOrderData.field === 'selected_material' ? (
+                          <div className={styles.inputContainer}>
+                            <input
+                              type='text'
+                              style={{ width: '100px', fontSize: 'medium' }}
+                              className='text-field'
+                              required
+                              autoFocus
+                              value={editingOrderData.value}
+                              onChange={handleFieldChange}
+                            />
+                            <Button
+                              className={styles.buttonInput}
+                              type='submit'
+                              variant='contained'
+                              onClick={handleFieldConfirmMeasurements}
+                            >
+                              Сохранить
+                            </Button>
+                          </div>
+                        ) : (
+                          <p
+                            style={{
+                              borderBottom: '0.5px solid black',
+                              marginBottom: '10px',
+                              marginTop: '5px',
+                            }}
+                            onClick={() =>
+                              handleFieldClickMeasurements(
+                                order?.id,
+                                item?.id,
+                                'selected_material',
+                                item?.OrderItem?.selected_material
+                              )
+                            }
+                          >
+                            {item?.article}:{' '}
+                            {item?.OrderItem?.selected_material}
+                          </p>
+                        )}
                       </div>
                     ))}
                   </TableCell>
