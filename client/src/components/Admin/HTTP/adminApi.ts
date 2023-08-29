@@ -103,27 +103,6 @@ export const formDataMatAxios = async (
       formData,
       {
         withCredentials: true,
-        headers: { 'Content-Type': 'multipart/form-data' },
-      }
-    );
-    const responseData: object = await response.data;
-    setMessage((prev) => responseData.message);
-    return responseData;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const formDataMatAxios = async (
-  formData: object,
-  setMessage
-): Promise<object> => {
-  try {
-    const response: any = await axios.post(
-      `${process.env.NEXT_PUBLIC_URL}admin/collection/addmaterial`,
-      formData,
-      {
-        withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
