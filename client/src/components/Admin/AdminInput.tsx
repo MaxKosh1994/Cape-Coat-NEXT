@@ -9,7 +9,7 @@ export default function AdminInput(props) {
         required
         onChange={props.changeHandler}
         name={props.name}
-        type="text"
+        type={props.types}
         fullWidth
         label={props.label}
         id="fullWidth"

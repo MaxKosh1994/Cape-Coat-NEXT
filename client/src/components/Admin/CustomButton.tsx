@@ -4,6 +4,7 @@ export default function CustomButton(props) {
   return (
     <>
       <Button
+      onClick={(event) => props.submit(event, props.url)}
         type="submit"
         style={{
           fontWeight: "700",

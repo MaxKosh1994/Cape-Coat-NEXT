@@ -22,22 +22,51 @@ export const formDataIteamAxios = async (
 };
 
 export const formDataCategoryAxios = async (
-  formData: object,
-  setMessage
+  formData,
+  setCategory,
+  setMessage,
+  url,
+  id
 ): Promise<object> => {
   try {
-    const response: any = await axios.post(
-      `${process.env.NEXT_PUBLIC_URL}admin/category/addcategory`,
-      formData,
-      {
-        withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
-    const responseData: object = await response.data;
-    console.log(responseData);
-    setMessage((prev) => responseData.message);
-    return responseData;
+    if (url === "addcategory") {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_URL}admin/category/${url}`,
+        formData,
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      const responseData: object = await response.data;
+      console.log(responseData.name)
+      setMessage((prev) => responseData.message);
+      setCategory((prev) => [...prev, responseData.res ]);
+      return responseData;
+    } else if (url === "dellcategory") {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_URL}admin/category/${url}/${id}`,
+        { withCredentials: true }
+      );
+      const responseData: object = await response.data;
+      setCategory((prev) => [...prev.filter((el) => el.id !== id)]);
+      setMessage((prev) => responseData.message);
+      return responseData;
+    } else if (url === "editcategory") {
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_URL}admin/category/${url}`,
+        formData,
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      const responseData: object = await response.data;
+      setCategory((prev) => [...prev.filter((el) => el.id !== id)]);
+      setCategory((prev) => [...prev, responseData.res ]);
+      setMessage((prev) => responseData.message);
+      return responseData;
+    }
   } catch (error) {
     console.log(error);
   }
@@ -50,6 +79,27 @@ export const formDataCollectionAxios = async (
   try {
     const response: any = await axios.post(
       `${process.env.NEXT_PUBLIC_URL}admin/collection/addcollection`,
+      formData,
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    const responseData: object = await response.data;
+    setMessage((prev) => responseData.message);
+    return responseData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const formDataMatAxios = async (
+  formData: object,
+  setMessage
+): Promise<object> => {
+  try {
+    const response: any = await axios.post(
+      `${process.env.NEXT_PUBLIC_URL}admin/collection/addmaterial`,
       formData,
       {
         withCredentials: true,
@@ -79,9 +129,8 @@ export const categoryDataFetch = async (
     );
     const data = await response.json();
 
-    const responseData = await data.allCategory.map((el) => {
-      setCategory((prev) => [...prev, el]);
-    });
+    const responseData = await data.allCategory;
+    setCategory(responseData);
     setMessage((prev) => data.message);
     return responseData;
   } catch (error) {
@@ -103,9 +152,8 @@ export const collectionDataFetch = async (
       }
     );
     const data = await response.json();
-    const responseData = await data.allcollection.map((el) => {
-      setCollection((prev) => [...prev, el]);
-    });
+    const responseData = await data.allcollection;
+    setCollection(responseData);
     setMessage((prev) => data.message);
     return responseData;
   } catch (error) {

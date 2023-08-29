@@ -24,7 +24,7 @@ export default function NavAdminComp() {
                 router.pathname === '/admin/item' ? styles.active : ''
               }`}
             >
-              Добавление товара
+              Добавить контент
             </Button>
           </NextLink>
 
@@ -38,15 +38,6 @@ export default function NavAdminComp() {
             </Button>
           </NextLink>
 
-          <NextLink href='/admin/cat-col-mat'>
-            <Button
-              className={`${styles.button} ${
-                router.pathname === '/admin/cat-col-mat' ? styles.active : ''
-              }`}
-            >
-              Категории/Коллекции/Материалы
-            </Button>
-          </NextLink>
 
           <NextLink href='/admin/orders'>
             <Button

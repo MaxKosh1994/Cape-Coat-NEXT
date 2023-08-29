@@ -5,33 +5,45 @@ export default function ItemInputs(props) {
     <>
       <AdminInput
         changeHandler={props.changeHandler}
-        name={"nameModel"}
-        label={"Имя модели"}
+        name={"name"}
+        label={"Название"}
+        types={"text"}
+      />
+      <AdminInput
+        changeHandler={props.changeHandler}
+        name={"article"}
+        label={"Артикул"}
+        types={"text"}
       />
       <AdminInput
         changeHandler={props.changeHandler}
         name={"description"}
         label={"Описание"}
+        types={"text"}
       />
       <AdminInput
         changeHandler={props.changeHandler}
-        name={"model_sizes"}
-        label={"Размер модели"}
+        name={"model_params"}
+        label={"Параметры модели"}
+        types={"text"}
       />
       <AdminInput
         changeHandler={props.changeHandler}
         name={"characteristics"}
         label={"Характеристики"}
+        types={"text"}
       />
       <AdminInput
         changeHandler={props.changeHandler}
         name={"price"}
         label={"Цена"}
+        types={"number"}
       />
       <AdminInput
         changeHandler={props.changeHandler}
-        name={"color"}
-        label={"Цвет"}
+        name={"new_price"}
+        label={"Новая цена"}
+        types={"number"}
       />
     </>
   );
