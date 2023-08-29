@@ -108,21 +108,6 @@ module.exports.createOrder = async (req, res) => {
       userParams,
     } = req.body;
 
-    console.log(
-      'Данные пользователя ====>>> \n',
-      personalData,
-      'Cумма заказа ====>>> \n',
-      cartTotal,
-      'Адрес ====>>> \n',
-      addressString,
-      'Комментарии ====>>> \n',
-      commentsInput,
-      'Срочность ====>>> \n',
-      urgentMaking,
-      'Товары и мерки ====>>> \n',
-      userParams,
-    );
-
     if (personalData) {
       currUser = await User.findOne({
         where: { email: personalData.email },
@@ -174,7 +159,7 @@ module.exports.createOrder = async (req, res) => {
 
       res.json({
         success: true,
-        message: `Заказ номер ${newOrder.id} создан. Мы свяжемся с вами в течение дня.`,
+        message: `Заказ номер ${newOrder.id} создан.`,
       });
     } else {
       res.status(500).json({

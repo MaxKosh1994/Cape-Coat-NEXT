@@ -7,9 +7,19 @@ import SearchItemCard from '@/components/SearchItemCard/SearchItemCard';
 import styles from './FormAddOrder.module.css';
 import { IPersonalData } from '@/TypeScript/checkoutTypes';
 import { createOrderFetch, getAllMaterials } from './api';
+import InfoModal from '../InfoModal';
+import { useRouter } from 'next/router';
+import ResultContainerAddOrder from '../ResultContainerAddOrder/ResultContainerAddOrder';
 
 export default function FormAddOrder() {
   //! ВСЕ STATES
+
+  // стейт для модалки после оформления заказа
+  const [openCreateOrderModal, setOpenCreateOrderModal] = useState(false);
+
+  // стейт для инфо для модалки после оформления заказа
+  const [modalInfo, setModalInfo] = useState('');
+
   // стейт для данных пользователя
   const [personalData, setPersonalData] = useState<IPersonalData>({
     name: '',
@@ -441,15 +451,17 @@ export default function FormAddOrder() {
 
   //! ГЛАВНАЯ ЛОГИКА СОЗДАНИЯ ЗАКАЗА
 
-  const handleCreateOrder = () => {
-    let addressString;
+  const router = useRouter();
+  let addressString;
+  if (selectedDelivery === 'post') {
+    addressString = `${addressInputs.city}, ${addressInputs.street} дом ${addressInputs.number}, квартира ${addressInputs.flat}`;
+  } else {
+    // если в шоурум, то записывает в переменную адрес шоурума
+    addressString = 'Нижний Новгород, ул. Малая Покровская, 20';
+  }
+
+  const handleCreateOrder = async () => {
     // если доставка выбрана сдек, то склеивает данные в строку
-    if (selectedDelivery === 'post') {
-      addressString = `${addressInputs.city}, ${addressInputs.street} дом ${addressInputs.number}, квартира ${addressInputs.flat}`;
-    } else {
-      // если в шоурум, то записывает в переменную адрес шоурума
-      addressString = 'Нижний Новгород, ул. Малая Покровская, 20';
-    }
 
     const data = {
       personalData,
@@ -460,11 +472,32 @@ export default function FormAddOrder() {
       userParams,
     };
 
-    if (data) {
-      createOrderFetch(data);
-      console.log('====ГЛАВНАЯ КНОПКА===>', data);
+    if (!personalData) {
+      setModalInfo('Не хватает данных о заказчике');
+      setOpenCreateOrderModal(true);
+    } else if (!cartTotal) {
+      setModalInfo('Не хватает данных о стоимости заказа');
+      setOpenCreateOrderModal(true);
+    } else if (!addressString) {
+      setModalInfo('Не хватает данных об адресе доставки');
+      setOpenCreateOrderModal(true);
+    } else if (!userParams) {
+      setModalInfo('Вы не выбрали товар, так нельзя, это неправильно!');
+      setOpenCreateOrderModal(true);
     } else {
-      console.log('Данных не хватает');
+      const res = await createOrderFetch(data);
+      setModalInfo(res.message);
+      setOpenCreateOrderModal(true);
+      if (res.success) {
+        setTimeout(() => {
+          router.push('/admin/tasks');
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          setOpenCreateOrderModal(false);
+        }),
+          2000;
+      }
     }
   };
 
@@ -1049,6 +1082,14 @@ export default function FormAddOrder() {
         </div>
 
         <div className={styles.orderSummDataContainer}>
+          <ResultContainerAddOrder
+            personalData={personalData}
+            cartTotal={cartTotal}
+            addressString={addressString}
+            commentsInput={commentsInput}
+            urgentMaking={urgentMaking}
+            userParams={userParams}
+          />
           <div className={`${styles.orderBlock} ${styles.orderBlockSummary}`}>
             <h1 className={styles.headerItemCart}>Стоимость заказа</h1>
             <div className={styles.promocodeInputContainer}>
@@ -1173,6 +1214,11 @@ export default function FormAddOrder() {
           </div>
         </div>
       </FormControl>
+      <InfoModal
+        open={openCreateOrderModal}
+        setOpen={setOpenCreateOrderModal}
+        info={modalInfo}
+      />
     </>
   );
 }
