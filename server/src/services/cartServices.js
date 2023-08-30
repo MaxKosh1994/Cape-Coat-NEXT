@@ -1,11 +1,5 @@
-const {
-  Item,
-  Cart,
-  User,
-  CartItem,
-  Promocode,
-  Photo,
-} = require('../../db/models');
+const { Cart, CartItem, Promocode, UserPromocode } = require('../../db/models');
+const { findUserByEmail } = require('./userService');
 
 module.exports.findUserCart = async (userId) => {
   try {
@@ -69,6 +63,31 @@ module.exports.validatePromoCode = async (code) => {
     }
     return { success: false, message: 'Такого промокода не существует' };
   } catch (error) {
+    throw new Error('Ошибка сервера');
+  }
+};
+
+module.exports.checkUserUsedPromocode = async (code, userEmail) => {
+  try {
+    const promoId = await Promocode.findOne({
+      where: { code },
+      raw: true,
+    });
+
+    const userId = await findUserByEmail(userEmail);
+    const wasPCused = await UserPromocode.findOne({
+      where: { user_id: userId.id, promocode_id: promoId.id },
+    });
+    if (!wasPCused) {
+      const usedPromocode = await UserPromocode.create({
+        user_id: userId.id,
+        promocode_id: promoId.id,
+      });
+      return { success: true };
+    }
+    return { success: false, message: 'Вы уже использовали этот промокод' };
+  } catch (error) {
+    console.log(error);
     throw new Error('Ошибка сервера');
   }
 };

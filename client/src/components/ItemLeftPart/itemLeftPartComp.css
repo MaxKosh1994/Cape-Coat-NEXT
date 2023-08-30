@@ -22,6 +22,10 @@
 img {
   border-style: none;
 }
+.product-img {
+  width: 100%;
+  height: auto;
+}
 @media (max-width: 1200px) {
   .product__media-list {
     grid-template-columns: repeat(1, 1fr);

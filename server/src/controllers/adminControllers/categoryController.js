@@ -13,12 +13,53 @@ module.exports.readCategory = async (req, res) => {
 module.exports.addCategory = async (req, res) => {
   try {
     const { files } = req;
-    const { name } = JSON.parse(req.body.description);
-    const category = await Category.create({ name, photo: files[0].filename });
-    const resultItem = category.get({ plain: true });
-    res.status(200).json({ message: 'Категория добавлена' });
+    const { name, urlName } = JSON.parse(req.body.description);
+    const category = await Category.create({
+      name,
+      urlName,
+      photo: files[0].filename,
+    });
+    const result = category.get({ plain: true });
+
+    res.status(200).json({ message: 'Категория добавлена', res: result });
   } catch (err) {
     res.status(400).json({ message: 'Не удалось добавить категорию' });
     console.log('Ошибка в addCategory --->', err);
+  }
+};
+
+module.exports.dellCategory = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const category = await Category.destroy({
+      where: { id },
+      individualHooks: true,
+    });
+    res.status(200).json({ message: 'Категория удалена' });
+  } catch (err) {
+    res.status(400).json({ message: 'Не удалось удалить категорию' });
+    console.log('Ошибка в dellCategory --->', err);
+  }
+};
+
+module.exports.editCategory = async (req, res) => {
+  try {
+    const { files } = req;
+    let photo = files[0]?.filename;
+    let { name, urlName, category_id } = JSON.parse(req.body.description);
+    const [rowsAffected, [updatedCategory]] = await Category.update(
+      { name, urlName, photo },
+      { where: { id: category_id }, individualHooks: true },
+    );
+    const result = updatedCategory.dataValues;
+    res
+      .status(200)
+      .json({
+        message: 'Категория изменена',
+        res: result,
+      });
+  } catch (err) {
+    res.status(400).json({ message: 'Не удалось изменить категорию' });
+    console.log('Ошибка в editCategory --->', err);
   }
 };

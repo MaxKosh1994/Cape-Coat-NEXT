@@ -11,7 +11,7 @@ import { AddShoppingCart } from '@mui/icons-material';
 import logo from './logoStore.svg';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
+
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SearchBar from '../SearchBar/SearchBar';
 import { useSelector } from 'react-redux';
@@ -24,17 +24,6 @@ import './navbarStyle.css';
 import NavigationMenu from './NavigationMenu/NavigationMenu';
 import MobileMenu from './MobileMenu/MobileMenu';
 import CartMin from '../Cart/CartMin';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#FFFFFF',
-    },
-    error: {
-      main: '#f44336',
-    },
-  },
-});
 
 const easeOutQuart = (progress: number) => 1 - Math.pow(1 - progress, 4);
 const easeInQuart = (progress: number) => progress ** 4;
@@ -295,8 +284,6 @@ export default function Navbar() {
               </Badge>
             </IconButton>
             {/* </Link> */}
-
-            {/* <a href="javascript:;" className="search-ico"></a> */}
           </div>
         </div>
       </div>
