@@ -3,6 +3,7 @@ import React from 'react';
 import './itemLeftPartComp.css';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CustomCarousel from '../carousel/CustomCarousel';
+import Image from 'next/image';
 
 interface ImageData {
   id: number;
@@ -26,14 +27,23 @@ export default function ItemLeftPart({
           {imageData.map((item, index) => (
             <div className="product__media-item" key={`img-${item.id}`}>
               <div
-                className={`product-img swiper-slide ${
-                  index === 0 ? 'active' : ''
-                }`}
+                className="product-img"
                 id={`img${index}`}
                 data-target={`#img${index}`}
                 key={`img${index}`}
               >
-                <img src={item.url} alt="" />
+                <Image
+                  src={item.url}
+                  alt="photo"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  priority={true}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                  }}
+                />
               </div>
             </div>
           ))}
