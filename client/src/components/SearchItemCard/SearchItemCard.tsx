@@ -18,7 +18,20 @@ export default function SearchItemCard({ item }: ISearchCardItem) {
         </div>
         <div className={styles.textContainer}>
           <h5>{item.name}</h5>
-          <h6>{item.price.toLocaleString().replace(/,\s?/g, ' ')} ₽</h6>
+          <h6>
+          {item.in_stock ? (
+            <>
+              <span className={styles.oldPrice}>
+                {item.price.toLocaleString().replace(/,\s?/g, ' ')} ₽
+              </span>
+              <span style={{ color: 'red', marginLeft: '5px' }}>
+                {item.new_price.toLocaleString().replace(/,\s?/g, ' ')} ₽
+              </span>
+            </>
+          ) : (
+            `${item.price.toLocaleString().replace(/,\s?/g, ' ')} ₽`
+          )}
+        </h6>
           <h6>{`Артикул: ${item.article}`}</h6>
         </div>
       </div>
