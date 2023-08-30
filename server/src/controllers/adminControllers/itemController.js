@@ -1,36 +1,54 @@
-const { Item, Photo, Material, Category } = require('../../../db/models');
-const fs = require('fs').promises;
+const { Item, Photo } = require('../../../db/models');
+
+module.exports.readItem = async (req, res) => {
+  try {
+    const allItem = await Item.findAll({
+      include: [Photo],
+    });
+    res.status(200).json({ message: 'success', all: allItem });
+  } catch (err) {
+    res.status(400).json({ message: 'error' });
+    console.log('Ошибка в readItem --->', err);
+  }
+};
 
 module.exports.addItem = async (req, res) => {
   try {
     const { files } = req;
     const {
-      nameModel,
+      name,
+      article,
       description,
-      model_sizes,
-      care_instructions,
+      model_params,
       characteristics,
       price,
-      color,
+      new_price,
       in_stock,
+      bestseller,
       collection_id,
       category_id,
+      material_id
     } = JSON.parse(req.body.description);
+    console.log(JSON.parse(req.body.description))
 
     const item = await Item.create({
-      name: nameModel,
+      name,
+      article: Number(article),
       description,
-      model_sizes,
-      care_instructions,
+      model_params,
       characteristics,
       price: Number(price),
-      color,
+      new_price: Number(new_price),
       in_stock,
-      collection_id: Number(collection_id),
-      category_id: Number(category_id),
+      bestseller,
+      collection_id,
+      category_id,
+      material_id
     });
+    
 
     const resultItem = item.get({ plain: true });
+    console.log(resultItem)
     await files.map((el) => {
       Photo.create({ photo: el.filename, item_id: resultItem.id });
     });
@@ -53,37 +71,11 @@ module.exports.readItem = async (req, res) => {
   }
 };
 
-module.exports.delItem = async (req, res) => {
+
+module.exports.editItem = async (req, res) => {
   try {
   } catch (err) {
     res.status(400).json({ message: 'error' });
     console.log('Ошибка в delItem --->', err);
-  }
-};
-
-module.exports.getAllMaterials = async (req, res) => {
-  const { id: itemId } = req.params;
-  try {
-    const item = await Item.findByPk(itemId);
-
-    if (!item) {
-      return res.status(404).json({ message: 'Товар не найден' });
-    }
-
-    const category = await Category.findByPk(item.category_id);
-
-    if (!category) {
-      return res.status(404).json({ message: 'Категория не найдена' });
-    }
-
-    const materials = await Material.findAll({
-      where: { category_id: category.id },
-      raw: true,
-    });
-
-    return res.status(200).json({ materials });
-  } catch (err) {
-    res.status(400).json({ message: 'Ошибка' });
-    console.log('Ошибка в getAllMaterials --->', err);
   }
 };

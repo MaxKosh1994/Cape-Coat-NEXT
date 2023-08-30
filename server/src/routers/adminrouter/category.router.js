@@ -13,15 +13,16 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
 const {
   readCategory,
   addCategory,
-  dellCategory,
+  delCategory,
   editCategory,
 } = require('../../controllers/adminControllers/categoryController');
 
 module.exports = categoryRoter
   .get('/allcategory', readCategory)
   .post('/addcategory', upload.array('photos', 1), addCategory)
-  .delete('/dellcategory/:id', dellCategory)
+  .delete('/delcategory/:id', delCategory)
   .patch('/editcategory', upload.array('photos', 1), editCategory);

@@ -1,6 +1,6 @@
 import Modal from "@mui/material/Modal";
-import { useState, useEffect } from "react";
-import { formDataCollectionAxios, collectionDataFetch } from "../HTTP/adminApi";
+import { useState, useEffect, useRef } from "react";
+import { dataAxios } from "../HTTP/adminApi";
 import styles from "../../../styles/admin/CatCol.module.css";
 import AdminInput from "../AdminInput";
 import InputFiles from "../InputFiles";
@@ -10,15 +10,19 @@ import CheckBox from "../checkbox";
 import CustomFormControl from "../CustomFormControl";
 
 export default function ColModal({ openChange, setOpenChange }) {
+  const formRef = useRef(null);
   const [files, setFile] = useState();
-  const [descript, setDescription] = useState({});
+  const [description, setDescription] = useState({});
+  const [conten, setConten] = useState([]);
+  const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
-  const [nameCol, setNameCol] = useState("");
-  const [collection, setCollection] = useState([]);
+  const address = "collection";
+  const id = description.collection_id;
+
 
   useEffect(() => {
-    collectionDataFetch(setCollection, setMessage);
+    dataAxios(setConten, setMessage, address);
   }, []);
 
   const changeHandlerFiles = (e) => {
@@ -26,31 +30,34 @@ export default function ColModal({ openChange, setOpenChange }) {
   };
 
   const changeHandlerDescript = (e) => {
-    setDescription({ ...descript, [e.target.name]: e.target.checked });
+    setDescription({ ...description, [e.target.name]: e.target.checked });
   };
 
   const changeHandlerDescription = (e) => {
-    setDescription({ ...descript, [e.target.name]: e.target.value });
+    setDescription({ ...description, [e.target.name]: e.target.value });
   };
-  const handleCollectionChange = (event) => {
-    setNameCol(event.target.value);
+  const handleChange = (e) => {
+    setName(e.target.value);
   };
-  const submit = async (e) => {
+
+  const submit = async (e, url) => {
     try {
       e.preventDefault();
       const formData = new FormData();
-      for (let key in files.photos) {
-        formData.append("photos", files.photos[key]);
+      if (url === `add${address}` || url === `edit${address}`) {
+        for (let key in files.photos) {
+          formData.append("photos", files.photos[key]);
+        }
       }
-      formData.append("description", JSON.stringify(descript));
+      formData.append("description", JSON.stringify(description));
       const val = await Object.fromEntries(formData.entries());
-      const response = await formDataCollectionAxios(formData, setMessage);
+      await dataAxios(setConten, setMessage, address, formData, url, id);
       setOpen(true);
       setTimeout(() => {
         setMessage("");
         setOpen(false);
       }, 1000);
-      e.target.reset();
+      formRef.current.reset();
     } catch (err) {
       console.log(err);
     }
@@ -84,6 +91,7 @@ export default function ColModal({ openChange, setOpenChange }) {
                 <h2>{"Коллекция"}</h2>
               </div>
               <form
+                ref={formRef}
                 onSubmit={submit}
                 encType="multipart/form-data"
                 style={{ marginTop: "10px" }}
@@ -91,11 +99,11 @@ export default function ColModal({ openChange, setOpenChange }) {
                 <CustomFormControl
                   styleSize={"200"}
                   infoText={"Выберите коллекцию"}
-                  arr={collection}
-                  valueState={nameCol}
+                  arr={conten}
+                  valueState={name}
                   name={"collection_id"}
                   label={"collection"}
-                  handleChange={handleCollectionChange}
+                  handleChange={handleChange}
                   changeHandlerDescription={changeHandlerDescription}
                 />
 
@@ -129,9 +137,21 @@ export default function ColModal({ openChange, setOpenChange }) {
                   changeHandlerFiles={changeHandlerFiles}
                   shouldAllowMultiple={false}
                 />
-                <CustomButton label={"Добавить"} />
-                <CustomButton label={"Изменить"} />
-                <CustomButton label={"Удалить"} />
+                <CustomButton
+                  label={"Добавить"}
+                  submit={submit}
+                  url={"addcollection"}
+                />
+                <CustomButton
+                  label={"Изменить"}
+                  submit={submit}
+                  url={"editcollection"}
+                />
+                <CustomButton
+                  label={"Удалить"}
+                  submit={submit}
+                  url={"delcollection"}
+                />
               </form>
               <div />
             </div>

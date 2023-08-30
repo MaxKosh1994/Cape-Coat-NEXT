@@ -1,6 +1,6 @@
 import Modal from "@mui/material/Modal";
 import { useState, useEffect, useRef } from "react";
-import { formDataCategoryAxios, categoryDataFetch } from "../HTTP/adminApi";
+import { dataAxios } from "../HTTP/adminApi";
 import styles from "../../../styles/admin/CatCol.module.css";
 import AdminInput from "../AdminInput";
 import InputFiles from "../InputFiles";
@@ -9,16 +9,18 @@ import InfoModal from "../InfoModal";
 import CustomFormControl from "../CustomFormControl";
 
 export default function CatModal({ openChange, setOpenChange }) {
-  const formCatRef = useRef(null);
+  const formRef = useRef(null);
   const [files, setFile] = useState();
-  const [descript, setDescription] = useState({});
+  const [description, setDescription] = useState({});
+  const [conten, setConten] = useState([]);
+  const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
-  const [category, setCategory] = useState([]);
-  const [nameCat, setNameCat] = useState("");
-  console.log(category)
+  const address = "category";
+  const id = description.category_id;
+
   useEffect(() => {
-    categoryDataFetch(setCategory, setMessage);
+    dataAxios(setConten, setMessage, address );
   }, []);
 
   const changeHandlerFiles = (e) => {
@@ -26,40 +28,34 @@ export default function CatModal({ openChange, setOpenChange }) {
   };
 
   const changeHandlerDescription = (e) => {
-    setDescription({ ...descript, [e.target.name]: e.target.value });
+    setDescription({ ...description, [e.target.name]: e.target.value });
   };
-  const handleCategoryChange = (event) => {
-    setNameCat(event.target.value);
+  const handleChange = (e) => {
+    setName(e.target.value);
   };
   const submit = async (e, url) => {
     try {
       e.preventDefault();
       const formData = new FormData();
-      if (url === "addcategory" || url === "editcategory") {
+      if (url === `add${address}` || url === `edit${address}`) {
         for (let key in files.photos) {
           formData.append("photos", files.photos[key]);
         }
       }
-      formData.append("description", JSON.stringify(descript));
+      formData.append("description", JSON.stringify(description));
       const val = await Object.fromEntries(formData.entries());
-      const id = descript.category_id;
-      const response = await formDataCategoryAxios(
-        formData,
-        setCategory,
-        setMessage,
-        url,
-        id
-      );
+      await dataAxios(setConten, setMessage, address, formData, url, id);
       setOpen(true);
       setTimeout(() => {
         setMessage("");
         setOpen(false);
       }, 1000);
-      formCatRef.current.reset();
+      formRef.current.reset();
     } catch (err) {
       console.log(err);
     }
   };
+
   return (
     <>
       <Modal
@@ -88,7 +84,7 @@ export default function CatModal({ openChange, setOpenChange }) {
                 <h2>{"Категория"}</h2>
               </div>
               <form
-                ref={formCatRef}
+                ref={formRef}
                 onSubmit={submit}
                 encType="multipart/form-data"
                 style={{ marginTop: "10px" }}
@@ -96,11 +92,11 @@ export default function CatModal({ openChange, setOpenChange }) {
                 <CustomFormControl
                   styleSize={"200"}
                   infoText={"Выберите категорию"}
-                  arr={category}
-                  valueState={nameCat}
+                  arr={conten}
+                  valueState={name}
                   name={"category_id"}
                   label={"category"}
-                  handleChange={handleCategoryChange}
+                  handleChange={handleChange}
                   changeHandlerDescription={changeHandlerDescription}
                 />
                 <AdminInput
@@ -134,7 +130,7 @@ export default function CatModal({ openChange, setOpenChange }) {
                 <CustomButton
                   label={"Удалить"}
                   submit={submit}
-                  url={"dellcategory"}
+                  url={"delcategory"}
                 />
               </form>
               <div />

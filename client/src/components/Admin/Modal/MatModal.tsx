@@ -1,7 +1,7 @@
 import Modal from "@mui/material/Modal";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CustomFormControl from "../CustomFormControl";
-import { formDataMatAxios, categoryDataFetch } from "../HTTP/adminApi";
+import { dataAxios } from "../HTTP/adminApi";
 import styles from "../../../styles/admin/CatCol.module.css";
 import InfoModal from "../InfoModal";
 import CustomButton from "../CustomButton";
@@ -9,44 +9,57 @@ import InputFiles from "../InputFiles";
 import AdminInput from "../AdminInput";
 
 export default function MatModal({ openChange, setOpenChange }) {
+  const formRef = useRef(null);
   const [files, setFile] = useState();
+  const [description, setDescription] = useState({});
   const [category, setCategory] = useState([]);
-  const [descript, setDescription] = useState({});
-  const [nameMat, setNameMat] = useState("");
+  const [content, setContent] = useState([]);
+  const [name, setName] = useState("");
   const [nameCat, setNameCat] = useState("");
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
-  useEffect(() => {
-    categoryDataFetch(setCategory, setMessage);
-  }, []);
+  const address = "material";
+  const addressCat = "category";
+  const id = description.material_id;
 
-  const changeHandlerDescription = (e) => {
-    setDescription({ ...descript, [e.target.name]: e.target.value });
-  };
-  const handleCategoryChange = (event) => {
-    setNameCat(event.target.value);
-  };
+  useEffect(() => {
+    dataAxios(setCategory, setMessage, addressCat);
+    dataAxios(setContent, setMessage, address);
+  }, []);
 
   const changeHandlerFiles = (e) => {
     setFile({ ...files, photos: e.target.files });
   };
 
-  const submit = async (e) => {
+  const changeHandlerDescription = (e) => {
+    setDescription({ ...description, [e.target.name]: e.target.value });
+  };
+  const handleChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleCategoryChange = (e) => {
+    setNameCat(e.target.value);
+  };
+
+  const submit = async (e, url) => {
     try {
       e.preventDefault();
       const formData = new FormData();
-      for (let key in files.photos) {
-        formData.append("photos", files.photos[key]);
+      if (url === `add${address}` || url === `edit${address}`) {
+        for (let key in files.photos) {
+          formData.append("photos", files.photos[key]);
+        }
       }
-      formData.append("description", JSON.stringify(descript));
+      formData.append("description", JSON.stringify(description));
       const val = await Object.fromEntries(formData.entries());
-      const response = await formDataMatAxios(formData, setMessage);
+      await dataAxios(setContent, setMessage, address, formData, url, id);
       setOpen(true);
       setTimeout(() => {
         setMessage("");
         setOpen(false);
       }, 1000);
-      e.target.reset();
+      formRef.current.reset();
     } catch (err) {
       console.log(err);
     }
@@ -80,6 +93,7 @@ export default function MatModal({ openChange, setOpenChange }) {
                 <h2>{"Коллекция"}</h2>
               </div>
               <form
+                ref={formRef}
                 onSubmit={submit}
                 encType="multipart/form-data"
                 style={{ marginTop: "10px" }}
@@ -94,15 +108,43 @@ export default function MatModal({ openChange, setOpenChange }) {
                   handleChange={handleCategoryChange}
                   changeHandlerDescription={changeHandlerDescription}
                 />
+                <CustomFormControl
+                  styleSize={"200"}
+                  infoText={"Выберите материал"}
+                  arr={content}
+                  valueState={name}
+                  name={"material_id"}
+                  label={"material"}
+                  handleChange={handleChange}
+                  changeHandlerDescription={changeHandlerDescription}
+                />
+                <AdminInput
+                  changeHandler={changeHandlerDescription}
+                  name={"name"}
+                  label={"Имя"}
+                  types={"text"}
+                />
                 <InputFiles
-                  text={"Фото коллекции"}
+                  text={"Фото материала"}
                   file={files}
                   changeHandlerFiles={changeHandlerFiles}
                   shouldAllowMultiple={false}
                 />
-                <CustomButton label={"Добавить"} />
-                <CustomButton label={"Изменить"} />
-                <CustomButton label={"Удалить"} />
+                <CustomButton
+                  label={"Добавить"}
+                  submit={submit}
+                  url={"addmaterial"}
+                />
+                <CustomButton
+                  label={"Изменить"}
+                  submit={submit}
+                  url={"editmaterial"}
+                />
+                <CustomButton
+                  label={"Удалить"}
+                  submit={submit}
+                  url={"delmaterial"}
+                />
               </form>
               <div />
             </div>
