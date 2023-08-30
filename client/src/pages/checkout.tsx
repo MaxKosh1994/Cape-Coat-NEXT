@@ -595,16 +595,16 @@ export default function CheckoutPage() {
     <>
       <Head>
         <title>Cape&Coat | Корзина</title>
-        <meta name="title" content="Cape and Coat" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <meta name='title' content='Cape and Coat' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='icon' href='/favicon.ico' />
       </Head>
       {cartItemsList?.length === 0 ? (
         <>
-          {orderStatus && <p className="order-status-cart">{orderStatus}</p>}
+          {orderStatus && <p className='order-status-cart'>{orderStatus}</p>}
           <p className={styles.emptyCartMsg}>
             Сейчас в вашей корзине пусто.{' '}
-            <Link href="/catalog">Загляните в каталог</Link>
+            <Link href='/catalog'>Загляните в каталог</Link>
           </p>
         </>
       ) : (
@@ -619,12 +619,12 @@ export default function CheckoutPage() {
                 <section
                   className={`${styles.orderBlock} ${styles.orderBlockBasket}`}
                 >
-                  {cartItemsList.map((item, index) => (
+                  {cartItemsList?.map((item, index) => (
                     <div className={styles.basketItem} key={item.id}>
                       <div className={styles.basketItemLeft}>
                         <Link
                           href={`/catalog/categoryName/${item.id}`}
-                          rel="noopener noreferrer"
+                          rel='noopener noreferrer'
                         >
                           <Image
                             width={300}
@@ -647,7 +647,7 @@ export default function CheckoutPage() {
                             <LikeButton itemId={item.id} />
                             <button
                               className={styles.basketItemDeleteButton}
-                              type="button"
+                              type='button'
                               onClick={() => handleDeleteItemFromCart(item.id)}
                             >
                               <DeleteOutlineIcon
@@ -742,95 +742,95 @@ export default function CheckoutPage() {
                               <div className={styles.itemPrices}>
                                 <Link
                                   className={styles.faqLink}
-                                  href="/FAQ/measurementsFAQ"
+                                  href='/FAQ/measurementsFAQ'
                                 >
                                   Посмотреть как снимать мерки
                                 </Link>
                               </div>
                             </div>
                             <div className={styles.sizesForm}>
-                              <form action="">
+                              <form action=''>
                                 <div className={styles.sizesFormBlock}>
                                   <div>
                                     <label
-                                      htmlFor="height"
+                                      htmlFor='height'
                                       className={styles.sizesFormLabel}
                                     >
                                       Ваш рост
                                     </label>
                                     <input
-                                      type="text"
-                                      name="height"
+                                      type='text'
+                                      name='height'
                                       className={styles.sizesFormInput}
                                       onChange={handleChange}
                                     />
                                   </div>
                                   <div>
                                     <label
-                                      htmlFor="length"
+                                      htmlFor='length'
                                       className={styles.sizesFormLabel}
                                     >
                                       Длина изделия
                                     </label>
                                     <input
-                                      type="text"
-                                      name="length"
+                                      type='text'
+                                      name='length'
                                       className={styles.sizesFormInput}
                                       onChange={handleChange}
                                     />
                                   </div>
                                   <div>
                                     <label
-                                      htmlFor="sleeve"
+                                      htmlFor='sleeve'
                                       className={styles.sizesFormLabel}
                                     >
                                       Длина рукава
                                     </label>
                                     <input
-                                      type="text"
-                                      name="sleeve"
+                                      type='text'
+                                      name='sleeve'
                                       className={styles.sizesFormInput}
                                       onChange={handleChange}
                                     />
                                   </div>
                                   <div>
                                     <label
-                                      htmlFor="bust"
+                                      htmlFor='bust'
                                       className={styles.sizesFormLabel}
                                     >
                                       Объем груди
                                     </label>
                                     <input
-                                      type="text"
-                                      name="bust"
+                                      type='text'
+                                      name='bust'
                                       className={styles.sizesFormInput}
                                       onChange={handleChange}
                                     />
                                   </div>
                                   <div>
                                     <label
-                                      htmlFor="waist"
+                                      htmlFor='waist'
                                       className={styles.sizesFormLabel}
                                     >
                                       Объем талии
                                     </label>
                                     <input
-                                      type="text"
-                                      name="waist"
+                                      type='text'
+                                      name='waist'
                                       className={styles.sizesFormInput}
                                       onChange={handleChange}
                                     />
                                   </div>
                                   <div>
                                     <label
-                                      htmlFor="hips"
+                                      htmlFor='hips'
                                       className={styles.sizesFormLabel}
                                     >
                                       Объем бедер
                                     </label>
                                     <input
-                                      type="text"
-                                      name="hips"
+                                      type='text'
+                                      name='hips'
                                       className={styles.sizesFormInput}
                                       onChange={handleChange}
                                     />
@@ -898,10 +898,10 @@ export default function CheckoutPage() {
                                   Имя
                                 </label>
                                 <input
-                                  role="text"
-                                  title="Имя"
-                                  placeholder=""
-                                  name="name"
+                                  role='text'
+                                  title='Имя'
+                                  placeholder=''
+                                  name='name'
                                   className={styles.formInput}
                                   onChange={handlePersonalDataInputChange}
                                 />
@@ -911,10 +911,10 @@ export default function CheckoutPage() {
                                   Email
                                 </label>
                                 <input
-                                  role="text"
-                                  title="Email*"
-                                  placeholder=""
-                                  name="email"
+                                  role='text'
+                                  title='Email*'
+                                  placeholder=''
+                                  name='email'
                                   className={styles.formInput}
                                   onChange={handlePersonalDataInputChange}
                                 />
@@ -927,13 +927,13 @@ export default function CheckoutPage() {
                                     Телефон
                                   </label>
                                   <input
-                                    role="text"
-                                    title="Телефон"
-                                    name="phone"
-                                    placeholder=""
+                                    role='text'
+                                    title='Телефон'
+                                    name='phone'
+                                    placeholder=''
                                     className={styles.formInput}
                                     onChange={handlePersonalDataInputChange}
-                                    disabled=""
+                                    disabled=''
                                   />
                                 </div>
                               </div>
@@ -950,12 +950,12 @@ export default function CheckoutPage() {
                   <h2 className={styles.headerItemCart}>Срочный пошив</h2>
                   <div className={styles.formBlock}>
                     <label
-                      id="urgent"
+                      id='urgent'
                       className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
                     >
                       <input
-                        type="checkbox"
-                        name="urgent"
+                        type='checkbox'
+                        name='urgent'
                         className={styles.checkboxIcon}
                         onChange={handleUrgentChange}
                       />
@@ -986,12 +986,12 @@ export default function CheckoutPage() {
                         ></label>
                         <textarea
                           className={`${styles.commentInput} ${styles.formInput}`}
-                          role="text"
-                          title="Комментарии"
-                          placeholder="Ваши пожелания..."
-                          name="comments"
-                          rows="5"
-                          cols="50"
+                          role='text'
+                          title='Комментарии'
+                          placeholder='Ваши пожелания...'
+                          name='comments'
+                          rows='5'
+                          cols='50'
                           onChange={handleCommentChange}
                         />
                       </div>
@@ -1008,11 +1008,11 @@ export default function CheckoutPage() {
                       // modelmodifiers="[object Object]"
                     >
                       <input
-                        hidden=""
-                        role="radio"
-                        type="radio"
-                        name="delivery"
-                        value="showroom"
+                        hidden=''
+                        role='radio'
+                        type='radio'
+                        name='delivery'
+                        value='showroom'
                         className={styles.checkboxIcon}
                         onChange={handleDeliveryChange}
                         defaultChecked={true}
@@ -1039,11 +1039,11 @@ export default function CheckoutPage() {
                       // modelmodifiers="[object Object]"
                     >
                       <input
-                        hidden=""
-                        role="radio"
-                        type="radio"
-                        name="delivery"
-                        value="post"
+                        hidden=''
+                        role='radio'
+                        type='radio'
+                        name='delivery'
+                        value='post'
                         className={styles.checkboxIcon}
                         onChange={handleDeliveryChange}
                       />
@@ -1072,10 +1072,10 @@ export default function CheckoutPage() {
                                   Город
                                 </label>
                                 <input
-                                  role="text"
-                                  title="Город"
-                                  placeholder=""
-                                  name="city"
+                                  role='text'
+                                  title='Город'
+                                  placeholder=''
+                                  name='city'
                                   className={styles.formInput}
                                   onChange={handleInputChange}
                                 />
@@ -1085,10 +1085,10 @@ export default function CheckoutPage() {
                                   Улица
                                 </label>
                                 <input
-                                  role="text"
-                                  title="Улица*"
-                                  placeholder=""
-                                  name="street"
+                                  role='text'
+                                  title='Улица*'
+                                  placeholder=''
+                                  name='street'
                                   className={styles.formInput}
                                   onChange={handleInputChange}
                                 />
@@ -1101,13 +1101,13 @@ export default function CheckoutPage() {
                                     Дом
                                   </label>
                                   <input
-                                    role="text"
-                                    title="Дом"
-                                    name="number"
-                                    placeholder=""
+                                    role='text'
+                                    title='Дом'
+                                    name='number'
+                                    placeholder=''
                                     className={styles.formInput}
                                     onChange={handleInputChange}
-                                    disabled=""
+                                    disabled=''
                                   />
                                   <div
                                     className={styles.formControlButtons}
@@ -1119,13 +1119,13 @@ export default function CheckoutPage() {
                                   Квартира/Офис
                                 </label>
                                 <input
-                                  role="text"
-                                  name="flat"
-                                  title="Квартира/Офис"
-                                  placeholder=""
+                                  role='text'
+                                  name='flat'
+                                  title='Квартира/Офис'
+                                  placeholder=''
                                   className={styles.formInput}
                                   onChange={handleInputChange}
-                                  disabled=""
+                                  disabled=''
                                 />
                                 <div
                                   className={styles.formControlButtons}
@@ -1150,8 +1150,8 @@ export default function CheckoutPage() {
                   >
                     <input
                       className={styles.promocodeInput}
-                      type="text"
-                      placeholder="Промокод"
+                      type='text'
+                      placeholder='Промокод'
                       value={promocode}
                       onChange={handlePromocodeChange}
                     />
