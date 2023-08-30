@@ -1,4 +1,11 @@
-const { Item, User, Favorite, Photo, Material } = require('../../db/models');
+const {
+  Item,
+  User,
+  Favorite,
+  Photo,
+  Material,
+  Category,
+} = require('../../db/models');
 
 module.exports.oneItem = async (req, res) => {
   try {
@@ -119,6 +126,9 @@ module.exports.getAllItems = async (req, res) => {
           model: Photo,
           limit: 1,
         },
+        {
+          model: Category,
+        },
       ],
     });
     if (items) {
@@ -129,6 +139,7 @@ module.exports.getAllItems = async (req, res) => {
         .json({ message: 'Извините, сервер временно не хочет грузить товары' });
     }
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 };

@@ -89,9 +89,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearchIconClick }) => {
             autoFocus
             inputProps={{ 'aria-label': 'search' }}
             onBlur={() => {
-              setIsInputOpen(false);
-              setInput('');
-              onSearchIconClick();
+              setTimeout(() => {
+                setIsInputOpen(false);
+                setInput('');
+                onSearchIconClick();
+              }, 200);
             }}
           />
         )}
