@@ -39,7 +39,6 @@ export default function CheckoutPage() {
     handleApplyPromocode,
     handleChange,
     handleInputChange,
-    handleCustomFormChange,
     handleUrgentChange,
     handleDeliveryChange,
     handleCommentChange,
