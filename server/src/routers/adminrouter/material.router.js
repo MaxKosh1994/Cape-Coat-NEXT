@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    return cb(null, 'storage/category');
+    return cb(null, 'storage/materials');
   },
   filename(req, file, cb) {
     return cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
@@ -13,16 +13,15 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
 const {
-  readCategory,
-  addCategory,
-  delCategory,
-  editCategory,
-} = require('../../controllers/adminControllers/categoryController');
+  readMaterial,
+  addMaterial,
+  delMaterial,
+  editMaterial,
+} = require('../../controllers/adminControllers/materialController');
 
 module.exports = categoryRoter
-  .get('/allcategory', readCategory)
-  .post('/addcategory', upload.array('photos', 1), addCategory)
-  .delete('/delcategory/:id', delCategory)
-  .patch('/editcategory', upload.array('photos', 1), editCategory);
+  .get('/allmaterial', readMaterial)
+  .post('/addmaterial', upload.array('photos', 1), addMaterial)
+  .delete('/delmaterial/:id', delMaterial)
+  .patch('/editmaterial', upload.array('photos', 1), editMaterial);

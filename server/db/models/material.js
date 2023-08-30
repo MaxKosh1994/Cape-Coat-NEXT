@@ -1,3 +1,6 @@
+const fs = require('fs').promises;
+const path = require('path');
+
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -23,5 +26,35 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'Material',
     },
   );
+
+  Material.afterUpdate(async (material, options) => {
+    const previousData = material._previousDataValues;
+    if (previousData.photo && previousData.photo !== material.photo) {
+      try {
+        const filePath = path.join(
+          process.cwd(),
+          `storage/materials/${previousData.photo}`,
+        );
+        await fs.unlink(filePath);
+        console.log('The avatar has been deleted');
+      } catch (error) {
+        console.error('Error deleting the avatar:', error);
+      }
+    }
+  });
+
+  Material.afterDestroy(async (material, options) => {
+    try {
+      console.log('Material:', material);
+      const filePath = path.join(
+        process.cwd(),
+        `storage/materials/${material.photo}`,
+      );
+      await fs.unlink(filePath);
+      console.log('The photo has been deleted');
+    } catch (error) {
+      console.error('Error deleting the photo:', error);
+    }
+  });
   return Material;
 };
