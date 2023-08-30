@@ -19,7 +19,6 @@ export default function CategoryList({
 
   //TODO подумать над query, чтобы не отображалось в адресной строке
   const categoryHandler = async (e) => {
-    console.log('urlName urlName', urlName);
     const target = e.target;
     if (!target) return;
     const pathname = `/catalog/${urlName}`;

@@ -32,10 +32,10 @@
   overflow-y: auto;
 }
 
-.right-part {
+/* .right-part {
   max-height: 100vh;
   overflow-y: auto;
-}
+} */
 ::-webkit-scrollbar {
   width: 0.5em;
 }

@@ -38,7 +38,7 @@ export default function Category(props) {
       console.log(err);
     }
   };
-console.log(props.text)
+
   return (
     <>
       <div className={styles.mainDiv}>
@@ -54,7 +54,7 @@ console.log(props.text)
                   <TextField
                     autoComplete="off"
                     required
-                    placeholder={props.placeholder}
+                    placeholder="Category"
                     onChange={changeHandlerDescription}
                     name="name"
                     type="text"
@@ -65,7 +65,7 @@ console.log(props.text)
               <div className={styles.liContainer}>
                 <h5 className={styles.headerFive}>{props.foto}</h5>
                 <label
-                  htmlFor={props.fileInput}
+                  htmlFor="fileColInput"
                   className={styles.customButton}
                 >
                   Выберите файл

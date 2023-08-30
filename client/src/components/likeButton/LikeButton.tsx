@@ -10,10 +10,10 @@ import { useSelector } from 'react-redux';
 import { fetchOneFavourite } from '@/app/thunkActionsFavourite';
 
 interface LikeButtonProps {
-  item: number;
+  itemId: number;
 }
 
-const LikeButton: React.FC<LikeButtonProps> = ({ item }) => {
+const LikeButton: React.FC<LikeButtonProps> = ({ itemId }) => {
   const [isLiked, setIsLiked] = useState(false);
   const user = useSelector((state: RootState) => state.sessionSlice.user);
   const dispatch = useAppDispatch();
@@ -22,13 +22,13 @@ const LikeButton: React.FC<LikeButtonProps> = ({ item }) => {
   );
 
   useEffect(() => {
-    const checkLike = favourites.some((el) => el.item_id === +item);
+    const checkLike = favourites.some((el) => el.item_id === itemId);
     setIsLiked(checkLike);
-  }, [favourites, item]);
+  }, [favourites, itemId]);
 
   const favHandler = async () => {
-    if (item) {
-      dispatch(fetchOneFavourite(item));
+    if (itemId) {
+      dispatch(fetchOneFavourite(itemId));
       setIsLiked(!isLiked);
     }
   };

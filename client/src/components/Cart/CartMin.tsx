@@ -113,7 +113,7 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
                   <div className={styles.basketItemRight}>
                     <div className={styles.basketItemContentRight}>
                       <div className={styles.iconsContainer}>
-                        <LikeButton item={item.id} />
+                        <LikeButton itemId={item.id} />
                         <button
                           className={styles.basketItemDeleteButton}
                           type="button"

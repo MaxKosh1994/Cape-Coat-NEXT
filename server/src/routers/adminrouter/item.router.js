@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 const itemRoter = new Router();
 
@@ -20,9 +20,11 @@ const {
   addItem,
   delItem,
   readItem,
+  getAllMaterials,
 } = require('../../controllers/adminControllers/itemController');
 
 module.exports = itemRoter
   .post('/additem', upload.array('photos', 12), addItem)
   .post('/delitem', delItem)
-  .get('/allitem', readItem);
+  .get('/allitem', readItem)
+  .get('/allMaterials/:id', getAllMaterials);

@@ -10,7 +10,7 @@ import {
 export default function CustomFormControl(props) {
   return (
     <>
-        <FormControl sx={{ m: 1, minWidth: 250 }}>
+        <FormControl sx={{ m: 1, minWidth: 220 }}>
           <InputLabel
             style={{
               fontWeight: "700",
