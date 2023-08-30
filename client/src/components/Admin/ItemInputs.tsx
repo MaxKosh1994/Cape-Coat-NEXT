@@ -13,7 +13,7 @@ export default function ItemInputs(props) {
         changeHandler={props.changeHandler}
         name={"article"}
         label={"Артикул"}
-        types={"text"}
+        types={"number"}
       />
       <AdminInput
         changeHandler={props.changeHandler}

@@ -1,11 +1,7 @@
 import Modal from "@mui/material/Modal";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import * as React from "react";
-import {
-  formDataIteamAxios,
-  categoryDataFetch,
-  collectionDataFetch,
-} from "../HTTP/adminApi";
+import { dataAxios } from "../HTTP/adminApi";
 
 import InfoModal from "../InfoModal";
 import ItemInputs from "../ItemInputs";
@@ -16,24 +12,34 @@ import CustomButton from "../CustomButton";
 
 import Box from "@mui/material/Box";
 
-export default function ItemModal({ openChange, setOpenChange }) {
+export default function ItemModal({ openChange, setOpenChange, id }) {
+  const formRef = useRef(null);
   const [files, setFile] = useState({});
-  const [category, setCategory] = useState([]);
-  const [collection, setCollection] = useState([]);
-  const [message, setMessage] = useState("");
-  const [nameCat, setNameCat] = useState("");
-  const [nameCol, setNameCol] = useState("");
-  const [open, setOpen] = useState<boolean>(false);
-
-  const [descript, setDescription] = useState({
+  const [description, setDescription] = useState({
     category_id: "1",
     collection_id: "1",
+    material_id: "1",
     in_stock: false,
+    bestseller: false,
   });
+  const [conten, setConten] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [collection, setCollection] = useState([]);
+  const [material, setMaterial] = useState([]);
+  const [nameCat, setNameCat] = useState("");
+  const [nameCol, setNameCol] = useState("");
+  const [nameMat, setNameMat] = useState("");
+  const [message, setMessage] = useState("");
+  const [open, setOpen] = useState<boolean>(false);
+  const address = "item";
+  const addressCat = "category";
+  const addressCol = "collection";
 
   useEffect(() => {
-    categoryDataFetch(setCategory, setMessage);
-    collectionDataFetch(setCollection, setMessage);
+    dataAxios(setCategory, setMessage, addressCat);
+    dataAxios(setCollection, setMessage, addressCol);
+    dataAxios(setMaterial, setMessage, addressCol);
+    dataAxios(setConten, setMessage, address);
   }, []);
 
   const changeHandlerFiles = (e) => {
@@ -41,41 +47,50 @@ export default function ItemModal({ openChange, setOpenChange }) {
   };
 
   const changeHandlerDescription = (e) => {
-    setDescription({ ...descript, [e.target.name]: e.target.value });
+    setDescription({ ...description, [e.target.name]: e.target.value });
   };
 
   const changeHandlerDescript = (e) => {
-    setDescription({ ...descript, [e.target.name]: e.target.checked });
+    setDescription({ ...description, [e.target.name]: e.target.checked });
   };
 
-  const handleCategoryChange = (event) => {
-    setNameCat(event.target.value);
+  const handleCategoryChange = (e) => {
+    setNameCat(e.target.value);
   };
-  const handleCollectionChange = (event) => {
-    setNameCol(event.target.value);
+  const handleCollectionChange = (e) => {
+    setNameCol(e.target.value);
   };
 
-  const submit = async (e) => {
+  const handleMaterialChange = (e) => {
+    setNameMat(e.target.value);
+  };
+
+  const submit = async (e, url) => {
     try {
       e.preventDefault();
       const formData = new FormData();
-      for (let key in files.photos) {
-        formData.append("photos", files.photos[key]);
+      if (url === `add${address}` || url === `edit${address}`) {
+        for (let key in files.photos) {
+          formData.append("photos", files.photos[key]);
+        }
       }
-      formData.append("description", JSON.stringify(descript));
-      const response = formDataIteamAxios(formData, setMessage);
+      formData.append("description", JSON.stringify(description));
+      const val = await Object.fromEntries(formData.entries());
+      await dataAxios(setConten, setMessage, address, formData, url, id);
       setOpen(true);
       setTimeout(() => {
         setMessage("");
         setOpen(false);
       }, 1000);
-      e.target.reset();
+      formRef.current.reset();
       setNameCat("");
       setNameCol("");
       setDescription({
         category_id: "1",
         collection_id: "1",
+        material_id: "1",
         in_stock: false,
+        bestseller: false,
       });
     } catch (err) {
       console.log(err);
@@ -105,6 +120,7 @@ export default function ItemModal({ openChange, setOpenChange }) {
             }}
           >
             <form
+              ref={formRef}
               onSubmit={submit}
               encType="multipart/form-data"
               style={{ marginTop: "10px" }}
@@ -132,11 +148,11 @@ export default function ItemModal({ openChange, setOpenChange }) {
                 />
                 <CustomFormControl
                   infoText={"Выберите материал"}
-                  arr={category}
-                  valueState={nameCat}
-                  name={"category_id"}
-                  label={"category"}
-                  handleChange={handleCategoryChange}
+                  arr={material}
+                  valueState={nameMat}
+                  name={"material_id"}
+                  label={"material"}
+                  handleChange={handleMaterialChange}
                   changeHandlerDescription={changeHandlerDescription}
                 />
               </div>
@@ -161,7 +177,21 @@ export default function ItemModal({ openChange, setOpenChange }) {
                   changeHandlerFiles={changeHandlerFiles}
                   shouldAllowMultiple={true}
                 />
-                <CustomButton label={"Сохранить"} />
+                <CustomButton
+                  label={"Добавить"}
+                  submit={submit}
+                  url={"additem"}
+                />
+                <CustomButton
+                  label={"Изменить"}
+                  submit={submit}
+                  url={"edititem"}
+                />
+                <CustomButton
+                  label={"Удалить"}
+                  submit={submit}
+                  url={"delitem"}
+                />
               </div>
             </form>
           </div>
