@@ -31,7 +31,7 @@ export default function BottomBlock() {
       console.log(error);
     }
   };
-  // console.log(itemsForMain);
+  // console.log('itemsForMain', itemsForMain[0].Category.urlName);
 
   return (
     <>
@@ -48,6 +48,7 @@ export default function BottomBlock() {
                 price={item.price}
                 isFavorite={item.isFavorite}
                 isCart={item.isCart}
+                urlName={item.Category ? item.Category.urlName : ''}
               />
             ))}
           </>
@@ -63,6 +64,7 @@ export default function BottomBlock() {
                 price={item.price}
                 isFavorite={item.isFavorite}
                 isCart={item.isCart}
+                urlName={item.Category ? item.Category.urlName : ''}
               />
             ))}
           </>
@@ -78,6 +80,7 @@ export default function BottomBlock() {
                 price={item.price}
                 isFavorite={item.isFavorite}
                 isCart={item.isCart}
+                urlName={item.Category ? item.Category.urlName : ''}
               />
             ))}
           </>

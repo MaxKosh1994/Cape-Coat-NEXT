@@ -36,6 +36,7 @@ interface IFaqMenuItem {
   name: string;
   collections?: ICollections[];
   link: string;
+  urlName?: string;
 }
 
 interface IMenuItem {
@@ -81,7 +82,7 @@ const NavigationMenu: React.FC<IProps> = ({
     { label: 'Каталог', link: '/catalog', submenu: categories },
     { label: 'Коллекции', link: '/catalog/collection', submenu: collections },
     { label: 'Sale', link: '/catalog/sale' },
-    { label: 'FAQ', link: '/FAQ', submenu: faqSubMenu },
+    { label: 'FAQ', link: '/FAQ/orderFAQ', submenu: faqSubMenu },
     { label: 'Контакты', link: '/address' },
   ];
 
@@ -124,7 +125,7 @@ const NavigationMenu: React.FC<IProps> = ({
                       <Link
                         href={{
                           pathname: `${item.link}/${el.urlName}`,
-                          query: { id: el.id },
+                          // query: { id: el.id },
                         }}
                         passHref
                       >
