@@ -1,39 +1,32 @@
 import { useEffect, useState } from 'react';
 import styles from './CartMin.module.css';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
-import {
-  delCartItemThunk,
-  emptyCartThunk,
-  getCartItemsThunk,
-} from '../../app/thunkActionsCart';
 import Image from 'next/image';
 import LikeButton from '@/components/likeButton/LikeButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { ISingleItem } from '@/app/types/cartTypes';
+import { useCartControl } from './useCartControl';
 
 const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
   show,
   handleCartIconClick,
 }) => {
+  const {
+    cartItemsList,
+    delError,
+    cartTotal,
+    setCartTotal,
+
+    fetchCartItems,
+    emptyCart,
+    handleDeleteItemFromCart,
+  } = useCartControl();
   const user = useAppSelector((state) => state.sessionSlice.user);
   const dispatch = useAppDispatch();
-  const [cartItemsList, setCartItemsList] = useState<ISingleItem[]>([]);
-  const [cartTotal, setCartTotal] = useState<number>(0);
-  const [delError, setDelError] = useState<string>('');
   const [showDiv, setShowDiv] = useState<boolean>(show);
 
   useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const cartItems = await dispatch(getCartItemsThunk());
-        setCartItemsList(cartItems);
-      } catch (err) {
-        console.log(err);
-      }
-    };
     fetchCartItems();
   }, [dispatch, user]);
 
@@ -47,25 +40,6 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
 
     setCartTotal(subtotal + subtotalStock);
   }, [cartItemsList]);
-
-  const handleDeleteItemFromCart = async (itemId: number) => {
-    try {
-      const data = { itemId, user };
-      await dispatch(delCartItemThunk(data));
-      const updatedCartItems = await dispatch(getCartItemsThunk());
-      setCartItemsList(updatedCartItems);
-    } catch (err) {
-      console.log(err);
-      setDelError('Не получилось удалить товар, попробуйте позже.');
-    }
-  };
-
-  const emptyCart = async () => {
-    const empty = await dispatch(emptyCartThunk(user));
-    if (empty === 200) {
-      setCartItemsList([]);
-    }
-  };
 
   const handleCloseCart = () => {
     setShowDiv((prev) => !prev);
@@ -82,12 +56,19 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
     >
       <>
         {cartItemsList?.length === 0 ? (
-          <>
+          <div className={styles.headerCart}>
             <p className={styles.emptyCartMsg}>
               Сейчас в вашей корзине пусто.{' '}
               <Link href="/catalog">Загляните в каталог</Link>
             </p>
-          </>
+            <button
+              className={styles.basketItemDeleteButton}
+              type="button"
+              onClick={handleCloseCart}
+            >
+              <CloseIcon sx={{ fontSize: '2rem', color: '#656565' }} />
+            </button>
+          </div>
         ) : (
           <>
             <div className={styles.headerCart}>
