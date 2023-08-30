@@ -314,6 +314,11 @@ export default function FormAddOrder() {
     setUserParams((prevTexts) => {
       return { ...prevTexts, [itemId]: paramsFormData[itemId] };
     });
+    setModalInfo(`Данные по товару ${itemId} успешно сохранены!`);
+    setOpenCreateOrderModal(true);
+    setInterval(() => {
+      setOpenCreateOrderModal(false);
+    }, 1000);
   };
 
   // записывает изменения в форме персональных данных (если клиент не залогинен)
@@ -471,6 +476,8 @@ export default function FormAddOrder() {
       urgentMaking,
       userParams,
     };
+
+    console.log(userParams);
 
     if (!personalData) {
       setModalInfo('Не хватает данных о заказчике');
@@ -1088,7 +1095,6 @@ export default function FormAddOrder() {
             addressString={addressString}
             commentsInput={commentsInput}
             urgentMaking={urgentMaking}
-            userParams={userParams}
           />
           <div className={`${styles.orderBlock} ${styles.orderBlockSummary}`}>
             <h1 className={styles.headerItemCart}>Стоимость заказа</h1>

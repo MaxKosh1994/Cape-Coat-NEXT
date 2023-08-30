@@ -25,9 +25,10 @@
   flex-direction: column;
   align-items: flex-start;
   width: 50%;
-  margin-right: 250px; 
+  margin-right: 250px;
   font-weight: bolder;
   color: black;
+  /* white-space: nowrap; */
 }
 
 .infoRightDiv {
@@ -35,6 +36,7 @@
   flex-direction: column;
   align-items: flex-end;
   width: 50%;
+  /* white-space: nowrap; */
 }
 
 .infoMainP {
@@ -42,4 +44,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.infoOrderBody {
+  width: 100%;
+  font-weight: bolder;
+  color: black;
 }
