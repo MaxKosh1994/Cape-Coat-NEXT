@@ -14,8 +14,14 @@ export interface Item {
   collection_id: number;
   material_id: number;
   category_id: number;
-
+  Category: Category;
   Photos: Photo[];
+}
+interface Category {
+  id: number;
+  name: string;
+  photo: string;
+  urlName: string;
 }
 interface Photo {
   id: number;

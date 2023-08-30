@@ -4,6 +4,7 @@ import { RootState } from '@/app/store';
 import './ItemMaterialsStyle.css';
 import CartButton from '../CartButton/CartButton';
 import { Item, Material } from '@/app/itemSlice';
+import Image from 'next/image';
 
 interface IitemMaterialsProps {
   itemId: number;
@@ -62,12 +63,13 @@ export default function ItemMaterials({
               .map((textile, index) => (
                 <div className="one_material_div" key={textile.id}>
                   <div className={`textile_icons selected`}>
-                    <img
+                    <Image
                       src={textile.url}
                       alt={`Textile ${textile.id}`}
+                      width={100}
+                      height={100}
+                      priority={true}
                       style={{
-                        width: '100%',
-                        height: '100%',
                         objectFit: 'cover',
                         borderRadius: '5px',
                       }}
@@ -93,12 +95,13 @@ export default function ItemMaterials({
                     handleImageClick(textile.url, textile.name, textile.id)
                   }
                 >
-                  <img
+                  <Image
                     src={textile.url}
                     alt={`Textile ${textile.id}`}
+                    width={100}
+                    height={100}
+                    priority={true}
                     style={{
-                      width: '100%',
-                      height: '100%',
                       objectFit: 'cover',
                       borderRadius: '5px',
                     }}

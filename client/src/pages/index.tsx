@@ -3,6 +3,10 @@ import styles from '../styles/Home.module.css';
 import HorizontalBlock from '@/components/main/HorizontalBlock';
 import VerticalBlock from '@/components/main/VerticalBlock';
 import BottomBlock from '@/components/main/BottomBlock';
+import {
+  horizontalBlockData,
+  verticalBlockData,
+} from '@/components/main/consts';
 
 const Home = () => {
   return (
@@ -15,19 +19,22 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <HorizontalBlock blockName="bestsellers" imgName="dresses.jpg" />
-        <HorizontalBlock blockName="sale" imgName="trenches.jpg" />
+        {Object.keys(horizontalBlockData).map((object) => (
+          <HorizontalBlock
+            key={horizontalBlockData[object].blockName}
+            blockName={horizontalBlockData[object].blockName}
+            imgName={horizontalBlockData[object].imgName}
+          />
+        ))}
         <div className={styles.blocksContainer}>
-          <VerticalBlock
-            blockName="Коллекция Aw-2023"
-            imgUrl={`${process.env.NEXT_PUBLIC_COLLECTION_URL}IMG_8836.JPG`}
-            url="collection"
-          />
-          <VerticalBlock
-            blockName="Новые поступления"
-            imgUrl={`${process.env.NEXT_PUBLIC_CATEGORY_URL}coats.jpg`}
-            url="new-arrivals"
-          />
+          {Object.keys(verticalBlockData).map((object) => (
+            <VerticalBlock
+              key={verticalBlockData[object].blockName}
+              blockName={verticalBlockData[object].blockName}
+              imgUrl={verticalBlockData[object].imgUrl}
+              url={verticalBlockData[object].url}
+            />
+          ))}
         </div>
         <BottomBlock />
       </main>

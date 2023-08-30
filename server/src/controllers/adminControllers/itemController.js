@@ -59,38 +59,23 @@ module.exports.addItem = async (req, res) => {
   }
 };
 
-
-
-module.exports.delItem = async (req, res) => {
+module.exports.readItem = async (req, res) => {
   try {
-    const id = Number(req.params.id);
-    const item = await Item.destroy({
-      where: { id },
-      individualHooks: true,
+    const readItem = await Item.findAll({
+      include: [Photo],
     });
-    res.status(200).json({ message: 'Товар удален' });
+    res.status(200).json({ message: 'success', readItem });
   } catch (err) {
-    res.status(400).json({ message: 'Не удалось удалить товар' });
-    console.log('Ошибка в delItem --->', err);
+    res.status(400).json({ message: 'error' });
+    console.log('Ошибка в readItem --->', err);
   }
 };
 
+
 module.exports.editItem = async (req, res) => {
   try {
-    const { files } = req;
-    let photo = files[0]?.filename;
-    let { name, urlName, item_id } = JSON.parse(req.body.description);
-    const [rowsAffected, [updatedItem]] = await Item.update(
-      { name, urlName, photo },
-      { where: { id: item_id }, individualHooks: true },
-    );
-    const result = updatedItem.dataValues;
-    res.status(200).json({
-      message: 'Товар изменен',
-      res: result,
-    });
   } catch (err) {
-    res.status(400).json({ message: 'Не удалось изменить товар' });
-    console.log('Ошибка в editItem --->', err);
+    res.status(400).json({ message: 'error' });
+    console.log('Ошибка в delItem --->', err);
   }
 };

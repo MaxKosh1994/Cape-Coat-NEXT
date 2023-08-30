@@ -27,7 +27,8 @@ const useProductCardLogic = (
   initialIsFavorite: boolean,
   initialIsCart: boolean,
   newPrice?: number,
-  isItemInFavoritesState?: boolean
+  isItemInFavoritesState?: boolean,
+  urlName?: string
 ) => {
   const dispatch = useAppDispatch();
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
@@ -245,6 +246,7 @@ const useProductCardLogic = (
     isCart,
     favoriteHandler,
     cartHandler,
+    urlName,
   };
 };
 
