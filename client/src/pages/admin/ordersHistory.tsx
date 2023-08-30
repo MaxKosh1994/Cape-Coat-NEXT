@@ -101,7 +101,7 @@ export default function Order() {
       id: orderId,
       itemId: itemId,
       field: currentField,
-      value: currentFieldValue.toString(),
+      value: currentFieldValue?.toString(),
     });
   };
 
@@ -145,7 +145,7 @@ export default function Order() {
     'December',
   ];
 
-  let ordersByMonth = orders.reduce((acc, order) => {
+  let ordersByMonth = orders?.reduce((acc, order) => {
     let date = format(parseISO(order?.createdAt), 'MMMM yyyy');
     let found = acc.find((a) => a.date === date);
 
@@ -158,7 +158,7 @@ export default function Order() {
     return acc;
   }, []);
 
-  ordersByMonth = ordersByMonth.sort((a, b) => {
+  ordersByMonth = ordersByMonth?.sort((a, b) => {
     const dateA = new Date(
       a.date.split(' ')[1],
       months.indexOf(a.date.split(' ')[0])
@@ -974,8 +974,8 @@ export default function Order() {
                           <div className={styles.inputContainer}>
                             <input
                               style={{ width: '100px', fontSize: 'medium' }}
-                              type="number"
-                              className="text-field"
+                              type='text'
+                              className='text-field'
                               required
                               autoFocus
                               value={editingOrderData.value}
@@ -1203,13 +1203,51 @@ export default function Order() {
                         style={{
                           display: 'flex',
                           flexDirection: 'column',
-                          borderBottom: '0.5px solid black',
-                          marginBottom: '10px',
-                          marginTop: '5px',
                         }}
-                        key={item?.article}
+                        key={item?.id}
                       >
-                        арт {item?.article}: {item?.Material?.name}
+                        {editingOrderData.id === order?.id &&
+                        editingOrderData.itemId === item?.id &&
+                        editingOrderData.field === 'selected_material' ? (
+                          <div className={styles.inputContainer}>
+                            <input
+                              type='text'
+                              style={{ width: '100px', fontSize: 'medium' }}
+                              className='text-field'
+                              required
+                              autoFocus
+                              value={editingOrderData.value}
+                              onChange={handleFieldChange}
+                            />
+                            <Button
+                              className={styles.buttonInput}
+                              type='submit'
+                              variant='contained'
+                              onClick={handleFieldConfirmMeasurements}
+                            >
+                              Сохранить
+                            </Button>
+                          </div>
+                        ) : (
+                          <p
+                            style={{
+                              borderBottom: '0.5px solid black',
+                              marginBottom: '10px',
+                              marginTop: '5px',
+                            }}
+                            onClick={() =>
+                              handleFieldClickMeasurements(
+                                order?.id,
+                                item?.id,
+                                'selected_material',
+                                item?.OrderItem?.selected_material
+                              )
+                            }
+                          >
+                            {item?.article}:{' '}
+                            {item?.OrderItem?.selected_material}
+                          </p>
+                        )}
                       </div>
                     ))}
                   </TableCell>

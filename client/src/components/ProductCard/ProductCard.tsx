@@ -17,6 +17,7 @@ const ProductCard: React.FC<IProductCard> = ({
   isCart: initialIsCart,
   newPrice,
   isItemInFavoritesState,
+  urlName,
 }: IProductCard) => {
   const { isFavorite, isCart, favoriteHandler, cartHandler } =
     useProductCardLogic(
@@ -28,19 +29,32 @@ const ProductCard: React.FC<IProductCard> = ({
       initialIsFavorite,
       initialIsCart,
       newPrice,
-      isItemInFavoritesState
+      isItemInFavoritesState,
+      urlName
     );
 
   const router = useRouter();
-  const { category } = router.query;
+
+  const linkToShow = router.asPath.replace(/^\/catalog\/|\/\d+$/g, '');
 
   return (
     <div className={styles.Card} key={id}>
-      <Link href={`/${category}/${id}`} as={`/catalog/${category}/${id}`}>
+      <Link
+        href={
+          router.pathname === '/'
+            ? `/${urlName}/${id}`
+            : `/catalog/${linkToShow}/${id}`
+        }
+        as={
+          router.pathname === '/'
+            ? `/catalog/${urlName}/${id}`
+            : `/catalog/${linkToShow}/${id}`
+        }
+      >
         <span className={styles.CardMedia}>
           <img
             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${photo}`}
-            alt="Product Image"
+            alt='Product Image'
             className={styles.Image}
           />
         </span>

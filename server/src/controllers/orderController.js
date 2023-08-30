@@ -2,6 +2,14 @@ const { Order, User, OrderItem } = require('../../db/models');
 const { getItemsInUserCart } = require('../services/cartItemService');
 const { checkUserUsedPromocode } = require('../services/cartServices');
 
+const { sendMessageToUser } = require('../../telegramBot/bot');
+
+// user,
+// cartTotal,
+// addressString,
+// commentsInput,
+// urgentMaking,
+
 module.exports.createOrder = async (req, res) => {
   try {
     let currUser;
@@ -46,6 +54,14 @@ module.exports.createOrder = async (req, res) => {
       }));
 
       await OrderItem.bulkCreate(orderItemsData);
+
+      //! Отправка сообщений для менеджера
+
+      const { MANAGER_TELEGRAM_ID } = process.env;
+      const message = `Покупатель ${currUser.full_name} сделал заказ номер ${newOrder.id} на сумму ${newOrder.total}.\n\nПочта: ${currUser.email}\nНомер телефона: ${currUser.phone}\nCоц.сети: ${currUser.telegram_instagram}`;
+      await sendMessageToUser(MANAGER_TELEGRAM_ID, message);
+
+      //! ------------------
 
       if (req.body.dbPc) {
         const usedPCCheck = await checkUserUsedPromocode(

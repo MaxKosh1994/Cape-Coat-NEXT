@@ -49,7 +49,6 @@ export default function Category() {
           setCatName(result.catName);
         } else if (response.status === 404) {
           const result = await response.json();
-          console.log(result.message);
         }
       })();
     } catch (err) {

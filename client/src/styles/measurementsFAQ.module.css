@@ -25,6 +25,11 @@
   text-align: justify;
 }
 
+.info a {
+  font-style: italic;
+  text-decoration: underline;
+}
+
 .movieContainer {
   display: flex;
   justify-content: center;

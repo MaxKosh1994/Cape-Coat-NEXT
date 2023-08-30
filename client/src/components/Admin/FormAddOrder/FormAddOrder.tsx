@@ -5,14 +5,30 @@ import { IItem } from '@/components/accComp/orders/types';
 import { getAllItems } from '@/components/SearchBar/fetchSearch';
 import SearchItemCard from '@/components/SearchItemCard/SearchItemCard';
 import styles from './FormAddOrder.module.css';
-import TrousersSizeForm from '@/components/Cart/trousersSizeForm';
-import TrenchSizeForm from '@/components/Cart/trenchSizeForm';
-import CoatSizeForm from '@/components/Cart/coatSizeForm';
-import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
-import BackToTopArrow from '@/components/ToTopArrow/ToTopArrow';
-import { clear } from 'console';
+import { IPersonalData } from '@/TypeScript/checkoutTypes';
+import { createOrderFetch, getAllMaterials } from './api';
+import InfoModal from '../InfoModal';
+import { useRouter } from 'next/router';
+import ResultContainerAddOrder from '../ResultContainerAddOrder/ResultContainerAddOrder';
+import { ParaglidingSharp } from '@mui/icons-material';
 
 export default function FormAddOrder() {
+  //! ВСЕ STATES
+
+  // стейт для модалки после оформления заказа
+  const [openCreateOrderModal, setOpenCreateOrderModal] = useState(false);
+
+  // стейт для инфо для модалки после оформления заказа
+  const [modalInfo, setModalInfo] = useState('');
+
+  // стейт для данных пользователя
+  const [personalData, setPersonalData] = useState<IPersonalData>({
+    name: '',
+    email: '',
+    number: '',
+    telegram_instagram: '',
+  });
+
   // стейт для всех товаров в выпадающий список
   const [allItems, setAllItems] = useState<IItem[]>([]);
 
@@ -58,9 +74,10 @@ export default function FormAddOrder() {
   // стоимость срочного пошива
   const [urgencyFee, setUrgencyFee] = useState(0);
 
-  // введенные в форму мерки
+  const [selectedItemsMaterials, setSelectedItemsMaterials] = useState({});
+
+  // Объявление состояния
   const [paramsFormData, setParamsFormData] = useState({
-    itemId: 0,
     height: '',
     length: '',
     sleeve: '',
@@ -68,7 +85,7 @@ export default function FormAddOrder() {
     waist: '',
     hips: '',
     saddle: '',
-    loops: '',
+    loops: false,
     buttons: '',
     lining: '',
   });
@@ -91,6 +108,8 @@ export default function FormAddOrder() {
 
   // отображать или нет форму адреса
   const [showAddressInputs, setShowAddressInputs] = useState(false);
+
+  //! --------------------------------
 
   //! Расчет стоимости
 
@@ -273,58 +292,53 @@ export default function FormAddOrder() {
     }
   }, [selectedDelivery]);
 
+  //! --------------------------------
+
   //! Хэндлеры
 
   // записывает изменения в инпутах формы введения мерок
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setParamsFormData({ ...paramsFormData, [e.target.name]: e.target.value });
-  };
-
-  // дозаписывает изменения в кастомизированных формах
-  // имеется в виду для брюк добавляет седло
-  // для пальто и шуб утепление, etc
-  const handleCustomFormChange = (updatedFields) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, itemId: number) => {
     setParamsFormData((prevState) => ({
       ...prevState,
-      ...updatedFields,
+      [itemId]: {
+        ...prevState[itemId],
+        [e.target.name]: e.target.value,
+      },
     }));
   };
 
-  // отрабатывает по клику на СОХРАНИТЬ при введении мерок
-  const handleSaveSizesInputs = async (index: number, itemId: number) => {
+  // Изменение состояния формы при выборе материала
+  const handleMaterialChange = (
+    event: ChangeEvent<HTMLSelectElement>,
+    itemId: number
+  ) => {
     setParamsFormData((prevState) => ({
       ...prevState,
-      itemId: itemId,
+      [itemId]: {
+        ...prevState[itemId],
+        [event.target.name]: event.target.value,
+      },
     }));
+  };
 
-    //  const userParamsText = `Ваш рост: ${paramsFormData.height}см, длина изделия: ${paramsFormData.length}см, длина рукава: ${paramsFormData.sleeve}см, объем груди: ${paramsFormData.bust}см, объем талии: ${paramsFormData.waist}см, объем бедер: ${paramsFormData.hips}см`;
+  // Сохранение формы
+  const handleSaveSizesInputs = (itemId: number) => {
     setUserParams((prevTexts) => {
-      const updatedTexts = [...prevTexts];
-      updatedTexts[index] = paramsFormData;
-      return updatedTexts;
+      if (!paramsFormData[itemId]) {
+        return { ...prevTexts, [itemId]: itemId };
+      }
+      return { ...prevTexts, [itemId]: paramsFormData[itemId] };
     });
-
-    //  const userParams = `Ваш рост: ${res.height}см, длина изделия: ${res.length}см, длина рукава: ${res.sleeve}см, объем груди: ${res.bust}см, объем талии: ${res.waist}см, объем бедер: ${res.hips}см`;
-    //  const response = await fetch(
-    //    `${process.env.NEXT_PUBLIC_URL}cart/measures/${itemId}`,
-    //    {
-    //      method: 'POST',
-    //      headers: { 'Content-Type': 'application/json' },
-    //      credentials: 'include',
-    //      body: JSON.stringify(paramsFormData),
-    //    }
-    //  );
-    //  const res = await response.json();
-    //  if (response.status === 200) {
-    //    // выводит мерки, если всё ок
-    //    // и прячет форму
-    //    const userParams = `Ваш рост: ${res.height}см, длина изделия: ${res.length}см, длина рукава: ${res.sleeve}см, объем груди: ${res.bust}см, объем талии: ${res.waist}см, объем бедер: ${res.hips}см`;
-    //    setUserParams((prevTexts) => {
-    //      const updatedTexts = [...prevTexts];
-    //      updatedTexts[index] = userParams;
-    //      return updatedTexts;
-    //    });
-    //  }
+    setModalInfo(`Данные по товару ${itemId} успешно сохранены!`);
+    setOpenCreateOrderModal(true);
+    setInterval(() => {
+      setOpenCreateOrderModal(false);
+    }, 1000);
+  };
+  console.log('--------', userParams);
+  // записывает изменения в форме персональных данных (если клиент не залогинен)
+  const handlePersonalDataInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPersonalData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   // отслеживает изменения в инпутах формы адреса доставки
@@ -404,6 +418,7 @@ export default function FormAddOrder() {
     }
   };
 
+  //! --------------------------------
   //! подгрузка всех товаров в выпадающий список
 
   useEffect(() => {
@@ -436,474 +451,826 @@ export default function FormAddOrder() {
     setIsOpen(!isOpen);
   };
 
+  //! --------------------------------
+  //! подгрузка всех доступных материалов для товара
+
+  useEffect(() => {
+    selectedItems.forEach(async (item) => {
+      const response = await getAllMaterials(item.id);
+      const materials = response.materials;
+      setSelectedItemsMaterials((prevMaterials) => ({
+        ...prevMaterials,
+        [item.id]: materials,
+      }));
+    });
+  }, [selectedItems]);
+
+  console.log('выбранные материалы======ЮЮЮ', selectedItemsMaterials);
+
+  //! --------------------------------
+
   //! ГЛАВНАЯ ЛОГИКА СОЗДАНИЯ ЗАКАЗА
 
-  const handleCreateOrder = () => {
-    let addressString;
-    // если доставка выбрана сдек, то склеивает данные в строку
-    if (selectedDelivery === 'post') {
-      addressString = `${addressInputs.city}, ${addressInputs.street} дом ${addressInputs.number}, квартира ${addressInputs.flat}`;
-    } else {
-      // если в шоурум, то записывает в переменную адрес шоурума
-      addressString = 'Нижний Новгород, ул. Малая Покровская, 20';
-    }
+  const router = useRouter();
+  let addressString;
+  if (selectedDelivery === 'post') {
+    addressString = `${addressInputs.city}, ${addressInputs.street} дом ${addressInputs.number}, квартира ${addressInputs.flat}`;
+  } else {
+    // если в шоурум, то записывает в переменную адрес шоурума
+    addressString = 'Нижний Новгород, ул. Малая Покровская, 20';
+  }
 
-    //! ВСЕ ДАННЫЕ ДЛЯ ЗАКАЗА КРОМЕ USER (каждую форму нужно сохранить)
-    const orderData = {
-      // user,
+  const handleCreateOrder = async () => {
+    // если доставка выбрана сдек, то склеивает данные в строку
+
+    const data = {
+      personalData,
       cartTotal,
       addressString,
       commentsInput,
       urgentMaking,
       userParams,
     };
-    console.log('====ГЛАВНАЯ КНОПКА===>', orderData);
+
+    console.log(userParams);
+
+    if (!personalData) {
+      setModalInfo('Не хватает данных о заказчике');
+      setOpenCreateOrderModal(true);
+    } else if (!cartTotal) {
+      setModalInfo('Не хватает данных о стоимости заказа');
+      setOpenCreateOrderModal(true);
+    } else if (!addressString) {
+      setModalInfo('Не хватает данных об адресе доставки');
+      setOpenCreateOrderModal(true);
+    } else if (!userParams) {
+      setModalInfo('Вы не выбрали товар, так нельзя, это неправильно!');
+      setOpenCreateOrderModal(true);
+    } else {
+      const res = await createOrderFetch(data);
+      setModalInfo(res.message);
+      setOpenCreateOrderModal(true);
+      if (res.success) {
+        setTimeout(() => {
+          router.push('/admin/tasks');
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          setOpenCreateOrderModal(false);
+        }),
+          2000;
+      }
+    }
   };
 
   return (
     <>
       <FormControl sx={{ m: 1, minWidth: 250 }}>
-        <section
-          className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
-        >
-          <h2 className={styles.headerItemCart}>Срочный пошив</h2>
-          <div className={styles.formBlock}>
-            <label
-              id='urgent'
-              className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+        <div className={styles.headerContainer}>
+          <div className={styles.userParamsContainer}>
+            <section
+              className={`${styles.orderBlockUserParams} ${styles.orderBlockDeliveries}`}
             >
-              <input
-                type='checkbox'
-                name='urgent'
-                className={styles.checkboxIcon}
-                onChange={handleUrgentChange}
-              />
-              <span className={styles.checkboxLabel}>
-                <span className={styles.checkboxHeader}>
-                  Изготовление изделия за 5 дней
-                </span>
-                <span className={styles.checkboxDescription}>
-                  <em>+20% к стоимости изделия</em>
-                </span>
-              </span>
-            </label>
-          </div>
-        </section>
-
-        <section
-          className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
-        >
-          <h2 className={styles.headerItemCart}>Комментарии к заказу</h2>
-          <div className={`${styles.formBlock} ${styles.commentCart}`}>
-            <label
-              className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
-            >
-              <div className={styles.formControl}>
-                <label
-                  className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
-                ></label>
-                <textarea
-                  className={`${styles.commentInput} ${styles.formInput}`}
-                  role='text'
-                  title='Комментарии'
-                  placeholder='Ваши пожелания...'
-                  name='comments'
-                  rows='5'
-                  cols='50'
-                  onChange={handleCommentChange}
-                />
-              </div>
-            </label>
-          </div>
-        </section>
-
-        <section
-          className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
-        >
-          <h2 className={styles.headerItemCart}>Способ доставки</h2>
-          <div className={styles.formBlock}>
-            <label
-              className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
-              // modelmodifiers="[object Object]"
-            >
-              <input
-                hidden=''
-                role='radio'
-                type='radio'
-                name='delivery'
-                value='showroom'
-                className={styles.checkboxIcon}
-                onChange={handleDeliveryChange}
-                defaultChecked={true}
-              />
-              <span className={styles.checkboxLabel}>
-                <span className={styles.checkboxHeader}>
-                  Забрать в шоу-руме
-                </span>
-                <span className={styles.checkboxDescription}>
-                  <em>Нижний Новгород, ул. Малая Покровская, 20</em>
-                </span>
-                <span className={styles.checkboxDescription}>
-                  <em>Будние дни, с 10:00 до 20:00</em>
-                </span>
-                <span className={styles.checkboxDescription}>
-                  <strong>Бесплатно</strong>
-                </span>
-              </span>
-            </label>
-          </div>
-          <div className={styles.formBlock}>
-            <label
-              className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
-              // modelmodifiers="[object Object]"
-            >
-              <input
-                hidden=''
-                role='radio'
-                type='radio'
-                name='delivery'
-                value='post'
-                className={styles.checkboxIcon}
-                onChange={handleDeliveryChange}
-              />
-              <span className={styles.checkboxLabel}>
-                <span className={styles.checkboxHeader}>
-                  Доставка СДЭК или Почтой России
-                </span>
-                <span className={styles.checkboxDescription}>
-                  <strong>от 300 рублей</strong>, от 3 дней
-                </span>
-                <span className={styles.checkboxDescription}>
-                  <em>
-                    Точную стоимость доставки вам сообщит менеджер. Итоговая
-                    сумма заказа может измениться.
-                  </em>
-                </span>
-              </span>
-            </label>
-            {showAddressInputs && (
-              <div className={styles.deliveryService}>
-                <div className={styles.deliveryServiceForm}>
-                  <div>
-                    <div className={styles.inputLocation}>
-                      <div className={styles.formControl}>
-                        <label className={styles.formControlLabel}>Город</label>
-                        <input
-                          role='text'
-                          title='Город'
-                          placeholder=''
-                          name='city'
-                          className={styles.formInput}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className={styles.formControl}>
-                        <label className={styles.formControlLabel}>Улица</label>
-                        <input
-                          role='text'
-                          title='Улица*'
-                          placeholder=''
-                          name='street'
-                          className={styles.formInput}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                    </div>
-                    <div className={styles.inputGroup}>
+              <h2 className={styles.headerUserParams}>Данные заказчика</h2>
+              <div style={{ height: '470px' }} className={styles.formBlock}>
+                <div className={styles.deliveryService}>
+                  <div className={styles.deliveryServiceForm}>
+                    <div>
                       <div className={styles.inputLocation}>
                         <div className={styles.formControl}>
-                          <label className={styles.formControlLabel}>Дом</label>
+                          <label className={styles.formControlLabel}>Имя</label>
                           <input
-                            role='text'
-                            title='Дом'
-                            name='number'
-                            placeholder=''
+                            role="text"
+                            title="Имя"
+                            placeholder=""
+                            name="name"
+                            className={styles.formInput}
+                            onChange={handlePersonalDataInputChange}
+                          />
+                        </div>
+                        <div className={styles.formControl}>
+                          <label className={styles.formControlLabel}>
+                            Email
+                          </label>
+                          <input
+                            role="text"
+                            title="Email*"
+                            placeholder=""
+                            name="email"
+                            className={styles.formInput}
+                            onChange={handlePersonalDataInputChange}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.inputGroup}>
+                        <div className={styles.inputLocation}>
+                          <div className={styles.formControl}>
+                            <label className={styles.formControlLabel}>
+                              Телефон
+                            </label>
+                            <input
+                              type="tel"
+                              role="text"
+                              title="Телефон"
+                              name="number"
+                              placeholder="+7(***)-***-**-**"
+                              pattern="\+7\(\d{3}\)-\d{3}-\d{2}-\d{2}"
+                              className={styles.formInput}
+                              onChange={handlePersonalDataInputChange}
+                              disabled=""
+                            />
+                          </div>
+                          <div className={styles.formControl}>
+                            <label className={styles.formControlLabel}>
+                              Telegram/Instagram
+                            </label>
+                            <input
+                              role="text"
+                              title="Telegram/Instagram"
+                              name="telegram_instagram"
+                              placeholder=""
+                              className={styles.formInput}
+                              onChange={handlePersonalDataInputChange}
+                              disabled=""
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div className={styles.orderDataContainer}>
+            <div className={styles.commentsDataContainer}>
+              <section
+                className={`${styles.orderBlockUserParams} ${styles.orderBlockDeliveries}`}
+              >
+                <h2 className={styles.headerUserParams}>
+                  Комментарии к заказу
+                </h2>
+                <div className={`${styles.formBlock} ${styles.commentCart}`}>
+                  <label
+                    className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+                  >
+                    <div className={styles.formControl}>
+                      <label
+                        className={`${styles.formControlLabel} ${styles.formControlLabelVisible}`}
+                      ></label>
+                      <textarea
+                        className={`${styles.commentInput} ${styles.formInput}`}
+                        role="text"
+                        title="Комментарии"
+                        placeholder="Пожелания заказчика..."
+                        name="comments"
+                        rows="5"
+                        cols="50"
+                        onChange={handleCommentChange}
+                      />
+                    </div>
+                  </label>
+                </div>
+              </section>
+            </div>
+            <div className={styles.urgentDataContainer}>
+              <section
+                className={`${styles.orderBlockUserParams} ${styles.orderBlockDeliveries}`}
+              >
+                <h2 className={styles.headerUserParams}>Срочный пошив</h2>
+                <div className={styles.formBlock}>
+                  <label
+                    id="urgent"
+                    className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+                  >
+                    <input
+                      type="checkbox"
+                      name="urgent"
+                      className={styles.checkboxIcon}
+                      onChange={handleUrgentChange}
+                    />
+                    <span className={styles.checkboxLabel}>
+                      <span className={styles.checkboxHeader}>
+                        Изготовление изделия за 5 дней
+                      </span>
+                      <span className={styles.checkboxDescription}>
+                        <em>+20% к стоимости изделия</em>
+                      </span>
+                    </span>
+                  </label>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.summOrderDataContainer}>
+          <section
+            className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}
+          >
+            <h2 className={styles.deliveryHeader}>Способ доставки</h2>
+            <div className={styles.formBlock}>
+              <label
+                className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+              >
+                <input
+                  hidden=""
+                  role="radio"
+                  type="radio"
+                  name="delivery"
+                  value="showroom"
+                  className={styles.checkboxIcon}
+                  onChange={handleDeliveryChange}
+                  defaultChecked={true}
+                />
+                <span className={styles.checkboxLabel}>
+                  <span className={styles.checkboxHeader}>
+                    Забрать в шоу-руме
+                  </span>
+                </span>
+              </label>
+            </div>
+            <div className={styles.formBlock}>
+              <label
+                className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
+              >
+                <input
+                  hidden=""
+                  role="radio"
+                  type="radio"
+                  name="delivery"
+                  value="post"
+                  className={styles.checkboxIcon}
+                  onChange={handleDeliveryChange}
+                />
+                <span className={styles.checkboxLabel}>
+                  <span className={styles.checkboxHeader}>
+                    Доставка СДЭК или Почтой России
+                  </span>
+                </span>
+              </label>
+              {showAddressInputs && (
+                <div className={styles.deliveryService}>
+                  <div className={styles.deliveryServiceForm}>
+                    <div>
+                      <div className={styles.inputLocation}>
+                        <div className={styles.formControl}>
+                          <label className={styles.formControlLabel}>
+                            Город
+                          </label>
+                          <input
+                            role="text"
+                            title="Город"
+                            placeholder=""
+                            name="city"
                             className={styles.formInput}
                             onChange={handleInputChange}
-                            disabled=''
+                          />
+                        </div>
+                        <div className={styles.formControl}>
+                          <label className={styles.formControlLabel}>
+                            Улица
+                          </label>
+                          <input
+                            role="text"
+                            title="Улица*"
+                            placeholder=""
+                            name="street"
+                            className={styles.formInput}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.inputGroup}>
+                        <div className={styles.inputLocation}>
+                          <div className={styles.formControl}>
+                            <label className={styles.formControlLabel}>
+                              Дом
+                            </label>
+                            <input
+                              role="text"
+                              title="Дом"
+                              name="number"
+                              placeholder=""
+                              className={styles.formInput}
+                              onChange={handleInputChange}
+                              disabled=""
+                            />
+                            <div className={styles.formControlButtons}></div>
+                          </div>
+                        </div>
+                        <div className={styles.formControl}>
+                          <label className={styles.formControlLabel}>
+                            Квартира/Офис
+                          </label>
+                          <input
+                            role="text"
+                            name="flat"
+                            title="Квартира/Офис"
+                            placeholder=""
+                            className={styles.formInput}
+                            onChange={handleInputChange}
+                            disabled=""
                           />
                           <div className={styles.formControlButtons}></div>
                         </div>
                       </div>
-                      <div className={styles.formControl}>
-                        <label className={styles.formControlLabel}>
-                          Квартира/Офис
-                        </label>
-                        <input
-                          role='text'
-                          name='flat'
-                          title='Квартира/Офис'
-                          placeholder=''
-                          className={styles.formInput}
-                          onChange={handleInputChange}
-                          disabled=''
-                        />
-                        <div className={styles.formControlButtons}></div>
-                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-          <BackToTopArrow />
-        </section>
-
-        <div className={`${styles.orderBlock} ${styles.orderBlockSummary}`}>
-          <h1 className={styles.headerItemCart}>Ваш заказ</h1>
-          <div className={styles.promocodeInputContainer}>
-            <p
-              className={`${styles.orderDescription} ${styles.orderDescriptionOnlinePayment}`}
-            >
-              <input
-                className={styles.promocodeInput}
-                type='text'
-                placeholder='Промокод'
-                value={promocode}
-                onChange={handlePromocodeChange}
-              />
-            </p>
-            <button
-              className={`${styles.button} ${styles.buttonBlock}  ${styles.buttonBordered}`}
-              onClick={handleApplyPromocode}
-            >
-              Применить
-            </button>
-          </div>
-          {promocodeErr && (
-            <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
-              {promocodeErr}
-            </p>
-          )}
-          {promoUsed && (
-            <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
-              Вы использовали промокод
-            </p>
-          )}
-          <div className={styles.orderSummary}>
-            <div className={styles.summary}>
-              <div className={styles.orderSummaryRow}>
-                <span>Товары ({selectedItems.length}):</span>
-                <div className={styles.itemPrices}>
-                  {(!promocodeErr && discount) || twoItemDiscount ? (
-                    <>
-                      <span
-                        className={styles.itemPricesPrice}
-                        style={{ textDecoration: 'line-through' }}
-                      >
-                        {selectedItems
-                          .reduce((sum, item) => sum + item.price, 0)
-                          .toLocaleString()}{' '}
-                        &#8381;
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <span className={styles.itemPricesPrice}>
-                        {selectedItems
-                          .reduce((sum, item) => sum + item.price, 0)
-                          .toLocaleString()}{' '}
-                        &#8381;
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
-              <div className={styles.orderSummaryRow}>
-                <span>Скидка:</span>
-                <div className={styles.itemPrices}>
-                  {twoItemDiscount ? (
-                    <span className={styles.itemPricesPrice}>
-                      {(discount + twoItemDiscount).toLocaleString()} &#8381;
-                    </span>
-                  ) : (
-                    <span className={styles.itemPricesPrice}>
-                      {discount.toLocaleString()} &#8381;
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className={styles.orderSummaryRow}>
-                <span>Доставка:</span>
-                <div className={styles.itemPrices}>
-                  <span className={styles.itemPricesPrice}>
-                    {deliveryCost.toLocaleString()} &#8381;
-                  </span>
-                </div>
-              </div>
-              {urgencyFee ? (
-                <div className={styles.orderSummaryRow}>
-                  <span>Срочность:</span>
-                  <div className={styles.itemPrices}>
-                    <span className={styles.itemPricesPrice}>
-                      {urgencyFee.toLocaleString()} &#8381;
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                <></>
               )}
             </div>
-          </div>
-          <div className={`${styles.orderSummary} ${styles.orderSummaryTotal}`}>
-            <div className={styles.orderSummaryRow}>
-              <span>Итого:</span>
-              <div className={styles.itemPrices}>
-                <span className={styles.itemPrices}>
-                  {cartTotal.toLocaleString()} &#8381;
-                </span>
-              </div>
-            </div>
-          </div>
-          {!orderStatus && (
-            <button
-              className={`${styles.button} ${styles.buttonBlock} ${styles.buttonBig} ${styles.buttonBordered} ${styles.orderButton}`}
-              onClick={() => {
-                handleCreateOrder();
-              }}
-            >
-              <span className={styles.buttonContent}>Оформить заказ</span>
-            </button>
-          )}
-          {orderStatus && (
-            <p className={styles.orderStatusCart}>{orderStatus}</p>
-          )}
+          </section>
         </div>
 
-        <Button className={styles.button} onClick={handleToggle}>
-          {isOpen ? 'Скрыть список товаров' : 'Показать список товаров'}
-        </Button>
-        <Collapse in={isOpen}>
-          <Grid container spacing={2}>
-            {allItems.map((item, index) => (
-              <Grid item xs={3} key={index}>
-                <Checkbox
-                  checked={isItemChecked(item)}
-                  onChange={() => handleCheckBox(item)}
-                />
-                <SearchItemCard item={item} />
-              </Grid>
-            ))}
-          </Grid>
-        </Collapse>
+        <div className={styles.selectItemsButtonContainer}>
+          <Button className={styles.button} onClick={handleToggle}>
+            {isOpen ? 'Скрыть список товаров' : 'Показать список товаров'}
+          </Button>
+        </div>
+
+        <div className={styles.itemListContainer}>
+          <Collapse in={isOpen}>
+            <Grid container spacing={2}>
+              {allItems.map((item, index) => (
+                <Grid item xs={3} key={index}>
+                  <Checkbox
+                    checked={isItemChecked(item)}
+                    onChange={() => handleCheckBox(item)}
+                  />
+                  <SearchItemCard item={item} />
+                </Grid>
+              ))}
+            </Grid>
+          </Collapse>
+        </div>
+
         <div className={styles.selectedItemsContainer}>
           {selectedItems.map((item, index) => (
             <div key={item.id} className={styles.oneItemConteiner}>
               <SearchItemCard key={item.id} item={item} />
-              <form action=''>
-                <div className={styles.sizesFormBlock}>
-                  <div>
-                    <label htmlFor='height' className={styles.sizesFormLabel}>
-                      Ваш рост
-                    </label>
-                    <input
-                      type='text'
-                      name='height'
-                      className={styles.sizesFormInput}
-                      onChange={handleChange}
-                    />
+              {item.in_stock ? (
+                <>
+                  <div className={styles.basketItemContent}>
+                    <div className={styles.itemPrices}>
+                      <span className={styles.itemPricesPrice}>
+                        {item.model_params}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <label htmlFor='length' className={styles.sizesFormLabel}>
-                      Длина изделия
-                    </label>
-                    <input
-                      type='text'
-                      name='length'
-                      className={styles.sizesFormInput}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor='sleeve' className={styles.sizesFormLabel}>
-                      Длина рукава
-                    </label>
-                    <input
-                      type='text'
-                      name='sleeve'
-                      className={styles.sizesFormInput}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor='bust' className={styles.sizesFormLabel}>
-                      Объем груди
-                    </label>
-                    <input
-                      type='text'
-                      name='bust'
-                      className={styles.sizesFormInput}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor='waist' className={styles.sizesFormLabel}>
-                      Объем талии
-                    </label>
-                    <input
-                      type='text'
-                      name='waist'
-                      className={styles.sizesFormInput}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor='hips' className={styles.sizesFormLabel}>
-                      Объем бедер
-                    </label>
-                    <input
-                      type='text'
-                      name='hips'
-                      className={styles.sizesFormInput}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  {item.category_id === 4 && (
-                    <TrousersSizeForm
-                      onTrousersSizeChange={handleCustomFormChange}
-                    />
-                  )}
-                  {item.category_id === 1 && (
-                    <TrenchSizeForm
-                      itemId={item.id}
-                      onTrenchSizeChange={handleCustomFormChange}
-                    />
-                  )}
-                  {item.category_id === 2 && (
-                    <CoatSizeForm
-                      itemId={item.id}
-                      onCoatSizeChange={handleCustomFormChange}
-                    />
-                  )}
-                  {item.category_id === 5 && (
-                    <FurCoatSizeForm
-                      itemId={item.id}
-                      onFurCoatSizeChange={handleCustomFormChange}
-                    />
-                  )}
-                </div>
-                <button
-                  className={styles.sizesFormBtn}
-                  onClick={(event) => {
-                    event.preventDefault();
-                    handleSaveSizesInputs(index, item.id);
-                  }}
-                >
-                  Сохранить
-                </button>
-              </form>
+                </>
+              ) : (
+                <>
+                  <select
+                    value={paramsFormData[item.id]?.selectedMaterial}
+                    onChange={(event) => handleMaterialChange(event, item.id)}
+                    name="selectedMaterial"
+                  >
+                    {selectedItemsMaterials[item.id]?.map((material, index) => (
+                      <option key={index} value={material.name}>
+                        {material.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  <form action="">
+                    <div className={styles.sizesFormBlock}>
+                      <div>
+                        <label
+                          htmlFor="height"
+                          className={styles.sizesFormLabel}
+                        >
+                          Ваш рост
+                        </label>
+                        <input
+                          type="text"
+                          name="height"
+                          className={styles.sizesFormInput}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="length"
+                          className={styles.sizesFormLabel}
+                        >
+                          Длина изделия
+                        </label>
+                        <input
+                          type="text"
+                          name="length"
+                          className={styles.sizesFormInput}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="sleeve"
+                          className={styles.sizesFormLabel}
+                        >
+                          Длина рукава
+                        </label>
+                        <input
+                          type="text"
+                          name="sleeve"
+                          className={styles.sizesFormInput}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="bust" className={styles.sizesFormLabel}>
+                          Объем груди
+                        </label>
+                        <input
+                          type="text"
+                          name="bust"
+                          className={styles.sizesFormInput}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="waist"
+                          className={styles.sizesFormLabel}
+                        >
+                          Объем талии
+                        </label>
+                        <input
+                          type="text"
+                          name="waist"
+                          className={styles.sizesFormInput}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="hips" className={styles.sizesFormLabel}>
+                          Объем бедер
+                        </label>
+                        <input
+                          type="text"
+                          name="hips"
+                          className={styles.sizesFormInput}
+                          onChange={(e) => handleChange(e, item.id)}
+                        />
+                      </div>
+                      {item.category_id === 4 && (
+                        <div>
+                          <label
+                            htmlFor="saddle"
+                            className={styles.sizesFormLabel}
+                          >
+                            &quot;Седло&quot; брюк
+                          </label>
+                          <input
+                            type="text"
+                            name="saddle"
+                            className={styles.sizesFormInput}
+                            onChange={(e) => handleChange(e, item.id)}
+                          />
+                        </div>
+                      )}
+                      {item.category_id === 1 && (
+                        <>
+                          <div>
+                            <input
+                              type="checkbox"
+                              name="loops"
+                              id={`loops${item.id}`}
+                              className={styles.sizesFormCheckbox}
+                              onChange={(e) => handleChange(e, item.id)}
+                            />
+                            <label
+                              htmlFor={`loops${item.id}`}
+                              className={styles.sizesFormLabel}
+                            >
+                              Хочу шлёвки
+                            </label>
+                          </div>
+                          <div>
+                            <input
+                              type="checkbox"
+                              name="buttons"
+                              id={`buttons${item.id}`}
+                              value="pugovitsy"
+                              className={styles.sizesFormCheckbox}
+                              onChange={(e) => handleChange(e, item.id)}
+                            />
+                            <label
+                              htmlFor={`buttons${item.id}`}
+                              className={styles.sizesFormLabel}
+                            >
+                              Хочу пуговицы
+                            </label>
+                          </div>
+                        </>
+                      )}
+                      {item.category_id === 2 && (
+                        <>
+                          <div>
+                            <input
+                              type="checkbox"
+                              name="loops"
+                              id={`loops${item.id}`}
+                              className={styles.sizesFormCheckbox}
+                              onChange={(e) => handleChange(e, item.id)}
+                            />
+                            <label
+                              htmlFor={`loops${item.id}`}
+                              className={styles.sizesFormLabel}
+                            >
+                              Хочу шлёвки
+                            </label>
+                          </div>
+                          <div>
+                            <input
+                              type="radio"
+                              name="buttons"
+                              id={`pugovitsy${item.id}`}
+                              value="pugovitsy"
+                              className={styles.sizesFormCheckbox}
+                              onChange={(e) => handleChange(e, item.id)}
+                            />
+                            <label
+                              htmlFor={`pugovitsy${item.id}`}
+                              className={styles.sizesFormLabel}
+                            >
+                              Хочу пуговицы
+                            </label>
+                          </div>
+                          <div>
+                            <input
+                              type="radio"
+                              name="buttons"
+                              value="knopki"
+                              id={`knopki${item.id}`}
+                              className={styles.sizesFormCheckbox}
+                              onChange={(e) => handleChange(e, item.id)}
+                            />
+                            <label
+                              htmlFor={`knopki${item.id}`}
+                              className={styles.sizesFormLabel}
+                            >
+                              Хочу кнопки
+                            </label>
+                          </div>
+                          <div>
+                            <label
+                              htmlFor={`lining${item.id}`}
+                              className={styles.sizesFormLabel}
+                            >
+                              Утепление
+                            </label>
+                            <select
+                              name="lining"
+                              id={`lining${item.id}`}
+                              className={styles.sizesFormSelect}
+                              onChange={(e) => handleChange(e, item.id)}
+                            >
+                              <option value="none">
+                                Без утепления (до 0 градусов)
+                              </option>
+                              <option value="minus5">
+                                Тонкое утепление (до -5 градусов) +1.400₽
+                              </option>
+                              <option value="minus10">
+                                Утепление с мембраной (до -10 градусов)
+                                *идеально для зимы* +1.400₽
+                              </option>
+                              <option value="minus20">
+                                Утепление двойным слоем с мембраной (до -20
+                                градусов) *обьемное утепление* +1.400₽
+                              </option>
+                            </select>
+                          </div>
+                        </>
+                      )}
+                      {item.category_id === 5 && (
+                        <>
+                          <div>
+                            <input
+                              type="checkbox"
+                              name="loops"
+                              id={`loops${item.id}`}
+                              className={styles.sizesFormCheckbox}
+                              onChange={(e) => handleChange(e, item.id)}
+                            />
+                            <label
+                              htmlFor={`loops${item.id}`}
+                              className={styles.sizesFormLabel}
+                            >
+                              Хочу шлёвки
+                            </label>
+                          </div>
+                          <div>
+                            <input
+                              type="radio"
+                              name="buttons"
+                              id={`pugovitsy${item.id}`}
+                              value="pugovitsy"
+                              className={styles.sizesFormCheckbox}
+                              onChange={(e) => handleChange(e, item.id)}
+                            />
+                            <label
+                              htmlFor={`pugovitsy${item.id}`}
+                              className={styles.sizesFormLabel}
+                            >
+                              Хочу пуговицы
+                            </label>
+                          </div>
+                          <div>
+                            <input
+                              type="radio"
+                              name="buttons"
+                              value="knopki"
+                              id={`knopki${item.id}`}
+                              className={styles.sizesFormCheckbox}
+                              onChange={(e) => handleChange(e, item.id)}
+                            />
+                            <label
+                              htmlFor={`knopki${item.id}`}
+                              className={styles.sizesFormLabel}
+                            >
+                              Хочу кнопки
+                            </label>
+                          </div>
+                          <div>
+                            <label
+                              htmlFor="lining"
+                              className={styles.sizesFormLabel}
+                            >
+                              Утепление
+                            </label>
+                            <select
+                              name="lining"
+                              id=""
+                              className={styles.sizesFormSelect}
+                              onChange={(e) => handleChange(e, item.id)}
+                            >
+                              <option value="minus15">
+                                Утепление до -15 градусов
+                              </option>
+                              <option value="minus25">
+                                Утепление до -25 градусов
+                              </option>
+                            </select>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </form>
+                </>
+              )}
+              <button
+                className={styles.sizesFormBtn}
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleSaveSizesInputs(item.id);
+                }}
+              >
+                Сохранить
+              </button>
             </div>
           ))}
         </div>
+
+        <div className={styles.orderSummDataContainer}>
+          <ResultContainerAddOrder
+            personalData={personalData}
+            cartTotal={cartTotal}
+            addressString={addressString}
+            commentsInput={commentsInput}
+            urgentMaking={urgentMaking}
+          />
+          <div className={`${styles.orderBlock} ${styles.orderBlockSummary}`}>
+            <h1 className={styles.headerItemCart}>Стоимость заказа</h1>
+            <div className={styles.promocodeInputContainer}>
+              <p
+                className={`${styles.orderDescription} ${styles.orderDescriptionOnlinePayment}`}
+              >
+                <input
+                  className={styles.promocodeInput}
+                  type="text"
+                  placeholder="Промокод"
+                  value={promocode}
+                  onChange={handlePromocodeChange}
+                />
+              </p>
+              <button
+                className={`${styles.button} ${styles.buttonBlock}  ${styles.buttonBordered}`}
+                onClick={handleApplyPromocode}
+              >
+                Применить
+              </button>
+            </div>
+            {promocodeErr && (
+              <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
+                {promocodeErr}
+              </p>
+            )}
+            {promoUsed && (
+              <p className={`${styles.errorMsgCart} ${styles.pcErr}`}>
+                Вы использовали промокод
+              </p>
+            )}
+            <div className={styles.orderSummary}>
+              <div className={styles.summary}>
+                <div className={styles.orderSummaryRow}>
+                  <span>Товары ({selectedItems.length}):</span>
+                  <div className={styles.itemPrices}>
+                    {(!promocodeErr && discount) || twoItemDiscount ? (
+                      <>
+                        <span
+                          className={styles.itemPricesPrice}
+                          style={{ textDecoration: 'line-through' }}
+                        >
+                          {selectedItems
+                            .reduce((sum, item) => sum + item.price, 0)
+                            .toLocaleString()}{' '}
+                          &#8381;
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className={styles.itemPricesPrice}>
+                          {selectedItems
+                            .reduce((sum, item) => sum + item.price, 0)
+                            .toLocaleString()}{' '}
+                          &#8381;
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className={styles.orderSummaryRow}>
+                  <span>Скидка:</span>
+                  <div className={styles.itemPrices}>
+                    {twoItemDiscount ? (
+                      <span className={styles.itemPricesPrice}>
+                        {(discount + twoItemDiscount).toLocaleString()} &#8381;
+                      </span>
+                    ) : (
+                      <span className={styles.itemPricesPrice}>
+                        {discount.toLocaleString()} &#8381;
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className={styles.orderSummaryRow}>
+                  <span>Доставка:</span>
+                  <div className={styles.itemPrices}>
+                    <span className={styles.itemPricesPrice}>
+                      {deliveryCost.toLocaleString()} &#8381;
+                    </span>
+                  </div>
+                </div>
+                {urgencyFee ? (
+                  <div className={styles.orderSummaryRow}>
+                    <span>Срочность:</span>
+                    <div className={styles.itemPrices}>
+                      <span className={styles.itemPricesPrice}>
+                        {urgencyFee.toLocaleString()} &#8381;
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
+            <div
+              className={`${styles.orderSummary} ${styles.orderSummaryTotal}`}
+            >
+              <div className={styles.orderSummaryRow}>
+                <span>Итого:</span>
+                <div className={styles.itemPrices}>
+                  <span className={styles.itemPrices}>
+                    {cartTotal.toLocaleString()} &#8381;
+                  </span>
+                </div>
+              </div>
+            </div>
+            {!orderStatus && (
+              <button
+                className={`${styles.button} ${styles.buttonBlock} ${styles.buttonBig} ${styles.buttonBordered} ${styles.orderButton}`}
+                onClick={() => {
+                  handleCreateOrder();
+                }}
+              >
+                <span className={styles.buttonContent}>Оформить заказ</span>
+              </button>
+            )}
+            {orderStatus && (
+              <p className={styles.orderStatusCart}>{orderStatus}</p>
+            )}
+          </div>
+        </div>
       </FormControl>
-      <button
-        className={`${styles.button} ${styles.buttonBlock} ${styles.buttonBig} ${styles.buttonBordered} ${styles.orderButton}`}
-        onClick={() => {
-          handleCreateOrder();
-        }}
-      >
-        <span className={styles.buttonContent}>Оформить заказ</span>
-      </button>
+      <InfoModal
+        open={openCreateOrderModal}
+        setOpen={setOpenCreateOrderModal}
+        info={modalInfo}
+      />
     </>
   );
 }

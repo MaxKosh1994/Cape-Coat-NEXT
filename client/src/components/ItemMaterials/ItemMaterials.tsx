@@ -1,17 +1,23 @@
-// ItemMaterials.js
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 import './ItemMaterialsStyle.css';
 import CartButton from '../CartButton/CartButton';
+import { Item, Material } from '@/app/itemSlice';
+import Image from 'next/image';
 
-export default function ItemMaterials({ item, itemData }) {
+interface IitemMaterialsProps {
+  itemId: number;
+  itemData: Item;
+}
+
+export default function ItemMaterials({
+  itemId,
+  itemData,
+}: IitemMaterialsProps): JSX.Element {
   const materialsData = useSelector(
     (state: RootState) => state.itemSlice.materials
   );
-  const [stockMaterial, setStockMaterial] = useState([]);
-  console.log('materialsData', materialsData);
-  console.log('itemitemitem', itemData);
 
   const materialsUrl = process.env.NEXT_PUBLIC_MATERIALS_URL;
   const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL;
@@ -23,10 +29,14 @@ export default function ItemMaterials({ item, itemData }) {
 
   const [selectedImage, setSelectedImage] = useState('');
   const [materialName, setMaterialName] = useState('');
-  const [selectedMaterialId, setSelectedMaterialId] = useState(null);
+  const [selectedMaterialId, setSelectedMaterialId] = useState<number>(0);
   const [materialAlert, setMaterialAlert] = useState('');
 
-  const handleImageClick = (url, name, materialId) => {
+  const handleImageClick = (
+    url: string,
+    name: string,
+    materialId: number
+  ): void => {
     setSelectedImage(url);
     setMaterialName(name);
     setSelectedMaterialId(materialId);
@@ -53,12 +63,13 @@ export default function ItemMaterials({ item, itemData }) {
               .map((textile, index) => (
                 <div className="one_material_div" key={textile.id}>
                   <div className={`textile_icons selected`}>
-                    <img
+                    <Image
                       src={textile.url}
                       alt={`Textile ${textile.id}`}
+                      width={100}
+                      height={100}
+                      priority={true}
                       style={{
-                        width: '100%',
-                        height: '100%',
                         objectFit: 'cover',
                         borderRadius: '5px',
                       }}
@@ -84,12 +95,13 @@ export default function ItemMaterials({ item, itemData }) {
                     handleImageClick(textile.url, textile.name, textile.id)
                   }
                 >
-                  <img
+                  <Image
                     src={textile.url}
                     alt={`Textile ${textile.id}`}
+                    width={100}
+                    height={100}
+                    priority={true}
                     style={{
-                      width: '100%',
-                      height: '100%',
                       objectFit: 'cover',
                       borderRadius: '5px',
                     }}
@@ -102,7 +114,7 @@ export default function ItemMaterials({ item, itemData }) {
       )}
 
       <CartButton
-        item={item}
+        itemId={itemId}
         itemData={itemData}
         selectedMaterialId={selectedMaterialId}
         setMaterialAlert={setMaterialAlert}

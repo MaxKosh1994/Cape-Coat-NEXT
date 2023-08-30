@@ -6,6 +6,7 @@ module.exports = {
     for (let i = 0; i < 12; i++) {
       orderItems.push({
         order_id: i + 1,
+        selected_material: 'Дефолтный материал',
         height: '180',
         length: '100',
         sleeve: '40',
@@ -20,6 +21,7 @@ module.exports = {
       });
       orderItems.push({
         order_id: i + 1,
+        selected_material: 'Дефолтный материал 2',
         height: '180',
         length: '100',
         sleeve: '40',

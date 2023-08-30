@@ -1,3 +1,5 @@
+import { Item } from '@/app/itemSlice';
+
 export const fetchNavigationMenuCategoryData = async () => {
   try {
     const responseFetch = await fetch(
@@ -52,5 +54,36 @@ export const fetchNavigationMenuCollectionData = async () => {
   } catch (error) {
     console.log(error);
     return { info: 'Error occurred', collections: [] };
+  }
+};
+
+export const getItems = async (
+  setSimilarItems: React.Dispatch<React.SetStateAction<Item[]>>,
+  isMobile: boolean,
+  itemData: Item
+): Promise<void> => {
+  try {
+    const allItems = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}item/allItems`,
+      {
+        credentials: 'include',
+      }
+    );
+    const response: Item[] = await allItems.json();
+
+    if (allItems.status === 200) {
+      const filteredItems = response.filter(
+        (item) =>
+          item.category_id === itemData.category_id &&
+          item.material_id !== itemData.material_id
+      );
+
+      const cutFilteredItems = isMobile
+        ? filteredItems.slice(0, 2)
+        : filteredItems.slice(0, 4);
+      setSimilarItems(cutFilteredItems);
+    }
+  } catch (error) {
+    console.log(error);
   }
 };

@@ -6,6 +6,8 @@ const {
   Material,
 } = require('../../../db/models');
 
+const { sendMessageToUser } = require('../../../telegramBot/bot');
+
 module.exports.readOrder = async (req, res) => {
   try {
     const allOrder = await Order.findAll({
@@ -85,5 +87,98 @@ module.exports.updateOrderItemField = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json({ message: 'Ошибка на сервере' });
+  }
+};
+
+// personalData,
+// cartTotal,
+// addressString,
+// commentsInput,
+// urgentMaking,
+// userParams
+
+module.exports.createOrder = async (req, res) => {
+  try {
+    let currUser;
+
+    const {
+      personalData,
+      cartTotal,
+      addressString,
+      commentsInput,
+      urgentMaking,
+      userParams,
+    } = req.body;
+
+    if (personalData) {
+      currUser = await User.findOne({
+        where: { email: personalData.email },
+      });
+
+      if (!currUser) {
+        const createdUser = await User.create({
+          email: personalData.email,
+          full_name: personalData.name,
+          phone: personalData.number,
+          telegram_instagram: personalData.telegram_instagram,
+          password: 'yourDefaultPassword',
+        });
+        currUser = createdUser.get();
+      }
+    }
+
+    const newOrder = await Order.create(
+      {
+        user_id: currUser.id,
+        address: addressString,
+        total: cartTotal,
+        comments: commentsInput || '',
+        urgent: urgentMaking || false,
+      },
+      { raw: true },
+    );
+
+    if (newOrder) {
+      const userParamsArray = Object.entries(userParams);
+
+      const orderItemsData = userParamsArray.map(([itemId, oneItem]) => ({
+        item_id: itemId,
+        order_id: newOrder.id,
+        selected_material: oneItem.selectedMaterial?.toString() || 'не выбран',
+        height: oneItem.height?.toString() || 'не выбран',
+        length: oneItem.length?.toString() || 'не выбран',
+        sleeve: oneItem.sleeve?.toString() || 'не выбран',
+        bust: oneItem.bust?.toString() || 'не выбран',
+        waist: oneItem.waist?.toString() || 'не выбран',
+        hips: oneItem.hips?.toString() || 'не выбран',
+        saddle: oneItem.saddle?.toString() || 'не выбран',
+        loops: Boolean(oneItem.loops) || false,
+        buttons: oneItem.buttons?.toString() || 'не выбран',
+        lining: oneItem.lining?.toString() || 'не выбран',
+      }));
+
+      await OrderItem.bulkCreate(orderItemsData);
+
+      //! Отправка сообщений для менеджера
+
+      const { MANAGER_TELEGRAM_ID } = process.env;
+      const message = `Покупатель ${currUser.full_name} сделал заказ номер ${newOrder.id} на сумму ${newOrder.total}.\n\nПочта: ${currUser.email}\nНомер телефона: ${currUser.phone}\nCоц.сети: ${currUser.telegram_instagram}`;
+      await sendMessageToUser(MANAGER_TELEGRAM_ID, message);
+
+      //! ------------------
+
+      res.json({
+        success: true,
+        message: `Заказ номер ${newOrder.id} создан.`,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Не получилось создать заказ. Пожалуйста, попробуйте позже',
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Что-то пошло не так, попробуйте позже' });
   }
 };
