@@ -18,10 +18,12 @@ const {
   addMaterial,
   delMaterial,
   editMaterial,
+  getAllMaterials,
 } = require('../../controllers/adminControllers/materialController');
 
 module.exports = categoryRoter
   .get('/allmaterial', readMaterial)
   .post('/addmaterial', upload.array('photos', 1), addMaterial)
   .delete('/delmaterial/:id', delMaterial)
-  .patch('/editmaterial', upload.array('photos', 1), editMaterial);
+  .patch('/editmaterial', upload.array('photos', 1), editMaterial)
+  .get('/getallmaterials', getAllMaterials);

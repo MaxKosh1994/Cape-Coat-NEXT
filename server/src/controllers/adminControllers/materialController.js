@@ -1,4 +1,4 @@
-const { Material } = require('../../../db/models');
+const { Item, Photo, Material, Category } = require('../../../db/models');
 
 module.exports.readMaterial = async (req, res) => {
   try {
@@ -62,5 +62,32 @@ module.exports.editMaterial = async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: 'Не удалось изменить материал' });
     console.log('Ошибка в editMaterial --->', err);
+  }
+};
+
+module.exports.getAllMaterials = async (req, res) => {
+  const { id: itemId } = req.params;
+  try {
+    const item = await Item.findByPk(itemId);
+
+    if (!item) {
+      return res.status(404).json({ message: 'Товар не найден' });
+    }
+
+    const category = await Category.findByPk(item.category_id);
+
+    if (!category) {
+      return res.status(404).json({ message: 'Категория не найдена' });
+    }
+
+    const materials = await Material.findAll({
+      where: { category_id: category.id },
+      raw: true,
+    });
+
+    return res.status(200).json({ materials });
+  } catch (err) {
+    res.status(400).json({ message: 'Ошибка' });
+    console.log('Ошибка в getAllMaterials --->', err);
   }
 };
