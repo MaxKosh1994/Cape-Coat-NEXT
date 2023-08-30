@@ -47,16 +47,6 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
         '& .MuiPaper-root': { borderRadius: 0, boxShadow: 'unset' },
       }}
       anchorEl={mobileMoreAnchorEl}
-      // anchorOrigin={{
-      //   vertical: 'bottom',
-      //   horizontal: 'right',
-      // }}
-      // id={mobileMenuId}
-      // keepMounted
-      // transformOrigin={{
-      //   vertical: 'bottom',
-      //   horizontal: 'right',
-      // }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
@@ -85,7 +75,11 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
         link="/catalog/sale"
         onClick={handleMobileMenuClose}
       />
-      <MobileMenuItem label="FAQ" link="/FAQ" onClick={handleMobileMenuClose} />
+      <MobileMenuItem
+        label="FAQ"
+        link="/FAQ/orderFAQ"
+        onClick={handleMobileMenuClose}
+      />
       <MobileMenuItem
         label="Контакты"
         link="/address"

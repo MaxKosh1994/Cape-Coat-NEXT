@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { createTheme } from '@mui/material/styles';
 import Image from 'next/image';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
@@ -11,7 +10,6 @@ import { AddShoppingCart } from '@mui/icons-material';
 import logo from './logoStore.svg';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SearchBar from '../SearchBar/SearchBar';
 import { useSelector } from 'react-redux';
