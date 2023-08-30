@@ -554,10 +554,12 @@ export default function FormAddOrder() {
                               Телефон
                             </label>
                             <input
+                              type='tel'
                               role='text'
                               title='Телефон'
                               name='number'
-                              placeholder=''
+                              placeholder='+7(***)-***-**-**'
+                              pattern='\+7\(\d{3}\)-\d{3}-\d{2}-\d{2}'
                               className={styles.formInput}
                               onChange={handlePersonalDataInputChange}
                               disabled=''
