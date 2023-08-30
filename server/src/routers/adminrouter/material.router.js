@@ -26,4 +26,4 @@ module.exports = categoryRoter
   .post('/addmaterial', upload.array('photos', 1), addMaterial)
   .delete('/delmaterial/:id', delMaterial)
   .patch('/editmaterial', upload.array('photos', 1), editMaterial)
-  .get('/getallmaterials', getAllMaterials);
+  .get('/getallmaterials/:id', getAllMaterials);

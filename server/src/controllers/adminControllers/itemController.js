@@ -59,19 +59,6 @@ module.exports.addItem = async (req, res) => {
   }
 };
 
-module.exports.readItem = async (req, res) => {
-  try {
-    const readItem = await Item.findAll({
-      include: [Photo],
-    });
-    res.status(200).json({ message: 'success', readItem });
-  } catch (err) {
-    res.status(400).json({ message: 'error' });
-    console.log('Ошибка в readItem --->', err);
-  }
-};
-
-
 module.exports.editItem = async (req, res) => {
   try {
   } catch (err) {
@@ -79,3 +66,12 @@ module.exports.editItem = async (req, res) => {
     console.log('Ошибка в delItem --->', err);
   }
 };
+
+module.exports.delItem = async (req, res) => {
+  try {
+  } catch (err) {
+    res.status(400).json({ message: 'error' });
+    console.log('Ошибка в delItem --->', err);
+  }
+};
+
