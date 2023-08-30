@@ -6,6 +6,7 @@ const categoryRoter = require('./category.router');
 const materialRouter = require('./material.router');
 const orderRouter = require('./order.router');
 const usersRouter = require('./users.router');
+const taskRouter = require('./task.router');
 
 module.exports = router
   .use('/item', itemRoter)
@@ -13,4 +14,5 @@ module.exports = router
   .use('/collection', collectionRoter)
   .use('/material', materialRouter)
   .use('/order', orderRouter)
-  .use('/users', usersRouter);
+  .use('/users', usersRouter)
+  .use('/tasks', taskRouter);
