@@ -502,7 +502,7 @@ export const useCartControl = () => {
         addressString = `${addressInputs.city}, ${addressInputs.street} дом ${addressInputs.number}, квартира ${addressInputs.flat}`;
       } else {
         // если в шоурум, то записывает в переменную адрес шоурума
-        addressString = 'Нижний Новгород, ул. Малая Покровская, 20';
+        addressString = 'Нижний Новгород, ул. Ильинская, 79';
       }
 
       // проверяем заполнил ли клиент мерки для всех товаров на пошив
