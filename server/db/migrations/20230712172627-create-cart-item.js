@@ -27,6 +27,15 @@ module.exports = {
           key: 'id',
         },
       },
+      material_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'Materials',
+          },
+          key: 'id',
+        },
+      },
       height: {
         type: Sequelize.TEXT,
         defaultValue: '',
