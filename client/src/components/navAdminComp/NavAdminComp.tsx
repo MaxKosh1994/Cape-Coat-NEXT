@@ -18,6 +18,16 @@ export default function NavAdminComp() {
       </Head>
       <div className={styles.mainDiv}>
         <div className={styles.routesDiv}>
+          <NextLink href='/admin/promo'>
+            <Button
+              className={`${styles.button} ${
+                router.pathname === '/admin/promo' ? styles.active : ''
+              }`}
+            >
+              Промокоды
+            </Button>
+          </NextLink>
+
           <NextLink href='/admin/cat-col-mat'>
             <Button
               className={`${styles.button} ${
@@ -37,7 +47,6 @@ export default function NavAdminComp() {
               Все товары
             </Button>
           </NextLink>
-
 
           <NextLink href='/admin/ordersHistory'>
             <Button

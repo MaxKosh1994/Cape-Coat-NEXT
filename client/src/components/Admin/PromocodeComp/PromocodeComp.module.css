@@ -1,0 +1,28 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.promoContainer {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  justify-content: space-between;
+  width: 30%;
+  border: 1px solid black;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.infoP {
+  margin-bottom: 5px;
+}
+
+.infoMainP {
+  margin-bottom: 5px;
+  font-weight: bolder;
+  color: black;
+}

@@ -1,7 +1,7 @@
 export const getAllMaterials = async (itemId: number) => {
   try {
     const responseFetch = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}admin/items/allMaterials/${itemId}`
+      `${process.env.NEXT_PUBLIC_URL}admin/material/getallmaterials/${itemId}`
     );
     const { status } = await responseFetch;
     const response = await responseFetch.json();
