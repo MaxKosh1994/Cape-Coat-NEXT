@@ -7,22 +7,27 @@ export interface ItemPhoto {
 }
 
 export interface CartItem {
-  added: null | boolean;
-  bust: null | string;
-  buttons: null | string;
+  added?: null | boolean;
+  bust?: null | string;
+  buttons?: null | string;
   cart_id: number;
-  createdAt: string;
-  height: null | number;
-  hips: null | number;
-  item_id: number;
-  length: null | number;
-  lining: null | string;
-  loops: null | boolean;
-  saddle: null | string;
-  sleeve: null | number;
-  updatedAt: string;
-  waist: null | number;
-  user_id: number;
+  createdAt?: string;
+  height?: null | number;
+  hips?: null | number;
+  item_id?: number;
+  length?: null | number;
+  lining?: null | string;
+  loops?: null | boolean;
+  saddle?: null | string;
+  sleeve?: null | number;
+  updatedAt?: string;
+  waist?: null | number;
+  user_id?: number;
+  selected_material?: null | string;
+}
+
+export interface CartItemMaterial {
+  selected_material?: null | string;
 }
 
 export interface MaterialItem {
@@ -36,6 +41,7 @@ export interface MaterialItem {
 
 export interface ISingleItem {
   Carts: CartItem[];
+  CartItems: CartItemMaterial[];
   Photos: ItemPhoto[];
   Material: MaterialItem[];
   article: string;

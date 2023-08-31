@@ -38,6 +38,9 @@ module.exports.createOrder = async (req, res) => {
       const orderItemsData = cartItems.map((oneItem) => ({
         item_id: oneItem.item_id,
         order_id: newOrder.id,
+        selected_material: oneItem.selected_material
+          ? oneItem.selected_material.toString()
+          : '',
         height: oneItem.height.toString(),
         length: oneItem.length.toString(),
         sleeve: oneItem.sleeve.toString(),
