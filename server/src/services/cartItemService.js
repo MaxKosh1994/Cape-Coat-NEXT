@@ -25,6 +25,13 @@ module.exports.getItemsInUserCart = async (userId) => {
   return allItems;
 };
 
+module.exports.checkStockItemAsPurchased = async (itemIds) => {
+  await Item.update(
+    { purchased: true },
+    { where: { id: itemIds, in_stock: true } },
+  );
+};
+
 module.exports.getItemIdsInCart = async (cartId) => {
   const allItems = await CartItem.findAll({
     where: {
