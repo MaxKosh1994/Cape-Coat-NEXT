@@ -35,16 +35,15 @@ module.exports = (sequelize, DataTypes) => {
      try {
        const filePath = path.join(process.cwd(), `storage/category/${previousData.photo}`);
        await fs.unlink(filePath);
-       console.log('The avatar has been deleted');
+       console.log('The photo has been deleted');
      } catch (error) {
-       console.error('Error deleting the avatar:', error);
+       console.error('Error deleting the photo:', error);
      }
    }
   });
 
   Category.afterDestroy(async (category, options) => {
     try {
-      console.log('Category:', category);
       const filePath = path.join(
         process.cwd(),
         `storage/category/${category.photo}`,

@@ -34,11 +34,12 @@ export default function ItemModal({ openChange, setOpenChange, id }) {
   const address = "item";
   const addressCat = "category";
   const addressCol = "collection";
+  const addressMat = "material";
 
   useEffect(() => {
     dataAxios(setCategory, setMessage, addressCat);
     dataAxios(setCollection, setMessage, addressCol);
-    dataAxios(setMaterial, setMessage, addressCol);
+    dataAxios(setMaterial, setMessage, addressMat);
     dataAxios(setConten, setMessage, address);
   }, []);
 
@@ -69,7 +70,7 @@ export default function ItemModal({ openChange, setOpenChange, id }) {
     try {
       e.preventDefault();
       const formData = new FormData();
-      if (url === `add${address}` || url === `edit${address}`) {
+      if (url === `create-${address}` || (url === `update-${address}` && files)) {
         for (let key in files.photos) {
           formData.append("photos", files.photos[key]);
         }
@@ -180,17 +181,17 @@ export default function ItemModal({ openChange, setOpenChange, id }) {
                 <CustomButton
                   label={"Добавить"}
                   submit={submit}
-                  url={"additem"}
+                  url={"create-item"}
                 />
                 <CustomButton
                   label={"Изменить"}
                   submit={submit}
-                  url={"edititem"}
+                  url={"update-item"}
                 />
                 <CustomButton
                   label={"Удалить"}
                   submit={submit}
-                  url={"delitem"}
+                  url={"delete-item"}
                 />
               </div>
             </form>
