@@ -28,10 +28,10 @@ export default function NavAdminComp() {
             </Button>
           </NextLink>
 
-          <NextLink href='/admin/addContent'>
+          <NextLink href='/admin/content'>
             <Button
               className={`${styles.button} ${
-                router.pathname === '/admin/addContent' ? styles.active : ''
+                router.pathname === '/admin/content' ? styles.active : ''
               }`}
             >
               Добавить контент
