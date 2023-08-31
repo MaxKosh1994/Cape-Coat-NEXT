@@ -45,7 +45,7 @@ export default function Tasks() {
   const sortedOrders = filteredOrders?.sort((a, b) => {
     if (a.urgent && !b.urgent) return -1;
     if (!a.urgent && b.urgent) return 1;
-    return a.createdAt.localeCompare(b.createdAt);
+    return a.getReadyAt.localeCompare(b.getReadyAt);
   });
 
   //! ---------------------------ЛОГИКА ИЗМЕНЕНИЯ ПОЛЕЙ ЗАКАЗА-------------------------------------
@@ -1071,6 +1071,19 @@ export default function Tasks() {
                         key={item?.article}
                       >
                         {item?.name}, арт:{item?.article}
+                        {item?.in_stock && (
+                          <span
+                            style={{
+                              backgroundColor: 'red',
+                              width: '60%',
+                              color: 'white',
+                              padding: '1px',
+                              borderRadius: '5px',
+                            }}
+                          >
+                            В НАЛИЧИИ
+                          </span>
+                        )}
                       </div>
                     ))}
                   </TableCell>
