@@ -44,7 +44,7 @@ export default function ColModal({ openChange, setOpenChange }) {
     try {
       e.preventDefault();
       const formData = new FormData();
-      if (url === `add${address}` || url === `edit${address}`) {
+      if (url === `create-${address}` || (url === `update-${address}` && files)) {
         for (let key in files.photos) {
           formData.append("photos", files.photos[key]);
         }
@@ -140,17 +140,17 @@ export default function ColModal({ openChange, setOpenChange }) {
                 <CustomButton
                   label={"Добавить"}
                   submit={submit}
-                  url={"addcollection"}
+                  url={"create-collection"}
                 />
                 <CustomButton
                   label={"Изменить"}
                   submit={submit}
-                  url={"editcollection"}
+                  url={"update-collection"}
                 />
                 <CustomButton
                   label={"Удалить"}
                   submit={submit}
-                  url={"delcollection"}
+                  url={"delete-collection"}
                 />
               </form>
               <div />

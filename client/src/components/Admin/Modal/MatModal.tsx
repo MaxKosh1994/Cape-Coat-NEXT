@@ -46,7 +46,7 @@ export default function MatModal({ openChange, setOpenChange }) {
     try {
       e.preventDefault();
       const formData = new FormData();
-      if (url === `add${address}` || url === `edit${address}`) {
+      if (url === `create-${address}` || (url === `update-${address}` && files)) {
         for (let key in files.photos) {
           formData.append("photos", files.photos[key]);
         }
@@ -90,7 +90,7 @@ export default function MatModal({ openChange, setOpenChange }) {
           >
             <div className={styles.mainDiv}>
               <div className={styles.headerDiv}>
-                <h2>{"Коллекция"}</h2>
+                <h2>{"Материал"}</h2>
               </div>
               <form
                 ref={formRef}
@@ -133,17 +133,17 @@ export default function MatModal({ openChange, setOpenChange }) {
                 <CustomButton
                   label={"Добавить"}
                   submit={submit}
-                  url={"addmaterial"}
+                  url={"create-material"}
                 />
                 <CustomButton
                   label={"Изменить"}
                   submit={submit}
-                  url={"editmaterial"}
+                  url={"update-material"}
                 />
                 <CustomButton
                   label={"Удалить"}
                   submit={submit}
-                  url={"delmaterial"}
+                  url={"delete-material"}
                 />
               </form>
               <div />
