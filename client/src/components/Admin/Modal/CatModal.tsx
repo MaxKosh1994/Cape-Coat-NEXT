@@ -37,7 +37,7 @@ export default function CatModal({ openChange, setOpenChange }) {
     try {
       e.preventDefault();
       const formData = new FormData();
-      if (url === `add${address}` || url === `edit${address}`) {
+      if (url === `create-${address}` || (url === `update-${address}` && files)) {
         for (let key in files.photos) {
           formData.append("photos", files.photos[key]);
         }
@@ -120,17 +120,17 @@ export default function CatModal({ openChange, setOpenChange }) {
                 <CustomButton
                   label={"Добавить"}
                   submit={submit}
-                  url={"addcategory"}
+                  url={"create-category"}
                 />
                 <CustomButton
                   label={"Изменить"}
                   submit={submit}
-                  url={"editcategory"}
+                  url={"update-category"}
                 />
                 <CustomButton
                   label={"Удалить"}
                   submit={submit}
-                  url={"delcategory"}
+                  url={"delete-category"}
                 />
               </form>
               <div />

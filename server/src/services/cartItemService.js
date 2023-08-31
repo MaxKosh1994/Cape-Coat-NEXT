@@ -25,6 +25,13 @@ module.exports.getItemsInUserCart = async (userId) => {
   return allItems;
 };
 
+module.exports.checkStockItemAsPurchased = async (itemIds) => {
+  await Item.update(
+    { purchased: true },
+    { where: { id: itemIds, in_stock: true } },
+  );
+};
+
 module.exports.getItemIdsInCart = async (cartId) => {
   const allItems = await CartItem.findAll({
     where: {
@@ -47,10 +54,11 @@ module.exports.findCartItem = async (cartId, itemId) => {
   return cartItem;
 };
 
-module.exports.createCartItem = async (cartId, itemId) => {
+module.exports.createCartItem = async (cartId, itemId, materialName) => {
   const newCartItem = await CartItem.create({
     cart_id: cartId,
     item_id: itemId,
+    selected_material: materialName,
   });
   return newCartItem;
 };

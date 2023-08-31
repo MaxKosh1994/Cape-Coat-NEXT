@@ -27,6 +27,7 @@ module.exports.getCart = async (req, res) => {
       res.status(401).json({ message: 'Unauthorized' });
     }
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 };
@@ -151,17 +152,18 @@ module.exports.addToCart = async (req, res) => {
   try {
     const email = req?.session?.user;
     const { id } = req.params;
+    const { material } = req.body;
     if (email) {
       const currUser = await findUserByEmail(email);
       const userCart = await findUserCart(currUser.id);
 
       if (userCart) {
         const existingCartItem = await findCartItem(userCart.id, id);
-        const newCartItem = await createCartItem(userCart.id, id);
+        const newCartItem = await createCartItem(userCart.id, id, material);
         res.status(200).json({ newCartItem });
       } else {
         const newCart = await createUserCart(currUser.id);
-        const newCartItem = await createCartItem(userCart.id, id);
+        const newCartItem = await createCartItem(userCart.id, id, material);
         res.status(200).json({ newCartItem });
       }
     } else {

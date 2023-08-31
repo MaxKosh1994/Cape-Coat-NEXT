@@ -1,4 +1,5 @@
 const { Router } = require('express');
+
 const categoryRoter = new Router();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
@@ -15,14 +16,14 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const {
+  createCategory,
   readCategory,
-  addCategory,
-  delCategory,
-  editCategory,
+  updateCategory,
+  deleteCategory,
 } = require('../../controllers/adminControllers/categoryController');
 
 module.exports = categoryRoter
-  .get('/allcategory', readCategory)
-  .post('/addcategory', upload.array('photos', 1), addCategory)
-  .delete('/delcategory/:id', delCategory)
-  .patch('/editcategory', upload.array('photos', 1), editCategory);
+  .post('/create-category', upload.array('photos', 1), createCategory)
+  .get('/read-category', readCategory)
+  .patch('/update-category', upload.array('photos', 1), updateCategory)
+  .delete('/delete-category/:id', deleteCategory);

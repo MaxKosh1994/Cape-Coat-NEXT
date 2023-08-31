@@ -64,7 +64,7 @@ module.exports.getNewArrivals = async (req, res) => {
 module.exports.getBestSellers = async (req, res) => {
   try {
     const bestsellers = await Item.findAll({
-      where: { bestseller: true },
+      where: { bestseller: true, in_stock: false },
       include: [
         {
           model: Photo,
@@ -82,7 +82,7 @@ module.exports.getBestSellers = async (req, res) => {
 module.exports.getStock = async (req, res) => {
   try {
     const inStockItems = await Item.findAll({
-      where: { in_stock: true },
+      where: { in_stock: true, purchased: false },
       include: [
         {
           model: Photo,

@@ -36,16 +36,15 @@ module.exports = (sequelize, DataTypes) => {
           `storage/materials/${previousData.photo}`,
         );
         await fs.unlink(filePath);
-        console.log('The avatar has been deleted');
+        console.log('The photo has been deleted');
       } catch (error) {
-        console.error('Error deleting the avatar:', error);
+        console.error('Error deleting the photo:', error);
       }
     }
   });
 
   Material.afterDestroy(async (material, options) => {
     try {
-      console.log('Material:', material);
       const filePath = path.join(
         process.cwd(),
         `storage/materials/${material.photo}`,

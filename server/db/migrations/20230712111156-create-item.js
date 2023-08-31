@@ -40,6 +40,11 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
+      purchased: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
+      },
       bestseller: {
         type: Sequelize.BOOLEAN,
         allowNull: false,

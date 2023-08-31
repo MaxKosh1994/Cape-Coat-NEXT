@@ -10,6 +10,7 @@ import { Item } from '@/app/itemSlice';
 interface IcartButtonProps {
   itemId: number;
   selectedMaterialId: number;
+  selectedMaterialName: string;
   setMaterialAlert: React.Dispatch<React.SetStateAction<string>>;
   itemData: Item;
 }
@@ -17,6 +18,7 @@ interface IcartButtonProps {
 export default function CartButton({
   itemId,
   selectedMaterialId,
+  selectedMaterialName,
   setMaterialAlert,
   itemData,
 }: IcartButtonProps): JSX.Element {
@@ -30,7 +32,6 @@ export default function CartButton({
     const isInCart = cartData.some((el) => el.item_id === itemId);
     setIsInCart(isInCart);
   }, [cartData, itemId]);
-
   const dispatch = useAppDispatch();
   const cartHandler = async () => {
     try {
@@ -42,12 +43,14 @@ export default function CartButton({
         return;
       }
       if (!isInCart) {
+        const materialName = { material: selectedMaterialName };
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_URL}cart/item/${itemId}`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
+            body: JSON.stringify(materialName),
           }
         );
 

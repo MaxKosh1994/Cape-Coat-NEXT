@@ -1,16 +1,6 @@
 const { Category } = require('../../../db/models');
 
-module.exports.readCategory = async (req, res) => {
-  try {
-    const allCategory = await Category.findAll({ raw: true });
-    res.status(200).json({ message: 'success', all: allCategory });
-  } catch (err) {
-    res.status(400).json({ message: 'error' });
-    console.log('Ошибка в readCategory --->', err);
-  }
-};
-
-module.exports.addCategory = async (req, res) => {
+module.exports.createCategory = async (req, res) => {
   try {
     const { files } = req;
     const photo = files[0]?.filename;
@@ -20,25 +10,21 @@ module.exports.addCategory = async (req, res) => {
     res.status(200).json({ message: 'Категория добавлена', res: result });
   } catch (err) {
     res.status(400).json({ message: 'Не удалось добавить категорию' });
-    console.log('Ошибка в addCategory --->', err);
+    console.log('Ошибка в createCategory --->', err);
   }
 };
 
-module.exports.delCategory = async (req, res) => {
+module.exports.readCategory = async (req, res) => {
   try {
-    const id = Number(req.params.id);
-    const category = await Category.destroy({
-      where: { id },
-      individualHooks: true,
-    });
-    res.status(200).json({ message: 'Категория удалена' });
+    const allCategory = await Category.findAll({ raw: true });
+    res.status(200).json({ message: 'success', res: allCategory });
   } catch (err) {
-    res.status(400).json({ message: 'Не удалось удалить категорию' });
-    console.log('Ошибка в delCategory --->', err);
+    res.status(400).json({ message: 'error' });
+    console.log('Ошибка в readCategory --->', err);
   }
 };
 
-module.exports.editCategory = async (req, res) => {
+module.exports.updateCategory = async (req, res) => {
   try {
     const { files } = req;
     let photo = files[0]?.filename;
@@ -54,6 +40,20 @@ module.exports.editCategory = async (req, res) => {
     });
   } catch (err) {
     res.status(400).json({ message: 'Не удалось изменить категорию' });
-    console.log('Ошибка в editCategory --->', err);
+    console.log('Ошибка в updateCategory --->', err);
+  }
+};
+
+module.exports.deleteCategory = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const category = await Category.destroy({
+      where: { id },
+      individualHooks: true,
+    });
+    res.status(200).json({ message: 'Категория удалена' });
+  } catch (err) {
+    res.status(400).json({ message: 'Не удалось удалить категорию' });
+    console.log('Ошибка в deleteCategory --->', err);
   }
 };

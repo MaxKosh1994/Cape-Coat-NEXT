@@ -1,14 +1,11 @@
 const { Order, User, OrderItem } = require('../../db/models');
-const { getItemsInUserCart } = require('../services/cartItemService');
+const {
+  getItemsInUserCart,
+  checkStockItemAsPurchased,
+} = require('../services/cartItemService');
 const { checkUserUsedPromocode } = require('../services/cartServices');
 
 const { sendMessageToUser } = require('../../telegramBot/bot');
-
-// user,
-// cartTotal,
-// addressString,
-// commentsInput,
-// urgentMaking,
 
 module.exports.createOrder = async (req, res) => {
   try {
@@ -41,6 +38,9 @@ module.exports.createOrder = async (req, res) => {
       const orderItemsData = cartItems.map((oneItem) => ({
         item_id: oneItem.item_id,
         order_id: newOrder.id,
+        selected_material: oneItem.selected_material
+          ? oneItem.selected_material.toString()
+          : '',
         height: oneItem.height.toString(),
         length: oneItem.length.toString(),
         sleeve: oneItem.sleeve.toString(),
@@ -69,6 +69,8 @@ module.exports.createOrder = async (req, res) => {
           currUser.email,
         );
         if (usedPCCheck.success) {
+          const itemIds = cartItems.map((item) => item.item_id);
+          await checkStockItemAsPurchased(itemIds);
           res.json({
             success: true,
             message: `Заказ номер ${newOrder.id} создан. Мы свяжемся с вами в течение дня.`,
@@ -80,6 +82,8 @@ module.exports.createOrder = async (req, res) => {
           });
         }
       } else {
+        const itemIds = cartItems.map((item) => item.item_id);
+        await checkStockItemAsPurchased(itemIds);
         res.json({
           success: true,
           message: `Заказ номер ${newOrder.id} создан. Мы свяжемся с вами в течение дня.`,

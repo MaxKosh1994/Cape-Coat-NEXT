@@ -1,4 +1,5 @@
 const { Router } = require('express');
+
 const collectionRoter = new Router();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
@@ -13,15 +14,16 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
 const {
+  createCollection,
   readCollection,
-  addCollection,
-  delCollection,
-  editCollection
+  updateCollection,
+  deleteCollection,
 } = require('../../controllers/adminControllers/collectionController');
 
 module.exports = collectionRoter
-  .get('/allcollection', readCollection)
-  .post('/addcollection', upload.array('photos', 1), addCollection)
-  .delete('/delcollection/:id', delCollection)
-  .patch('/editcollection', upload.array('photos', 1), editCollection);
+  .post('/create-collection', upload.array('photos', 1), createCollection)
+  .get('/read-collection', readCollection)
+  .patch('/update-collection', upload.array('photos', 1), updateCollection)
+  .delete('/delete-collection/:id', deleteCollection);

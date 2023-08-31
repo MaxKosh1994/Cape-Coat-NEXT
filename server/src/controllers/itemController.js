@@ -121,6 +121,7 @@ module.exports.favourites = async (req, res) => {
 module.exports.getAllItems = async (req, res) => {
   try {
     const items = await Item.findAll({
+      where: { purchased: false },
       include: [
         {
           model: Photo,
@@ -134,9 +135,7 @@ module.exports.getAllItems = async (req, res) => {
     if (items) {
       res.status(200).json(items);
     } else {
-      res
-        .status(404)
-        .json({ message: 'Извините, сервер временно не хочет грузить товары' });
+      res.status(500).json({ message: 'Ошибка сервера' });
     }
   } catch (err) {
     console.log(err);

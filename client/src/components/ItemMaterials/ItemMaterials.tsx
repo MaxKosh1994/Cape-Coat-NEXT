@@ -116,6 +116,7 @@ export default function ItemMaterials({
       <CartButton
         itemId={itemId}
         itemData={itemData}
+        selectedMaterialName={materialName}
         selectedMaterialId={selectedMaterialId}
         setMaterialAlert={setMaterialAlert}
       />
