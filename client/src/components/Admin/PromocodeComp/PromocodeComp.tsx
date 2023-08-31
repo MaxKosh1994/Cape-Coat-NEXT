@@ -24,6 +24,11 @@ export default function PromocodeComp() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
+    if (!code || !percent) {
+      console.error('Code and percent are required');
+      return;
+    }
+
     try {
       const result = await createPromo(code, Number(percent));
       setPromoArr((prev) => [...prev, result.newPromo]);
@@ -77,20 +82,24 @@ export default function PromocodeComp() {
 
   return (
     <div className={styles.mainContainer}>
-      <form onSubmit={handleCreate}>
+      <form className={styles.form} onSubmit={handleCreate}>
         <input
+          className={styles.input}
           type='text'
           value={code}
           onChange={(e) => setCode(e.target.value)}
           placeholder='Code'
         />
         <input
+          className={styles.input}
           type='number'
           value={percent}
           onChange={(e) => setPercent(e.target.value)}
           placeholder='Discount percent'
         />
-        <button type='submit'>Create</button>
+        <button className={styles.button} type='submit'>
+          СОЗДАТЬ
+        </button>
       </form>
       {promoArr?.map((promo) => (
         <div className={styles.promoContainer} key={promo.id}>
@@ -108,8 +117,9 @@ export default function PromocodeComp() {
           </div>
 
           {editingPromo !== null && editingPromo.id === promo.id ? (
-            <form onSubmit={handleUpdate}>
+            <form className={styles.formEdit} onSubmit={handleUpdate}>
               <input
+                className={styles.inputEditForm}
                 type='text'
                 value={editingCode}
                 onChange={(e) => setEditingCode(e.target.value)}
@@ -121,18 +131,41 @@ export default function PromocodeComp() {
                 onChange={(e) => setEditingPercent(e.target.value)}
                 placeholder='Discount percent'
               />
-              <button type='submit'>Save</button>
-              <button type='button' onClick={() => setEditingPromo(null)}>
-                Cancel
+              <div className={styles.buttonEditContainer}>
+                <button className={styles.buttonSave} type='submit'>
+                  SAVE
+                </button>
+                <button
+                  className={styles.buttonCancel}
+                  type='button'
+                  onClick={() => setEditingPromo(null)}
+                >
+                  CLOSE
+                </button>
+              </div>
+              <button
+                className={styles.buttonDel}
+                onClick={() => handleDelete(promo.id)}
+              >
+                DELETE
               </button>
             </form>
           ) : (
-            <>
-              <button onClick={() => handleEdit(promo)}>Edit</button>
-            </>
+            <div className={styles.buttonContainer}>
+              <button
+                className={styles.buttonEdit}
+                onClick={() => handleEdit(promo)}
+              >
+                ИЗМЕНИТЬ
+              </button>
+              <button
+                className={styles.buttonDel}
+                onClick={() => handleDelete(promo.id)}
+              >
+                DELETE
+              </button>
+            </div>
           )}
-
-          <button onClick={() => handleDelete(promo.id)}>Delete</button>
         </div>
       ))}
     </div>
