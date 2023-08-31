@@ -23,7 +23,7 @@ export interface IPersonalData {
   name: string;
   email: string;
   number: string;
-  telegram_instagram: string;
+  telegram_instagram?: string;
 }
 
 export interface IShowParamsForm {
