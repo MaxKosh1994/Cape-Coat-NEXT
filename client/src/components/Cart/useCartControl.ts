@@ -481,7 +481,7 @@ export const useCartControl = () => {
           setOrderStatus('');
         }, 2000);
       } else {
-        если все ок - очищает корзину, массив в редаксе и редиректит на спасибку
+        // если все ок - очищает корзину, массив в редаксе и редиректит на спасибку
         emptyCart();
         dispatch(getCartItems([]));
         router.push('/thankyou');
