@@ -9,14 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Material, { foreignKey: 'material_id' });
     }
   }
   CartItem.init(
     {
       cart_id: DataTypes.INTEGER,
       item_id: DataTypes.INTEGER,
-      material_id: DataTypes.INTEGER,
+      selected_material: DataTypes.TEXT,
       height: DataTypes.TEXT,
       length: DataTypes.TEXT,
       sleeve: DataTypes.TEXT,
