@@ -1,0 +1,43 @@
+.modalContainer {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.showdiv {
+  display: flex;
+}
+
+.hidediv {
+  display: none;
+}
+
+.modalContent {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 80px 40px;
+  border: 1px solid #888;
+  width: 60%;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.taskForm {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 10px;
+}
+
