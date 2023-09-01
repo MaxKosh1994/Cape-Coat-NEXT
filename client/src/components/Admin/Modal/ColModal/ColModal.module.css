@@ -1,0 +1,51 @@
+.modal {
+	width: 750px;
+	margin: 0 auto;
+	margin-top: 10px;
+ }
+ 
+ .mainContainer {
+	background-color: white;
+	margin-top: 0px;
+	margin-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+ }
+ 
+ .headerDiv {
+	margin-top: 20px;
+ }
+ 
+ .selectContainer {
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	justify-content: space-between;
+	margin: 0 auto;
+	margin-bottom: 20px;
+	width: 100%;
+ }
+ 
+ .formContainer {
+	margin-top: 20px;
+	margin-bottom: 20px;
+ }
+ 
+ .inputContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0 auto;
+	width: 100%;
+ }
+ 
+ .buttonContainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 0 auto;
+	width: 400px;
+	justify-content: space-between;
+ }
+ 

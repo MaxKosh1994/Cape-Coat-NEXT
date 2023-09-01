@@ -3,10 +3,10 @@ import * as React from 'react';
 import styles from '../../styles/admin/Content.module.css';
 
 import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
-import ItemModal from '../../components/Admin/Modal/ItemModal';
-import CatModal from '../../components/Admin/Modal/CatModal';
-import ColModal from '../../components/Admin/Modal/ColModal';
-import MatModal from '../../components/Admin/Modal/MatModal';
+import ItemModal from '../../components/Admin/Modal/ItemModal/ItemModal';
+import CatModal from '../../components/Admin/Modal/CatModal/CatModal';
+import ColModal from '../../components/Admin/Modal/ColModal/ColModal';
+import MatModal from '../../components/Admin/Modal/MatModal/MatModal';
 import ItemTable from '../../components/Admin/ItemTable/ItemTable';
 import InfoModal from '../../components/Admin/InfoModal';
 import { dataAxios } from '../../components/Admin/HTTP/adminApi';
