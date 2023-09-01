@@ -30,6 +30,7 @@ import {
   IItemData,
   ITaskInfo,
 } from '@/components/Admin/TasksForm/taskformTypes';
+import Head from 'next/head';
 
 export default function Order() {
   const [orders, setOrders] = useState([]);
@@ -235,6 +236,9 @@ export default function Order() {
 
   return (
     <>
+      <Head>
+        <meta name="robots" content="noindex,nofollow" />
+      </Head>
       <NavAdminComp />
       <InfoContainer />
       <div className={styles.mainDiv}>
@@ -974,8 +978,8 @@ export default function Order() {
                           <div className={styles.inputContainer}>
                             <input
                               style={{ width: '100px', fontSize: 'medium' }}
-                              type='text'
-                              className='text-field'
+                              type="text"
+                              className="text-field"
                               required
                               autoFocus
                               value={editingOrderData.value}
@@ -1211,9 +1215,9 @@ export default function Order() {
                         editingOrderData.field === 'selected_material' ? (
                           <div className={styles.inputContainer}>
                             <input
-                              type='text'
+                              type="text"
                               style={{ width: '100px', fontSize: 'medium' }}
-                              className='text-field'
+                              className="text-field"
                               required
                               autoFocus
                               value={editingOrderData.value}
@@ -1221,8 +1225,8 @@ export default function Order() {
                             />
                             <Button
                               className={styles.buttonInput}
-                              type='submit'
-                              variant='contained'
+                              type="submit"
+                              variant="contained"
                               onClick={handleFieldConfirmMeasurements}
                             >
                               Сохранить

@@ -1,4 +1,4 @@
-const { Cart, CartItem } = require('../../db/models');
+const { Cart, CartItem, Item } = require('../../db/models');
 const { findUserByEmail } = require('../services/userService');
 const {
   getUserCartItems,
@@ -134,7 +134,7 @@ module.exports.addMeasures = async (req, res) => {
         const updCartItem = await CartItem.findOne({
           where: { item_id: id },
         });
-        console.log(updCartItem);
+
         res.status(200).json(updCartItem);
       } else {
         res
@@ -150,20 +150,18 @@ module.exports.addMeasures = async (req, res) => {
 module.exports.addToCart = async (req, res) => {
   try {
     const email = req?.session?.user;
+
     const { id } = req.params;
+    const user = await findUserByEmail(email);
     if (email) {
       const currUser = await findUserByEmail(email);
       const userCart = await findUserCart(currUser.id);
 
-      if (userCart) {
-        const existingCartItem = await findCartItem(userCart.id, id);
-        const newCartItem = await createCartItem(userCart.id, id);
-        res.status(200).json({ newCartItem });
-      } else {
-        const newCart = await createUserCart(currUser.id);
-        const newCartItem = await createCartItem(userCart.id, id);
-        res.status(200).json({ newCartItem });
-      }
+      const newCart = await createUserCart(currUser.id);
+      const newCartItem = await createCartItem(userCart.id, id);
+      const cartItems = await getUserCartItems(user.id);
+
+      res.status(200).json(cartItems);
     } else {
       res.status(401).json({ message: 'Unauthorized' });
     }
@@ -176,7 +174,7 @@ module.exports.addToCart = async (req, res) => {
 module.exports.checkCart = async (req, res) => {
   try {
     const { email } = req.params;
-    console.log('emailemail', email);
+
     if (email) {
       const currUser = await findUserByEmail(email);
       const userCart = await findUserCart(currUser.id);
@@ -186,8 +184,10 @@ module.exports.checkCart = async (req, res) => {
           where: {
             cart_id: userCart.id,
           },
+
           raw: true,
         });
+
         res.status(200).json({ cartItem });
       } else {
         res.status(200).json({ cartItem: [] });

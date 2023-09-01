@@ -5,22 +5,21 @@ import './ItemMaterialsStyle.css';
 import CartButton from '../CartButton/CartButton';
 import { Item, Material } from '@/app/itemSlice';
 import Image from 'next/image';
+import { ImaterialsData } from '@/pages/catalog/[category]/[item]';
 
 interface IitemMaterialsProps {
   itemId: number;
   itemData: Item;
+  materialsData: ImaterialsData[];
 }
 
 export default function ItemMaterials({
   itemId,
   itemData,
+  materialsData,
 }: IitemMaterialsProps): JSX.Element {
-  const materialsData = useSelector(
-    (state: RootState) => state.itemSlice.materials
-  );
-
   const materialsUrl = process.env.NEXT_PUBLIC_MATERIALS_URL;
-  const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL;
+
   const textileData = materialsData?.map((material) => ({
     id: material.id,
     url: `${materialsUrl}${material.photo}`,

@@ -13,6 +13,7 @@ export const getCartItemsThunk = (): AppThunk => async (dispatch: Dispatch) => {
       },
       credentials: 'include',
     });
+
     dispatch(getCartItems(res.data));
     return res.data;
   } catch (err) {
@@ -86,6 +87,7 @@ export const addCartItemsThunk =
           },
         }
       );
+
       dispatch(getCartItems(res.data.newCartItem));
       dispatch(getCartItems());
       return res.data;

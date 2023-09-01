@@ -7,12 +7,12 @@ module.exports.oneCategory = async (req, res) => {
     const { urlName } = req.params;
     const category = await Category.findAll({
       where: {
-        urlName, // Shorthand property name, equivalent to { id: id }
+        urlName,
       },
       include: [
         {
           model: Item,
-          where: { in_stock: false }, // Filter items that are in stock
+          where: { in_stock: false },
           include: [
             {
               model: Photo,
@@ -31,7 +31,6 @@ module.exports.oneCategory = async (req, res) => {
       res.status(404).json({ message: 'Category not found' });
     }
   } catch (err) {
-    console.log(res);
     res.status(500).json({ message: 'Server Error' });
   }
 };

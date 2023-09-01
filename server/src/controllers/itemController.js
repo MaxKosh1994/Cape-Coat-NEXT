@@ -13,8 +13,14 @@ module.exports.oneItem = async (req, res) => {
 
     const data = await Item.findOne({
       where: { id },
-
-      include: [Photo],
+      include: [
+        {
+          model: Photo,
+        },
+        {
+          model: Category,
+        },
+      ],
     });
     const item = data.get({ plain: true });
     const materials = await Material.findAll({

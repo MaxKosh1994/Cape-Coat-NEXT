@@ -17,7 +17,7 @@ import { RootState } from '../../app/store';
 import { useAppDispatch } from '../../app/hooks';
 import { isUserLoginThunk } from '../../app/thunkActionsAuth';
 import { fetchFavouritesData } from '../../app/thunkActionsFavourite';
-import { checkCartItemThunk } from '../../app/thunkActionsCart';
+import { getCartItemsThunk } from '../../app/thunkActionsCart';
 import './navbarStyle.css';
 import NavigationMenu from './NavigationMenu/NavigationMenu';
 import MobileMenu from './MobileMenu/MobileMenu';
@@ -102,7 +102,7 @@ export default function Navbar() {
     if (isUserLogin) {
       dispatch(isUserLoginThunk());
       dispatch(fetchFavouritesData());
-      dispatch(checkCartItemThunk());
+      dispatch(getCartItemsThunk());
     }
   }, [dispatch, isUserLogin]);
 
@@ -145,7 +145,7 @@ export default function Navbar() {
 
   const handleCartIconClick = (e: MouseEvent<HTMLButtonElement>) => {
     setShowCart((prev) =>
-      prev
+      !prev
         ? !prev
         : setTimeout(() => {
             !prev;

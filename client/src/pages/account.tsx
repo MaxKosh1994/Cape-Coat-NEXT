@@ -32,9 +32,10 @@ export default function Account() {
     <>
       <Head>
         <title>Cape&Coat | Профиль</title>
-        <meta name='title' content='Cape and Coat' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <link rel='icon' href='/favicon.ico' />
+        <meta name="title" content="Cape and Coat" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="robots" content="noindex,nofollow" />
       </Head>
       <div className={styles.mainDiv}>
         <div className={styles.routesDiv}>
@@ -47,18 +48,18 @@ export default function Account() {
           <Button
             onClick={() => setSelectedComponent('profile')}
             className={styles.button}
-            type='button'
+            type="button"
           >
             Данные
           </Button>
           <Button
             onClick={() => setSelectedComponent('orders')}
             className={styles.button}
-            type='button'
+            type="button"
           >
             Заказы
           </Button>
-          <Button onClick={handleOpen} className={styles.button} type='button'>
+          <Button onClick={handleOpen} className={styles.button} type="button">
             <LogoutIcon />
             Выйти
           </Button>

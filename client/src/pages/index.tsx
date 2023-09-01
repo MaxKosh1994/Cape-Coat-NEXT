@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <>
       <Head>
-        <title>Cape&Coat | Главная</title>
+        <title>Cape&Coat</title>
         <meta name="title" content="Cape and Coat" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 

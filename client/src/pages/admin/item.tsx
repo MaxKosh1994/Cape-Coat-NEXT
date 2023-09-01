@@ -1,13 +1,14 @@
-import { useState, useEffect } from "react";
-import * as React from "react";
+import { useState, useEffect } from 'react';
+import * as React from 'react';
 
-import NavAdminComp from "@/components/navAdminComp/NavAdminComp";
-import ItemModal from "../../components/Admin/Modal/ItemModal";
-import CatModal from "../../components/Admin/Modal/CatModal";
-import ColModal from "../../components/Admin/Modal/ColModal";
-import MatModal from "../../components/Admin/Modal/MatModal";
+import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
+import ItemModal from '../../components/Admin/Modal/ItemModal';
+import CatModal from '../../components/Admin/Modal/CatModal';
+import ColModal from '../../components/Admin/Modal/ColModal';
+import MatModal from '../../components/Admin/Modal/MatModal';
 
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
+import Head from 'next/head';
 
 export default function Iteam() {
   const [openItem, setOpenItem] = useState<boolean>(false);
@@ -22,6 +23,9 @@ export default function Iteam() {
 
   return (
     <>
+      <Head>
+        <meta name="robots" content="noindex,nofollow" />
+      </Head>
       <NavAdminComp />
       <Button onClick={handleOpenItem} type="button">
         Добавить товар
