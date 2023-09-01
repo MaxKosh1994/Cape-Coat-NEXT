@@ -20,6 +20,7 @@ import { RootState } from '../../app/store';
 
 const useProductCardLogic = (
   id: number,
+  material_name: string,
   article: string,
   photo: string,
   name: string,
@@ -96,15 +97,19 @@ const useProductCardLogic = (
       const cartItemsFromStorage =
         JSON.parse(localStorage.getItem('cartItems')) || [];
 
-      const isItemInCart = cartItemsFromStorage.includes(id);
+      const isItemInCart = cartItemsFromStorage.find((item) => item.id === id);
 
       if (isItemInCart) {
         const updatedCartItems = cartItemsFromStorage.filter(
-          (cartId) => cartId !== id
+          (item) => item.id !== id
         );
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       } else {
-        const updatedCartItems = [...cartItemsFromStorage, id];
+        const updatedCartItems = [
+          ...cartItemsFromStorage,
+          { id: id, material: material_name },
+        ];
+
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
 
         //TODO ставится сердечко в навбаре, а как его убрать?

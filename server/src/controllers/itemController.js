@@ -14,7 +14,15 @@ module.exports.oneItem = async (req, res) => {
     const data = await Item.findOne({
       where: { id },
 
-      include: [Photo],
+      include: [
+        {
+          model: Photo,
+          limit: 1,
+        },
+        {
+          model: Material,
+        },
+      ],
     });
     const item = data.get({ plain: true });
     const materials = await Material.findAll({
@@ -130,6 +138,9 @@ module.exports.getAllItems = async (req, res) => {
         {
           model: Category,
         },
+        {
+          model: Material,
+        },
       ],
     });
     if (items) {
@@ -166,7 +177,18 @@ module.exports.getAllItemsWithFavorites = async (req, res) => {
 
       const items = await Item.findAll({
         where: { id: favoriteItemIds },
-        include: [{ model: Photo, limit: 1 }],
+        include: [
+          {
+            model: Photo,
+            limit: 1,
+          },
+          {
+            model: Category,
+          },
+          {
+            model: Material,
+          },
+        ],
       });
 
       console.log(items);

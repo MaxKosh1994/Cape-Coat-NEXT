@@ -9,6 +9,7 @@ import Link from 'next/link';
 
 const ProductCard: React.FC<IProductCard> = ({
   id,
+  material_name,
   article,
   photo,
   name,
@@ -22,6 +23,7 @@ const ProductCard: React.FC<IProductCard> = ({
   const { isFavorite, isCart, favoriteHandler, cartHandler } =
     useProductCardLogic(
       id,
+      material_name,
       article,
       photo,
       name,

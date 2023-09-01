@@ -1,22 +1,23 @@
-const bcrypt = require('bcrypt');
-const { Op } = require('sequelize');
-const { Category, Item, Photo } = require('../../db/models');
+const { Category, Item, Photo, Material } = require('../../db/models');
 
 module.exports.oneCategory = async (req, res) => {
   try {
     const { urlName } = req.params;
     const category = await Category.findAll({
       where: {
-        urlName, // Shorthand property name, equivalent to { id: id }
+        urlName,
       },
       include: [
         {
           model: Item,
-          where: { in_stock: false }, // Filter items that are in stock
+          where: { in_stock: false },
           include: [
             {
               model: Photo,
               limit: 1,
+            },
+            {
+              model: Material,
             },
           ],
         },
