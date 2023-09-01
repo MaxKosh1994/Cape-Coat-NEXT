@@ -22,6 +22,9 @@ module.exports.oneItem = async (req, res) => {
         {
           model: Material,
         },
+        {
+          model: Category,
+        },
       ],
     });
     const item = data.get({ plain: true });

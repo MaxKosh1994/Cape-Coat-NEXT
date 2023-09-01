@@ -41,37 +41,37 @@ export default function CartButton({
   }, [cartItems, itemId]);
 
   const cartHandler = async () => {
-    //!------ЕСЛИ ЮЗЕРА НЕТ - ЛОГИКА ДОБАВЛЕНИЯ В ЛОКАЛ------
+    // //!------ЕСЛИ ЮЗЕРА НЕТ - ЛОГИКА ДОБАВЛЕНИЯ В ЛОКАЛ------
 
-    if (!user) {
-      const cartItemsFromStorage =
-        JSON.parse(localStorage.getItem('cartItems')) || [];
+    // if (!user) {
+    //   const cartItemsFromStorage =
+    //     JSON.parse(localStorage.getItem('cartItems')) || [];
 
-      const materialName = selectedMaterialName
-        ? selectedMaterialName
-        : itemData.Material.name;
+    //   const materialName = selectedMaterialName
+    //     ? selectedMaterialName
+    //     : itemData.Material.name;
 
-      const isItemInCart = cartItemsFromStorage.find(
-        (item) => item.id === itemId
-      );
+    //   const isItemInCart = cartItemsFromStorage.find(
+    //     (item) => item.id === itemId
+    //   );
 
-      if (isItemInCart) {
-        const updatedCartItems = cartItemsFromStorage.map((item) =>
-          item.id === itemId ? { ...item, material: materialName } : item
-        );
-        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-      } else {
-        const updatedCartItems = [
-          ...cartItemsFromStorage,
-          { id: itemId, material: materialName },
-        ];
+    //   if (isItemInCart) {
+    //     const updatedCartItems = cartItemsFromStorage.map((item) =>
+    //       item.id === itemId ? { ...item, material: materialName } : item
+    //     );
+    //     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    //   } else {
+    //     const updatedCartItems = [
+    //       ...cartItemsFromStorage,
+    //       { id: itemId, material: materialName },
+    //     ];
 
-        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-      }
-      return;
-    }
+    //     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    //   }
+    //   return;
+    // }
 
-    //! -----------------------------------------------------
+    // //! -----------------------------------------------------
 
     try {
       if (!selectedMaterialId && !isInCart && !itemData.in_stock) {

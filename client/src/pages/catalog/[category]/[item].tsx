@@ -33,7 +33,7 @@ function Item({
   similarItems,
 }: ItemProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
-
+  console.log('itemDataitemDataitemData', itemData);
   return (
     <>
       <Head>
@@ -104,6 +104,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     if (res.ok) {
       const data: ItemState = await res.json();
+      console.log('data', data);
 
       const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL;
 
