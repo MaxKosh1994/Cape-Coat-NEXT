@@ -190,13 +190,13 @@ export default function Navbar() {
             isScrolled || isNavbarWhite ? '#FFFFFF' : 'transparent',
         }}
       >
-        <div className="wrap">
+        <div className='wrap'>
           {isMobile && (
             <IconButton
-              className="burger"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
+              className='burger'
+              edge='start'
+              color='inherit'
+              aria-label='menu'
               onClick={(event) => {
                 handleMobileMenuOpen(event);
                 onSearchIconClick();
@@ -206,12 +206,12 @@ export default function Navbar() {
               <MenuIcon />
             </IconButton>
           )}
-          <Link href="/" passHref>
+          <Link href='/' passHref>
             <Image
               src={logo}
-              alt="Logo"
+              alt='Logo'
               priority={true}
-              className="logo"
+              className='logo'
               style={{
                 width: '200px',
                 height: '30px',
@@ -235,30 +235,30 @@ export default function Navbar() {
             <SearchBar onSearchIconClick={onSearchIconClick} />
 
             <Link
-              className="header-personal"
+              className='header-personal'
               href={
                 isUserLogin
                   ? isAdmin
-                    ? '/admin/orders'
+                    ? '/admin/tasks'
                     : '/account'
                   : '/signin'
               }
               passHref
             >
               <IconButton
-                size="large"
+                size='large'
                 sx={{ color: iconColour, padding: '8px' }}
               >
                 <Person2Icon />
               </IconButton>
             </Link>
-            <Link className="header-favorite" href="/favorites" passHref>
+            <Link className='header-favorite' href='/favorites' passHref>
               <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
+                size='large'
+                aria-label='show 17 new notifications'
                 sx={{ color: iconColour, padding: '8px' }}
               >
-                <Badge badgeContent={amountOfLikes} color="error">
+                <Badge badgeContent={amountOfLikes} color='error'>
                   <FavoriteIcon />
                 </Badge>
               </IconButton>
@@ -269,15 +269,15 @@ export default function Navbar() {
               passHref
             > */}
             <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
+              size='large'
+              edge='end'
+              aria-label='account of current user'
               aria-controls={menuId}
-              aria-haspopup="true"
+              aria-haspopup='true'
               sx={{ color: iconColour, padding: '8px' }}
               onClick={handleCartIconClick}
             >
-              <Badge badgeContent={amountOfCartItem} color="error">
+              <Badge badgeContent={amountOfCartItem} color='error'>
                 <AddShoppingCart />
               </Badge>
             </IconButton>

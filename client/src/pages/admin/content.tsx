@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import * as React from "react";
+import { useState, useEffect } from 'react';
+import * as React from 'react';
 
 import NavAdminComp from "@/components/navAdminComp/NavAdminComp";
 import ItemModal from "../../components/Admin/Modal/ItemModal";
@@ -10,9 +10,9 @@ import ItemTable from "../../components/Admin/ItemTable";
 import InfoModal from "../../components/Admin/InfoModal";
 import { dataAxios } from "../../components/Admin/HTTP/adminApi";
 
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
 
-export default function Iteam() {
+export default function addContent() {
   const [openCat, setOpenCat] = useState<boolean>(false);
   const [openCol, setOpenCol] = useState<boolean>(false);
   const [openMat, setOpenMat] = useState<boolean>(false);
@@ -40,16 +40,16 @@ export default function Iteam() {
   return (
     <>
       <NavAdminComp />
-      <Button onClick={handleOpenItem} type="button">
+      <Button onClick={handleOpenItem} type='button'>
         Добавить товар
       </Button>
-      <Button onClick={handleOpenCat} type="button">
+      <Button onClick={handleOpenCat} type='button'>
         Добавить категорию
       </Button>
-      <Button onClick={handleOpenCol} type="button">
+      <Button onClick={handleOpenCol} type='button'>
         Добавить коллекцию
       </Button>
-      <Button onClick={handleOpenMat} type="button">
+      <Button onClick={handleOpenMat} type='button'>
         Добавить материал
       </Button>
       <ItemTable

@@ -27,6 +27,9 @@ module.exports = {
           key: 'id',
         },
       },
+      selected_material: {
+        type: Sequelize.TEXT,
+      },
       height: {
         type: Sequelize.TEXT,
         defaultValue: '',

@@ -13,7 +13,6 @@ export default function thankYouPage() {
           style={{
             marginRight: `30px`,
             marginTop: '5px',
-            // width: '40px',
             fontSize: '40px',
             color: 'green',
           }}
