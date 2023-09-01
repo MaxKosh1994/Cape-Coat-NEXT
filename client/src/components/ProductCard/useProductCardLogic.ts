@@ -99,21 +99,16 @@ const useProductCardLogic = (
 
       const isItemInCart = cartItemsFromStorage.find((item) => item.id === id);
 
-      const materialName = material_name
-        ? material_name
-        : itemData.Material.name;
-
       if (isItemInCart) {
-        const updatedCartItems = cartItemsFromStorage.map((item) =>
-          item.id === id ? { ...item, material: materialName } : item
+        const updatedCartItems = cartItemsFromStorage.filter(
+          (item) => item.id !== id
         );
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       } else {
         const updatedCartItems = [
           ...cartItemsFromStorage,
-          { id: id, material: materialName },
+          { id, material_name },
         ];
-
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       }
     } else {
