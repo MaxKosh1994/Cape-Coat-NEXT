@@ -1,5 +1,6 @@
 export interface IProductCard {
   id: number;
+  material_name: string;
   article: string;
   photo: string;
   name: string;
