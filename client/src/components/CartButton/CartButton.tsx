@@ -34,6 +34,38 @@ export default function CartButton({
   }, [cartData, itemId]);
   const dispatch = useAppDispatch();
   const cartHandler = async () => {
+    //!------ЕСЛИ ЮЗЕРА НЕТ - ЛОГИКА ДОБАВЛЕНИЯ В ЛОКАЛ------
+
+    if (!user) {
+      const cartItemsFromStorage =
+        JSON.parse(localStorage.getItem('cartItems')) || [];
+
+      const materialName = selectedMaterialName
+        ? selectedMaterialName
+        : itemData.Material.name;
+
+      const isItemInCart = cartItemsFromStorage.find(
+        (item) => item.id === itemId
+      );
+
+      if (isItemInCart) {
+        const updatedCartItems = cartItemsFromStorage.map((item) =>
+          item.id === itemId ? { ...item, material: materialName } : item
+        );
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+      } else {
+        const updatedCartItems = [
+          ...cartItemsFromStorage,
+          { id: itemId, material: materialName },
+        ];
+
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+      }
+      return;
+    }
+
+    //! -----------------------------------------------------
+
     try {
       if (!selectedMaterialId && !isInCart && !itemData.in_stock) {
         setMaterialAlert('alert');
@@ -81,25 +113,25 @@ export default function CartButton({
   };
 
   return (
-    <div className="product__actions">
-      <div className="product__actions-line">
-        <div className="product__actions-button">
+    <div className='product__actions'>
+      <div className='product__actions-line'>
+        <div className='product__actions-button'>
           <button
             onClick={cartHandler}
-            type="button"
+            type='button'
             className={`ui-button ui-button-wide ui-button-dark${
               isInCart ? ' in-cart' : ''
             }`}
           >
-            <div className="ui-ripple">
+            <div className='ui-ripple'>
               <div className={`ui-button-content${isInCart ? ' in-cart' : ''}`}>
                 {isInCart ? 'В корзине' : 'В корзину'}
               </div>
             </div>
           </button>
         </div>
-        <div className="product__actions-additional">
-          <div className="product__favorites">
+        <div className='product__actions-additional'>
+          <div className='product__favorites'>
             <LikeButton itemId={itemId} />
           </div>
         </div>

@@ -99,25 +99,23 @@ const useProductCardLogic = (
 
       const isItemInCart = cartItemsFromStorage.find((item) => item.id === id);
 
+      const materialName = material_name
+        ? material_name
+        : itemData.Material.name;
+
       if (isItemInCart) {
-        const updatedCartItems = cartItemsFromStorage.filter(
-          (item) => item.id !== id
+        const updatedCartItems = cartItemsFromStorage.map((item) =>
+          item.id === id ? { ...item, material: materialName } : item
         );
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       } else {
         const updatedCartItems = [
           ...cartItemsFromStorage,
-          { id: id, material: material_name },
+          { id: id, material: materialName },
         ];
 
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-
-        //TODO ставится сердечко в навбаре, а как его убрать?
-
-        // dispatch(setFavourites(updatedFavorites));
       }
-
-      // dispatch(setLikedStatus(!isFavorite));
     } else {
       try {
         const cartData = {
