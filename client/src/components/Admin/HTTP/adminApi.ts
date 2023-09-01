@@ -21,6 +21,7 @@ export const dataAxios = async (
       const responseData: object = await response.data;
       setMessage((prev) => responseData.message);
       setContent((prev) => [...prev, responseData.res]);
+      console.log(responseData.res)
       return responseData;
     } else if (url === `delete-${address}`) {//!DELETE
       const response = await axios.delete(
@@ -33,7 +34,7 @@ export const dataAxios = async (
       return responseData;
     } else if (url === `update-${address}`) {//!PATCH
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_URL}admin/${address}/${url}`,
+        `${process.env.NEXT_PUBLIC_URL}admin/${address}/${url}/${id}`,
         formData,
         {
           withCredentials: true,

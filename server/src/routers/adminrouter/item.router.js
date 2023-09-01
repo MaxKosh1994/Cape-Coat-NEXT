@@ -25,5 +25,5 @@ const {
 module.exports = itemRouter
   .post('/create-item', upload.array('photos', 12), createItem)
   .get('/read-item', readItem)
-  .patch('/update-item', upload.array('photos', 1), updateItem)
+  .patch('/update-item/:id', upload.array('photos', 12), updateItem)
   .delete('/delete-item/:id', deleteItem);

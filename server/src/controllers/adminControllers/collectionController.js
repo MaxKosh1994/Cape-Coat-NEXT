@@ -29,11 +29,12 @@ module.exports.readCollection = async (req, res) => {
 module.exports.updateCollection = async (req, res) => {
   try {
     const { files } = req;
+    const id = Number(req.params.id);
     let photo = files[0]?.filename;
-    let { name, description, urlName, current, collection_id } = JSON.parse(req.body.description);
+    let { name, description, urlName, current } = JSON.parse(req.body.description);
     const [rowsAffected, [updatedCollection]] = await Collection.update(
       { name, photo, description, urlName, current },
-      { where: { id: collection_id }, individualHooks: true },
+      { where: { id }, individualHooks: true },
     );
     const result = updatedCollection.dataValues;
     res

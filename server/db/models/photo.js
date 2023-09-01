@@ -25,22 +25,6 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
 
-  Photo.afterUpdate(async (photo, options) => {
-    const previousData = photo._previousDataValues;
-    if (previousData.photo && previousData.photo !== photo.photo) {
-      try {
-        const filePath = path.join(
-          process.cwd(),
-          `storage/items/${previousData.photo}`,
-        );
-        await fs.unlink(filePath);
-        console.log('The photo has been deleted');
-      } catch (error) {
-        console.error('Error deleting the photo:', error);
-      }
-    }
-  });
-
   Photo.afterDestroy(async (photo, options) => {
     try {
       const filePath = path.join(
@@ -53,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       console.error('Error deleting the photo:', error);
     }
   });
+
 
   return Photo;
 };
