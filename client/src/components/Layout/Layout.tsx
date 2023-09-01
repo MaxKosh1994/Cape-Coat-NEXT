@@ -4,6 +4,7 @@ import Script from 'next/script';
 import Footer from '../Footer/Footer';
 import Social from '../Social/Social';
 import { useRouter } from 'next/router';
+import MyCookieConsent from '../cookieConsent/CookieConsent';
 
 const Layout = ({ children }) => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const Layout = ({ children }) => {
         {children}
       </div>
       <Footer />
+      <MyCookieConsent />
     </div>
   );
 };

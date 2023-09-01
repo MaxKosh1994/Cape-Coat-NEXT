@@ -44,6 +44,7 @@ export const fetchItemData = createAsyncThunk(
 
         dispatch(setItem(data.item));
         dispatch(setMaterials(data.materials));
+        return data;
       }
     } catch (error) {
       console.log(error);

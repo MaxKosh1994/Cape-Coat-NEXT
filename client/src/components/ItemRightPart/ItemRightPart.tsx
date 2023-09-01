@@ -6,15 +6,19 @@ import CustomList from '../customList/CustomList';
 
 import ItemMaterials from '../ItemMaterials/ItemMaterials';
 import { Item } from '@/app/itemSlice';
+import { ImaterialsData } from '@/pages/catalog/[category]/[item]';
+import numeral from 'numeral';
 
 interface ItemRightPartProps {
   itemData: Item;
   itemId: number;
+  materialsData: ImaterialsData[];
 }
 
 export default function ItemRightPart({
   itemData,
   itemId,
+  materialsData,
 }: ItemRightPartProps): JSX.Element {
   return (
     <div
@@ -22,35 +26,38 @@ export default function ItemRightPart({
       id={styles.productInfoProduct}
     >
       <div className={styles.text_left}>
-        <p className={styles.text_center}>Cape & Coat</p>
+        <p id="alert" className={styles.text_center}>
+          Cape & Coat
+        </p>
         <div className={styles.itemNameDiv}>
           {' '}
           <h1 className={styles.itemName}>{itemData.name}</h1>
           <span className={styles.itemArt}>Art.{itemData.article}</span>
         </div>
         {itemData.in_stock ? (
-          <div className={styles.prices}>
-            <div className={styles.price_old}>{`${itemData.price
-              .toLocaleString()
-              .replace(/,\s?/g, ' ')} РУБ.`}</div>
+          <>
+            <div className={styles.price_old}>
+              {`${numeral(itemData.price).format('0,0')} РУБ.`}
+            </div>
             <div className={styles.price_current}>
-              {`${itemData.new_price
-                .toLocaleString()
-                .replace(/,\s?/g, ' ')} РУБ.`}
+              {`${numeral(itemData.new_price).format('0,0')} РУБ.`}
             </div>
             <div className={styles.discount}>
-              {' '}
               {`Скидка ${Math.round(
                 ((itemData.price - itemData.new_price) * 100) / itemData.price
               )} %`}
             </div>
-          </div>
+          </>
         ) : (
-          <div className={styles.price_current}>{`${itemData.price
-            .toLocaleString()
-            .replace(/,\s?/g, ' ')} РУБ.`}</div>
+          <div className={styles.price_current}>
+            {`${numeral(itemData.price).format('0,0')} РУБ.`}
+          </div>
         )}
-        <ItemMaterials itemId={itemId} itemData={itemData} />
+        <ItemMaterials
+          itemId={itemId}
+          itemData={itemData}
+          materialsData={materialsData}
+        />
       </div>
 
       <Box

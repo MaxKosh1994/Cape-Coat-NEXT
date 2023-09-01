@@ -32,7 +32,6 @@ export default function BottomBlock() {
       console.log(error);
     }
   };
-  // console.log('itemsForMain', itemsForMain[0].Category.urlName);
 
   return (
     <>
