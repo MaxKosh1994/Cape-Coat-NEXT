@@ -1,16 +1,6 @@
-const { Item, Photo, Material, Category } = require('../../../db/models');
+const { Item, Material, Category } = require('../../../db/models');
 
-module.exports.readMaterial = async (req, res) => {
-  try {
-    const allMaterial = await Material.findAll({ raw: true });
-    res.status(200).json({ message: 'success', all: allMaterial });
-  } catch (err) {
-    res.status(400).json({ message: 'error' });
-    console.log('Ошибка в readMaterial --->', err);
-  }
-};
-
-module.exports.addMaterial = async (req, res) => {
+module.exports.createMaterial = async (req, res) => {
   try {
     const { files } = req;
     const { name, category_id } = JSON.parse(req.body.description);
@@ -24,14 +14,44 @@ module.exports.addMaterial = async (req, res) => {
     res.status(200).json({ message: 'Материал добавлен', res: result });
   } catch (err) {
     res.status(400).json({ message: 'Не удалось добавить материал' });
-    console.log('Ошибка в addMaterial --->', err);
+    console.log('Ошибка в createMaterial --->', err);
   }
 };
 
-module.exports.delMaterial = async (req, res) => {
+module.exports.readMaterial = async (req, res) => {
+  try {
+    const allMaterial = await Material.findAll({ raw: true });
+    res.status(200).json({ message: 'success', res: allMaterial });
+  } catch (err) {
+    res.status(400).json({ message: 'error' });
+    console.log('Ошибка в readMaterial --->', err);
+  }
+};
+
+module.exports.updateMaterial = async (req, res) => {
+  try {
+    const { files } = req;
+    const id = Number(req.params.id);
+    const photo = files[0]?.filename;
+    let { name, category_id } = JSON.parse(req.body.description);
+    const [rowsAffected, [updatedMaterial]] = await Material.update(
+      { name, category_id, photo },
+      { where: { id }, individualHooks: true },
+    );
+    const result = updatedMaterial.dataValues;
+    res.status(200).json({
+      message: 'Материал изменен',
+      res: result,
+    });
+  } catch (err) {
+    res.status(400).json({ message: 'Не удалось изменить материал' });
+    console.log('Ошибка в updateMaterial --->', err);
+  }
+};
+
+module.exports.deleteMaterial = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    console.log(id)
     const material = await Material.destroy({
       where: { id },
       individualHooks: true,
@@ -39,29 +59,7 @@ module.exports.delMaterial = async (req, res) => {
     res.status(200).json({ message: 'Материал удален' });
   } catch (err) {
     res.status(400).json({ message: 'Не удалось удалить материал' });
-    console.log('Ошибка в dellMaterial --->', err);
-  }
-};
-
-module.exports.editMaterial = async (req, res) => {
-  try {
-    const { files } = req;
-    let photo = files[0]?.filename;
-    let { name, category_id, material_id } = JSON.parse(req.body.description);
-    const [rowsAffected, [updatedMaterial]] = await Material.update(
-      { name, category_id, photo },
-      { where: { id: material_id }, individualHooks: true },
-    );
-    const result = updatedMaterial.dataValues;
-    res
-      .status(200)
-      .json({
-        message: 'Материал изменен',
-        res: result,
-      });
-  } catch (err) {
-    res.status(400).json({ message: 'Не удалось изменить материал' });
-    console.log('Ошибка в editMaterial --->', err);
+    console.log('Ошибка в deleteMaterial --->', err);
   }
 };
 

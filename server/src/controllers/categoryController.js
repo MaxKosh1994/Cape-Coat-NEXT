@@ -1,6 +1,4 @@
-const bcrypt = require('bcrypt');
-const { Op } = require('sequelize');
-const { Category, Item, Photo } = require('../../db/models');
+const { Category, Item, Photo, Material } = require('../../db/models');
 
 module.exports.oneCategory = async (req, res) => {
   try {
@@ -17,6 +15,9 @@ module.exports.oneCategory = async (req, res) => {
             {
               model: Photo,
               limit: 1,
+            },
+            {
+              model: Material,
             },
           ],
         },

@@ -22,6 +22,7 @@ export default function BottomBlock() {
         }
       );
       const response = await allItems.json();
+      console.log(response);
       if (allItems.status === 200) {
         let items;
         const filterStock = response.filter((item) => item.in_stock === false);
@@ -40,6 +41,7 @@ export default function BottomBlock() {
             {itemsForMain.slice(6, 8).map((item) => (
               <ProductCard
                 key={item.id}
+                material_name={item.Material.name}
                 id={item.id}
                 article={item.article}
                 photo={item.Photos[0].photo}
@@ -57,6 +59,7 @@ export default function BottomBlock() {
               <ProductCard
                 key={item.id}
                 id={item.id}
+                material_name={item.Material.name}
                 article={item.article}
                 photo={item.Photos[0].photo}
                 name={item.name}
@@ -73,6 +76,7 @@ export default function BottomBlock() {
               <ProductCard
                 key={item.id}
                 id={item.id}
+                material_name={item.Material.name}
                 article={item.article}
                 photo={item.Photos[0].photo}
                 name={item.name}
@@ -85,7 +89,7 @@ export default function BottomBlock() {
           </>
         )}
       </div>
-      <Link href="catalog/all-items">
+      <Link href='catalog/all-items'>
         <button className={styles.allBtn}>Смотреть все товары</button>
       </Link>
     </>

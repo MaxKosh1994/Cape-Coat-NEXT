@@ -1,5 +1,6 @@
 const { Router } = require('express');
-const categoryRoter = new Router();
+
+const categoryRouter = new Router();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 
@@ -13,17 +14,18 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
 const {
+  createMaterial,
   readMaterial,
-  addMaterial,
-  delMaterial,
-  editMaterial,
+  updateMaterial,
+  deleteMaterial,
   getAllMaterials,
 } = require('../../controllers/adminControllers/materialController');
 
-module.exports = categoryRoter
-  .get('/allmaterial', readMaterial)
-  .post('/addmaterial', upload.array('photos', 1), addMaterial)
-  .delete('/delmaterial/:id', delMaterial)
-  .patch('/editmaterial', upload.array('photos', 1), editMaterial)
+module.exports = categoryRouter
+  .post('/create-material', upload.array('photos', 1), createMaterial)
+  .get('/read-material', readMaterial)
+  .patch('/update-material/:id', upload.array('photos', 1), updateMaterial)
+  .delete('/delete-material/:id', deleteMaterial)
   .get('/getallmaterials/:id', getAllMaterials);

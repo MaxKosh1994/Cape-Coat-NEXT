@@ -1,4 +1,4 @@
-const { Item, Photo } = require('../../db/models');
+const { Item, Photo, Material } = require('../../db/models');
 
 module.exports.getStock = async (req, res) => {
   try {
@@ -8,6 +8,9 @@ module.exports.getStock = async (req, res) => {
         {
           model: Photo,
           limit: 1,
+        },
+        {
+          model: Material,
         },
       ],
     });

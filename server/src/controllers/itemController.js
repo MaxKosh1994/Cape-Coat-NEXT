@@ -13,12 +13,14 @@ module.exports.oneItem = async (req, res) => {
 
     const data = await Item.findOne({
       where: { id },
+
       include: [
         {
           model: Photo,
+          limit: 1,
         },
         {
-          model: Category,
+          model: Material,
         },
       ],
     });
@@ -127,6 +129,7 @@ module.exports.favourites = async (req, res) => {
 module.exports.getAllItems = async (req, res) => {
   try {
     const items = await Item.findAll({
+      where: { purchased: false },
       include: [
         {
           model: Photo,
@@ -135,14 +138,15 @@ module.exports.getAllItems = async (req, res) => {
         {
           model: Category,
         },
+        {
+          model: Material,
+        },
       ],
     });
     if (items) {
       res.status(200).json(items);
     } else {
-      res
-        .status(404)
-        .json({ message: 'Извините, сервер временно не хочет грузить товары' });
+      res.status(500).json({ message: 'Ошибка сервера' });
     }
   } catch (err) {
     console.log(err);
@@ -173,7 +177,18 @@ module.exports.getAllItemsWithFavorites = async (req, res) => {
 
       const items = await Item.findAll({
         where: { id: favoriteItemIds },
-        include: [{ model: Photo, limit: 1 }],
+        include: [
+          {
+            model: Photo,
+            limit: 1,
+          },
+          {
+            model: Category,
+          },
+          {
+            model: Material,
+          },
+        ],
       });
 
       console.log(items);

@@ -1,5 +1,11 @@
 const { Op } = require('sequelize');
-const { Category, Item, Collection, Photo } = require('../../db/models');
+const {
+  Category,
+  Item,
+  Collection,
+  Photo,
+  Material,
+} = require('../../db/models');
 
 module.exports.getAll = async (req, res) => {
   try {
@@ -27,6 +33,9 @@ module.exports.getCollection = async (req, res) => {
           model: Photo,
           limit: 1,
         },
+        {
+          model: Material,
+        },
       ],
     });
     res.json(collectionItems);
@@ -52,6 +61,9 @@ module.exports.getNewArrivals = async (req, res) => {
           model: Photo,
           limit: 1,
         },
+        {
+          model: Material,
+        },
       ],
     });
 
@@ -64,11 +76,14 @@ module.exports.getNewArrivals = async (req, res) => {
 module.exports.getBestSellers = async (req, res) => {
   try {
     const bestsellers = await Item.findAll({
-      where: { bestseller: true },
+      where: { bestseller: true, in_stock: false },
       include: [
         {
           model: Photo,
           limit: 1,
+        },
+        {
+          model: Material,
         },
       ],
     });
@@ -82,11 +97,14 @@ module.exports.getBestSellers = async (req, res) => {
 module.exports.getStock = async (req, res) => {
   try {
     const inStockItems = await Item.findAll({
-      where: { in_stock: true },
+      where: { in_stock: true, purchased: false },
       include: [
         {
           model: Photo,
           limit: 1,
+        },
+        {
+          model: Material,
         },
       ],
     });

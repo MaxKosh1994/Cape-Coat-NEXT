@@ -24,6 +24,11 @@ import InfoModal from '../../components/Admin/InfoModal';
 import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
 import { IOrderAdmin } from '@/components/Admin/order/types';
 import InfoContainer from '@/components/Admin/infoContainer/infoContainer';
+import {
+  IItemData,
+  ITaskInfo,
+} from '@/components/Admin/TasksForm/taskformTypes';
+import TasksForm from '@/components/Admin/TasksForm/TasksForm';
 import Head from 'next/head';
 
 export default function Tasks() {
@@ -46,7 +51,7 @@ export default function Tasks() {
   const sortedOrders = filteredOrders?.sort((a, b) => {
     if (a.urgent && !b.urgent) return -1;
     if (!a.urgent && b.urgent) return 1;
-    return a.createdAt.localeCompare(b.createdAt);
+    return a.getReadyAt.localeCompare(b.getReadyAt);
   });
 
   //! ---------------------------ЛОГИКА ИЗМЕНЕНИЯ ПОЛЕЙ ЗАКАЗА-------------------------------------
@@ -132,6 +137,67 @@ export default function Tasks() {
       field: '',
       value: '',
     });
+  };
+
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [itemInfo, setItemInfo] = useState<IItemData>({
+    id: 0,
+    name: '',
+    article: '',
+    description: '',
+    model_params: '',
+    characteristics: '',
+    price: 0,
+    new_price: 0,
+    in_stock: false,
+    bestseller: false,
+    collection_id: 0,
+    material_id: 0,
+    category_id: 0,
+    createdAt: '',
+    updatedAt: '',
+    OrderItem: {
+      order_id: 0,
+      item_id: 0,
+      height: '',
+      length: '',
+      sleeve: '',
+      bust: '',
+      waist: '',
+      hips: '',
+      saddle: '',
+      loops: false,
+      buttons: '',
+      lining: '',
+      createdAt: '',
+      updatedAt: '',
+    },
+    Material: {
+      id: 0,
+      name: '',
+      photo: '',
+      category_id: 0,
+      createdAt: '',
+      updatedAt: '',
+    },
+  });
+  const [taskInfo, setTaskInfo] = useState<ITaskInfo>({
+    id: 0,
+    createdAt: '',
+    updatedAt: '',
+  });
+
+  const handleFormTask = async (item: IItemData) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}admin/tasks/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(item),
+    });
+    const res = await response.json();
+    setTaskInfo(res.newTask);
+    setItemInfo(item);
+    setOpenModal(true);
   };
 
   return (
@@ -1075,6 +1141,19 @@ export default function Tasks() {
                         key={item?.article}
                       >
                         {item?.name}, арт:{item?.article}
+                        {item?.in_stock && (
+                          <span
+                            style={{
+                              backgroundColor: 'red',
+                              width: '60%',
+                              color: 'white',
+                              padding: '1px',
+                              borderRadius: '5px',
+                            }}
+                          >
+                            В НАЛИЧИИ
+                          </span>
+                        )}
                       </div>
                     ))}
                   </TableCell>
@@ -1259,19 +1338,29 @@ export default function Tasks() {
                     )}
                   </TableCell>
                   <TableCell className={styles.tableCell}>
-                    <Button
-                      className={styles.button}
-                      type="submit"
-                      variant="contained"
-                    >
-                      Сформировать
-                    </Button>
+                    {order?.Items?.map((item) => (
+                      <Button
+                        key={item.id}
+                        className={styles.button}
+                        type="submit"
+                        variant="contained"
+                        onClick={() => handleFormTask(item)}
+                      >
+                        Сформировать
+                      </Button>
+                    ))}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
+        <TasksForm
+          openModal={openModal}
+          itemInfo={itemInfo}
+          taskInfo={taskInfo}
+          setOpenModal={setOpenModal}
+        />
         <InfoModal info={message} open={open} setOpen={setOpen} />
       </div>
     </>

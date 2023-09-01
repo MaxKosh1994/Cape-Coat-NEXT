@@ -1,0 +1,104 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.form {
+  margin: 0 auto;
+  width: 40%;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input {
+  width: 150px;
+  height: 35px;
+  text-align: center;
+}
+
+.promoContainer {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  justify-content: space-between;
+  width: 40%;
+  border: 1px solid black;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.infoP {
+  margin-bottom: 5px;
+}
+
+.infoMainP {
+  margin-bottom: 5px;
+  font-weight: bolder;
+  color: black;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 30%;
+}
+
+.button {
+  width: 30%;
+  height: 35px;
+  background-color: #3ed7336d;
+  border-color: #6b6b6b;
+  color: black;
+  cursor: pointer;
+}
+
+.buttonDel {
+  width: 80%;
+  height: 30px;
+  background-color: #bb19197c;
+  cursor: pointer;
+}
+
+.buttonEdit {
+  width: 80%;
+  height: 30px;
+  cursor: pointer;
+}
+
+.formEdit {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonSave {
+  width: 48%;
+  background-color: #3ed7336d;
+  cursor: pointer;
+}
+
+.buttonCancel {
+  width: 48%;
+  cursor: pointer;
+}
+
+.buttonEditContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
+.inputEditForm {
+  margin-bottom: 5px;
+}

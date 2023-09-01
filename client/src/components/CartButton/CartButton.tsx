@@ -12,6 +12,7 @@ import { RootState } from '@/app/store';
 interface IcartButtonProps {
   itemId: number;
   selectedMaterialId: number;
+  selectedMaterialName: string;
   setMaterialAlert: React.Dispatch<React.SetStateAction<string>>;
   itemData: Item;
 }
@@ -19,6 +20,7 @@ interface IcartButtonProps {
 export default function CartButton({
   itemId,
   selectedMaterialId,
+  selectedMaterialName,
   setMaterialAlert,
   itemData,
 }: IcartButtonProps): JSX.Element {
@@ -39,6 +41,38 @@ export default function CartButton({
   }, [cartItems, itemId]);
 
   const cartHandler = async () => {
+    //!------ЕСЛИ ЮЗЕРА НЕТ - ЛОГИКА ДОБАВЛЕНИЯ В ЛОКАЛ------
+
+    if (!user) {
+      const cartItemsFromStorage =
+        JSON.parse(localStorage.getItem('cartItems')) || [];
+
+      const materialName = selectedMaterialName
+        ? selectedMaterialName
+        : itemData.Material.name;
+
+      const isItemInCart = cartItemsFromStorage.find(
+        (item) => item.id === itemId
+      );
+
+      if (isItemInCart) {
+        const updatedCartItems = cartItemsFromStorage.map((item) =>
+          item.id === itemId ? { ...item, material: materialName } : item
+        );
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+      } else {
+        const updatedCartItems = [
+          ...cartItemsFromStorage,
+          { id: itemId, material: materialName },
+        ];
+
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+      }
+      return;
+    }
+
+    //! -----------------------------------------------------
+
     try {
       if (!selectedMaterialId && !isInCart && !itemData.in_stock) {
         const materialAlertElement = document.getElementById('alert');
@@ -54,12 +88,14 @@ export default function CartButton({
         return;
       }
       if (!isInCart) {
+        const materialName = { material: selectedMaterialName };
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_URL}cart/item/${itemId}`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
+            body: JSON.stringify(materialName),
           }
         );
 

@@ -1,4 +1,6 @@
 'use strict';
+const fs = require('fs').promises;
+const path = require('path');
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Photo extends Model {
@@ -22,5 +24,20 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'Photo',
     },
   );
+
+  Photo.afterDestroy(async (photo, options) => {
+    try {
+      const filePath = path.join(
+        process.cwd(),
+        `storage/items/${photo.photo}`,
+      );
+      await fs.unlink(filePath);
+      console.log('The photo has been deleted');
+    } catch (error) {
+      console.error('Error deleting the photo:', error);
+    }
+  });
+
+
   return Photo;
 };

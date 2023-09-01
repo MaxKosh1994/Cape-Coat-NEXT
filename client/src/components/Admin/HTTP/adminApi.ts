@@ -9,7 +9,7 @@ export const dataAxios = async (
   id = undefined
 ): Promise<object> => {
   try {
-    if (url === `add${address}`) {//!POST
+    if (url === `create-${address}`) {//!POST
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_URL}admin/${address}/${url}`,
         formData,
@@ -21,8 +21,9 @@ export const dataAxios = async (
       const responseData: object = await response.data;
       setMessage((prev) => responseData.message);
       setContent((prev) => [...prev, responseData.res]);
+      console.log(responseData.res)
       return responseData;
-    } else if (url === `del${address}`) {//!DELETE
+    } else if (url === `delete-${address}`) {//!DELETE
       const response = await axios.delete(
         `${process.env.NEXT_PUBLIC_URL}admin/${address}/${url}/${id}`,
         { withCredentials: true }
@@ -31,9 +32,9 @@ export const dataAxios = async (
       setContent((prev) => [...prev.filter((el) => el.id !== id)]);
       setMessage((prev) => responseData.message);
       return responseData;
-    } else if (url === `edit${address}`) {//!PATCH
+    } else if (url === `update-${address}`) {//!PATCH
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_URL}admin/${address}/${url}`,
+        `${process.env.NEXT_PUBLIC_URL}admin/${address}/${url}/${id}`,
         formData,
         {
           withCredentials: true,
@@ -47,11 +48,11 @@ export const dataAxios = async (
       return responseData;
     } else if (url === undefined) {//!GET
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_URL}admin/${address}/all${address}`,
+        `${process.env.NEXT_PUBLIC_URL}admin/${address}/read-${address}`,
         { withCredentials: true }
       );
       const responseData = await response.data;
-      setContent(responseData.all);
+      setContent(responseData.res);
       setMessage((prev) => responseData.message);
       return responseData;
     }

@@ -1,16 +1,6 @@
 const { Collection } = require('../../../db/models');
 
-module.exports.readCollection = async (req, res) => {
-  try {
-    const allcollection = await Collection.findAll({ raw: true });
-    res.status(200).json({ message: 'success', all: allcollection });
-  } catch (err) {
-    res.status(400).json({ message: 'error' });
-    console.log('Ошибка в readcollection --->', err);
-  }
-};
-
-module.exports.addCollection = async (req, res) => {
+module.exports.createCollection = async (req, res) => {
   try {
     const { files } = req;
     const photo = files[0]?.filename;
@@ -22,33 +12,29 @@ module.exports.addCollection = async (req, res) => {
     res.status(200).json({ message: 'Коллекция добавлена', res: result });
   } catch (err) {
     res.status(400).json({ message: 'Не удалось добавить коллекцию' });
-    console.log('Ошибка в addCollection --->', err);
+    console.log('Ошибка в createCollection --->', err);
   }
 };
 
-
-module.exports.delCollection = async (req, res) => {
+module.exports.readCollection = async (req, res) => {
   try {
-    const id = Number(req.params.id);
-    const сollection = await Collection.destroy({
-      where: { id },
-      individualHooks: true,
-    });
-    res.status(200).json({ message: 'Коллекция удалена' });
+    const allcollection = await Collection.findAll({ raw: true });
+    res.status(200).json({ message: 'success', res: allcollection });
   } catch (err) {
-    res.status(400).json({ message: 'Не удалось удалить коллекцию' });
-    console.log('Ошибка в delCollection --->', err);
+    res.status(400).json({ message: 'error' });
+    console.log('Ошибка в readcollection --->', err);
   }
 };
 
-module.exports.editCollection = async (req, res) => {
+module.exports.updateCollection = async (req, res) => {
   try {
     const { files } = req;
+    const id = Number(req.params.id);
     let photo = files[0]?.filename;
-    let { name, description, urlName, current, collection_id } = JSON.parse(req.body.description);
+    let { name, description, urlName, current } = JSON.parse(req.body.description);
     const [rowsAffected, [updatedCollection]] = await Collection.update(
       { name, photo, description, urlName, current },
-      { where: { id: collection_id }, individualHooks: true },
+      { where: { id }, individualHooks: true },
     );
     const result = updatedCollection.dataValues;
     res
@@ -59,6 +45,20 @@ module.exports.editCollection = async (req, res) => {
       });
   } catch (err) {
     res.status(400).json({ message: 'Не удалось изменить коллекцию' });
-    console.log('Ошибка в editCollection --->', err);
+    console.log('Ошибка в updateCollection --->', err);
+  }
+};
+
+module.exports.deleteCollection = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const сollection = await Collection.destroy({
+      where: { id },
+      individualHooks: true,
+    });
+    res.status(200).json({ message: 'Коллекция удалена' });
+  } catch (err) {
+    res.status(400).json({ message: 'Не удалось удалить коллекцию' });
+    console.log('Ошибка в deleteCollection --->', err);
   }
 };

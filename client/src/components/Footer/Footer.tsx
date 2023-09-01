@@ -13,9 +13,9 @@ export default function Footer() {
           <div className={styles.footerSection}>
             <div className={styles.logoContainer}>
               <Image
-                src="/logo.png"
-                alt="Logo"
-                layout="responsive"
+                src='/logo.png'
+                alt='Logo'
+                layout='responsive'
                 width={300}
                 height={40}
               />
@@ -24,30 +24,27 @@ export default function Footer() {
           <div className={styles.footerSection}>
             <div className={styles.footerTitle}>Наш шоурум:</div>
             <div className={styles.footerItem}>
-              <Link href="/address">
-                г.Нижний Новгород, ул. Малая Покровская, 20
-              </Link>
+              <Link href='/address'>г.Нижний Новгород, ул. Ильинская, 79</Link>
             </div>
-            <div className={styles.footerItem}>Ждем вас с 10:00 до 20:00</div>
           </div>
           <div className={styles.footerSection}>
             <div className={styles.footerTitle}>
-              <Image src="/phoneicon.png" width={28} height={28} alt="call" />{' '}
+              <Image src='/phoneicon.png' width={28} height={28} alt='call' />{' '}
               +7 (920)-119-99-19
             </div>
             <div className={styles.footerItem}>
-              <Link href="https://t.me/@kkireva">
+              <Link href='https://t.me/@kkireva'>
                 <Image
-                  src="/tgicon.png"
-                  alt="telegram @kkireva"
+                  src='/tgicon.png'
+                  alt='telegram @kkireva'
                   width={33}
                   height={33}
                 />
               </Link>
-              <Link href="mailto:Cape.n.coat@gmail.com">
+              <Link href='mailto:Cape.n.coat@gmail.com'>
                 <Image
-                  src="/mail.png"
-                  alt="Cape.n.coat@gmail.com"
+                  src='/mail.png'
+                  alt='Cape.n.coat@gmail.com'
                   width={31}
                   height={31}
                 />
@@ -58,10 +55,10 @@ export default function Footer() {
           <div className={styles.footerSection}>
             <div className={styles.footerTitle}>Покупателям:</div>
             <div className={styles.footerItem}>
-              <Link href="/FAQ">Информация о снятии мерок</Link>
+              <Link href='/FAQ'>Информация о снятии мерок</Link>
             </div>
             <div className={styles.footerItem}>
-              <Link href="/privacy">Политика конфиденциальности</Link>
+              <Link href='/privacy'>Политика конфиденциальности</Link>
             </div>
           </div>
         </div>
@@ -70,50 +67,47 @@ export default function Footer() {
           <div className={styles.footerSection}>
             <div className={styles.logoContainer}>
               <Image
-                src="/logo.png"
-                alt="Logo"
+                src='/logo.png'
+                alt='Logo'
                 width={500}
                 height={120}
-                layout="responsive"
+                layout='responsive'
               />
             </div>
           </div>
           <div className={styles.footerSection}>
             <div className={styles.footerTitle}>Наш шоурум:</div>
             <div className={styles.footerItem}>
-              <Link href="/address">
-                г.Нижний Новгород, ул. Малая Покровская, 20
-              </Link>
+              <Link href='/address'>г.Нижний Новгород, ул. Ильинская, 79</Link>
             </div>
-            <div className={styles.footerItem}>Ждем вас с 10:00 до 20:00</div>
           </div>
           <div className={styles.footerSection}>
             <div className={styles.footerTitle}>Покупателям:</div>
             <div className={styles.footerItem}>
-              <Link href="/FAQ/measurementsFAQ">Информация о снятии мерок</Link>
+              <Link href='/FAQ/measurementsFAQ'>Информация о снятии мерок</Link>
             </div>
             <div className={styles.footerItem}>
-              <Link href="/privacy">Политика конфиденциальности</Link>
+              <Link href='/privacy'>Политика конфиденциальности</Link>
             </div>
           </div>
           <div className={styles.footerSection}>
             <div className={styles.footerTitle}>
-              <Image src="/phoneicon.png" width={28} height={28} alt="call" />{' '}
+              <Image src='/phoneicon.png' width={28} height={28} alt='call' />{' '}
               +7 (920)-119-99-19
             </div>
             <div className={styles.footerItem}>
-              <Link href="https://t.me/@kkireva">
+              <Link href='https://t.me/@kkireva'>
                 <Image
-                  src="/tgicon.png"
-                  alt="telegram @kkireva"
+                  src='/tgicon.png'
+                  alt='telegram @kkireva'
                   width={33}
                   height={33}
                 />
               </Link>
-              <Link href="mailto:Cape.n.coat@gmail.com">
+              <Link href='mailto:Cape.n.coat@gmail.com'>
                 <Image
-                  src="/mail.png"
-                  alt="Cape.n.coat@gmail.com"
+                  src='/mail.png'
+                  alt='Cape.n.coat@gmail.com'
                   width={31}
                   height={31}
                 />

@@ -66,6 +66,8 @@ export default function CheckoutPage() {
     cartTotal,
   ]);
 
+  console.log(cartItemsList);
+
   useEffect(() => {
     // подсчет стоимости доставки в зависимости от почта\шоурум
     countDeliveryCost();
@@ -143,7 +145,14 @@ export default function CheckoutPage() {
                         </div>
                         <div className={styles.basketItemContent}>
                           <div className={styles.basketItemProperties}>
-                            <div>Материал: {item.Material.name}</div>
+                            {item.Carts[0].CartItem.selected_material ? (
+                              <div>
+                                Материал:{' '}
+                                {item.Carts[0].CartItem.selected_material}
+                              </div>
+                            ) : (
+                              <div>Материал: {item.Material.name}</div>
+                            )}
                           </div>
                         </div>
                         <div className={styles.basketItemContent}>
