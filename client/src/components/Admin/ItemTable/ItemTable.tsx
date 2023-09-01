@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
+import styles from './ItemTable.module.css';
 
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
 
 export default function ItemTable(props) {
   const handleUpdateItem = (id) => {
@@ -8,8 +9,8 @@ export default function ItemTable(props) {
     props.setId((prev) => id);
   };
   return (
-    <><div style={{ maxHeight: '500px', overflow: 'auto' }}>
-      <table>
+    <div className={styles.mainContainer}>
+      <table className={styles.table}>
         <thead>
           <tr>
             <th>ID</th>
@@ -17,6 +18,7 @@ export default function ItemTable(props) {
             <th>Price</th>
             <th>In Stock</th>
             <th>Bestseller</th>
+            <th>Изменение</th>
           </tr>
         </thead>
         <tbody>
@@ -25,18 +27,21 @@ export default function ItemTable(props) {
               <td>{item.id}</td>
               <td>{item.name}</td>
               <td>{item.price}</td>
-              <td>{item.in_stock ? "Yes" : "No"}</td>
-              <td>{item.bestseller ? "Yes" : "No"}</td>
+              <td>{item.in_stock ? 'Yes' : 'No'}</td>
+              <td>{item.bestseller ? 'Yes' : 'No'}</td>
               <td>
-                <button onClick={() => handleUpdateItem(item.id)} type="button">
-                  Изменить товар
+                <button
+                  className={styles.button}
+                  onClick={() => handleUpdateItem(item.id)}
+                  type='button'
+                >
+                  Изменить №{item.id}
                 </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      </div>
-    </>
+    </div>
   );
 }

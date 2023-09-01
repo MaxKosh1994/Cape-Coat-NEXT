@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
+import styles from '../../styles/admin/Content.module.css';
 
-import NavAdminComp from "@/components/navAdminComp/NavAdminComp";
-import ItemModal from "../../components/Admin/Modal/ItemModal";
-import CatModal from "../../components/Admin/Modal/CatModal";
-import ColModal from "../../components/Admin/Modal/ColModal";
-import MatModal from "../../components/Admin/Modal/MatModal";
-import ItemTable from "../../components/Admin/ItemTable";
-import InfoModal from "../../components/Admin/InfoModal";
-import { dataAxios } from "../../components/Admin/HTTP/adminApi";
+import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
+import ItemModal from '../../components/Admin/Modal/ItemModal';
+import CatModal from '../../components/Admin/Modal/CatModal';
+import ColModal from '../../components/Admin/Modal/ColModal';
+import MatModal from '../../components/Admin/Modal/MatModal';
+import ItemTable from '../../components/Admin/ItemTable/ItemTable';
+import InfoModal from '../../components/Admin/InfoModal';
+import { dataAxios } from '../../components/Admin/HTTP/adminApi';
 
 import { Button } from '@mui/material';
 
@@ -18,7 +19,7 @@ export default function addContent() {
   const [openMat, setOpenMat] = useState<boolean>(false);
   const [openItem, setOpenItem] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   let [id, setId] = useState();
   useEffect(() => {
     if (!openItem) {
@@ -32,7 +33,7 @@ export default function addContent() {
   const handleOpenMat = () => setOpenMat(true);
 
   const [content, setContent] = useState([]);
-  const address = "item";
+  const address = 'item';
   useEffect(() => {
     dataAxios(setContent, setMessage, address);
   }, []);
@@ -40,18 +41,24 @@ export default function addContent() {
   return (
     <>
       <NavAdminComp />
-      <Button onClick={handleOpenItem} type='button'>
-        Добавить товар
-      </Button>
-      <Button onClick={handleOpenCat} type='button'>
-        Добавить категорию
-      </Button>
-      <Button onClick={handleOpenCol} type='button'>
-        Добавить коллекцию
-      </Button>
-      <Button onClick={handleOpenMat} type='button'>
-        Добавить материал
-      </Button>
+      <div className={styles.routesDiv}>
+        <Button
+          className={styles.button}
+          onClick={handleOpenItem}
+          type='button'
+        >
+          Добавить товар
+        </Button>
+        <Button className={styles.button} onClick={handleOpenCat} type='button'>
+          Добавить категорию
+        </Button>
+        <Button className={styles.button} onClick={handleOpenCol} type='button'>
+          Добавить коллекцию
+        </Button>
+        <Button className={styles.button} onClick={handleOpenMat} type='button'>
+          Добавить материал
+        </Button>
+      </div>
       <ItemTable
         content={content}
         setContent={setContent}
