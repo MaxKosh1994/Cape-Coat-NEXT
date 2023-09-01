@@ -20,6 +20,7 @@ import { RootState } from '../../app/store';
 
 const useProductCardLogic = (
   id: number,
+  material_name: string,
   article: string,
   photo: string,
   name: string,
@@ -96,23 +97,25 @@ const useProductCardLogic = (
       const cartItemsFromStorage =
         JSON.parse(localStorage.getItem('cartItems')) || [];
 
-      const isItemInCart = cartItemsFromStorage.includes(id);
+      const isItemInCart = cartItemsFromStorage.find((item) => item.id === id);
+
+      const materialName = material_name
+        ? material_name
+        : itemData.Material.name;
 
       if (isItemInCart) {
-        const updatedCartItems = cartItemsFromStorage.filter(
-          (cartId) => cartId !== id
+        const updatedCartItems = cartItemsFromStorage.map((item) =>
+          item.id === id ? { ...item, material: materialName } : item
         );
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       } else {
-        const updatedCartItems = [...cartItemsFromStorage, id];
+        const updatedCartItems = [
+          ...cartItemsFromStorage,
+          { id: id, material: materialName },
+        ];
+
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-
-        //TODO ставится сердечко в навбаре, а как его убрать?
-
-        // dispatch(setFavourites(updatedFavorites));
       }
-
-      // dispatch(setLikedStatus(!isFavorite));
     } else {
       try {
         const cartData = {

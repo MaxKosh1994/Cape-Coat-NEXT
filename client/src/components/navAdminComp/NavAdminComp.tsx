@@ -38,16 +38,6 @@ export default function NavAdminComp() {
             </Button>
           </NextLink>
 
-          <NextLink href='/admin/allItems'>
-            <Button
-              className={`${styles.button} ${
-                router.pathname === '/FAQ/allItems' ? styles.active : ''
-              }`}
-            >
-              Все товары
-            </Button>
-          </NextLink>
-
           <NextLink href='/admin/ordersHistory'>
             <Button
               className={`${styles.button} ${
