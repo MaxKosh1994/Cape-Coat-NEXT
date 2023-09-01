@@ -28,10 +28,11 @@ module.exports.updateCategory = async (req, res) => {
   try {
     const { files } = req;
     let photo = files[0]?.filename;
-    let { name, urlName, category_id } = JSON.parse(req.body.description);
+    const id = Number(req.params.id);
+    let { name, urlName,  } = JSON.parse(req.body.description);
     const [rowsAffected, [updatedCategory]] = await Category.update(
       { name, urlName, photo },
-      { where: { id: category_id }, individualHooks: true },
+      { where: { id }, individualHooks: true },
     );
     const result = updatedCategory.dataValues;
     res.status(200).json({

@@ -9,14 +9,12 @@ import InfoModal from "../InfoModal";
 import CheckBox from "../checkbox";
 import CustomFormControl from "../CustomFormControl";
 
-export default function ColModal({ openChange, setOpenChange }) {
+export default function ColModal({ openChange, setOpenChange, open, setOpen, message, setMessage }) {
   const formRef = useRef(null);
   const [files, setFile] = useState();
   const [description, setDescription] = useState({});
   const [conten, setConten] = useState([]);
   const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
-  const [open, setOpen] = useState(false);
   const address = "collection";
   const id = description.collection_id;
 
@@ -57,6 +55,7 @@ export default function ColModal({ openChange, setOpenChange }) {
         setMessage("");
         setOpen(false);
       }, 1000);
+      setOpenChange(false)
       formRef.current.reset();
     } catch (err) {
       console.log(err);

@@ -8,7 +8,14 @@ import CustomButton from "../CustomButton";
 import InputFiles from "../InputFiles";
 import AdminInput from "../AdminInput";
 
-export default function MatModal({ openChange, setOpenChange }) {
+export default function MatModal({
+  openChange,
+  setOpenChange,
+  open,
+  setOpen,
+  message,
+  setMessage,
+}) {
   const formRef = useRef(null);
   const [files, setFile] = useState();
   const [description, setDescription] = useState({});
@@ -16,8 +23,6 @@ export default function MatModal({ openChange, setOpenChange }) {
   const [content, setContent] = useState([]);
   const [name, setName] = useState("");
   const [nameCat, setNameCat] = useState("");
-  const [message, setMessage] = useState("");
-  const [open, setOpen] = useState(false);
   const address = "material";
   const addressCat = "category";
   const id = description.material_id;
@@ -46,7 +51,10 @@ export default function MatModal({ openChange, setOpenChange }) {
     try {
       e.preventDefault();
       const formData = new FormData();
-      if (url === `create-${address}` || (url === `update-${address}` && files)) {
+      if (
+        url === `create-${address}` ||
+        (url === `update-${address}` && files)
+      ) {
         for (let key in files.photos) {
           formData.append("photos", files.photos[key]);
         }
@@ -59,6 +67,7 @@ export default function MatModal({ openChange, setOpenChange }) {
         setMessage("");
         setOpen(false);
       }, 1000);
+      setOpenChange(false);
       formRef.current.reset();
     } catch (err) {
       console.log(err);

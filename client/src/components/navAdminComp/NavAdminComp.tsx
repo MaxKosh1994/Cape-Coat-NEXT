@@ -18,10 +18,10 @@ export default function NavAdminComp() {
       </Head>
       <div className={styles.mainDiv}>
         <div className={styles.routesDiv}>
-          <NextLink href='/admin/cat-col-mat'>
+          <NextLink href='/admin/content'>
             <Button
               className={`${styles.button} ${
-                router.pathname === '/admin/cat-col-mat' ? styles.active : ''
+                router.pathname === '/admin/content' ? styles.active : ''
               }`}
             >
               Добавить контент

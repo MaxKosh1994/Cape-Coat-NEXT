@@ -8,19 +8,17 @@ import CustomButton from "../CustomButton";
 import InfoModal from "../InfoModal";
 import CustomFormControl from "../CustomFormControl";
 
-export default function CatModal({ openChange, setOpenChange }) {
+export default function CatModal({ openChange, setOpenChange, open, setOpen, message, setMessage }) {
   const formRef = useRef(null);
   const [files, setFile] = useState();
   const [description, setDescription] = useState({});
   const [conten, setConten] = useState([]);
   const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
-  const [open, setOpen] = useState(false);
   const address = "category";
   const id = description.category_id;
 
   useEffect(() => {
-    dataAxios(setConten, setMessage, address );
+    dataAxios(setConten, setMessage, address);
   }, []);
 
   const changeHandlerFiles = (e) => {
@@ -37,7 +35,10 @@ export default function CatModal({ openChange, setOpenChange }) {
     try {
       e.preventDefault();
       const formData = new FormData();
-      if (url === `create-${address}` || (url === `update-${address}` && files)) {
+      if (
+        url === `create-${address}` ||
+        (url === `update-${address}` && files)
+      ) {
         for (let key in files.photos) {
           formData.append("photos", files.photos[key]);
         }
@@ -50,6 +51,7 @@ export default function CatModal({ openChange, setOpenChange }) {
         setMessage("");
         setOpen(false);
       }, 1000);
+      setOpenChange(false);
       formRef.current.reset();
     } catch (err) {
       console.log(err);

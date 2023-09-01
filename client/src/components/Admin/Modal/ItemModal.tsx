@@ -12,25 +12,33 @@ import CustomButton from "../CustomButton";
 
 import Box from "@mui/material/Box";
 
-export default function ItemModal({ openChange, setOpenChange, id }) {
+export default function ItemModal({
+  openChange,
+  setOpenChange,
+  id,
+  setContent,
+  open,
+  setOpen,
+  message,
+  setMessage,
+}) {
+  console.log(id);
   const formRef = useRef(null);
   const [files, setFile] = useState({});
   const [description, setDescription] = useState({
-    category_id: "1",
-    collection_id: "1",
-    material_id: "1",
+    category_id: 1,
+    collection_id: 1,
+    material_id: 1,
     in_stock: false,
     bestseller: false,
   });
-  const [conten, setConten] = useState([]);
+
   const [category, setCategory] = useState([]);
   const [collection, setCollection] = useState([]);
   const [material, setMaterial] = useState([]);
   const [nameCat, setNameCat] = useState("");
   const [nameCol, setNameCol] = useState("");
   const [nameMat, setNameMat] = useState("");
-  const [message, setMessage] = useState("");
-  const [open, setOpen] = useState<boolean>(false);
   const address = "item";
   const addressCat = "category";
   const addressCol = "collection";
@@ -40,7 +48,6 @@ export default function ItemModal({ openChange, setOpenChange, id }) {
     dataAxios(setCategory, setMessage, addressCat);
     dataAxios(setCollection, setMessage, addressCol);
     dataAxios(setMaterial, setMessage, addressMat);
-    dataAxios(setConten, setMessage, address);
   }, []);
 
   const changeHandlerFiles = (e) => {
@@ -70,29 +77,24 @@ export default function ItemModal({ openChange, setOpenChange, id }) {
     try {
       e.preventDefault();
       const formData = new FormData();
-      if (url === `create-${address}` || (url === `update-${address}` && files)) {
+      if (
+        url === `create-${address}` ||
+        (url === `update-${address}` && files)
+      ) {
         for (let key in files.photos) {
           formData.append("photos", files.photos[key]);
         }
       }
       formData.append("description", JSON.stringify(description));
       const val = await Object.fromEntries(formData.entries());
-      await dataAxios(setConten, setMessage, address, formData, url, id);
+      await dataAxios(setContent, setMessage, address, formData, url, id);
       setOpen(true);
       setTimeout(() => {
         setMessage("");
         setOpen(false);
       }, 1000);
       formRef.current.reset();
-      setNameCat("");
-      setNameCol("");
-      setDescription({
-        category_id: "1",
-        collection_id: "1",
-        material_id: "1",
-        in_stock: false,
-        bestseller: false,
-      });
+      setOpenChange(false);
     } catch (err) {
       console.log(err);
     }
@@ -178,21 +180,28 @@ export default function ItemModal({ openChange, setOpenChange, id }) {
                   changeHandlerFiles={changeHandlerFiles}
                   shouldAllowMultiple={true}
                 />
-                <CustomButton
-                  label={"Добавить"}
-                  submit={submit}
-                  url={"create-item"}
-                />
-                <CustomButton
-                  label={"Изменить"}
-                  submit={submit}
-                  url={"update-item"}
-                />
-                <CustomButton
-                  label={"Удалить"}
-                  submit={submit}
-                  url={"delete-item"}
-                />
+                {id === undefined ? (
+                  <>
+                    <CustomButton
+                      label={"Добавить"}
+                      submit={submit}
+                      url={"create-item"}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <CustomButton
+                      label={"Изменить"}
+                      submit={submit}
+                      url={"update-item"}
+                    />
+                    <CustomButton
+                      label={"Удалить"}
+                      submit={submit}
+                      url={"delete-item"}
+                    />
+                  </>
+                )}
               </div>
             </form>
           </div>
