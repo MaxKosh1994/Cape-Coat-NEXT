@@ -26,6 +26,13 @@ const FavoriteIconButton: React.FC<FavoriteIconButtonProps> = ({
     console.log(isItemInFavoritesLog);
   }, []);
 
+
+  // const localStorageData = localStorage.getItem('favorites');
+
+  // const favoriteItems = JSON.parse(localStorageData  '[]');
+
+  // const isItemInFavoritesLog = favoriteItems.includes(itemId);
+
   return (
     <IconButton
       className={styles.IconImage}

@@ -98,6 +98,8 @@ const useProductCardLogic = (
       const cartItemsFromStorage =
         JSON.parse(localStorage.getItem('cartItems')) || [];
 
+        //TODO   const isItemInCart = cartItemsFromStorage.includes(id);
+
       const isItemInCart = cartItemsFromStorage.find((item) => item.id === id);
 
       if (isItemInCart) {
