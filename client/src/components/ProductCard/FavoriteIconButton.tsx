@@ -16,22 +16,22 @@ const FavoriteIconButton: React.FC<FavoriteIconButtonProps> = ({
   onClick,
   itemId,
 }) => {
-  const [isItemInFavoritesLog, setIsItemInFavoritesLog] = useState(false);
-  useEffect(() => {
-    const localStorageData = localStorage.getItem('favorites');
-    console.log('icon', localStorageData);
-    const favoriteItems = JSON.parse(localStorageData || '[]');
-    setIsItemInFavoritesLog(favoriteItems.includes(itemId));
-    console.log(setIsItemInFavoritesLog);
-    console.log(isItemInFavoritesLog);
-  }, []);
+  // const [isItemInFavoritesLog, setIsItemInFavoritesLog] = useState(false);
+  // useEffect(() => {
+  //   const localStorageData = localStorage.getItem('favorites');
+  //   console.log('icon', localStorageData);
+  //   const favoriteItems = JSON.parse(localStorageData || '[]');
+  //   setIsItemInFavoritesLog(favoriteItems.includes(itemId));
+  //   console.log(setIsItemInFavoritesLog);
+  //   console.log(isItemInFavoritesLog);
+  // }, []);
 
 
-  // const localStorageData = localStorage.getItem('favorites');
+  const localStorageData = localStorage.getItem('favorites');
 
-  // const favoriteItems = JSON.parse(localStorageData  '[]');
+  const favoriteItems = JSON.parse(localStorageData || '[]');
 
-  // const isItemInFavoritesLog = favoriteItems.includes(itemId);
+  const isItemInFavoritesLog = favoriteItems.includes(itemId);
 
   return (
     <IconButton
