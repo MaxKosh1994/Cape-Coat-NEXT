@@ -45,6 +45,7 @@ const useProductCardLogic = (
       setIsFavorite(false);
       const favoritesFromStorage =
         JSON.parse(localStorage.getItem('favorites')) || [];
+        console.log('logic',favoritesFromStorage )
 
       const isItemInFavorites = favoritesFromStorage.includes(id);
       if (isItemInFavorites) {

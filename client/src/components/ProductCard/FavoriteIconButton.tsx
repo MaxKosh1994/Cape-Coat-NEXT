@@ -19,8 +19,11 @@ const FavoriteIconButton: React.FC<FavoriteIconButtonProps> = ({
   const [isItemInFavoritesLog, setIsItemInFavoritesLog] = useState(false);
   useEffect(() => {
     const localStorageData = localStorage.getItem('favorites');
+    console.log('icon', localStorageData);
     const favoriteItems = JSON.parse(localStorageData || '[]');
     setIsItemInFavoritesLog(favoriteItems.includes(itemId));
+    console.log(setIsItemInFavoritesLog);
+    console.log(isItemInFavoritesLog);
   }, []);
 
   return (
