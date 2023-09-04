@@ -29,10 +29,7 @@ const Address = () => {
               <strong>Адрес шоурума</strong>
             </Typography>
             <Typography className={styles.infoText} variant='p'>
-              Наш адрес: Россия, г.Нижний Новгород, ул. Малая Покровская, 20
-            </Typography>
-            <Typography className={styles.infoText} variant='p'>
-              Ждем вас в будние дни с 10 утра до 20 вечера!
+              Наш адрес: Россия, г.Нижний Новгород, ул. Ильинская, 79
             </Typography>
           </div>
 

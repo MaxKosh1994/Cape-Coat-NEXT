@@ -111,7 +111,7 @@ module.exports.updateItem = async (req, res) => {
       });
     }
     res.status(200).json({
-      message: 'Материал изменен',
+      message: 'Товар успешно изменен',
       res: result,
     });
   } catch (err) {
@@ -131,7 +131,7 @@ module.exports.deleteItem = async (req, res) => {
       where: { id },
       individualHooks: true,
     });
-    console.log(photo)
+    console.log(photo);
     res.status(200).json({ message: 'Товар удален' });
   } catch (err) {
     res.status(400).json({ message: 'error' });

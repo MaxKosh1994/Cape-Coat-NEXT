@@ -9,7 +9,6 @@ export const getAllPromo = async () => {
     if (status !== 200) {
       throw new Error(response.message);
     }
-    console.log(response);
     return response;
   } catch (err) {
     console.log(err);

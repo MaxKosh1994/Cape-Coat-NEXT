@@ -172,6 +172,13 @@ export default function Order() {
 
   const [pageNumber, setPageNumber] = useState(0);
 
+  const totalMonths = ordersByMonth[pageNumber].orders.reduce(
+    (accumulator, order) => accumulator + Number(order.total),
+    0
+  );
+
+  //! Логика составления заданий
+
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [itemInfo, setItemInfo] = useState<IItemData>({
     id: 0,
@@ -214,6 +221,7 @@ export default function Order() {
       updatedAt: '',
     },
   });
+
   const [taskInfo, setTaskInfo] = useState<ITaskInfo>({
     id: 0,
     createdAt: '',
@@ -238,6 +246,11 @@ export default function Order() {
       <NavAdminComp />
       <InfoContainer />
       <div className={styles.mainDiv}>
+        <div className={styles.infoTotalContainer}>
+          <p className={styles.infoPTotal}>
+            Итого за месяц заказов на {totalMonths.toLocaleString()}р
+          </p>
+        </div>
         <div
           style={{
             display: 'flex',

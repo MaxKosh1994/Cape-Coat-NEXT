@@ -51,3 +51,9 @@
   font-weight: bolder;
   color: black;
 }
+
+@media (max-width: 850px) {
+  .infoContainer {
+    border-bottom: none !important;
+  }
+}

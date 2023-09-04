@@ -42,7 +42,6 @@
   width: 80%;
 }
 
-
 .selectedItemsContainer {
   display: flex;
   flex-direction: column;
@@ -540,4 +539,86 @@
 .orderStatusCart {
   font-size: 1.4rem;
   margin-bottom: 20px;
+}
+
+@media (max-width: 850px) {
+  .headerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .headerUserParams {
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+
+  .formBlock {
+    width: 100%;
+  }
+
+  .deliveryHeader {
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+
+  .orderSummDataContainer {
+    width: 80%;
+    margin: 0 auto;
+    border: 1px solid black;
+    padding: 25px;
+  }
+}
+
+@media (max-width: 550px) {
+  .headerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+  }
+
+  .headerUserParams {
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+
+  .formBlock {
+    width: 73%;
+  }
+
+  .deliveryHeader {
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+
+  .selectItemsButtonContainer {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .button {
+    width: 66%;
+  }
+
+  .summOrderDataContainer {
+    margin-left: 0px;
+    width: 90%;
+    margin-top: 30px;
+  }
+
+  .orderSummDataContainer {
+    width: 66%;
+    margin-left: 0px;
+    border: 1px solid black;
+    padding: 25px;
+  }
+
+  .promocodeInput {
+    width: 200px;
+  }
 }
