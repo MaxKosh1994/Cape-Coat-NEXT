@@ -5,6 +5,8 @@ import Head from 'next/head';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PhoneIcon from '@mui/icons-material/Phone';
+import { Icon36LogoVk } from '@vkontakte/icons';
+import PinterestIcon from '@mui/icons-material/Pinterest';
 
 const DynamicMap = dynamic(() => import('@/components/About/Map'), {
   ssr: false,
@@ -46,15 +48,35 @@ const Address = () => {
                 Cape.n.coat@gmail.com
               </a>
             </Typography>
-            <Typography className={styles.infoText} variant='p'>
+            <Typography className={styles.infoTextNotVk} variant='p'>
               <a href='https://t.me/@kkireva' className={styles.contactLink}>
                 <TelegramIcon className={styles.Icon} /> Telegram: @kkireva
               </a>
             </Typography>
-            <Typography className={styles.infoText} variant='p'>
+            <Typography className={styles.infoTextNotVk} variant='p'>
+              <a className={styles.link} href='https://pin.it/2lozIsT'>
+                <PinterestIcon className={styles.Icon} /> Pinterest: @capencoat
+              </a>
+            </Typography>
+            <Typography className={styles.infoTextNotVk} variant='p'>
+              <a className={styles.link} href='https://pin.it/AK7aIDV'>
+                <PinterestIcon className={styles.Icon} /> Pinterest: @KKir_eva
+              </a>
+            </Typography>
+            <Typography className={styles.infoTextNotVk} variant='p'>
               <a href='tel:+79201199919' className={styles.contactLink}>
                 <PhoneIcon className={styles.Icon} /> Phone number:
                 +7(920)-119-99-19
+              </a>
+            </Typography>
+            <Typography className={styles.infoText} variant='p'>
+              <a className={styles.link} href='https://vk.com/cape.n.coat'>
+                <Icon36LogoVk className={styles.Icon} /> Группа ВК
+              </a>
+            </Typography>
+            <Typography className={styles.infoText} variant='p'>
+              <a className={styles.link} href='https://vk.com/kkireva'>
+                <Icon36LogoVk className={styles.Icon} /> Группа ВК (платья)
               </a>
             </Typography>
           </div>

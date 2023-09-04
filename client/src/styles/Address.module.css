@@ -49,10 +49,26 @@
 }
 
 .infoText {
-  display: block;
   font-size: 1.2rem;
   text-align: start;
   margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.infoTextNotVk {
+  font-size: 1.2rem;
+  text-align: start;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  /* color: black; */
+  display: flex;
+  align-items: center;
 }
 
 .contactLink {
