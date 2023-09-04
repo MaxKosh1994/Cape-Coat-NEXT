@@ -22,7 +22,6 @@ export default function BottomBlock() {
         }
       );
       const response = await allItems.json();
-      console.log(response);
       if (allItems.status === 200) {
         let items;
         const filterStock = response.filter((item) => item.in_stock === false);

@@ -21,11 +21,11 @@ const FavoriteIconButton: React.FC<FavoriteIconButtonProps> = ({
   //   const localStorageData = localStorage.getItem('favorites');
   //   console.log('icon', localStorageData);
   //   const favoriteItems = JSON.parse(localStorageData || '[]');
+  //   // const isItemInFavoritesLog = favoriteItems.includes(itemId);
   //   setIsItemInFavoritesLog(favoriteItems.includes(itemId));
   //   console.log(setIsItemInFavoritesLog);
   //   console.log(isItemInFavoritesLog);
   // }, []);
-
 
   const localStorageData = localStorage.getItem('favorites');
 

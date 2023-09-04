@@ -45,7 +45,7 @@ const useProductCardLogic = (
       setIsFavorite(false);
       const favoritesFromStorage =
         JSON.parse(localStorage.getItem('favorites')) || [];
-        console.log('logic',favoritesFromStorage )
+      console.log('logic', favoritesFromStorage);
 
       const isItemInFavorites = favoritesFromStorage.includes(id);
       if (isItemInFavorites) {
@@ -98,7 +98,7 @@ const useProductCardLogic = (
       const cartItemsFromStorage =
         JSON.parse(localStorage.getItem('cartItems')) || [];
 
-        //TODO   const isItemInCart = cartItemsFromStorage.includes(id);
+      //TODO   const isItemInCart = cartItemsFromStorage.includes(id);
 
       const isItemInCart = cartItemsFromStorage.find((item) => item.id === id);
 
@@ -108,6 +108,7 @@ const useProductCardLogic = (
         );
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       } else {
+        console.log(material_name)
         const updatedCartItems = [
           ...cartItemsFromStorage,
           { id, material_name },
