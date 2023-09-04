@@ -17,7 +17,7 @@ const favoriteRouter = require('./favorite.router');
 module.exports = router
   .use('/auth', authRouter)
   .use('/admin', adminRouter)
-  .use('/account', isAuth, isAdmin, accountRouter)
+  .use('/account', isAuth, accountRouter)
   .use('/catalog', catalogRouter)
   .use('/stock', stockRouter)
   .use('/cart', cartRouter)

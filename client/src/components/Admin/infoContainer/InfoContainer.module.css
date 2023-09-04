@@ -82,3 +82,24 @@
 .infoP {
   margin-bottom: 10px;
 }
+
+@media (max-width: 550px) {
+  .mainContainer {
+    margin-left: 30px;
+    flex-direction: column;
+  }
+
+  .colorDescBlock {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 850px) {
+  .mainContainer {
+    margin-left: 30px;
+  }
+
+  .colorDescBlock {
+    flex-direction: column;
+  }
+}

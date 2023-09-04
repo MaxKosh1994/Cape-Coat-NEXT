@@ -224,7 +224,7 @@ export default function Tasks() {
                 <TableCell className={styles.tableMiddleCell}>
                   Дата готовности
                 </TableCell>
-                <TableCell className={styles.tableCell}>ФИО*</TableCell>
+                <TableCell className={styles.tableMiddleCell}>ФИО*</TableCell>
                 <TableCell className={styles.tableCell}>
                   Telegram/Insta*
                 </TableCell>

@@ -355,7 +355,6 @@ export const useCartControl = () => {
       ...prevState,
       itemId,
     }));
-    console.log(paramsFormData);
 
     // записывает мерки к товару в CartItems
     const response = await fetch(
