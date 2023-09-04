@@ -15,10 +15,21 @@
   padding-bottom: 20px;
 }
 
-.messengersContainer a {
+.teleIcon {
   color: black;
   background-color: white;
   padding: 10px;
+  border-radius: 20px;
+  width: 45px;
+  height: 45px;
+  margin-bottom: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.vkIcon {
+  color: black;
+  background-color: white;
+  padding: 5px;
   border-radius: 20px;
   width: 45px;
   height: 45px;

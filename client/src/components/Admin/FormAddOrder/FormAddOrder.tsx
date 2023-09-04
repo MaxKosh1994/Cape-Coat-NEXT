@@ -962,7 +962,9 @@ export default function FormAddOrder() {
                         </>
                       )}
                       {item.category_id === 2 && (
-                        <>
+                        <div
+                          style={{ display: 'flex', flexDirection: 'column' }}
+                        >
                           <div>
                             <input
                               type='checkbox'
@@ -1033,13 +1035,9 @@ export default function FormAddOrder() {
                                 Утепление с мембраной (до -10 градусов)
                                 *идеально для зимы* +1.400₽
                               </option>
-                              <option value='minus20'>
-                                Утепление двойным слоем с мембраной (до -20
-                                градусов) *обьемное утепление* +1.400₽
-                              </option>
                             </select>
                           </div>
-                        </>
+                        </div>
                       )}
                       {item.category_id === 5 && (
                         <>
