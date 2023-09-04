@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ItemRightPartComp.module.css';
 
-import { Box, List } from '@mui/material';
+import { Box, List, useMediaQuery } from '@mui/material';
 import CustomList from '../customList/CustomList';
 
 import ItemMaterials from '../ItemMaterials/ItemMaterials';
@@ -20,6 +20,7 @@ export default function ItemRightPart({
   itemId,
   materialsData,
 }: ItemRightPartProps): JSX.Element {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   return (
     <div
       className={`${styles.grid__item} ${styles.large_one_third}`}
@@ -67,7 +68,7 @@ export default function ItemRightPart({
           flexDirection: 'column',
           justifyContent: 'end',
           alignItems: 'start',
-          marginBottom: '50px',
+          marginBottom: isMobile ? '10px' : '50px',
         }}
       >
         <List sx={{ width: '100%' }}>
