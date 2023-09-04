@@ -172,7 +172,7 @@ export default function Order() {
 
   const [pageNumber, setPageNumber] = useState(0);
 
-  const totalMonths = ordersByMonth[pageNumber].orders.reduce(
+  const totalMonths = ordersByMonth[pageNumber]?.orders.reduce(
     (accumulator, order) => accumulator + Number(order.total),
     0
   );
@@ -248,7 +248,7 @@ export default function Order() {
       <div className={styles.mainDiv}>
         <div className={styles.infoTotalContainer}>
           <p className={styles.infoPTotal}>
-            Итого за месяц заказов на {totalMonths.toLocaleString()}р
+            Итого за месяц заказов на {totalMonths?.toLocaleString()}р
           </p>
         </div>
         <div
