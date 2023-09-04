@@ -7,9 +7,9 @@ export default function BasePage({ pageName, itemsArr }) {
     <>
       <Head>
         <title>Cape&Coat | {pageName}</title>
-        <meta name='title' content='Cape and Coat' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <link rel='icon' href='/favicon.ico' />
+        <meta name="title" content="Cape and Coat" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.pageContainer}>
         <h3 className={styles.header}>{pageName}</h3>
@@ -17,14 +17,14 @@ export default function BasePage({ pageName, itemsArr }) {
           {itemsArr.map((item) => (
             <ProductCard
               key={item.id}
-              material_name={item.Material.name}
+              material_name={item.material_name}
               id={item.id}
               article={item.article}
               photo={item?.photo || item?.Photos[0]?.photo}
               name={item.name}
               price={item.price}
-              isFavorite={item.isFavorite}
-              isCart={item.isCart}
+              isFavorite={false}
+              isCart={false}
               newPrice={item.new_price}
             />
           ))}

@@ -45,6 +45,7 @@ export default function CheckoutPage() {
     countCartTotal,
     handleCreateOrder,
   } = useCartControl();
+  console.log(cartItemsList)
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
   const dispatch = useAppDispatch();
 

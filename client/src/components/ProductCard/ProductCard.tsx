@@ -35,7 +35,6 @@ const ProductCard: React.FC<IProductCard> = ({
       isItemInFavoritesState,
       urlName
     );
-
   const router = useRouter();
 
   const linkToShow = router.asPath.replace(/^\/catalog\/|\/\d+$/g, '');
