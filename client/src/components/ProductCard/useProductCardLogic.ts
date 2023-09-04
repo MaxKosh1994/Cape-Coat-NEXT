@@ -100,6 +100,7 @@ const useProductCardLogic = (
 
       //TODO   const isItemInCart = cartItemsFromStorage.includes(id);
 
+      
       const isItemInCart = cartItemsFromStorage.find((item) => item.id === id);
 
       if (isItemInCart) {
@@ -108,7 +109,6 @@ const useProductCardLogic = (
         );
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       } else {
-        console.log(material_name)
         const updatedCartItems = [
           ...cartItemsFromStorage,
           { id, material_name },

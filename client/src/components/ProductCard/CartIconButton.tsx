@@ -23,14 +23,11 @@ const CartIconButton: React.FC<CartIconButtonProps> = ({
   //   setIsItemInCart(itemsInCart.includes(itemId));
   // }, []);
 
-
-
   const localStorageData = localStorage.getItem('cartItems');
 
   const itemsInCart = JSON.parse(localStorageData || '[]');
 
-  const isItemInCart = itemsInCart.includes(itemId);
-
+  const isItemInCart = itemsInCart.some((element) => element.id === itemId);
 
   return (
     <IconButton
