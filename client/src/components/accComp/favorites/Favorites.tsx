@@ -54,7 +54,7 @@ export default function Favorites() {
       setFavoriteItems(fetchedItems);
     };
 
-    // fetchData();
+    fetchData();
   }, []);
 
   console.log('itemData', itemData);
