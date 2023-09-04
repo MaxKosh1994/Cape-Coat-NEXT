@@ -116,3 +116,15 @@ textarea {
   display: flex;
   align-items: center;
 }
+
+.ui-ripple.in-cart-btn {
+  border: 1px solid black !important;
+  background-color: white;
+  color: black;
+}
+@media only screen and (max-width: 768px) {
+  .product__actions {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}

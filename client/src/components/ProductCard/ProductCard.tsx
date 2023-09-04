@@ -6,6 +6,7 @@ import FavoriteIconButton from './FavoriteIconButton';
 import CartIconButton from './CartIconButton';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import numeral from 'numeral';
 
 const ProductCard: React.FC<IProductCard> = ({
   id,
@@ -56,7 +57,7 @@ const ProductCard: React.FC<IProductCard> = ({
         <span className={styles.CardMedia}>
           <img
             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${photo}`}
-            alt='Product Image'
+            alt="Product Image"
             className={styles.Image}
           />
         </span>
@@ -65,11 +66,9 @@ const ProductCard: React.FC<IProductCard> = ({
       {newPrice ? (
         <div className={styles.CardContent}>
           <h3 className={styles.Price}>Цена:</h3>
-          <h3 className={styles.OldPrice}>
-            {price?.toLocaleString().replace(/,\s?/g, ' ')} ₽
-          </h3>
+          <h3 className={styles.OldPrice}>{numeral(price).format('0,0')} ₽</h3>
           <h3 className={styles.NewPrice}>
-            {newPrice?.toLocaleString().replace(/,\s?/g, ' ')} ₽
+            {numeral(newPrice).format('0,0')} ₽
           </h3>
           <div className={styles.Icons}>
             <FavoriteIconButton
@@ -83,7 +82,7 @@ const ProductCard: React.FC<IProductCard> = ({
       ) : (
         <div className={styles.CardContent}>
           <h3 className={styles.PriceOne}>
-            Цена: {price?.toLocaleString().replace(/,\s?/g, ' ')} ₽
+            Цена: {numeral(price).format('0,0')} ₽
           </h3>
           <div className={styles.Icons}>
             <FavoriteIconButton

@@ -17,10 +17,12 @@ module.exports.oneItem = async (req, res) => {
       include: [
         {
           model: Photo,
-          limit: 1,
         },
         {
           model: Material,
+        },
+        {
+          model: Category,
         },
       ],
     });

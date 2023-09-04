@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IconButton } from '@mui/material';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -16,11 +16,12 @@ const FavoriteIconButton: React.FC<FavoriteIconButtonProps> = ({
   onClick,
   itemId,
 }) => {
-  const localStorageData = localStorage.getItem('favorites');
-
-  const favoriteItems = JSON.parse(localStorageData || '[]');
-
-  const isItemInFavoritesLog = favoriteItems.includes(itemId);
+  const [isItemInFavoritesLog, setIsItemInFavoritesLog] = useState(false);
+  useEffect(() => {
+    const localStorageData = localStorage.getItem('favorites');
+    const favoriteItems = JSON.parse(localStorageData || '[]');
+    setIsItemInFavoritesLog(favoriteItems.includes(itemId));
+  }, []);
 
   return (
     <IconButton

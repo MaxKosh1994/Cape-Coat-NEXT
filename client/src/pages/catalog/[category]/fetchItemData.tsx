@@ -58,7 +58,7 @@ export const fetchNavigationMenuCollectionData = async () => {
 };
 
 export const getItems = async (
-  setSimilarItems: React.Dispatch<React.SetStateAction<Item[]>>,
+  // setSimilarItems: React.Dispatch<React.SetStateAction<Item[]>>,
   isMobile: boolean,
   itemData: Item
 ): Promise<void> => {
@@ -81,7 +81,8 @@ export const getItems = async (
       const cutFilteredItems = isMobile
         ? filteredItems.slice(0, 2)
         : filteredItems.slice(0, 4);
-      setSimilarItems(cutFilteredItems);
+      // setSimilarItems(cutFilteredItems);
+      return cutFilteredItems;
     }
   } catch (error) {
     console.log(error);

@@ -29,6 +29,7 @@ import {
   ITaskInfo,
 } from '@/components/Admin/TasksForm/taskformTypes';
 import TasksForm from '@/components/Admin/TasksForm/TasksForm';
+import Head from 'next/head';
 
 export default function Tasks() {
   const [orders, setOrders] = useState([]);
@@ -201,6 +202,9 @@ export default function Tasks() {
 
   return (
     <>
+      <Head>
+        <meta name="robots" content="noindex,nofollow" />
+      </Head>
       <NavAdminComp />
       <InfoContainer />
       <div className={styles.mainDiv}>
