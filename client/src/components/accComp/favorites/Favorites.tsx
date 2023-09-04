@@ -51,19 +51,20 @@ export default function Favorites() {
           console.log(err);
         }
       }
-
       setFavoriteItems(fetchedItems);
     };
 
-    fetchData();
+    // fetchData();
   }, []);
 
+  console.log('itemData', itemData);
   const renderProductCards =
     itemData && Array.isArray(itemData)
       ? itemData.map((item) => (
           <ProductCard
             key={item.id}
             id={item.id}
+            material_name={item.Material.name}
             article={item.article}
             photo={item.Photos[0].photo}
             name={item.name}
@@ -74,12 +75,15 @@ export default function Favorites() {
         ))
       : null;
 
+  console.log('favoriteItems', favoriteItems);
+
   const renderProductCardsLocal =
     favoriteItems && Array.isArray(favoriteItems)
       ? favoriteItems.map((item) => (
           <ProductCard
             key={item.item.id}
             id={item.item.id}
+            material_name={item.item.Material.name}
             article={item.item.article}
             photo={item.item.Photos[0].photo}
             name={item.item.name}

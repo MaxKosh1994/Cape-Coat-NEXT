@@ -104,6 +104,8 @@ export default function CartButton({
           const data = await res.json();
           const addToCart = data.filter((el) => el.id == itemId)[0];
 
+          console.log('addToCart, addToCart', addToCart)
+
           dispatch(addCartItem(addToCart));
         }
       }

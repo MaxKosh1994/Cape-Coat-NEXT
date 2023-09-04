@@ -68,6 +68,7 @@ const useProductCardLogic = (
       try {
         const favoriteData = {
           id,
+          material_name,
           article,
           photo,
           name,
@@ -100,7 +101,6 @@ const useProductCardLogic = (
 
       //TODO   const isItemInCart = cartItemsFromStorage.includes(id);
 
-      
       const isItemInCart = cartItemsFromStorage.find((item) => item.id === id);
 
       if (isItemInCart) {
@@ -119,6 +119,7 @@ const useProductCardLogic = (
       try {
         const cartData = {
           id,
+          material_name,
           article,
           photo,
           name,
@@ -130,6 +131,7 @@ const useProductCardLogic = (
 
         if (!isCart) {
           const inCart = await addToCart(cartData);
+          console.log('cartData', inCart);
           const itemInCart = inCart[0];
           setIsCart(itemInCart);
           dispatch(addCartItem(inCart));
@@ -152,8 +154,10 @@ const useProductCardLogic = (
         Promise.all(
           cartFromStorage.map(async (cartId) => {
             const cartData = {
-              id: cartId,
+              id: cartId.id,
+              material_name: cartId.material_name,
             };
+            console.log('hz', cartData);
             return addToCart(cartData);
           })
         )

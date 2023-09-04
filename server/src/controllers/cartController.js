@@ -206,9 +206,12 @@ module.exports.addToCartInOneCat = async (req, res) => {
   try {
     const { user } = req.session;
     const cardInCart = req.body;
+    console.log('cardInCart ---------->', cardInCart);
     const currUser = await findUserByEmail(user);
 
-    const findCart = await Cart.findAll({
+    console.log('user -------------->', user);
+
+    const findCart = await Cart.findOrCreate({
       where: {
         user_id: currUser.id,
       },
@@ -216,13 +219,18 @@ module.exports.addToCartInOneCat = async (req, res) => {
       nest: true,
     });
 
+    console.log('findCart ----------------->', findCart);
+
     const itemCart = await CartItem.findOrCreate({
       where: {
         cart_id: findCart[0].id,
         item_id: cardInCart.id,
+        selected_material: cardInCart.material_name,
       },
       plain: true,
     });
+
+    console.log('itemCart ---------->', itemCart)
     if (itemCart) {
       res.status(200).json(itemCart);
     } else {
