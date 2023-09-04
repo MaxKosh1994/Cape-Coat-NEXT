@@ -33,7 +33,7 @@ function Item({
   similarItems,
 }: ItemProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
-  console.log('itemDataitemDataitemData', itemData);
+
   return (
     <>
       <Head>
