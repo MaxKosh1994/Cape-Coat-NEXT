@@ -67,8 +67,6 @@ export default function CheckoutPage() {
     cartTotal,
   ]);
 
-  console.log(cartItemsList);
-
   useEffect(() => {
     // подсчет стоимости доставки в зависимости от почта\шоурум
     countDeliveryCost();

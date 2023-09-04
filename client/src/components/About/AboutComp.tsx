@@ -5,6 +5,8 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PhoneIcon from '@mui/icons-material/Phone';
 import styles from './AboutComp.module.css';
 import Image from 'next/image';
+import { Icon36LogoVk } from '@vkontakte/icons';
+import PinterestIcon from '@mui/icons-material/Pinterest';
 
 export default function AboutComp() {
   return (
@@ -21,7 +23,7 @@ export default function AboutComp() {
                   <td className={styles.Photo}>
                     <Image
                       src={`${process.env.NEXT_PUBLIC_COLLAGE_URL}collage1.png`}
-                      alt="collage1"
+                      alt='collage1'
                       width={300}
                       height={400}
                     />
@@ -37,6 +39,10 @@ export default function AboutComp() {
                       пошив изделий из сезонных коллекций бренда по персональным
                       меркам с возможностью выбора ткани и фурнитуры.
                     </p>
+                    <p className={styles.Info}>
+                      <strong>Сape&Coat</strong> — это архитектурный крой,
+                      помноженный на дорогие и качественные материалы.
+                    </p>
                   </td>
                 </tr>
               </tbody>
@@ -46,16 +52,12 @@ export default function AboutComp() {
             <table className={styles.Table}>
               <tbody>
                 <tr>
-                  <td className={styles.InfoConteiner}>
+                  <td className={styles.InfoContainer}>
                     <p className={styles.Info}>
                       <strong>Основатель бренда</strong> Екатерина Киреева
                       уделяет пристальное внимание деталям, крою и выбору
                       материалов. Лично прорабатывает дизайн, конструкцию и
                       технологию пошива каждой модели: от идеи до воплощения.
-                    </p>
-                    <p className={styles.Info}>
-                      <strong>Сape&Coat</strong> — это архитектурный крой,
-                      помноженный на дорогие и качественные материалы.
                     </p>
                     <p className={styles.Info}>
                       В результате получаются изделия, балансирующие на грани
@@ -65,7 +67,7 @@ export default function AboutComp() {
                   <td className={styles.Photo}>
                     <Image
                       src={`${process.env.NEXT_PUBLIC_COLLAGE_URL}collage2.png`}
-                      alt="collage1"
+                      alt='collage1'
                       width={300}
                       height={400}
                     />
@@ -74,22 +76,44 @@ export default function AboutComp() {
               </tbody>
             </table>
           </div>
-          <h1 className={styles.Contact}>
-            Наши контакты:
-          </h1>
-          <p className={styles.Info}>
-            <a style={{ color: 'black' }} href="mailto:Cape.n.coat@gmail.com">
-              <MailOutlineIcon className={styles.Icon} /> Email: Cape.n.coat@gmail.com
-            </a>
-          </p>
-          <p className={styles.Info}>
-            <a style={{ color: 'black' }} href="https://t.me/@kkireva">
-              <TelegramIcon className={styles.Icon} /> Telegram: @kkireva
-            </a>
-          </p>
-          <p className={styles.Info}>
-            <PhoneIcon className={styles.Icon} /> Phone number: +7(920)-119-99-19
-          </p>
+          <div className={styles.socialMediaContainer}>
+            <h1 className={styles.Contact}>Наши контакты и соц.сети:</h1>
+            <Typography className={styles.displayFlex} variant='p'>
+              <a className={styles.link} href='mailto:Cape.n.coat@gmail.com'>
+                <MailOutlineIcon className={styles.Icon} /> Email:
+                Cape.n.coat@gmail.com
+              </a>
+            </Typography>
+            <Typography className={styles.displayFlex} variant='p'>
+              <a className={styles.link} href='https://t.me/@kkireva'>
+                <TelegramIcon className={styles.Icon} /> Telegram: @kkireva
+              </a>
+            </Typography>
+            <Typography className={styles.displayFlex} variant='p'>
+              <a className={styles.link} href='https://pin.it/2lozIsT'>
+                <PinterestIcon className={styles.Icon} /> Pinterest: @capencoat
+              </a>
+            </Typography>
+            <Typography className={styles.displayFlex} variant='p'>
+              <a className={styles.link} href='https://pin.it/AK7aIDV'>
+                <PinterestIcon className={styles.Icon} /> Pinterest: @KKir_eva
+              </a>
+            </Typography>
+            <Typography className={styles.displayFlex} variant='p'>
+              <a className={styles.link} href='https://vk.com/cape.n.coat'>
+                <Icon36LogoVk className={styles.Icon} /> Группа ВК
+              </a>
+            </Typography>
+            <Typography className={styles.displayFlex} variant='p'>
+              <a className={styles.link} href='https://vk.com/kkireva'>
+                <Icon36LogoVk className={styles.Icon} /> Группа ВК (платья)
+              </a>
+            </Typography>
+            <Typography className={styles.displayFlex} variant='p'>
+              <PhoneIcon className={styles.Icon} /> Phone number:
+              +7(920)-119-99-19
+            </Typography>
+          </div>
         </div>
       </div>
     </div>

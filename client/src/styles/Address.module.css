@@ -49,10 +49,26 @@
 }
 
 .infoText {
-  display: block;
   font-size: 1.2rem;
   text-align: start;
   margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.infoTextNotVk {
+  font-size: 1.2rem;
+  text-align: start;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  /* color: black; */
+  display: flex;
+  align-items: center;
 }
 
 .contactLink {
@@ -63,4 +79,74 @@
 
 .Icon {
   margin-right: 1rem;
+}
+
+@media (max-width: 550px) {
+  .mainContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column-reverse;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .mapContainer {
+    width: 90%;
+    height: 700px;
+    margin: 0 auto;
+    margin-top: 20px;
+  }
+
+  .infoContainer {
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 0px;
+    margin: 0 auto;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  .addressContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0px;
+    text-align: justify;
+  }
+
+  .contactContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0px;
+    text-align: justify;
+  }
+
+  .header {
+    font-size: 1.8rem;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 15px;
+  }
+
+  .infoText {
+    display: block;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 5px;
+    padding-left: 10px;
+  }
+
+  .contactLink {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .Icon {
+    margin-right: 1rem;
+  }
 }

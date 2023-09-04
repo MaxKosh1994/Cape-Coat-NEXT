@@ -1,7 +1,5 @@
 const { User, Order, Photo, Item } = require('../../db/models');
 
-const { sendMessageToUser } = require('../../telegramBot/bot'); // ФУНКЦИЯ ДЛЯ ОТПРАВКИ СООБЩЕНИЙ БОТОМ
-
 module.exports.getProfileInfo = async (req, res) => {
   try {
     const { user } = req.session;
@@ -106,14 +104,6 @@ module.exports.updateInfo = async (req, res) => {
     }
 
     await userExisting.save();
-
-    //! Тестовая отправка сообщений для менеджера
-
-    const { MANAGER_TELEGRAM_ID } = process.env;
-    const message = 'Ваши данные были успешно обновлены';
-    await sendMessageToUser(MANAGER_TELEGRAM_ID, message);
-
-    //! ------------------
 
     res.status(200).json({ message: 'Данные успешно обновлены' });
   } catch (err) {

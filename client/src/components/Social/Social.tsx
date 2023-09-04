@@ -1,6 +1,6 @@
 import TelegramIcon from '@mui/icons-material/Telegram';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import styles from './Social.module.css';
+import { Icon36LogoVk } from '@vkontakte/icons';
 
 import React from 'react';
 
@@ -8,11 +8,11 @@ export default function Social() {
   return (
     <>
       <div className={styles.messengersContainer}>
-        <a href="https://t.me/@kkireva">
+        <a className={styles.teleIcon} href='https://t.me/@kkireva'>
           <TelegramIcon />
         </a>
-        <a href="mailto:Cape.n.coat@gmail.com">
-          <MailOutlineIcon />
+        <a className={styles.vkIcon} href='https://vk.com/cape.n.coat'>
+          <Icon36LogoVk />
         </a>
       </div>
     </>

@@ -335,7 +335,7 @@ export default function FormAddOrder() {
       setOpenCreateOrderModal(false);
     }, 1000);
   };
-  console.log('--------', userParams);
+
   // записывает изменения в форме персональных данных (если клиент не залогинен)
   const handlePersonalDataInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPersonalData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -465,8 +465,6 @@ export default function FormAddOrder() {
     });
   }, [selectedItems]);
 
-  console.log('выбранные материалы======ЮЮЮ', selectedItemsMaterials);
-
   //! --------------------------------
 
   //! ГЛАВНАЯ ЛОГИКА СОЗДАНИЯ ЗАКАЗА
@@ -528,9 +526,7 @@ export default function FormAddOrder() {
       <FormControl sx={{ m: 1, minWidth: 250 }}>
         <div className={styles.headerContainer}>
           <div className={styles.userParamsContainer}>
-            <section
-              className={`${styles.orderBlockUserParams} ${styles.orderBlockDeliveries}`}
-            >
+            <section className={`${styles.orderBlockUserParams}`}>
               <h2 className={styles.headerUserParams}>Данные заказчика</h2>
               <div style={{ height: '470px' }} className={styles.formBlock}>
                 <div className={styles.deliveryService}>
@@ -966,7 +962,9 @@ export default function FormAddOrder() {
                         </>
                       )}
                       {item.category_id === 2 && (
-                        <>
+                        <div
+                          style={{ display: 'flex', flexDirection: 'column' }}
+                        >
                           <div>
                             <input
                               type='checkbox'
@@ -1037,13 +1035,9 @@ export default function FormAddOrder() {
                                 Утепление с мембраной (до -10 градусов)
                                 *идеально для зимы* +1.400₽
                               </option>
-                              <option value='minus20'>
-                                Утепление двойным слоем с мембраной (до -20
-                                градусов) *обьемное утепление* +1.400₽
-                              </option>
                             </select>
                           </div>
-                        </>
+                        </div>
                       )}
                       {item.category_id === 5 && (
                         <>

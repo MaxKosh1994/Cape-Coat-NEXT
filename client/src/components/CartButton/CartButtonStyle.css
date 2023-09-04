@@ -122,3 +122,9 @@ textarea {
   background-color: white;
   color: black;
 }
+@media only screen and (max-width: 768px) {
+  .product__actions {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}

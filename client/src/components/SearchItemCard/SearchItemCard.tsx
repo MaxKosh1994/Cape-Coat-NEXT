@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export default function SearchItemCard({ item }: ISearchCardItem) {
   return (
-    <Link href={`/catalog/${item.Category.urlName}/${item.id}`}>
+    <Link href={`/catalog/${item.Category?.urlName}/${item.id}`}>
       <div className={styles.container} key={item.id}>
         <div className={styles.imageContainer}>
           <Image
