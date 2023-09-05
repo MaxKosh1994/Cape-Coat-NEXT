@@ -6,6 +6,10 @@
   min-height: 70vh;
 }
 
+.errBtnContainer {
+	margin-top: 300px;
+}
+
 .errMsg {
   margin: 20px;
   font-size: 1.5rem;
