@@ -261,7 +261,7 @@ export default function Order() {
       {isAdmin && (
         <>
           <Head>
-            <meta name='robots' content='noindex,nofollow' />
+            <meta name="robots" content="noindex,nofollow" />
           </Head>
           <NavAdminComp />
           <InfoContainer />
@@ -294,7 +294,7 @@ export default function Order() {
               </select>
             </div>
             <TableContainer className={styles.tableContainer} component={Paper}>
-              <Table className={styles.table} aria-label='simple table'>
+              <Table className={styles.table} aria-label="simple table">
                 <TableHead>
                   <TableRow className={styles.tableRow}>
                     <TableCell
@@ -451,8 +451,8 @@ export default function Order() {
                               />
                               <Button
                                 className={styles.buttonInput}
-                                type='submit'
-                                variant='contained'
+                                type="submit"
+                                variant="contained"
                                 onClick={handleFieldConfirm}
                               >
                                 Изменить
@@ -488,7 +488,7 @@ export default function Order() {
                           editingOrderData.field === 'getReadyAt' ? (
                             <div className={styles.inputContainer}>
                               <TextField
-                                type='date'
+                                type="date"
                                 className={styles.dateInput}
                                 fullWidth
                                 required
@@ -497,8 +497,8 @@ export default function Order() {
                               />
                               <Button
                                 className={styles.buttonInput}
-                                type='submit'
-                                variant='contained'
+                                type="submit"
+                                variant="contained"
                                 onClick={handleFieldConfirm}
                               >
                                 Сохранить
@@ -548,15 +548,15 @@ export default function Order() {
                                 style={{ width: '100px' }}
                                 onChange={handleFieldChange}
                                 className={styles.inputText}
-                                type='text'
+                                type="text"
                                 fullWidth
                                 required
                                 value={editingOrderData.value}
                               />
                               <Button
                                 className={styles.buttonInput}
-                                type='submit'
-                                variant='contained'
+                                type="submit"
+                                variant="contained"
                                 onClick={handleFieldConfirm}
                               >
                                 Сохранить
@@ -579,14 +579,14 @@ export default function Order() {
                                 style={{ width: '100px', fontSize: 'medium' }}
                                 onChange={handleFieldChange}
                                 className={styles.inputText}
-                                type='number'
+                                type="number"
                                 required
                                 value={editingOrderData.value}
                               />
                               <Button
                                 className={styles.buttonInput}
-                                type='submit'
-                                variant='contained'
+                                type="submit"
+                                variant="contained"
                                 onClick={handleFieldConfirm}
                               >
                                 Сохранить
@@ -613,14 +613,14 @@ export default function Order() {
                                 style={{ width: '100px', fontSize: 'medium' }}
                                 onChange={handleFieldChange}
                                 className={styles.inputText}
-                                type='number'
+                                type="number"
                                 required
                                 value={editingOrderData.value}
                               />
                               <Button
                                 className={styles.buttonInput}
-                                type='submit'
-                                variant='contained'
+                                type="submit"
+                                variant="contained"
                                 onClick={handleFieldConfirm}
                               >
                                 Сохранить
@@ -649,15 +649,15 @@ export default function Order() {
                               <input
                                 onChange={handleFieldChange}
                                 className={styles.inputText}
-                                type='text'
-                                name='address'
-                                placeholder='Введите адрес...'
+                                type="text"
+                                name="address"
+                                placeholder="Введите адрес..."
                                 value={editingOrderData.value}
                               />
                               <Button
                                 className={styles.buttonInput}
-                                type='submit'
-                                variant='contained'
+                                type="submit"
+                                variant="contained"
                                 onClick={handleFieldConfirm}
                               >
                                 Сохранить
@@ -687,8 +687,8 @@ export default function Order() {
                                   paddingTop: '4px',
                                   paddingBottom: '4px',
                                 }}
-                                type='text'
-                                className='text-field'
+                                type="text"
+                                className="text-field"
                                 fullWidth
                                 required
                                 multiline
@@ -705,8 +705,8 @@ export default function Order() {
                               />
                               <Button
                                 className={styles.buttonInput}
-                                type='submit'
-                                variant='contained'
+                                type="submit"
+                                variant="contained"
                                 onClick={handleFieldConfirm}
                               >
                                 Сохранить
@@ -735,8 +735,8 @@ export default function Order() {
                                       width: '100px',
                                       fontSize: 'medium',
                                     }}
-                                    type='number'
-                                    className='text-field'
+                                    type="number"
+                                    className="text-field"
                                     required
                                     autoFocus
                                     value={editingOrderData.value}
@@ -744,8 +744,8 @@ export default function Order() {
                                   />
                                   <Button
                                     className={styles.buttonInput}
-                                    type='submit'
-                                    variant='contained'
+                                    type="submit"
+                                    variant="contained"
                                     onClick={handleFieldConfirmMeasurements}
                                   >
                                     Сохранить
@@ -792,8 +792,8 @@ export default function Order() {
                                       width: '100px',
                                       fontSize: 'medium',
                                     }}
-                                    type='number'
-                                    className='text-field'
+                                    type="number"
+                                    className="text-field"
                                     required
                                     autoFocus
                                     value={editingOrderData.value}
@@ -801,8 +801,8 @@ export default function Order() {
                                   />
                                   <Button
                                     className={styles.buttonInput}
-                                    type='submit'
-                                    variant='contained'
+                                    type="submit"
+                                    variant="contained"
                                     onClick={handleFieldConfirmMeasurements}
                                   >
                                     Сохранить
@@ -849,8 +849,8 @@ export default function Order() {
                                       width: '100px',
                                       fontSize: 'medium',
                                     }}
-                                    type='number'
-                                    className='text-field'
+                                    type="number"
+                                    className="text-field"
                                     required
                                     autoFocus
                                     value={editingOrderData.value}
@@ -858,8 +858,8 @@ export default function Order() {
                                   />
                                   <Button
                                     className={styles.buttonInput}
-                                    type='submit'
-                                    variant='contained'
+                                    type="submit"
+                                    variant="contained"
                                     onClick={handleFieldConfirmMeasurements}
                                   >
                                     Сохранить
@@ -906,8 +906,8 @@ export default function Order() {
                                       width: '100px',
                                       fontSize: 'medium',
                                     }}
-                                    type='number'
-                                    className='text-field'
+                                    type="number"
+                                    className="text-field"
                                     required
                                     autoFocus
                                     value={editingOrderData.value}
@@ -915,8 +915,8 @@ export default function Order() {
                                   />
                                   <Button
                                     className={styles.buttonInput}
-                                    type='submit'
-                                    variant='contained'
+                                    type="submit"
+                                    variant="contained"
                                     onClick={handleFieldConfirmMeasurements}
                                   >
                                     Сохранить
@@ -963,8 +963,8 @@ export default function Order() {
                                       width: '100px',
                                       fontSize: 'medium',
                                     }}
-                                    type='number'
-                                    className='text-field'
+                                    type="number"
+                                    className="text-field"
                                     required
                                     autoFocus
                                     value={editingOrderData.value}
@@ -972,8 +972,8 @@ export default function Order() {
                                   />
                                   <Button
                                     className={styles.buttonInput}
-                                    type='submit'
-                                    variant='contained'
+                                    type="submit"
+                                    variant="contained"
                                     onClick={handleFieldConfirmMeasurements}
                                   >
                                     Сохранить
@@ -1020,8 +1020,8 @@ export default function Order() {
                                       width: '100px',
                                       fontSize: 'medium',
                                     }}
-                                    type='number'
-                                    className='text-field'
+                                    type="number"
+                                    className="text-field"
                                     required
                                     autoFocus
                                     value={editingOrderData.value}
@@ -1029,8 +1029,8 @@ export default function Order() {
                                   />
                                   <Button
                                     className={styles.buttonInput}
-                                    type='submit'
-                                    variant='contained'
+                                    type="submit"
+                                    variant="contained"
                                     onClick={handleFieldConfirmMeasurements}
                                   >
                                     Сохранить
@@ -1077,8 +1077,8 @@ export default function Order() {
                                       width: '100px',
                                       fontSize: 'medium',
                                     }}
-                                    type='text'
-                                    className='text-field'
+                                    type="text"
+                                    className="text-field"
                                     required
                                     autoFocus
                                     value={editingOrderData.value}
@@ -1086,8 +1086,8 @@ export default function Order() {
                                   />
                                   <Button
                                     className={styles.buttonInput}
-                                    type='submit'
-                                    variant='contained'
+                                    type="submit"
+                                    variant="contained"
                                     onClick={handleFieldConfirmMeasurements}
                                   >
                                     Сохранить
@@ -1140,8 +1140,8 @@ export default function Order() {
                                   />
                                   <Button
                                     className={styles.buttonCheckBox}
-                                    type='submit'
-                                    variant='contained'
+                                    type="submit"
+                                    variant="contained"
                                     onClick={handleFieldConfirmMeasurements}
                                   >
                                     Сохранить
@@ -1189,12 +1189,12 @@ export default function Order() {
                               editingOrderData.field === 'buttons' ? (
                                 <div className={styles.inputContainer}>
                                   <input
-                                    type='text'
+                                    type="text"
                                     style={{
                                       width: '100px',
                                       fontSize: 'medium',
                                     }}
-                                    className='text-field'
+                                    className="text-field"
                                     required
                                     autoFocus
                                     value={editingOrderData.value}
@@ -1202,8 +1202,8 @@ export default function Order() {
                                   />
                                   <Button
                                     className={styles.buttonInput}
-                                    type='submit'
-                                    variant='contained'
+                                    type="submit"
+                                    variant="contained"
                                     onClick={handleFieldConfirmMeasurements}
                                   >
                                     Сохранить
@@ -1246,12 +1246,12 @@ export default function Order() {
                               editingOrderData.field === 'lining' ? (
                                 <div className={styles.inputContainer}>
                                   <input
-                                    type='text'
+                                    type="text"
                                     style={{
                                       width: '100px',
                                       fontSize: 'medium',
                                     }}
-                                    className='text-field'
+                                    className="text-field"
                                     required
                                     autoFocus
                                     value={editingOrderData.value}
@@ -1259,8 +1259,8 @@ export default function Order() {
                                   />
                                   <Button
                                     className={styles.buttonInput}
-                                    type='submit'
-                                    variant='contained'
+                                    type="submit"
+                                    variant="contained"
                                     onClick={handleFieldConfirmMeasurements}
                                   >
                                     Сохранить
@@ -1333,12 +1333,12 @@ export default function Order() {
                               editingOrderData.field === 'selected_material' ? (
                                 <div className={styles.inputContainer}>
                                   <input
-                                    type='text'
+                                    type="text"
                                     style={{
                                       width: '100px',
                                       fontSize: 'medium',
                                     }}
-                                    className='text-field'
+                                    className="text-field"
                                     required
                                     autoFocus
                                     value={editingOrderData.value}
@@ -1346,8 +1346,8 @@ export default function Order() {
                                   />
                                   <Button
                                     className={styles.buttonInput}
-                                    type='submit'
-                                    variant='contained'
+                                    type="submit"
+                                    variant="contained"
                                     onClick={handleFieldConfirmMeasurements}
                                   >
                                     Сохранить
@@ -1397,8 +1397,8 @@ export default function Order() {
                                   paddingTop: '4px',
                                   paddingBottom: '4px',
                                 }}
-                                type='text'
-                                className='text-field'
+                                type="text"
+                                className="text-field"
                                 fullWidth
                                 required
                                 multiline
@@ -1415,8 +1415,8 @@ export default function Order() {
                               />
                               <Button
                                 className={styles.buttonInput}
-                                type='submit'
-                                variant='contained'
+                                type="submit"
+                                variant="contained"
                                 onClick={handleFieldConfirm}
                               >
                                 Сохранить
@@ -1438,62 +1438,62 @@ export default function Order() {
                               <select
                                 onChange={handleFieldChange}
                                 className={styles.select}
-                                name='status'
+                                name="status"
                               >
-                                <option value='Заказ создан'>
+                                <option value="Заказ создан">
                                   {'Заказ создан'}
                                 </option>
-                                <option value='Уточнение мерок, отправка реквизитов для внесения предоплаты'>
+                                <option value="Уточнение мерок, отправка реквизитов для внесения предоплаты">
                                   {
                                     'Уточнение мерок, отправка реквизитов для внесения предоплаты'
                                   }
                                 </option>
-                                <option value='Ожидание предоплаты'>
+                                <option value="Ожидание предоплаты">
                                   {'Ожидание предоплаты'}
                                 </option>
-                                <option value='Предоплата получена'>
+                                <option value="Предоплата получена">
                                   {'Предоплата получена'}
                                 </option>
-                                <option value='Задание сформировано'>
+                                <option value="Задание сформировано">
                                   {'Задание сформировано'}
                                 </option>
-                                <option value='Задание передано на производство'>
+                                <option value="Задание передано на производство">
                                   {'Задание передано на производство'}
                                 </option>
-                                <option value='Обратная связь по заданию от производства'>
+                                <option value="Обратная связь по заданию от производства">
                                   {'Обратная связь по заданию от производства'}
                                 </option>
-                                <option value='Изделия в производстве'>
+                                <option value="Изделия в производстве">
                                   {'Изделия в производстве'}
                                 </option>
-                                <option value='Изделие отшито'>
+                                <option value="Изделие отшито">
                                   {'Изделие отшито'}
                                 </option>
-                                <option value='Забрали заказ с производства'>
+                                <option value="Забрали заказ с производства">
                                   {'Забрали заказ с производства'}
                                 </option>
-                                <option value='Оповещение клиента, отправка реквизитов для внесения полной оплаты'>
+                                <option value="Оповещение клиента, отправка реквизитов для внесения полной оплаты">
                                   {
                                     'Оповещение клиента, отправка реквизитов для внесения полной оплаты'
                                   }
                                 </option>
-                                <option value='Получена полная оплата'>
+                                <option value="Получена полная оплата">
                                   {'Получена полная оплата'}
                                 </option>
-                                <option value='Заказ отправлен'>
+                                <option value="Заказ отправлен">
                                   {'Заказ отправлен'}
                                 </option>
-                                <option value='Возврат заказа'>
+                                <option value="Возврат заказа">
                                   {'Возврат заказа'}
                                 </option>
-                                <option value='Перешив заказа'>
+                                <option value="Перешив заказа">
                                   {'Перешив заказа'}
                                 </option>
                               </select>
                               <Button
                                 className={styles.buttonInput}
-                                type='submit'
-                                variant='contained'
+                                type="submit"
+                                variant="contained"
                                 onClick={handleFieldConfirm}
                               >
                                 Сохранить
@@ -1508,8 +1508,8 @@ export default function Order() {
                             <Button
                               key={item.id}
                               className={styles.button}
-                              type='submit'
-                              variant='contained'
+                              type="submit"
+                              variant="contained"
                               onClick={() => handleFormTask(item)}
                             >
                               Сформировать
