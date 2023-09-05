@@ -1,0 +1,36 @@
+.ContainerOneCard {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 30px;
+  max-width: 1350px;
+}
+
+.Header {
+  margin-bottom: 30px;
+  text-align: center;
+  letter-spacing: 0.2em;
+  font-size: 2rem;
+}
+
+.ProductCardsContainer {
+  margin: 0 -15px;
+}
+
+@media (max-width: 850px) {
+  .ProductCardsContainer {
+    margin-right: -70px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .ProductCardsContainer {
+    margin-right: -27px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ProductCardsContainer {
+    margin-right: -15px;
+  }
+}

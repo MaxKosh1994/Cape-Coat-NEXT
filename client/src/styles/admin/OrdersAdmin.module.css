@@ -1,0 +1,197 @@
+.mainDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.infoTotalContainer {
+  display: flex;
+  align-items: center;
+  width: 300px;
+  height: 50px;
+  background-color: rgba(129, 255, 127, 0.426);
+  border: 0.5px solid black;
+  font-size: large;
+  font-weight: bold;
+}
+
+.infoPTotal {
+  margin: 0 auto;
+}
+
+.paginationContainer {
+  margin-bottom: 20px;
+  flex-direction: column;
+}
+
+.tableContainer {
+  width: 98%;
+  min-height: 500px;
+}
+
+.table {
+  border: 1px solid black;
+}
+
+.tableRow {
+  background-color: rgb(229, 229, 229);
+  max-height: 20px;
+}
+
+.tableCell {
+  font-size: small;
+  border-right: 0.5px solid black;
+  border-bottom: 0.5px solid black;
+  padding: 5px;
+}
+
+.tableCellMini {
+  font-size: small;
+  border-right: 0.5px solid black;
+  border-bottom: 0.5px solid black;
+  min-width: 90px;
+  padding: 5px;
+}
+
+.tableMiddleCell {
+  font-size: small;
+  border-right: 0.5px solid black;
+  border-bottom: 0.5px solid black;
+  min-width: 150px;
+  padding: 5px;
+}
+
+.tableCellBig {
+  font-size: small;
+  border-right: 0.5px solid black;
+  border-bottom: 0.5px solid black;
+  min-width: 400px;
+  padding: 5px;
+}
+
+.button {
+  font-size: smaller;
+  background-color: grey;
+  color: rgb(229, 229, 229);
+  height: 30px;
+  border: 0.5px solid black;
+}
+
+.select {
+  width: 150px;
+  height: 30px;
+  font-size: small;
+}
+
+.checkBoxContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.checkBox {
+  width: 17px;
+  height: 17px;
+  margin-left: 5px;
+}
+
+.dateInput {
+  height: 35px;
+  width: 135px;
+  font-size: small;
+}
+
+.inputText {
+  height: 35px;
+  width: 135px;
+  font-size: small;
+  padding-top: 0px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonCheckBox {
+  font-size: smaller;
+  background-color: grey;
+  color: rgb(229, 229, 229);
+  height: 25px;
+  border: 0.5px solid black;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+.buttonInput {
+  font-size: smaller;
+  background-color: grey;
+  color: rgb(229, 229, 229);
+  height: 25px;
+  border: 0.5px solid black;
+  margin-top: 5px;
+}
+
+.buttonPagination {
+  font-size: xx-small;
+}
+
+.messageP {
+  margin: 20px;
+}
+
+.divTableRow {
+  display: flex;
+}
+
+@media (max-width: 821px) {
+  .TableContainer {
+    width: 90% !important;
+  }
+
+  .mainDiv {
+    margin-top: 30px;
+  }
+
+  .headerDiv {
+    margin-bottom: 40px;
+    margin-left: 40px;
+  }
+}
+
+@media (max-width: 550px) {
+  .TableContainer {
+    width: 90% !important;
+  }
+
+  .mainDiv {
+    margin-top: 10px;
+  }
+
+  .headerDiv {
+    margin-bottom: 20px;
+    flex-direction: column;
+    margin-left: 10px !important;
+  }
+  .tableRow {
+    font-size: smaller !important;
+    font-weight: 100;
+  }
+}
+
+/* style={{
+	borderBottom: '0.5px solid black',
+	marginBottom: '10px',
+	marginTop: '5px',
+ }} */
+
+/* <input
+ style={{ width: '100px', fontSize: 'medium' }}
+ type='number'
+ className='text-field'
+ required
+ autoFocus
+ value={editingOrderData.value}
+ onChange={handleFieldChange}
+/> */

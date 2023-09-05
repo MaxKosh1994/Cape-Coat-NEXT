@@ -1,0 +1,38 @@
+.ContainerOneCard {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 30px;
+  max-width: 1350px;
+}
+
+.ProductCardsContainer {
+  margin: 0 -15px;
+}
+
+.infoContainer {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.infoP {
+  margin: 0 auto;
+}
+
+@media (max-width: 850px) {
+  .ProductCardsContainer {
+    margin-right: -70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ProductCardsContainer {
+    margin-right: -27px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ProductCardsContainer {
+    margin-right: -15px;
+  }
+}

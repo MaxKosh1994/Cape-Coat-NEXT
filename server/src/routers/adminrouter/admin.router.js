@@ -1,12 +1,18 @@
 const router = require('express').Router();
 
-const itemRoter = require('./item.router');
-const collectionRoter = require('./collection.router');
-const categoryRoter = require('./category.router');
-const orderRouter = require('./order.router')
+const itemRouter = require('./item.router');
+const collectionRouter = require('./collection.router');
+const categoryRouter = require('./category.router');
+const materialRouter = require('./material.router');
+const orderRouter = require('./order.router');
+const taskRouter = require('./task.router');
+const promoRouter = require('./promo.router');
 
 module.exports = router
-  .use('/items', itemRoter)
-  .use('/category', categoryRoter)
-  .use('/collection', collectionRoter)
+  .use('/item', itemRouter)
+  .use('/category', categoryRouter)
+  .use('/collection', collectionRouter)
+  .use('/material', materialRouter)
   .use('/order', orderRouter)
+  .use('/tasks', taskRouter)
+  .use('/promo', promoRouter);

@@ -3,3 +3,4 @@ NEXT_PUBLIC_IMAGE_URL=http://localhost:7000/items/
 NEXT_PUBLIC_CATEGORY_URL=http://localhost:7000/category/
 NEXT_PUBLIC_MATERIALS_URL=http://localhost:7000/materials/
 NEXT_PUBLIC_COLLECTION_URL=http://localhost:7000/collection/
+NEXT_PUBLIC_COLLAGE_URL=http://localhost:3000/collage/

@@ -4,7 +4,11 @@ export default function Document() {
   return (
     <Html lang="ru">
       <Head>
-        {/* че та не работает */}
+        <script
+          defer
+          src="https://api-maps.yandex.ru/2.1/?apikey=aff58b82-7811-4ae0-984e-a1b0ecc0f6b6&lang=ru_RU"
+          type="text/javascript"
+        ></script>
         <link
           href="https://fonts.googleapis.com/css2?family=Ysabeau+Infant&display=swap"
           rel="stylesheet"

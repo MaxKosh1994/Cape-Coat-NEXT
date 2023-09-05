@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  cursor: pointer;
+  padding: 5px;
+  border-bottom: 0.5px solid rgb(78, 78, 78);
+}
+
+.oldPrice {
+  text-decoration: line-through;
+}
+
+.imageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 120%;
+  padding-right: 0px;
+}
+
+.container {
+  transition: background-color 0.3s ease;
+}
+
+.container > div:first-child {
+  margin-right: 10px;
+}
+
+.container:hover {
+  background-color: rgb(233, 233, 233);
+}

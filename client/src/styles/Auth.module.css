@@ -1,0 +1,70 @@
+.formContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  width: 28vw;
+  margin: 0 auto;
+}
+
+.signInForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.signInForm > button {
+  margin-top: 10px;
+  font-family: 'Ysabeau Infant';
+}
+
+.redirect {
+  font-style: italic;
+}
+
+.redirMsg {
+  margin-top: 30px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.header {
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+@media only screen and (min-width: 120px) and (max-width: 800px) {
+  .formContainer {
+    width: 80vw;
+  }
+
+  .signInForm {
+    width: 100%;
+    font-size: 2rem;
+  }
+
+  .header {
+    font-size: 1.6rem;
+  }
+}
+
+@media only screen and (min-width: 750px) and (max-width: 1100px) {
+  .formContainer {
+    width: 70vw;
+  }
+
+  .header {
+    font-size: 2rem;
+  }
+
+  .signInForm > button {
+    font-size: 1.3rem;
+  }
+
+  .redirMsg {
+    font-size: 1.5rem;
+  }
+}

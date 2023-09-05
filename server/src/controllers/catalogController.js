@@ -1,5 +1,11 @@
 const { Op } = require('sequelize');
-const { Category, Item, Collection, Photo } = require('../../db/models');
+const {
+  Category,
+  Item,
+  Collection,
+  Photo,
+  Material,
+} = require('../../db/models');
 
 module.exports.getAll = async (req, res) => {
   try {
@@ -12,9 +18,12 @@ module.exports.getAll = async (req, res) => {
 
 module.exports.getCollection = async (req, res) => {
   try {
+    const currCollection = await Collection.findOne({
+      where: { current: true },
+    });
     const collectionItems = await Item.findAll({
       where: {
-        [Op.and]: [{ collection_id: req.params.id }, { in_stock: false }],
+        [Op.and]: [{ collection_id: currCollection.id }, { in_stock: false }],
       },
       include: [
         {
@@ -23,6 +32,9 @@ module.exports.getCollection = async (req, res) => {
         {
           model: Photo,
           limit: 1,
+        },
+        {
+          model: Material,
         },
       ],
     });
@@ -49,11 +61,66 @@ module.exports.getNewArrivals = async (req, res) => {
           model: Photo,
           limit: 1,
         },
+        {
+          model: Material,
+        },
       ],
     });
 
     res.json(newArrivals);
   } catch (err) {
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+};
+
+module.exports.getBestSellers = async (req, res) => {
+  try {
+    const bestsellers = await Item.findAll({
+      where: { bestseller: true, in_stock: false },
+      include: [
+        {
+          model: Photo,
+          limit: 1,
+        },
+        {
+          model: Material,
+        },
+      ],
+    });
+
+    res.json(bestsellers);
+  } catch (err) {
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+};
+
+module.exports.getStock = async (req, res) => {
+  try {
+    const inStockItems = await Item.findAll({
+      where: { in_stock: true, purchased: false },
+      include: [
+        {
+          model: Photo,
+          limit: 1,
+        },
+        {
+          model: Material,
+        },
+      ],
+    });
+    res.json(inStockItems);
+  } catch (err) {
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+};
+
+module.exports.getAllCollections = async (req, res) => {
+  try {
+    const collections = await Collection.findAll({ raw: true });
+
+    res.json(collections);
+  } catch (err) {
+    console.log(err);
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 };

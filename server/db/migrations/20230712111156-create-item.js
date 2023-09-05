@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       article: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       name: {
@@ -40,6 +40,11 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
+      purchased: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
+      },
       bestseller: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
@@ -64,6 +69,7 @@ module.exports = {
           key: 'id',
         },
       },
+
       category_id: {
         type: Sequelize.INTEGER,
         allowNull: false,

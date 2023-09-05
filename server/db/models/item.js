@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'item_id',
       });
       this.hasMany(models.Photo, { foreignKey: 'item_id' });
+      this.hasMany(models.CartItem, { foreignKey: 'item_id' });
     }
   }
   Item.init(
@@ -35,8 +36,8 @@ module.exports = (sequelize, DataTypes) => {
       characteristics: DataTypes.STRING,
       price: DataTypes.INTEGER,
       new_price: DataTypes.INTEGER,
-      color: DataTypes.STRING,
       in_stock: DataTypes.BOOLEAN,
+      purchased: DataTypes.BOOLEAN,
       bestseller: DataTypes.BOOLEAN,
       collection_id: DataTypes.INTEGER,
       material_id: DataTypes.INTEGER,

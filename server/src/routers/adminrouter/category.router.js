@@ -1,24 +1,29 @@
 const { Router } = require('express');
-const categoryRoter = new Router();
+
+const categoryRouter = new Router();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
-const replaceName = require('../../lib/replaceName');
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
     return cb(null, 'storage/category');
   },
   filename(req, file, cb) {
-    return cb(null, `${uuidv4()}${replaceName(file.originalname)}`);
+    return cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
   },
 });
 
 const upload = multer({ storage: storage });
+
 const {
+  createCategory,
   readCategory,
-  addCategory,
+  updateCategory,
+  deleteCategory,
 } = require('../../controllers/adminControllers/categoryController');
 
-module.exports = categoryRoter
-  .get('/allcategory', readCategory)
-  .post('/addcategory', upload.array('photos', 1), addCategory);
+module.exports = categoryRouter
+  .post('/create-category', upload.array('photos', 1), createCategory)
+  .get('/read-category', readCategory)
+  .patch('/update-category/:id', upload.array('photos', 1), updateCategory)
+  .delete('/delete-category/:id', deleteCategory);

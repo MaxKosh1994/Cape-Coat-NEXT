@@ -1,0 +1,136 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 79px;
+  padding: 21px 0;
+  z-index: 10;
+  transition: all 0.3s;
+}
+.header {
+  flex: 0 0 auto;
+}
+.header .wrap {
+  max-width: none;
+}
+.wrap {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 30px;
+  max-width: 1350px;
+  transition: all 0.3s;
+}
+.logo {
+  display: inline-block;
+  vertical-align: middle;
+
+  background-size: contain;
+
+  margin-top: 10px;
+  transition: all 0.3s;
+}
+.header-right {
+  padding-right: 10px;
+}
+.header-right {
+  display: flex;
+  vertical-align: top;
+  position: absolute;
+  top: 35px;
+  right: 10px;
+  text-align: right;
+  transition: all 0.3s;
+}
+
+.header-right.fix {
+  top: 22px;
+  transition: all 0.3s;
+}
+
+.header-basket,
+.header-personal,
+.header-favorite {
+  display: inline-block;
+  vertical-align: top;
+  width: 28px;
+  height: 28px;
+  background: no-repeat center;
+  background-size: contain;
+  margin-right: 5px;
+  transition: all 0.3s;
+}
+.header.fix {
+  background: #ffffff;
+  height: 68px;
+}
+.header.fix .logo {
+  margin-top: 0;
+}
+@media (max-width: 1095px) {
+  .header .wrap {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .header-right {
+    top: 5px;
+  }
+  .logo {
+    margin-top: 0px;
+  }
+}
+@media (min-width: 150px) and (max-width: 370px) {
+  .header .wrap {
+    text-align: center;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: unset;
+    padding: 0px;
+  }
+  .header-right {
+    position: unset;
+  }
+  .burger {
+    position: unset !important;
+  }
+  .logo {
+    width: 100px !important;
+  }
+}
+@media (min-width: 370px) and (max-width: 400px) {
+  .header .wrap {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: unset;
+    padding: 0px;
+  }
+  .header-right {
+    position: unset;
+  }
+  .burger {
+    position: unset !important;
+  }
+  .logo {
+    width: 180px !important;
+  }
+}
+@media (min-width: 400px) and (max-width: 768px) {
+  .header .wrap {
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: unset;
+  }
+  .header-right {
+    position: unset;
+  }
+  .burger {
+    position: unset !important;
+  }
+}

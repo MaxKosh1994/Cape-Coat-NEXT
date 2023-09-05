@@ -1,0 +1,21 @@
+.headerSearch {
+  display: inline-block;
+  vertical-align: top;
+  width: 28px;
+  height: 28px;
+  background: no-repeat center;
+  background-size: contain;
+  margin-right: 13px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.headerSearchIcon {
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+  background: no-repeat center;
+  background-size: contain;
+  transition: all 0.3s;
+  color: '#423C3D';
+}

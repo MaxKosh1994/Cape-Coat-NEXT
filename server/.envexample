@@ -1,3 +1,6 @@
 PORT=3XXX
 DATABASE=dialect://user:password@localhost:port/database
 SECRET_KEY_SESSION = sxxxxx_kxx_Sxxxxx_x
+CORS_PORT=http://localhost:XXXX
+BOT_TOKEN=6566460744:AAGaidBa0yYgGJ4qi3hDfB_15P_N1KQ5YDI
+MANAGER_TELEGRAM_ID=5775578653

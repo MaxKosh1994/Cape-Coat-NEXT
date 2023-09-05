@@ -9,17 +9,19 @@ const {
   addToCartInOneCat,
   delToCartInOneCat,
   getCartInCat,
+  addMeasures,
 } = require('../controllers/cartController');
 
 const cartRouter = new Router();
 
 module.exports = cartRouter
+  .get('/', getCart)
   .get('/promocode/:code', checkPromoCode)
   .get('/cartInCat', getCartInCat)
-  .get('/:user', getCart)
+  .post('/measures/:id', addMeasures)
   .post('/item/add', addToCartInOneCat)
   .post('/item/:id', addToCart)
-  .get('/item/:id', checkCart)
+  .get('/item/:email', checkCart)
   .delete('/item/del', delToCartInOneCat)
   .delete('/item/:id/:user', delItemFromCart)
   .delete('/emptyCart/:user', emptyCart);
