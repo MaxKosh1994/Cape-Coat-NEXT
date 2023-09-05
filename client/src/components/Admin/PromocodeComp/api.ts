@@ -1,7 +1,11 @@
 export const getAllPromo = async () => {
   try {
     const responseFetch = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}admin/promo/getAll`
+      `${process.env.NEXT_PUBLIC_URL}admin/promo/getAll`,
+      {
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      }
     );
     const { status } = await responseFetch;
     const response = await responseFetch.json();
@@ -21,6 +25,7 @@ export const createPromo = async (text: string, percent: number) => {
       `${process.env.NEXT_PUBLIC_URL}admin/promo/createPromo`,
       {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -49,6 +54,7 @@ export const updatePromo = async (
       `${process.env.NEXT_PUBLIC_URL}admin/promo/updatePromo/${id}`,
       {
         method: 'PUT',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -72,7 +78,9 @@ export const deletePromo = async (id: number) => {
     const responseFetch = await fetch(
       `${process.env.NEXT_PUBLIC_URL}admin/promo/deletePromo/${id}`,
       {
+        credentials: 'include',
         method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
       }
     );
     const { status } = responseFetch;

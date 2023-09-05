@@ -1,7 +1,10 @@
 export const getAllMaterials = async (itemId: number) => {
   try {
     const responseFetch = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}admin/material/getallmaterials/${itemId}`
+      `${process.env.NEXT_PUBLIC_URL}admin/material/getallmaterials/${itemId}`,
+      {
+        credentials: 'include',
+      }
     );
     const { status } = await responseFetch;
     const response = await responseFetch.json();

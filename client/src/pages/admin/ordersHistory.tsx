@@ -5,7 +5,6 @@ import { Modal } from '@mui/material';
 import {
   allOrderDataFetch,
   updateOrderFieldFetch,
-  updateOrderDataFetch,
   updateOrderItemFieldFetch,
 } from '../../components/Admin/HTTP/adminApi';
 import styles from '../../styles/admin/OrdersAdmin.module.css';
