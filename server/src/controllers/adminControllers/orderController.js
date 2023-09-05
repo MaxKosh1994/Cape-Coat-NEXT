@@ -90,13 +90,6 @@ module.exports.updateOrderItemField = async (req, res) => {
   }
 };
 
-// personalData,
-// cartTotal,
-// addressString,
-// commentsInput,
-// urgentMaking,
-// userParams
-
 module.exports.createOrder = async (req, res) => {
   try {
     let currUser;

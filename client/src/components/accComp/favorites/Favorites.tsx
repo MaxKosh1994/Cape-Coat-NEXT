@@ -51,15 +51,13 @@ export default function Favorites() {
           console.log(err);
         }
       }
-
       setFavoriteItems(fetchedItems);
     };
 
     fetchData();
   }, []);
 
-  console.log(favoriteItems);
-
+  console.log('itemData', itemData);
   const renderProductCards =
     itemData && Array.isArray(itemData)
       ? itemData.map((item) => (
@@ -76,6 +74,8 @@ export default function Favorites() {
           />
         ))
       : null;
+
+  console.log('favoriteItems', favoriteItems);
 
   const renderProductCardsLocal =
     favoriteItems && Array.isArray(favoriteItems)

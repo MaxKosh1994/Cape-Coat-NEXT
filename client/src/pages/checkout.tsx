@@ -45,6 +45,7 @@ export default function CheckoutPage() {
     countCartTotal,
     handleCreateOrder,
   } = useCartControl();
+  console.log(cartItemsList)
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
   const dispatch = useAppDispatch();
 
@@ -65,8 +66,6 @@ export default function CheckoutPage() {
     dispatch,
     cartTotal,
   ]);
-
-  console.log(cartItemsList);
 
   useEffect(() => {
     // подсчет стоимости доставки в зависимости от почта\шоурум
