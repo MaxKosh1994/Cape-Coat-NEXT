@@ -18,7 +18,8 @@ module.exports.createOrder = async (req, res) => {
         email: personalData.email,
         full_name: personalData.name,
         phone: personalData.phone,
-        password: 'zhopablya',
+        // TODO заглушка на пароль
+        password: '123',
       });
       currUser = newUser.get();
     }

@@ -44,7 +44,7 @@ export default function CheckoutPage() {
     handleCreateOrder,
     handleCustomFormChange,
   } = useCartControl();
-  console.log(cartItemsList)
+
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
   // const cartItemsList = useAppSelector(
   //   (state: RootState) => state.cartSlice.cartItems

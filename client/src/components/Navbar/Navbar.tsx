@@ -152,7 +152,7 @@ export default function Navbar() {
         className={isScrolled ? 'header fix' : 'header'}
         style={{
           paddingTop: isMobile ? '5px' : '21px',
-          height: isMobile ? '55px' : '68px',
+          height: isMobile ? '55px' : '75px',
           backgroundColor:
             isScrolled || isNavbarWhite ? '#FFFFFF' : 'transparent',
         }}

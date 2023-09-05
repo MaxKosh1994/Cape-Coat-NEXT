@@ -61,7 +61,7 @@ export const useCartControl = () => {
   const [personalData, setPersonalData] = useState<IPersonalData>({
     name: '',
     email: '',
-    number: '',
+    phone: '',
   });
   // форма адреса
   const [addressInputs, setAddressInputs] = useState<IAddressInputs>({
@@ -89,9 +89,7 @@ export const useCartControl = () => {
     lining: '',
   });
   // записывет параметры товаров по индексу в массиве
-  const [userParams, setUserParams] = useState<string[]>(
-    Array(cartItemsList.length).fill('')
-  );
+  const [userParams, setUserParams] = useState<string[]>([]);
 
   // стукается через санку на бек, грузит список товаров добавленных в корзину
   const fetchCartItems = async (): Promise<void> => {
@@ -103,9 +101,16 @@ export const useCartControl = () => {
       console.log(err);
     }
   };
-
+  console.log(cartItemsList);
   const countCartTotal = (): void => {
-    const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
+    // const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
+    const subtotal = cartItemsList.reduce((sum, item) => {
+      if (item.Carts[0].CartItem.lining !== '') {
+        return sum + item.price + 1400;
+      } else {
+        return sum + item.price;
+      }
+    }, 0);
     // фильтруем только жакеты
     const jacketItems = cartItemsList.filter((item) => item.category_id === 3);
 
@@ -264,7 +269,7 @@ export const useCartControl = () => {
   useEffect(() => {
     // стукается через санку на бек, грузит список товаров добавленных в корзину
     fetchCartItems();
-  }, [dispatch, user]);
+  }, [dispatch, user, userParams]);
 
   useEffect(() => {
     // подсчет ИТОГО заказа
@@ -387,7 +392,7 @@ export const useCartControl = () => {
     if (response.status === 200) {
       // выводит мерки, если всё ок
       // и прячет форму
-      const userParams = `Ваш рост: ${res.height}см, длина изделия: ${res.length}см, длина рукава: ${res.sleeve}см, объем груди: ${res.bust}см, объем талии: ${res.waist}см, объем бедер: ${res.hips}см`;
+      const userParams = `Ваш рост: ${res.height}см, длина изделия: ${res.length}см, длина рукава: ${res.sleeve}см, объем груди: ${res.bust}см, объем талии: ${res.waist}см, объем бедер: ${res.hips}см, утепление: ${res.lining}`;
       setUserParams((prevTexts) => {
         const updatedTexts = [...prevTexts];
         updatedTexts[index] = userParams;
@@ -396,6 +401,7 @@ export const useCartControl = () => {
       setShowParamsForm({});
     }
   };
+  console.log(userParams);
 
   // отслеживает инпут промокода
   const handlePromocodeChange = async (
@@ -540,6 +546,7 @@ export const useCartControl = () => {
             );
           });
         });
+      console.log(cartItemsList.map((item) => item));
       // если адрес корректный
       if (addressString.length > 18) {
         // проверяем мерки

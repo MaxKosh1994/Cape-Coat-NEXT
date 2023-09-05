@@ -26,7 +26,6 @@ export default function TrenchSizeForm({ itemId, onTrenchSizeChange }) {
           type="checkbox"
           name="buttons"
           id={`buttons${itemId}`}
-          value="pugovitsy"
           className={styles.sizesFormCheckbox}
           onChange={handleCheckboxChange}
         />

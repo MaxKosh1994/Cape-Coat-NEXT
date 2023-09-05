@@ -20,9 +20,7 @@ export default function ItemDisplay({
   return (
     <div className={styles.basketItem}>
       <div className={styles.basketItemLeft}>
-        <Link
-          href={`/catalog/categoryName/${item.id}`}
-        >
+        <Link href={`/catalog/categoryName/${item.id}`}>
           <Image
             width={300}
             height={500}
@@ -102,7 +100,7 @@ export default function ItemDisplay({
                   <div className={styles.itemPrices}>
                     <span className={styles.itemPricesPrice}>
                       {userParams[index] ||
-                        `Ваш рост: ${item.Carts[0].CartItem.height}см, Длина изделия: ${item.Carts[0].CartItem.length}см, Длина рукава: ${item.Carts[0].CartItem.sleeve}см, Объем груди: ${item.Carts[0].CartItem.bust}см, Объем талии: ${item.Carts[0].CartItem.waist}см, Объем бедер: ${item.Carts[0].CartItem.hips}см`}
+                        `Ваш рост: ${item.Carts[0].CartItem.height}см, Длина изделия: ${item.Carts[0].CartItem.length}см, Длина рукава: ${item.Carts[0].CartItem.sleeve}см, Объем груди: ${item.Carts[0].CartItem.bust}см, Объем талии: ${item.Carts[0].CartItem.waist}см, Объем бедер: ${item.Carts[0].CartItem.hips}см, Утепление: ${item.Carts[0].CartItem.lining}`}
                     </span>
                   </div>
                 </div>
