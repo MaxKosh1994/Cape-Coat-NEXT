@@ -23,6 +23,7 @@ module.exports.getCart = async (req, res) => {
     if (user) {
       const cartItems = await getUserCartItems(user.id);
       res.json(cartItems);
+      console.log(cartItems);
     } else {
       res.status(401).json({ message: 'Unauthorized' });
     }

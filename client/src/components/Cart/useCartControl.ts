@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, useState } from 'react';
+import React, { ChangeEvent, MouseEvent, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getCartItems } from '@/app/cartSlice';
 import {
@@ -25,6 +25,9 @@ export const useCartControl = () => {
   const router = useRouter();
   // товары в корзине
   const [cartItemsList, setCartItemsList] = useState<ISingleItem[]>([]);
+  // const cartItemsList = useAppSelector(
+  //   (state: RootState) => state.cartSlice.cartItems
+  // );
   // ошибка при удалении товара из корзины
   const [delError, setDelError] = useState<string>('');
   // сумма корзины
@@ -89,15 +92,6 @@ export const useCartControl = () => {
   const [userParams, setUserParams] = useState<string[]>(
     Array(cartItemsList.length).fill('')
   );
-
-  // Очищает корзину при успешном заказе
-  // тип промис войд потому что асинхронная и ничего не возвр
-  const emptyCart = async (): Promise<void> => {
-    const empty = await dispatch(emptyCartThunk(user));
-    if (empty === 200) {
-      setCartItemsList([]);
-    }
-  };
 
   // стукается через санку на бек, грузит список товаров добавленных в корзину
   const fetchCartItems = async (): Promise<void> => {
@@ -208,7 +202,6 @@ export const useCartControl = () => {
         // если нет скидки по промокоду
         if (urgentMaking) {
           // те же расчеты если срочный пошив
-
           const twentyPercentOfSubtotal = (subtotal * 20) / 100;
           setUrgencyFee(twentyPercentOfSubtotal);
           const updatedTotal =
@@ -266,6 +259,30 @@ export const useCartControl = () => {
       }
     }
   };
+
+  useEffect(() => {
+    // стукается через санку на бек, грузит список товаров добавленных в корзину
+    fetchCartItems();
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    // подсчет ИТОГО заказа
+    countCartTotal();
+  }, [
+    cartItemsList,
+    discount,
+    twoItemDiscount,
+    deliveryCost,
+    urgentMaking,
+    urgencyFee,
+    dispatch,
+    cartTotal,
+  ]);
+
+  useEffect(() => {
+    // подсчет стоимости доставки в зависимости от почта\шоурум
+    countDeliveryCost();
+  }, [selectedDelivery]);
 
   // отрабатыват по клику на иконку удаления
   // удаляет из массива и с бека через санку
@@ -351,9 +368,8 @@ export const useCartControl = () => {
   ): Promise<void> => {
     setParamsFormData((prevState) => ({
       ...prevState,
-      itemId,
+      itemId: itemId,
     }));
-    console.log(paramsFormData);
 
     // записывает мерки к товару в CartItems
     const response = await fetch(
@@ -482,8 +498,7 @@ export const useCartControl = () => {
         }, 2000);
       } else {
         // если все ок - очищает корзину, массив в редаксе и редиректит на спасибку
-        emptyCart();
-        dispatch(getCartItems([]));
+        await dispatch(emptyCartThunk(user));
         router.push('/thankyou');
         sendMail(name, user, re.message);
       }
@@ -624,7 +639,6 @@ export const useCartControl = () => {
     setCartTotal,
     userParams,
     setUserParams,
-    emptyCart,
     fetchCartItems,
     countDeliveryCost,
     handleDisplaySizesForm,
