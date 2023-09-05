@@ -94,6 +94,9 @@ export default function Favorites() {
         ))
       : null;
 
+
+      console.log('favorite', favoriteItems);
+
   return (
     <>
       {itemData?.length > 0 ? (
