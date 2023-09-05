@@ -9,7 +9,7 @@ import {
 
 interface IProps {
   isScrolled: boolean;
-  handleScrollAndHighlight: () => void;
+
   onSearchIconClick: () => void;
 }
 
@@ -47,7 +47,7 @@ interface IMenuItem {
 
 const NavigationMenu: React.FC<IProps> = ({
   isScrolled,
-  handleScrollAndHighlight,
+
   onSearchIconClick,
 }) => {
   const router = useRouter();
