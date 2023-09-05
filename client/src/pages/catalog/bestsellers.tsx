@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import BasePage from '@/components/ItemPage/BasePage';
+import Custom404 from '../404';
 
 export default function BestsellersPage() {
   const [bestsellerItems, setBestsellerItems] = useState([]);
@@ -10,7 +11,12 @@ export default function BestsellersPage() {
           process.env.NEXT_PUBLIC_URL + 'catalog/bestsellers'
         );
         if (response.status === 200) {
-          const items = await response.json();
+          const result = await response.json();
+          const items = result.map((item) => ({
+            ...item,
+            isFavorite: false,
+            isCart: false,
+          }));
           setBestsellerItems(items);
         }
       })();
@@ -19,5 +25,13 @@ export default function BestsellersPage() {
     }
   }, []);
 
-  return <BasePage pageName="Bestsellers" itemsArr={bestsellerItems} />;
+  return (
+    <>
+      {bestsellerItems.length ? (
+        <BasePage pageName="Bestsellers" itemsArr={bestsellerItems} />
+      ) : (
+        <Custom404 />
+      )}
+    </>
+  );
 }

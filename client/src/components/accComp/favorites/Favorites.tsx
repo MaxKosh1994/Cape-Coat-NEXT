@@ -43,6 +43,8 @@ export default function Favorites() {
           if (response.status === 200) {
             const itemData = await response.json();
 
+            console.log('resp itemData', itemData);
+
             fetchedItems.push(itemData);
           } else if (response.status === 404) {
             console.log('Товар не найден');
@@ -88,14 +90,13 @@ export default function Favorites() {
             photo={item.item.Photos[0].photo}
             name={item.item.name}
             price={item.item.price}
-            isFavorite={true}
+            isFavorite={item.item.isFavorite}
             isCart={item.isCart}
           />
         ))
       : null;
 
-
-      console.log('favorite', favoriteItems);
+  console.log('favorite', favoriteItems[0]?.item?.isFavorite);
 
   return (
     <>

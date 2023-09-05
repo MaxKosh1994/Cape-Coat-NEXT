@@ -45,7 +45,6 @@ const useProductCardLogic = (
       setIsFavorite(false);
       const favoritesFromStorage =
         JSON.parse(localStorage.getItem('favorites')) || [];
-      console.log('logic', favoritesFromStorage);
 
       const isItemInFavorites = favoritesFromStorage.includes(id);
       if (isItemInFavorites) {
@@ -56,6 +55,7 @@ const useProductCardLogic = (
       } else {
         const updatedFavorites = [...favoritesFromStorage, id];
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        setIsFavorite(true)
 
         //TODO ставится сердечко в навбаре, а как его убрать?
 

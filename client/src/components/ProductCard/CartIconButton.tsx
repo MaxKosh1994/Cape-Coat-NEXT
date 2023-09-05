@@ -29,6 +29,12 @@ const CartIconButton: React.FC<CartIconButtonProps> = ({
 
   const isItemInCart = itemsInCart.some((element) => element.id === itemId);
 
+  // console.log('itemId', itemId);
+
+  // console.log('itemsInCart', itemsInCart);
+
+  // console.log('isItemInCart', isItemInCart);
+
   return (
     <IconButton
       className={styles.IconImage}

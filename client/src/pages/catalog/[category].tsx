@@ -8,9 +8,12 @@ import BasePage from '@/components/ItemPage/BasePage';
 import Custom404 from '../404';
 import { useLocation } from 'react-router-dom';
 import Link from 'next/link';
+import { ca } from 'date-fns/locale';
 
 export default function Category() {
   const [catName, setCatName] = useState('');
+  const [categoryItems, setCategoryItems] = useState([]);
+
   const nameOneCategory = useRouter().query.category;
 
   const dispatch = useDispatch();
@@ -18,6 +21,7 @@ export default function Category() {
   const card = useSelector(
     (state: RootState) => state.CategorySlice.categoryItems
   );
+  // console.log('card', card);
 
   useEffect(() => {
     try {
@@ -30,23 +34,30 @@ export default function Category() {
         );
         if (response.status === 200) {
           const result = await response.json();
-          dispatch(categoryClear());
+          // dispatch(categoryClear());
 
-          result.items.forEach((item: ICategory) => {
-            dispatch(
-              category({
-                id: item.id,
-                material_name: item.Material.name,
-                article: item.article,
-                photo: item.Photos[0]?.photo || '',
-                name: item.name,
-                price: item.price,
-                categoryName: item.categoryName,
-                isFavorite: false,
-                isCart: false,
-              })
-            );
-          });
+          // result.items.forEach((item: ICategory) => {
+          //   dispatch(
+          //     category({
+          //       id: item.id,
+          //       material_name: item.Material.name,
+          //       article: item.article,
+          //       photo: item.Photos[0]?.photo || '',
+          //       name: item.name,
+          //       price: item.price,
+          //       categoryName: item.categoryName,
+          //       isFavorite: false,
+          //       isCart: false,
+          //     })
+          //   );
+          // });
+          const items = result.items.map((item) => ({
+            ...item,
+            isFavorite: false,
+            isCart: false,
+          }));
+
+          setCategoryItems(items);
           setCatName(result.catName);
         } else if (response.status === 404) {
           const result = await response.json();
@@ -60,8 +71,8 @@ export default function Category() {
 
   return (
     <>
-      {card.length ? (
-        <BasePage pageName={catName} itemsArr={card} />
+      {categoryItems.length ? (
+        <BasePage pageName={catName} itemsArr={categoryItems} />
       ) : (
         <Custom404 />
       )}
