@@ -26,6 +26,7 @@
   height: 90%;
   width: 60%;
   position: relative;
+  overflow: scroll;
 }
 
 .close {
@@ -41,4 +42,30 @@
   display: grid;
   grid-template-columns: 1fr 420px;
   gap: 10px;
+  width: 90%;
+  margin-right: -30px;
+}
+
+@media screen and (max-width: 540px) {
+  .modalContent {
+    height: 100%;
+    width: 100%;
+  }
+
+  .taskForm {
+    grid-template-columns: 1fr 220px;
+    width: 90%;
+  }
+}
+
+@media screen and (min-width: 540px) and (max-width: 900px) {
+  .modalContent {
+    height: 100%;
+    width: 100%;
+  }
+
+  .taskForm {
+    grid-template-columns: 1fr 320px;
+    width: auto;
+  }
 }
