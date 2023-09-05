@@ -4,9 +4,9 @@ const { findUserByEmail, findOrCreateUserByEmail } = require('./userService');
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-module.exports.registerUser = async (full_name, email, password) => {
+module.exports.registerUser = async (full_name, email, phone, password) => {
   try {
-    if (!full_name || !email || !password) {
+    if (!full_name || !email || !phone || !password) {
       return { success: false, message: 'Некорректные данные!' };
     }
     if (!emailRegex.test(email)) {
@@ -17,6 +17,7 @@ module.exports.registerUser = async (full_name, email, password) => {
     const [userData, isCreated] = await findOrCreateUserByEmail(
       full_name,
       email,
+      phone,
       hashedPassword,
     );
     if (isCreated) {
