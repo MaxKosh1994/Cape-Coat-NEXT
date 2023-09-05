@@ -1,3 +1,4 @@
+// import { addCartItem } from "@/app/cartSlice";я
 import { useState } from "react";
 
 const [isCart, setIsCart] = useState(initialIsCart);

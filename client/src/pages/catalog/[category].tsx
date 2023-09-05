@@ -36,6 +36,7 @@ export default function Category() {
             dispatch(
               category({
                 id: item.id,
+                material_name: item.Material.name,
                 article: item.article,
                 photo: item.Photos[0]?.photo || '',
                 name: item.name,
@@ -49,6 +50,7 @@ export default function Category() {
           setCatName(result.catName);
         } else if (response.status === 404) {
           const result = await response.json();
+          console.log(result.message);
         }
       })();
     } catch (err) {

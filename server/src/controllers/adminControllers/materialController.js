@@ -31,11 +31,12 @@ module.exports.readMaterial = async (req, res) => {
 module.exports.updateMaterial = async (req, res) => {
   try {
     const { files } = req;
+    const id = Number(req.params.id);
     const photo = files[0]?.filename;
-    let { name, category_id, material_id } = JSON.parse(req.body.description);
+    let { name, category_id } = JSON.parse(req.body.description);
     const [rowsAffected, [updatedMaterial]] = await Material.update(
       { name, category_id, photo },
-      { where: { id: material_id }, individualHooks: true },
+      { where: { id }, individualHooks: true },
     );
     const result = updatedMaterial.dataValues;
     res.status(200).json({

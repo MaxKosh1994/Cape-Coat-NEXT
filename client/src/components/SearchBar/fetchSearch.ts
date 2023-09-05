@@ -4,7 +4,7 @@ export const getAllItems = async () => {
 			  ${process.env.NEXT_PUBLIC_URL}item/allItems`);
     const { status } = await responseFetch;
     const response = await responseFetch.json();
-    console.log('response', response);
+
     if (status !== 200) {
       throw new Error(response.message);
     }

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, MouseEvent, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { getCartItems } from '@/app/cartSlice';
+import { delCartItem, getCartItems } from '@/app/cartSlice';
 import {
   delCartItemThunk,
   emptyCartThunk,
@@ -97,6 +97,7 @@ export const useCartControl = () => {
   const fetchCartItems = async (): Promise<void> => {
     try {
       const cartItems = await dispatch(getCartItemsThunk());
+
       setCartItemsList(cartItems);
     } catch (err) {
       console.log(err);
@@ -292,6 +293,7 @@ export const useCartControl = () => {
       await dispatch(delCartItemThunk(data));
       const updatedCartItems = await dispatch(getCartItemsThunk());
       setCartItemsList(updatedCartItems);
+      dispatch(delCartItem(itemId));
     } catch (err) {
       console.log(err);
       setDelError('Не получилось удалить товар, попробуйте позже.');

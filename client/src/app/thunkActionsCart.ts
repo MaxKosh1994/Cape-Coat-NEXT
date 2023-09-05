@@ -87,6 +87,7 @@ export const addCartItemsThunk =
           },
         }
       );
+
       dispatch(getCartItems(res.data.newCartItem));
       dispatch(getCartItems());
       return res.data;

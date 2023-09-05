@@ -8,6 +8,7 @@ export interface IPhoto {
 
 export interface ICategory {
   id: number;
+  material_name: string;
   article: string;
   photo: IPhoto | undefined;
   name: string;
@@ -73,9 +74,5 @@ const rtkSlice = createSlice({
 });
 
 export default rtkSlice.reducer;
-export const {
-  category,
-  toggleFavorite,
-  categoryClear,
-  toggleCart,
-} = rtkSlice.actions;
+export const { category, toggleFavorite, categoryClear, toggleCart } =
+  rtkSlice.actions;

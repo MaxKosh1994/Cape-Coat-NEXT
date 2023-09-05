@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import LikeButton from '../likeButton/LikeButton';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/app/store';
+
 import { addCartItem, delCartItem } from '@/app/cartSlice';
 import { useAppDispatch } from '@/app/hooks';
 import './CartButtonStyle.css';
 import { Item } from '@/app/itemSlice';
+import { getCartItemsThunk } from '@/app/thunkActionsCart';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/store';
 
 interface IcartButtonProps {
   itemId: number;
@@ -22,20 +24,63 @@ export default function CartButton({
   setMaterialAlert,
   itemData,
 }: IcartButtonProps): JSX.Element {
+  const [cartData, setCartData] = useState([]);
   const [isInCart, setIsInCart] = useState(false);
 
-  const cartData = useSelector((state: RootState) => state.cartSlice.cartItems);
-
-  const user = useSelector((state: RootState) => state.sessionSlice.user);
-
-  useEffect(() => {
-    const isInCart = cartData.some((el) => el.item_id === itemId);
-    setIsInCart(isInCart);
-  }, [cartData, itemId]);
   const dispatch = useAppDispatch();
+
+  const cartItems = useSelector(
+    (state: RootState) => state.cartSlice.cartItems
+  );
+  useEffect(() => {
+    const isInCart = cartItems.some(
+      (el) => el.id == itemId || el.item_id == itemId
+    );
+
+    setIsInCart(isInCart);
+  }, [cartItems, itemId]);
+
   const cartHandler = async () => {
+    // //!------ЕСЛИ ЮЗЕРА НЕТ - ЛОГИКА ДОБАВЛЕНИЯ В ЛОКАЛ------
+
+    // if (!user) {
+    //   const cartItemsFromStorage =
+    //     JSON.parse(localStorage.getItem('cartItems')) || [];
+
+    //   const materialName = selectedMaterialName
+    //     ? selectedMaterialName
+    //     : itemData.Material.name;
+
+    //   const isItemInCart = cartItemsFromStorage.find(
+    //     (item) => item.id === itemId
+    //   );
+
+    //   if (isItemInCart) {
+    //     const updatedCartItems = cartItemsFromStorage.map((item) =>
+    //       item.id === itemId ? { ...item, material: materialName } : item
+    //     );
+    //     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    //   } else {
+    //     const updatedCartItems = [
+    //       ...cartItemsFromStorage,
+    //       { id: itemId, material: materialName },
+    //     ];
+
+    //     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    //   }
+    //   return;
+    // }
+
+    // //! -----------------------------------------------------
+
     try {
       if (!selectedMaterialId && !isInCart && !itemData.in_stock) {
+        const materialAlertElement = document.getElementById('alert');
+
+        if (materialAlertElement) {
+          materialAlertElement.scrollIntoView({ behavior: 'smooth' });
+        }
+
         setMaterialAlert('alert');
         setTimeout(() => {
           setMaterialAlert('');
@@ -57,22 +102,11 @@ export default function CartButton({
         if (res.ok) {
           setIsInCart(true);
           const data = await res.json();
-          const addToCart = data.newCartItem;
+          const addToCart = data.filter((el) => el.id == itemId)[0];
+
+          console.log('addToCart, addToCart', addToCart)
 
           dispatch(addCartItem(addToCart));
-        }
-      } else {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_URL}cart/item/${itemId}/${user}`,
-          {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-          }
-        );
-        if (res.ok) {
-          setIsInCart(!isInCart);
-          dispatch(delCartItem(itemId));
         }
       }
     } catch (error) {
@@ -91,7 +125,7 @@ export default function CartButton({
               isInCart ? ' in-cart' : ''
             }`}
           >
-            <div className="ui-ripple">
+            <div className={`ui-ripple${isInCart ? ' in-cart-btn' : ''}`}>
               <div className={`ui-button-content${isInCart ? ' in-cart' : ''}`}>
                 {isInCart ? 'В корзине' : 'В корзину'}
               </div>

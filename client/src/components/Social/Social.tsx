@@ -1,20 +1,26 @@
 import TelegramIcon from '@mui/icons-material/Telegram';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import styles from './Social.module.css';
-
+import { Icon36LogoVk } from '@vkontakte/icons';
 import React from 'react';
+import { useRouter } from 'next/router';
 
 export default function Social() {
+  const router = useRouter();
+
+  const isAdminAcc = router.asPath.includes('admin');
+
   return (
     <>
-      <div className={styles.messengersContainer}>
-        <a href="https://t.me/@kkireva">
-          <TelegramIcon />
-        </a>
-        <a href="mailto:Cape.n.coat@gmail.com">
-          <MailOutlineIcon />
-        </a>
-      </div>
+      {!isAdminAcc && (
+        <div className={styles.messengersContainer}>
+          <a className={styles.teleIcon} href="https://t.me/@kkireva">
+            <TelegramIcon />
+          </a>
+          <a className={styles.vkIcon} href="https://vk.com/cape.n.coat">
+            <Icon36LogoVk />
+          </a>
+        </div>
+      )}
     </>
   );
 }

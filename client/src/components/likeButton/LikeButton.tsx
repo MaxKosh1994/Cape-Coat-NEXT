@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
+
 import { RootState } from '@/app/store';
 import { IconButton } from '@mui/material';
 import { Badge } from '@mui/base';
@@ -7,7 +8,11 @@ import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import { useSelector } from 'react-redux';
 
-import { fetchOneFavourite } from '@/app/thunkActionsFavourite';
+import {
+  fetchFavouritesData,
+  fetchItemData,
+  fetchOneFavourite,
+} from '@/app/thunkActionsFavourite';
 
 interface LikeButtonProps {
   itemId: number;
@@ -22,9 +27,16 @@ const LikeButton: React.FC<LikeButtonProps> = ({ itemId }) => {
   );
 
   useEffect(() => {
-    const checkLike = favourites.some((el) => el.item_id === itemId);
-    setIsLiked(checkLike);
-  }, [favourites, itemId]);
+    dispatch(fetchItemData(itemId));
+    dispatch(fetchFavouritesData());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (favourites.length > 0) {
+      const checkLike = favourites.some((el) => el.item_id == itemId);
+      setIsLiked(checkLike);
+    }
+  }, []);
 
   const favHandler = async () => {
     if (itemId) {

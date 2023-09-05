@@ -1,12 +1,13 @@
 .modalContainer {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 999999999999999999;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  padding: 70px 0 10px;
 }
 
 .showdiv {
@@ -19,18 +20,20 @@
 
 .modalContent {
   background-color: #fff;
-  margin: 5% auto;
-  padding: 80px 40px;
+  margin: 10px auto;
+  padding: 20px 40px;
   border: 1px solid #888;
+  height: 90%;
   width: 60%;
   position: relative;
+  overflow: scroll;
 }
 
 .close {
   position: absolute;
   top: 0;
   right: 10px;
-  font-size: 24px;
+  font-size: 40px;
   font-weight: bold;
   cursor: pointer;
 }
@@ -39,5 +42,30 @@
   display: grid;
   grid-template-columns: 1fr 420px;
   gap: 10px;
+  width: 90%;
+  margin-right: -30px;
 }
 
+@media screen and (max-width: 540px) {
+  .modalContent {
+    height: 100%;
+    width: 100%;
+  }
+
+  .taskForm {
+    grid-template-columns: 1fr 220px;
+    width: 90%;
+  }
+}
+
+@media screen and (min-width: 540px) and (max-width: 900px) {
+  .modalContent {
+    height: 100%;
+    width: 100%;
+  }
+
+  .taskForm {
+    grid-template-columns: 1fr 320px;
+    width: auto;
+  }
+}

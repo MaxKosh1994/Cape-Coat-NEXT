@@ -26,6 +26,6 @@ const {
 module.exports = categoryRouter
   .post('/create-material', upload.array('photos', 1), createMaterial)
   .get('/read-material', readMaterial)
-  .patch('/update-material', upload.array('photos', 1), updateMaterial)
+  .patch('/update-material/:id', upload.array('photos', 1), updateMaterial)
   .delete('/delete-material/:id', deleteMaterial)
   .get('/getallmaterials/:id', getAllMaterials);

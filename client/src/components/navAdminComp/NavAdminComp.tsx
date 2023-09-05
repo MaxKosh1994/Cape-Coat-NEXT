@@ -1,12 +1,17 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './NavAdminComp.module.css';
 import { Button } from '@mui/material';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SureModal from '../accComp/sureModal/SureModal';
 
 export default function NavAdminComp() {
   const router = useRouter();
+  const [open, setOpen] = useState<boolean>(false);
+
+  const handleOpen = () => setOpen(true);
 
   return (
     <>
@@ -35,16 +40,6 @@ export default function NavAdminComp() {
               }`}
             >
               Добавить контент
-            </Button>
-          </NextLink>
-
-          <NextLink href='/admin/allItems'>
-            <Button
-              className={`${styles.button} ${
-                router.pathname === '/FAQ/allItems' ? styles.active : ''
-              }`}
-            >
-              Все товары
             </Button>
           </NextLink>
 
@@ -77,8 +72,20 @@ export default function NavAdminComp() {
               Создать заказ
             </Button>
           </NextLink>
+
+          <NextLink href='#'>
+            <Button
+              onClick={handleOpen}
+              className={styles.button}
+              type='button'
+            >
+              <LogoutIcon />
+              Выйти
+            </Button>
+          </NextLink>
         </div>
       </div>
+      <SureModal open={open} setOpen={setOpen} />
     </>
   );
 }

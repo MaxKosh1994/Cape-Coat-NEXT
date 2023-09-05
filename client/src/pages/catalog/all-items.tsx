@@ -18,7 +18,6 @@ export default function AllItemsPage() {
       console.log(err);
     }
   }, []);
-  console.log(allItems);
 
   return <BasePage pageName="Все товары" itemsArr={allItems} />;
 }

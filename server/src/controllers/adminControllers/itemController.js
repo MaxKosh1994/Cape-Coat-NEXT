@@ -3,7 +3,7 @@ const { Item, Photo } = require('../../../db/models');
 module.exports.createItem = async (req, res) => {
   try {
     const { files } = req;
-    const {
+    let {
       name,
       article,
       description,
@@ -17,15 +17,18 @@ module.exports.createItem = async (req, res) => {
       category_id,
       material_id,
     } = JSON.parse(req.body.description);
+    price ? Number(price) : (price = undefined);
+    new_price ? Number(new_price) : (new_price = undefined);
+    article ? Number(article) : (article = undefined);
 
     const item = await Item.create({
       name,
-      article: Number(article),
+      article,
       description,
       model_params,
       characteristics,
-      price: Number(price),
-      new_price: Number(new_price),
+      price,
+      new_price,
       in_stock,
       bestseller,
       collection_id,
@@ -37,7 +40,9 @@ module.exports.createItem = async (req, res) => {
     await files.map((el) => {
       Photo.create({ photo: el.filename, item_id: resultItem.id });
     });
-    res.status(200).json({ message: 'Товар успешно добавлен' });
+    res
+      .status(200)
+      .json({ message: 'Товар успешно добавлен', res: resultItem });
   } catch (err) {
     res.status(400).json({ message: 'error' });
     console.log('Ошибка в createItem --->', err);
@@ -56,11 +61,11 @@ module.exports.readItem = async (req, res) => {
   }
 };
 
-
 module.exports.updateItem = async (req, res) => {
   try {
     const { files } = req;
-    const {
+    const id = Number(req.params.id);
+    let {
       name,
       article,
       description,
@@ -73,35 +78,40 @@ module.exports.updateItem = async (req, res) => {
       collection_id,
       category_id,
       material_id,
-      item_id
     } = JSON.parse(req.body.description);
+    price ? Number(price) : (price = undefined);
+    new_price ? Number(new_price) : (new_price = undefined);
+    article ? Number(article) : (article = undefined);
     const [rowsAffected, [updatedItem]] = await Item.update(
       {
         name,
-        article: Number(article),
+        article,
         description,
         model_params,
         characteristics,
-        price: Number(price),
-        new_price: Number(new_price),
+        price,
+        new_price,
+        in_stock,
         in_stock,
         bestseller,
         collection_id,
         category_id,
         material_id,
-        item_id,
       },
-      { where: { id: item_id } },
+      { where: { id }, individualHooks: true },
     );
     const result = updatedItem.dataValues;
     if (files && files.length > 0) {
-      await files.map(async (el) => {
-          await Photo.upsert({ photo: el.filename, item_id: item_id }, { individualHooks: true });
-        })
-
+      const photo = await Photo.destroy({
+        where: { item_id: id },
+        individualHooks: true,
+      });
+      await files.map((el) => {
+        Photo.create({ photo: el.filename, item_id: id });
+      });
     }
     res.status(200).json({
-      message: 'Материал изменен',
+      message: 'Товар успешно изменен',
       res: result,
     });
   } catch (err) {
@@ -113,10 +123,15 @@ module.exports.updateItem = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
   try {
     const id = Number(req.params.id);
+    const photo = await Photo.destroy({
+      where: { item_id: id },
+      individualHooks: true,
+    });
     const item = await Item.destroy({
       where: { id },
       individualHooks: true,
     });
+    console.log(photo);
     res.status(200).json({ message: 'Товар удален' });
   } catch (err) {
     res.status(400).json({ message: 'error' });

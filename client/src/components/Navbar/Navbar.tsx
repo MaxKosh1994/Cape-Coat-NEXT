@@ -17,45 +17,11 @@ import { RootState } from '../../app/store';
 import { useAppDispatch } from '../../app/hooks';
 import { isUserLoginThunk } from '../../app/thunkActionsAuth';
 import { fetchFavouritesData } from '../../app/thunkActionsFavourite';
-import { checkCartItemThunk } from '../../app/thunkActionsCart';
+import { getCartItemsThunk } from '../../app/thunkActionsCart';
 import './navbarStyle.css';
 import NavigationMenu from './NavigationMenu/NavigationMenu';
 import MobileMenu from './MobileMenu/MobileMenu';
 import CartMin from '../Cart/CartMin';
-
-const easeOutQuart = (progress: number) => 1 - Math.pow(1 - progress, 4);
-const easeInQuart = (progress: number) => progress ** 4;
-const handleScrollAndHighlight = () => {
-  const scrollToBottom = () => {
-    const currentPosition = window.pageYOffset;
-    const targetPosition = document.body.scrollHeight;
-    const distance = targetPosition - currentPosition;
-    const duration = 1000;
-    const startTime = performance.now();
-
-    const scrollStep = (timestamp: number) => {
-      const elapsedTime = timestamp - startTime;
-      let progress = elapsedTime / duration;
-
-      if (progress < 0.5) {
-        progress = easeInQuart(progress * 2) / 2;
-      } else {
-        progress = easeOutQuart((progress - 0.5) * 2) / 2 + 0.5;
-      }
-
-      const easing = progress;
-      window.scrollTo(0, currentPosition + distance * easing);
-
-      if (elapsedTime < duration) {
-        requestAnimationFrame(scrollStep);
-      }
-    };
-
-    requestAnimationFrame(scrollStep);
-  };
-
-  setTimeout(scrollToBottom, 100);
-};
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -94,15 +60,16 @@ export default function Navbar() {
   const [amountOfLikes, setAmountOfLikes] = useState(0);
   const [amountOfCartItem, setAmountOfCartItem] = useState(0);
   const [isNavbarWhite, setIsNavbarWhite] = useState(false);
+
   const onSearchIconClick = () => {
-    setIsNavbarWhite(!isNavbarWhite);
+    setIsNavbarWhite((prev) => !prev);
   };
 
   useEffect(() => {
     if (isUserLogin) {
       dispatch(isUserLoginThunk());
       dispatch(fetchFavouritesData());
-      dispatch(checkCartItemThunk());
+      dispatch(getCartItemsThunk());
     }
   }, [dispatch, isUserLogin]);
 
@@ -145,7 +112,7 @@ export default function Navbar() {
 
   const handleCartIconClick = (e: MouseEvent<HTMLButtonElement>) => {
     setShowCart((prev) =>
-      prev
+      !prev
         ? !prev
         : setTimeout(() => {
             !prev;
@@ -190,13 +157,13 @@ export default function Navbar() {
             isScrolled || isNavbarWhite ? '#FFFFFF' : 'transparent',
         }}
       >
-        <div className='wrap'>
+        <div className="wrap">
           {isMobile && (
             <IconButton
-              className='burger'
-              edge='start'
-              color='inherit'
-              aria-label='menu'
+              className="burger"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
               onClick={(event) => {
                 handleMobileMenuOpen(event);
                 onSearchIconClick();
@@ -206,12 +173,12 @@ export default function Navbar() {
               <MenuIcon />
             </IconButton>
           )}
-          <Link href='/' passHref>
+          <Link href="/" passHref>
             <Image
               src={logo}
-              alt='Logo'
+              alt="Logo"
               priority={true}
-              className='logo'
+              className="logo"
               style={{
                 width: '200px',
                 height: '30px',
@@ -223,7 +190,6 @@ export default function Navbar() {
           {!isMobile && (
             <NavigationMenu
               isScrolled={isScrolled}
-              handleScrollAndHighlight={handleScrollAndHighlight}
               onSearchIconClick={onSearchIconClick}
             />
           )}
@@ -235,7 +201,7 @@ export default function Navbar() {
             <SearchBar onSearchIconClick={onSearchIconClick} />
 
             <Link
-              className='header-personal'
+              className="header-personal"
               href={
                 isUserLogin
                   ? isAdmin
@@ -246,19 +212,19 @@ export default function Navbar() {
               passHref
             >
               <IconButton
-                size='large'
+                size="large"
                 sx={{ color: iconColour, padding: '8px' }}
               >
                 <Person2Icon />
               </IconButton>
             </Link>
-            <Link className='header-favorite' href='/favorites' passHref>
+            <Link className="header-favorite" href="/favorites" passHref>
               <IconButton
-                size='large'
-                aria-label='show 17 new notifications'
+                size="large"
+                aria-label="show 17 new notifications"
                 sx={{ color: iconColour, padding: '8px' }}
               >
-                <Badge badgeContent={amountOfLikes} color='error'>
+                <Badge badgeContent={amountOfLikes} color="error">
                   <FavoriteIcon />
                 </Badge>
               </IconButton>
@@ -269,15 +235,15 @@ export default function Navbar() {
               passHref
             > */}
             <IconButton
-              size='large'
-              edge='end'
-              aria-label='account of current user'
+              size="large"
+              edge="end"
+              aria-label="account of current user"
               aria-controls={menuId}
-              aria-haspopup='true'
+              aria-haspopup="true"
               sx={{ color: iconColour, padding: '8px' }}
               onClick={handleCartIconClick}
             >
-              <Badge badgeContent={amountOfCartItem} color='error'>
+              <Badge badgeContent={amountOfCartItem} color="error">
                 <AddShoppingCart />
               </Badge>
             </IconButton>
@@ -290,7 +256,6 @@ export default function Navbar() {
         mobileMoreAnchorEl={mobileMoreAnchorEl}
         isMobileMenuOpen={isMobileMenuOpen}
         handleMobileMenuClose={handleMobileMenuClose}
-        handleScrollAndHighlight={handleScrollAndHighlight}
         onSearchIconClick={onSearchIconClick}
       />
       {renderMenu}

@@ -26,6 +26,8 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
   const dispatch = useAppDispatch();
   const [showDiv, setShowDiv] = useState<boolean>(show);
 
+  console.log('cartItemsList', cartItemsList);
+
   useEffect(() => {
     fetchCartItems();
   }, [dispatch, user]);
