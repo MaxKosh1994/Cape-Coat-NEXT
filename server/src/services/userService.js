@@ -8,10 +8,20 @@ module.exports.findUserByEmail = async (email) => {
   return currUser;
 };
 
-module.exports.findOrCreateUserByEmail = async (full_name, email, password) => {
+module.exports.findOrCreateUserByEmail = async (
+  full_name,
+  email,
+  phone,
+  password,
+) => {
   const currUser = await await User.findOrCreate({
     where: { email },
-    defaults: { full_name, email, password },
+    defaults: {
+      full_name,
+      email,
+      phone,
+      password,
+    },
   });
   return currUser;
 };
