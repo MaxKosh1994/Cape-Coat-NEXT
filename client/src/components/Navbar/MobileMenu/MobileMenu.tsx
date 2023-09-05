@@ -7,7 +7,7 @@ interface IMobileMenuProps {
   mobileMoreAnchorEl: null | HTMLElement;
   isMobileMenuOpen: boolean;
   handleMobileMenuClose: () => void;
-  handleScrollAndHighlight: () => void;
+
   onSearchIconClick: () => void;
 }
 
@@ -34,7 +34,6 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
   mobileMoreAnchorEl,
   isMobileMenuOpen,
   handleMobileMenuClose,
-  handleScrollAndHighlight,
 }) => {
   const mobileMenuId = 'primary-search-account-menu-mobile';
 
