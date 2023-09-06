@@ -100,7 +100,31 @@ export default function ItemDisplay({
                   <div className={styles.itemPrices}>
                     <span className={styles.itemPricesPrice}>
                       {userParams[index] ||
-                        `Ваш рост: ${item.Carts[0].CartItem.height}см, Длина изделия: ${item.Carts[0].CartItem.length}см, Длина рукава: ${item.Carts[0].CartItem.sleeve}см, Объем груди: ${item.Carts[0].CartItem.bust}см, Объем талии: ${item.Carts[0].CartItem.waist}см, Объем бедер: ${item.Carts[0].CartItem.hips}см, Утепление: ${item.Carts[0].CartItem.lining}`}
+                        `Ваш рост: ${
+                          item.Carts[0].CartItem.height
+                        }см, Длина изделия: ${
+                          item.Carts[0].CartItem.length
+                        }см, Длина рукава: ${
+                          item.Carts[0].CartItem.sleeve
+                        }см, Объем груди: ${
+                          item.Carts[0].CartItem.bust
+                        }см, Объем талии: ${
+                          item.Carts[0].CartItem.waist
+                        }см, Объем бедер: ${item.Carts[0].CartItem.hips}см${
+                          item.Carts[0].CartItem.lining
+                            ? `, Утепление: ${item.Carts[0].CartItem.lining}`
+                            : ''
+                        }${
+                          item.Carts[0].CartItem.buttons
+                            ? `, Фурнитура: ${item.Carts[0].CartItem.buttons}`
+                            : ''
+                        }${
+                          item.Carts[0].CartItem.loops ? `, со шлёвками` : ''
+                        }${
+                          item.Carts[0].CartItem.saddle
+                            ? `, седло: ${item.Carts[0].CartItem.saddle}`
+                            : ''
+                        }`}
                     </span>
                   </div>
                 </div>

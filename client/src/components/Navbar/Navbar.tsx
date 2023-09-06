@@ -111,13 +111,7 @@ export default function Navbar() {
   const [prevAsPath, setPrevAsPath] = useState(router.asPath);
 
   const handleCartIconClick = (e: MouseEvent<HTMLButtonElement>) => {
-    setShowCart((prev) =>
-      !prev
-        ? !prev
-        : setTimeout(() => {
-            !prev;
-          }, 1001)
-    );
+    setShowCart((prev) => !prev);
   };
 
   useEffect(() => {

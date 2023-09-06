@@ -309,7 +309,15 @@ export const useCartControl = () => {
     if (response.status === 200) {
       // выводит мерки, если всё ок
       // и прячет форму
-      const userParams = `Ваш рост: ${res.height}см, длина изделия: ${res.length}см, длина рукава: ${res.sleeve}см, объем груди: ${res.bust}см, объем талии: ${res.waist}см, объем бедер: ${res.hips}см, утепление: ${res.lining}`;
+      const userParams = `Ваш рост: ${res.height}см, длина изделия: ${
+        res.length
+      }см, длина рукава: ${res.sleeve}см, объем груди: ${
+        res.bust
+      }см, объем талии: ${res.waist}см, объем бедер: ${res.hips}см${
+        res.saddle ? `, седло: ${res.saddle}` : ''
+      }${res.lining ? `, утепление: ${res.lining}` : ''}${
+        res.buttons ? `, фурнитура: ${res.buttons}` : ''
+      }${res.loops ? `, со шлёвками` : ''}`;
       setUserParams((prevTexts) => {
         const updatedTexts = [...prevTexts];
         updatedTexts[index] = userParams;
@@ -346,25 +354,9 @@ export const useCartControl = () => {
       const response = await isValidPromo.json();
       if (isValidPromo.status === 200) {
         setDbPc(promocode);
-        // если такой промокод есть, то считаем скидку
-        // if (discount === 0) {
-        // если до этого была ноль
         setDiscountPercent(response.percent / 100);
-        // ?! maybe shouldnt count discount here
-        // const disc = (response.percent / 100) * subtotal;
-        // setDiscount(disc);
         setPromoUsed(true);
         setPromocode('');
-        // } else {
-        //   // ?! and then dont need this
-        //   // если до этого уже была скидка
-        //   setDiscountPercent(response.percent / 100);
-        //   // плюсуем существующую скидку
-        //   const disc = discount + (response.percent / 100) * subtotal;
-        //   setDiscount(disc);
-        //   setPromoUsed(true);
-        //   setPromocode('');
-        // }
       } else {
         // если ошибка с бека
         setPromocodeErr(response);
