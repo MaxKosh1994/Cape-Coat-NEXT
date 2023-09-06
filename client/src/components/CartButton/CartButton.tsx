@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import LikeButton from '../likeButton/LikeButton';
 
-import { addCartItem, delCartItem } from '@/app/cartSlice';
+import { addCartItem, delCartItem, delItemInCart } from '@/app/cartSlice';
 import { useAppDispatch } from '@/app/hooks';
 import './CartButtonStyle.css';
 import { Item } from '@/app/itemSlice';
@@ -32,6 +32,9 @@ export default function CartButton({
   const cartItems = useSelector(
     (state: RootState) => state.cartSlice.cartItems
   );
+
+  const { user } = useSelector((state: RootState) => state.sessionSlice);
+
   useEffect(() => {
     const isInCart = cartItems.some(
       (el) => el.id == itemId || el.item_id == itemId
@@ -43,33 +46,38 @@ export default function CartButton({
   const cartHandler = async () => {
     // //!------ЕСЛИ ЮЗЕРА НЕТ - ЛОГИКА ДОБАВЛЕНИЯ В ЛОКАЛ------
 
-    // if (!user) {
-    //   const cartItemsFromStorage =
-    //     JSON.parse(localStorage.getItem('cartItems')) || [];
+    if (!user) {
+      const cartItemsFromStorage =
+        JSON.parse(localStorage.getItem('cartItems')) || [];
 
-    //   const materialName = selectedMaterialName
-    //     ? selectedMaterialName
-    //     : itemData.Material.name;
+      const materialName = selectedMaterialName
+        ? selectedMaterialName
+        : itemData.Material.name;
 
-    //   const isItemInCart = cartItemsFromStorage.find(
-    //     (item) => item.id === itemId
-    //   );
+      const isItemInCart = cartItemsFromStorage.find(
+        (item) => item.id === itemId
+      );
 
-    //   if (isItemInCart) {
-    //     const updatedCartItems = cartItemsFromStorage.map((item) =>
-    //       item.id === itemId ? { ...item, material: materialName } : item
-    //     );
-    //     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-    //   } else {
-    //     const updatedCartItems = [
-    //       ...cartItemsFromStorage,
-    //       { id: itemId, material: materialName },
-    //     ];
+      if (isItemInCart) {
+        const updatedCartItems = cartItemsFromStorage.map((item) =>
+          item.id === itemId ? { ...item, material: materialName } : item
+        );
+        console.log(updatedCartItems)
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+        dispatch(delItemInCart(updatedCartItems));
+        setIsInCart(false);
+      } else {
+        const updatedCartItems = [
+          ...cartItemsFromStorage,
+          { id: itemId, material: materialName },
+        ];
 
-    //     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-    //   }
-    //   return;
-    // }
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+        setIsInCart(true);
+        dispatch(addCartItem(updatedCartItems));
+      }
+      return;
+    }
 
     // //! -----------------------------------------------------
 

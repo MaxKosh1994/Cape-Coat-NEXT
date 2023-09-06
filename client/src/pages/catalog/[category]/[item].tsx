@@ -34,6 +34,8 @@ function Item({
 }: ItemProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
+  console.log('similarItems', similarItems);
+
   return (
     <>
       <Head>
@@ -101,7 +103,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     });
-
+    
     if (res.ok) {
       const data: ItemState = await res.json();
 
@@ -112,7 +114,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         url: `${imageUrl}${photo.photo}`,
       }));
 
+      //TODO здесь прокинуты item нужно понять как
+
       const similarItems = await getItems(isMobile, data.item);
+
+      console.log({ similarItems });
 
       return {
         props: {

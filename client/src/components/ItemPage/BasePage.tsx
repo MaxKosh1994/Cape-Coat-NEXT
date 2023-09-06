@@ -3,6 +3,7 @@ import styles from '../../styles/BasePage.module.css';
 import ProductCard from '@/components/ProductCard/ProductCard';
 
 export default function BasePage({ pageName, itemsArr }) {
+  console.log({itemsArr})
   return (
     <>
       <Head>
