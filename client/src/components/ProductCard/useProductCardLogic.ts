@@ -11,11 +11,7 @@ import {
 import { fetchFavouritesData } from '../../app/thunkActionsFavourite';
 import { getCartItemsThunk } from '../../app/thunkActionsCart';
 import { addCartItem } from '../../app/cartSlice';
-import {
-  removeItem,
-  setFavourites,
-  setLikedStatus,
-} from '../../app/favouriteSlice';
+import { removeItem, setLikedStatus } from '../../app/favouriteSlice';
 import { RootState } from '../../app/store';
 
 const useProductCardLogic = (
@@ -28,7 +24,6 @@ const useProductCardLogic = (
   initialIsFavorite: boolean,
   initialIsCart: boolean,
   newPrice?: number,
-  isItemInFavoritesState?: boolean,
   urlName?: string
 ) => {
   const dispatch = useAppDispatch();
@@ -42,26 +37,29 @@ const useProductCardLogic = (
     dispatch(toggleFavorite(id));
 
     if (!user) {
-      setIsFavorite(false);
+      // setIsFavorite(false);
       const favoritesFromStorage =
         JSON.parse(localStorage.getItem('favorites')) || [];
 
       const isItemInFavorites = favoritesFromStorage.includes(id);
+
       if (isItemInFavorites) {
         const updatedFavorites = favoritesFromStorage.filter(
           (favId) => favId !== id
         );
+
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        setIsFavorite(!isFavorite);
       } else {
         const updatedFavorites = [...favoritesFromStorage, id];
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-        setIsFavorite(true)
+        setIsFavorite(!isFavorite);
 
         //TODO ставится сердечко в навбаре, а как его убрать?
 
         // dispatch(setFavourites(updatedFavorites));
       }
-      dispatch(setLikedStatus(!isFavorite));
+      // dispatch(setLikedStatus(!isFavorite));
     } else {
       setIsFavorite(!isFavorite);
       dispatch(toggleFavorite(id));
@@ -75,6 +73,7 @@ const useProductCardLogic = (
           newPrice,
           price,
           isFavorite: !isFavorite,
+          isCart,
         };
         const favoriteAction = isFavorite
           ? removeFromFavorites
@@ -91,15 +90,12 @@ const useProductCardLogic = (
   };
 
   const cartHandler = async () => {
-    setIsCart(!isCart);
     dispatch(toggleCart(id));
 
     if (!user) {
-      setIsCart(false);
+      // setIsCart(false);
       const cartItemsFromStorage =
         JSON.parse(localStorage.getItem('cartItems')) || [];
-
-      //TODO   const isItemInCart = cartItemsFromStorage.includes(id);
 
       const isItemInCart = cartItemsFromStorage.find((item) => item.id === id);
 
@@ -107,15 +103,22 @@ const useProductCardLogic = (
         const updatedCartItems = cartItemsFromStorage.filter(
           (item) => item.id !== id
         );
+        // console.log('updatedCartItems', updatedCartItems);
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+
+        setIsCart(!isCart);
       } else {
         const updatedCartItems = [
           ...cartItemsFromStorage,
           { id, material_name },
         ];
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+        setIsCart(!isCart);
+        console.log('SEEEEET', isCart);
       }
     } else {
+      setIsCart(!isCart);
+      dispatch(toggleCart(id));
       try {
         const cartData = {
           id,
@@ -131,20 +134,23 @@ const useProductCardLogic = (
 
         if (!isCart) {
           const inCart = await addToCart(cartData);
-          console.log('cartData', inCart);
-          const itemInCart = inCart[0];
+          const itemInCart = inCart[1];
           setIsCart(itemInCart);
           dispatch(addCartItem(inCart));
         } else {
           const delCart = await removeFromCart(cartData);
+
+          console.log('delCart', delCart);
           dispatch(removeItem(delCart));
           await dispatch(getCartItemsThunk(user));
+          setIsCart(false);
         }
       } catch (err) {
         console.log(err);
       }
     }
   };
+
   useEffect(() => {
     if (user) {
       const cartFromStorage =
@@ -157,7 +163,6 @@ const useProductCardLogic = (
               id: cartId.id,
               material_name: cartId.material_name,
             };
-            console.log('hz', cartData);
             return addToCart(cartData);
           })
         )
@@ -172,8 +177,8 @@ const useProductCardLogic = (
             console.error('Error while adding item in cart:', error);
           });
       }
-      try {
-        (async function (): Promise<void> {
+      const fetchData = async () => {
+        try {
           const response = await fetch(
             process.env.NEXT_PUBLIC_URL + 'cart/cartInCat',
             {
@@ -187,14 +192,22 @@ const useProductCardLogic = (
             setIsCart(isProductInCart);
           }
           dispatch(toggleCart(id));
-        })();
-      } catch (err) {
-        console.log(err);
-      }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchData();
     } else {
-      setIsCart(false);
+      const cartFromStorage = JSON.parse(
+        localStorage.getItem('cartItems') || '[]'
+      );
+      const isItemInCart = cartFromStorage.some((element) => element.id === id);
+      // console.log({ isItemInCart });
+
+      setIsCart(isItemInCart);
+      // setIsCart(false);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (user) {
@@ -243,9 +256,14 @@ const useProductCardLogic = (
 
       fetchData();
     } else {
-      setIsFavorite(false);
+      const favoritesFromStorage = JSON.parse(
+        localStorage.getItem('favorites') || '[]'
+      );
+      const isItemInFavorites = favoritesFromStorage.includes(id);
+      setIsFavorite(isItemInFavorites);
+      // setIsFavorite(false);
     }
-  }, []);
+  }, [user]);
 
   return {
     isFavorite,

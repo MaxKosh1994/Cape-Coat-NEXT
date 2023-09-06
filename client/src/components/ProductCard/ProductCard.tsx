@@ -32,12 +32,9 @@ const ProductCard: React.FC<IProductCard> = ({
       initialIsFavorite,
       initialIsCart,
       newPrice,
-      isItemInFavoritesState,
       urlName
     );
   const router = useRouter();
-
-  console.log('isFavorite', isFavorite, 'isCart', isCart);
 
   const linkToShow = router.asPath.replace(/^\/catalog\/|\/\d+$/g, '');
 
