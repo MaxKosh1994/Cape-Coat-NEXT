@@ -10,8 +10,18 @@ import {
 } from './thunkProduct';
 import { fetchFavouritesData } from '../../app/thunkActionsFavourite';
 import { getCartItemsThunk } from '../../app/thunkActionsCart';
-import { addCartItem } from '../../app/cartSlice';
-import { removeItem, setLikedStatus } from '../../app/favouriteSlice';
+import {
+  addCartItem,
+  delCartItem,
+  delItemInCart,
+  getCartItems,
+} from '../../app/cartSlice';
+import {
+  addItem,
+  removeItem,
+  setFavourites,
+  setLikedStatus,
+} from '../../app/favouriteSlice';
 import { RootState } from '../../app/store';
 
 const useProductCardLogic = (
@@ -34,10 +44,7 @@ const useProductCardLogic = (
   const { user } = useSelector((state: RootState) => state.sessionSlice);
 
   const favoriteHandler = async () => {
-    dispatch(toggleFavorite(id));
-
     if (!user) {
-      // setIsFavorite(false);
       const favoritesFromStorage =
         JSON.parse(localStorage.getItem('favorites')) || [];
 
@@ -47,22 +54,17 @@ const useProductCardLogic = (
         const updatedFavorites = favoritesFromStorage.filter(
           (favId) => favId !== id
         );
-
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
         setIsFavorite(!isFavorite);
+        dispatch(setFavourites(updatedFavorites));
       } else {
         const updatedFavorites = [...favoritesFromStorage, id];
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
         setIsFavorite(!isFavorite);
-
-        //TODO ставится сердечко в навбаре, а как его убрать?
-
-        // dispatch(setFavourites(updatedFavorites));
+        dispatch(setFavourites(updatedFavorites));
       }
-      // dispatch(setLikedStatus(!isFavorite));
     } else {
       setIsFavorite(!isFavorite);
-      dispatch(toggleFavorite(id));
       try {
         const favoriteData = {
           id,
@@ -79,7 +81,6 @@ const useProductCardLogic = (
           ? removeFromFavorites
           : addToFavorites;
         const favorite = await favoriteAction(favoriteData);
-
         setFavCard(favorite);
         dispatch(fetchFavouritesData(favorite));
         dispatch(setLikedStatus(!isFavorite));
@@ -90,10 +91,7 @@ const useProductCardLogic = (
   };
 
   const cartHandler = async () => {
-    dispatch(toggleCart(id));
-
     if (!user) {
-      // setIsCart(false);
       const cartItemsFromStorage =
         JSON.parse(localStorage.getItem('cartItems')) || [];
 
@@ -103,9 +101,8 @@ const useProductCardLogic = (
         const updatedCartItems = cartItemsFromStorage.filter(
           (item) => item.id !== id
         );
-        // console.log('updatedCartItems', updatedCartItems);
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-
+        dispatch(delItemInCart(updatedCartItems));
         setIsCart(!isCart);
       } else {
         const updatedCartItems = [
@@ -114,11 +111,10 @@ const useProductCardLogic = (
         ];
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
         setIsCart(!isCart);
-        console.log('SEEEEET', isCart);
+        dispatch(addCartItem(updatedCartItems));
       }
     } else {
       setIsCart(!isCart);
-      dispatch(toggleCart(id));
       try {
         const cartData = {
           id,
@@ -139,9 +135,6 @@ const useProductCardLogic = (
           dispatch(addCartItem(inCart));
         } else {
           const delCart = await removeFromCart(cartData);
-
-          console.log('delCart', delCart);
-          dispatch(removeItem(delCart));
           await dispatch(getCartItemsThunk(user));
           setIsCart(false);
         }
@@ -201,11 +194,9 @@ const useProductCardLogic = (
       const cartFromStorage = JSON.parse(
         localStorage.getItem('cartItems') || '[]'
       );
+      dispatch(getCartItems(cartFromStorage));
       const isItemInCart = cartFromStorage.some((element) => element.id === id);
-      // console.log({ isItemInCart });
-
       setIsCart(isItemInCart);
-      // setIsCart(false);
     }
   }, [user]);
 
@@ -259,9 +250,9 @@ const useProductCardLogic = (
       const favoritesFromStorage = JSON.parse(
         localStorage.getItem('favorites') || '[]'
       );
+      dispatch(setFavourites(favoritesFromStorage));
       const isItemInFavorites = favoritesFromStorage.includes(id);
       setIsFavorite(isItemInFavorites);
-      // setIsFavorite(false);
     }
   }, [user]);
 

@@ -25,8 +25,6 @@ export default function SalePage() {
     }
   }, []);
 
-  console.log('saleItems', saleItems);
-
   return (
     <>
       {saleItems.length ? (

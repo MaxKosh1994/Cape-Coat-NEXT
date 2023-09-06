@@ -22,7 +22,6 @@ export const fetchNavigationMenuCategoryData = async () => {
 
     return { info: 'Unknown status', categories: [] };
   } catch (error) {
-    // console.log(error);
     return { info: 'Error occurred', categories: [] };
   }
 };

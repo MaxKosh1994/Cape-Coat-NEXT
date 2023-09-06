@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ICartState, ISingleItem } from './types/cartTypes';
+import { CartItemMaterial, ICartState, ISingleItem } from './types/cartTypes';
 
 const initialState: ICartState = {
   cartItems: [],
@@ -13,9 +13,8 @@ const rtkSlice = createSlice({
       state.cartItems = action.payload;
     },
     delCartItem(state, action: PayloadAction<number>) {
-      console.log('HERE--------------------', action);
       state.cartItems = state.cartItems.filter(
-        (el) => el.item_id !== +action.payload
+        (el) => el.item_id !== action.payload
       );
     },
     emptyCart(state) {
@@ -24,9 +23,17 @@ const rtkSlice = createSlice({
     addCartItem(state, action: PayloadAction<ISingleItem>) {
       state.cartItems = [...state.cartItems, action.payload];
     },
+    delItemInCart(state, action: PayloadAction<[]>) {
+      state.cartItems = action.payload;
+    },
   },
 });
 
 export default rtkSlice.reducer;
-export const { getCartItems, delCartItem, addCartItem, emptyCart } =
-  rtkSlice.actions;
+export const {
+  getCartItems,
+  delCartItem,
+  addCartItem,
+  emptyCart,
+  delItemInCart,
+} = rtkSlice.actions;

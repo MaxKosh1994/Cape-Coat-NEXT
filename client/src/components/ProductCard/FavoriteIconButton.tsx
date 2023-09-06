@@ -16,25 +16,9 @@ const FavoriteIconButton: React.FC<FavoriteIconButtonProps> = ({
   onClick,
   itemId,
 }) => {
-
-
-  // const [isItemInFavorites, setIsItemInFavorites] = useState(false);
-  // useEffect(() => {
-  //   const localStorageData = localStorage.getItem('favorites');
-  //   // console.log('icon', localStorageData);
-  //   const favoriteItems = JSON.parse(localStorageData || '[]');
-  //   // const isItemInFavoritesLog = favoriteItems.includes(itemId);
-  //   setIsItemInFavorites(favoriteItems.includes(itemId));
-  //   // console.log(isItemInFavorites);
-  // }, []);
-
   const localStorageData = localStorage.getItem('favorites');
-
   const favoriteItems = JSON.parse(localStorageData || '[]');
-
   const isItemInFavoritesLog = favoriteItems.includes(itemId);
-
-
 
   return (
     <IconButton

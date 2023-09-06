@@ -81,8 +81,6 @@ export default function Favorites() {
         ))
       : null;
 
-  console.log('favoriteItems', favoriteItems);
-
   const renderProductCardsLocal =
     favoriteItems && Array.isArray(favoriteItems)
       ? favoriteItems.map((item) => (

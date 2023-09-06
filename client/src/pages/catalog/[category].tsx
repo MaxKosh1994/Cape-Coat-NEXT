@@ -21,7 +21,6 @@ export default function Category() {
   const card = useSelector(
     (state: RootState) => state.CategorySlice.categoryItems
   );
-  // console.log('card', card);
 
   useEffect(() => {
     try {
@@ -34,23 +33,6 @@ export default function Category() {
         );
         if (response.status === 200) {
           const result = await response.json();
-          // dispatch(categoryClear());
-
-          // result.items.forEach((item: ICategory) => {
-          //   dispatch(
-          //     category({
-          //       id: item.id,
-          //       material_name: item.Material.name,
-          //       article: item.article,
-          //       photo: item.Photos[0]?.photo || '',
-          //       name: item.name,
-          //       price: item.price,
-          //       categoryName: item.categoryName,
-          //       isFavorite: false,
-          //       isCart: false,
-          //     })
-          //   );
-          // });
           const items = result.items.map((item) => ({
             ...item,
             isFavorite: false,
