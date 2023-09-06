@@ -1,4 +1,10 @@
-import React, { ChangeEvent, MouseEvent, useState, useEffect } from 'react';
+import React, {
+  ChangeEvent,
+  MouseEvent,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 import { useRouter } from 'next/router';
 import { delCartItem, getCartItems } from '@/app/cartSlice';
 import {
@@ -92,9 +98,8 @@ export const useCartControl = () => {
     lining: '',
   });
   // записывет параметры товаров по индексу в массиве
-  const [userParams, setUserParams] = useState<string[]>(
-    Array(cartItemsList.length).fill('')
-  );
+  const [userParams, setUserParams] = useState<string[]>([]);
+  const userParamsRef = useRef(userParams);
 
   // стукается через санку на бек, грузит список товаров добавленных в корзину
   const fetchCartItems = async (): Promise<void> => {
@@ -172,8 +177,15 @@ export const useCartControl = () => {
 
   useEffect(() => {
     // стукается через санку на бек, грузит список товаров добавленных в корзину
+    userParamsRef.current = userParams;
     fetchCartItems();
-  }, [dispatch, user, userParams]);
+  }, [dispatch, user, userParamsRef]);
+
+  useEffect(() => {
+    if (cartItemsList.length > 0) {
+      setUserParams(Array(cartItemsList.length).fill(''));
+    }
+  }, [cartItemsList]);
 
   useEffect(() => {
     // подсчет ИТОГО заказа
