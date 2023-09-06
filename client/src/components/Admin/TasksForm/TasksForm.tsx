@@ -160,35 +160,35 @@ export default function TasksForm({
           <input
             type="text"
             name="taskNum"
-            value={taskInfo.id}
+            defaultValue={taskInfo.id}
             onChange={handleTaskInputChange}
           />
           <label htmlFor="date">Дата</label>
           <input
             type="text"
             name="date"
-            value={taskData.date}
+            defaultValue={taskData.date}
             onChange={handleTaskInputChange}
           />
           <label htmlFor="itemCategory">Изделие</label>
           <input
             type="text"
             name="itemCategory"
-            value={itemInfo.name}
+            defaultValue={itemInfo.name}
             onChange={handleTaskInputChange}
           />
           <label htmlFor="itemMaterial">Ткань</label>
           <input
             type="text"
             name="itemMaterial"
-            value={itemInfo.Material.name}
+            defaultValue={itemInfo?.Material?.name}
             onChange={handleTaskInputChange}
           />
           <label htmlFor="itemArticle">Лекала</label>
           <input
             type="text"
             name="itemArticle"
-            value={itemInfo.article}
+            defaultValue={itemInfo.article}
             onChange={handleTaskInputChange}
           />
           <label htmlFor="size">Размер</label>
@@ -205,7 +205,7 @@ export default function TasksForm({
           <input
             type="text"
             name="length"
-            value={itemInfo.OrderItem.length}
+            defaultValue={itemInfo.OrderItem.length}
             onChange={handleTaskInputChange}
           />
           {itemInfo.category_id !== 4 && (
@@ -214,7 +214,7 @@ export default function TasksForm({
               <input
                 type="text"
                 name="sleeve"
-                value={itemInfo.OrderItem.sleeve}
+                defaultValue={itemInfo.OrderItem.sleeve}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="shlitsa">Шлица</label>
@@ -240,14 +240,14 @@ export default function TasksForm({
               <input
                 type="text"
                 name="buttons"
-                value={itemInfo.OrderItem.buttons}
+                defaultValue={itemInfo.OrderItem.buttons}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="lining">Утепление</label>
               <input
                 type="text"
                 name="lining"
-                value={itemInfo.OrderItem.lining}
+                defaultValue={itemInfo.OrderItem.lining}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="straps">Погоны паты</label>
@@ -264,35 +264,35 @@ export default function TasksForm({
               <input
                 type="text"
                 name="height"
-                value={itemInfo.OrderItem.height}
+                defaultValue={itemInfo.OrderItem.height}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="bust">ОГ</label>
               <input
                 type="text"
                 name="bust"
-                value={itemInfo.OrderItem.bust}
+                defaultValue={itemInfo.OrderItem.bust}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="waist">ОТ</label>
               <input
                 type="text"
                 name="waist"
-                value={itemInfo.OrderItem.waist}
+                defaultValue={itemInfo.OrderItem.waist}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="hips">ОБ</label>
               <input
                 type="text"
                 name="hips"
-                value={itemInfo.OrderItem.hips}
+                defaultValue={itemInfo.OrderItem.hips}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="saddle">Седло</label>
               <input
                 type="text"
                 name="saddle"
-                value={itemInfo.OrderItem.saddle}
+                defaultValue={itemInfo.OrderItem.saddle}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="belt">Пояс</label>
@@ -307,35 +307,35 @@ export default function TasksForm({
               <input
                 type="text"
                 name="sleeve"
-                value={itemInfo.OrderItem.sleeve}
+                defaultValue={itemInfo.OrderItem.sleeve}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="height">Рост</label>
               <input
                 type="text"
                 name="height"
-                value={itemInfo.OrderItem.height}
+                defaultValue={itemInfo.OrderItem.height}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="bust">ОГ</label>
               <input
                 type="text"
                 name="bust"
-                value={itemInfo.OrderItem.bust}
+                defaultValue={itemInfo.OrderItem.bust}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="waist">ОТ</label>
               <input
                 type="text"
                 name="waist"
-                value={itemInfo.OrderItem.waist}
+                defaultValue={itemInfo.OrderItem.waist}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="hips">ОБ</label>
               <input
                 type="text"
                 name="hips"
-                value={itemInfo.OrderItem.hips}
+                defaultValue={itemInfo.OrderItem.hips}
                 onChange={handleTaskInputChange}
               />
               <label htmlFor="zipper">Молния \ пуговицы</label>

@@ -6,9 +6,14 @@ const {
 
 module.exports.register = async (req, res) => {
   try {
-    const { full_name, email, password } = req.body;
+    const { full_name, email, phone, password } = req.body;
 
-    const registrationResult = await registerUser(full_name, email, password);
+    const registrationResult = await registerUser(
+      full_name,
+      email,
+      phone,
+      password,
+    );
 
     if (!registrationResult.success) {
       return res.status(401).json({ message: registrationResult.message });
