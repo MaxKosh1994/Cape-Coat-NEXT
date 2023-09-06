@@ -11,7 +11,6 @@ module.exports = {
           password: hashPassword,
           phone: '89505558888',
           full_name: 'Георгий',
-          address: 'Екатеринбург',
           telegram_instagram: '@ltc',
           admin: true,
         },
