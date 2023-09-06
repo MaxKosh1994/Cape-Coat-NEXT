@@ -13,7 +13,6 @@ export default function ModalEditInfo({
   const [inputsUserInfo, setInputsUserInfo] = useState<IInputsEditInfo>({
     full_name: userInfo?.full_name || '',
     phone: userInfo?.phone || '',
-    address: userInfo?.address || '',
     telegram_instagram: userInfo?.telegram_instagram || '',
   });
 
@@ -23,7 +22,6 @@ export default function ModalEditInfo({
     setInputsUserInfo({
       full_name: userInfo?.full_name,
       phone: userInfo?.phone,
-      address: userInfo?.address,
       telegram_instagram: userInfo?.telegram_instagram,
     });
   }, [userInfo]);
@@ -65,17 +63,6 @@ export default function ModalEditInfo({
               fullWidth
               margin='normal'
               required
-              onChange={changeHandler}
-            />
-            <TextField
-              autoComplete='off'
-              className='text-field'
-              label='Адрес'
-              name='address'
-              type='text'
-              value={inputsUserInfo?.address || ''}
-              fullWidth
-              margin='normal'
               onChange={changeHandler}
             />
             <TextField

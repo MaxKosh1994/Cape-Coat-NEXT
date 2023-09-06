@@ -23,40 +23,6 @@ import NavigationMenu from './NavigationMenu/NavigationMenu';
 import MobileMenu from './MobileMenu/MobileMenu';
 import CartMin from '../Cart/CartMin';
 
-const easeOutQuart = (progress: number) => 1 - Math.pow(1 - progress, 4);
-const easeInQuart = (progress: number) => progress ** 4;
-const handleScrollAndHighlight = () => {
-  const scrollToBottom = () => {
-    const currentPosition = window.pageYOffset;
-    const targetPosition = document.body.scrollHeight;
-    const distance = targetPosition - currentPosition;
-    const duration = 1000;
-    const startTime = performance.now();
-
-    const scrollStep = (timestamp: number) => {
-      const elapsedTime = timestamp - startTime;
-      let progress = elapsedTime / duration;
-
-      if (progress < 0.5) {
-        progress = easeInQuart(progress * 2) / 2;
-      } else {
-        progress = easeOutQuart((progress - 0.5) * 2) / 2 + 0.5;
-      }
-
-      const easing = progress;
-      window.scrollTo(0, currentPosition + distance * easing);
-
-      if (elapsedTime < duration) {
-        requestAnimationFrame(scrollStep);
-      }
-    };
-
-    requestAnimationFrame(scrollStep);
-  };
-
-  setTimeout(scrollToBottom, 100);
-};
-
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -94,8 +60,9 @@ export default function Navbar() {
   const [amountOfLikes, setAmountOfLikes] = useState(0);
   const [amountOfCartItem, setAmountOfCartItem] = useState(0);
   const [isNavbarWhite, setIsNavbarWhite] = useState(false);
+
   const onSearchIconClick = () => {
-    setIsNavbarWhite(!isNavbarWhite);
+    setIsNavbarWhite((prev) => !prev);
   };
 
   useEffect(() => {
@@ -223,7 +190,6 @@ export default function Navbar() {
           {!isMobile && (
             <NavigationMenu
               isScrolled={isScrolled}
-              handleScrollAndHighlight={handleScrollAndHighlight}
               onSearchIconClick={onSearchIconClick}
             />
           )}
@@ -290,7 +256,6 @@ export default function Navbar() {
         mobileMoreAnchorEl={mobileMoreAnchorEl}
         isMobileMenuOpen={isMobileMenuOpen}
         handleMobileMenuClose={handleMobileMenuClose}
-        handleScrollAndHighlight={handleScrollAndHighlight}
         onSearchIconClick={onSearchIconClick}
       />
       {renderMenu}
