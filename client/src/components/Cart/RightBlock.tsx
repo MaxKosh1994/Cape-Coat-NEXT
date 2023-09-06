@@ -10,6 +10,7 @@ export default function RightBlock({
   discount,
   twoItemDiscount,
   deliveryCost,
+  liningCost,
   urgencyFee,
   urgentMaking,
   cartTotal,
@@ -60,43 +61,30 @@ export default function RightBlock({
                     className={styles.itemPricesPrice}
                     style={{ textDecoration: 'line-through' }}
                   >
-                    {cartItemsList
-                      .reduce((sum, item) => sum + item.price, 0)
-                      .toLocaleString()}{' '}
+                    {Math.floor(
+                      cartItemsList.reduce((sum, item) => sum + item.price, 0)
+                    ).toLocaleString()}{' '}
                     &#8381;
                   </span>
                 </>
               ) : (
                 <>
                   <span className={styles.itemPricesPrice}>
-                    {cartItemsList
-                      .reduce((sum, item) => sum + item.price, 0)
-                      .toLocaleString()}{' '}
+                    {Math.floor(
+                      cartItemsList.reduce((sum, item) => sum + item.price, 0)
+                    ).toLocaleString()}{' '}
                     &#8381;
                   </span>
                 </>
               )}
             </div>
           </div>
-          <div className={styles.orderSummaryRow}>
-            <span>Скидка:</span>
-            <div className={styles.itemPrices}>
-              {twoItemDiscount ? (
-                <span className={styles.itemPricesPrice}>
-                  {(discount + twoItemDiscount).toLocaleString()} &#8381;
-                </span>
-              ) : (
-                <span className={styles.itemPricesPrice}>
-                  {discount.toLocaleString()} &#8381;
-                </span>
-              )}
-            </div>
-          </div>
+
           <div className={styles.orderSummaryRow}>
             <span>Доставка:</span>
             <div className={styles.itemPrices}>
               <span className={styles.itemPricesPrice}>
-                {deliveryCost.toLocaleString()} &#8381;
+                {Math.floor(deliveryCost).toLocaleString()} &#8381;
               </span>
             </div>
           </div>
@@ -105,13 +93,40 @@ export default function RightBlock({
               <span>Срочность:</span>
               <div className={styles.itemPrices}>
                 <span className={styles.itemPricesPrice}>
-                  {urgencyFee.toLocaleString()} &#8381;
+                  {Math.floor(urgencyFee).toLocaleString()} &#8381;
                 </span>
               </div>
             </div>
           ) : (
             <></>
           )}
+          {liningCost ? (
+            <div className={styles.orderSummaryRow}>
+              <span>Утепление для пальто:</span>
+              <div className={styles.itemPrices}>
+                <span className={styles.itemPricesPrice}>
+                  {Math.floor(liningCost).toLocaleString()} &#8381;
+                </span>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
+          <div className={styles.orderSummaryRow}>
+            <span>Скидка:</span>
+            <div className={styles.itemPrices}>
+              {twoItemDiscount ? (
+                <span className={styles.itemPricesPrice}>
+                  {Math.floor(discount + twoItemDiscount).toLocaleString()}{' '}
+                  &#8381;
+                </span>
+              ) : (
+                <span className={styles.itemPricesPrice}>
+                  {Math.floor(discount).toLocaleString()} &#8381;
+                </span>
+              )}
+            </div>
+          </div>
         </div>
       </div>
       <div className={`${styles.orderSummary} ${styles.orderSummaryTotal}`}>
@@ -119,7 +134,7 @@ export default function RightBlock({
           <span>Итого:</span>
           <div className={styles.itemPrices}>
             <span className={styles.itemPrices}>
-              {cartTotal.toLocaleString()} &#8381;
+              {Math.floor(cartTotal).toLocaleString()} &#8381;
             </span>
           </div>
         </div>

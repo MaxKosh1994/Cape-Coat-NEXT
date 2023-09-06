@@ -58,6 +58,9 @@ export const useCartControl = () => {
   const [urgentMaking, setUrgentMaking] = useState<boolean>(false);
   // стоимость срочного пошива
   const [urgencyFee, setUrgencyFee] = useState<number>(0);
+  // стоимость утепления
+  const [liningCost, setLiningCost] = useState<number>(0);
+  // форма для незарегистрированного пользователя
   const [personalData, setPersonalData] = useState<IPersonalData>({
     name: '',
     email: '',
@@ -89,7 +92,9 @@ export const useCartControl = () => {
     lining: '',
   });
   // записывет параметры товаров по индексу в массиве
-  const [userParams, setUserParams] = useState<string[]>([]);
+  const [userParams, setUserParams] = useState<string[]>(
+    Array(cartItemsList.length).fill('')
+  );
 
   // стукается через санку на бек, грузит список товаров добавленных в корзину
   const fetchCartItems = async (): Promise<void> => {
@@ -101,167 +106,66 @@ export const useCartControl = () => {
       console.log(err);
     }
   };
-  console.log(cartItemsList);
+
   const countCartTotal = (): void => {
-    // const subtotal = cartItemsList.reduce((sum, item) => sum + item.price, 0);
+    let liningCost = 0;
+    // counting subtotal of all items adding 1400 to the items with lining
     const subtotal = cartItemsList.reduce((sum, item) => {
       if (item.Carts[0].CartItem.lining !== '') {
+        liningCost += 1400;
         return sum + item.price + 1400;
       } else {
         return sum + item.price;
       }
     }, 0);
-    // фильтруем только жакеты
-    const jacketItems = cartItemsList.filter((item) => item.category_id === 3);
-
+    setLiningCost(liningCost);
     if (cartItemsList.length > 2) {
-      // если больше 2х товаров в корзине скидка 5%
-      const discountPercentage = 0.05;
-      // считаем размер скидки
-      const discountAmount = subtotal * discountPercentage;
-      // устанавливаем размер скидки для двух+ товаров
-      setTwoItemDiscount(discountAmount);
-      // если есть скидка по промокоду, то считаем с учетом той скидки
-      if (discount) {
-        // считает размер новой скидки по ее проценту
-        const newDisc = discountPercent * subtotal;
-        // записываем размер скидки в стейт
-        setDiscount(newDisc);
-        // пересчитываем и устанавливаем новый тотал
-        const updTotal = subtotal - newDisc - discountAmount + deliveryCost;
-        setCartTotal(updTotal);
+      // 5% discount for >2 items in cart from all item prices + delivery
+      const threePlusItemsDiscount = (subtotal + deliveryCost) * 0.05;
+      setTwoItemDiscount(threePlusItemsDiscount);
+      // upds total - discount for >2 items + cost of delivery
+      const updTotal = subtotal + deliveryCost - threePlusItemsDiscount;
+      setCartTotal(updTotal);
+      console.log(discountPercent);
+      // if there is a promocode discount
+      if (discountPercent > 0) {
+        // counts new total with discount from promo
+        setCartTotal(updTotal * (1 - discountPercent));
+        // sets discount size off of subtotal and deliverycost
+        setDiscount(discountPercent * updTotal);
         if (urgentMaking) {
-          // если срочный пошив, считает 20% от корзины и устанавливаем размер стоимости пошива
-          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
-          setUrgencyFee(twentyPercentOfSubtotal);
-          // обновляем ИТОГО с учетом скидок, срочного пошива и доставки
-          const updatedTotal =
-            subtotal -
-            newDisc -
-            discountAmount +
-            deliveryCost +
-            twentyPercentOfSubtotal;
-          setCartTotal(updatedTotal);
-        } else {
-          // если несрочно - то считаем тотал с учетом скидок и доставки
-          const updatedTotal =
-            subtotal - newDisc - discountAmount + deliveryCost;
-          setDiscount(newDisc);
-          setCartTotal(updatedTotal);
-          setUrgencyFee(0);
-        }
-      } else {
-        // если скидки нет (от промокода), то считаем так же срочную и несрочную доставку
-        if (urgentMaking) {
-          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
-          setUrgencyFee(twentyPercentOfSubtotal);
-          const updatedTotal =
-            subtotal -
-            discount -
-            discountAmount +
-            deliveryCost +
-            twentyPercentOfSubtotal;
-          setCartTotal(updatedTotal);
-        } else {
-          const updatedTotal =
-            subtotal - discount - discountAmount + deliveryCost;
-          setCartTotal(updatedTotal);
-          setUrgencyFee(0);
+          // counts +20% on the total of the cart after >2 item discount
+          setUrgencyFee(subtotal * 0.2);
+          // counts new total from total with >2 discount + discount from promo + urgency fee + delivery
+          setCartTotal(
+            updTotal * (1 - discountPercent) + (urgencyFee - urgencyFee * 0.05)
+          );
+          // count discount size from total before any discount + fee + delivery
+          setDiscount(discountPercent * (updTotal + urgencyFee));
         }
       }
-    } else if (jacketItems.length > 2) {
-      // если больше 2 товаров категории жакет, то подсчитываем их стоимость
-      const subtotalJackets = jacketItems.reduce(
-        (sum, item) => sum + item.price,
-        0
-      );
-      // считаем размер скидки 5% и пишем в стейт
-      const discountPercentage = 0.05;
-      const discountAmount = subtotalJackets * discountPercentage;
-      setTwoItemDiscount(discountAmount);
-      if (discount) {
-        // те же расчеты если есть скидка по промокоду
-        const newDisc = discountPercent * subtotal;
-        setDiscount(newDisc);
-        const updTotal = subtotal - newDisc - discountAmount + deliveryCost;
-        setCartTotal(updTotal);
-        if (urgentMaking) {
-          // те же расчеты если срочный пошив
-          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
-          setUrgencyFee(twentyPercentOfSubtotal);
-          const updatedTotal =
-            subtotal -
-            newDisc -
-            discountAmount +
-            deliveryCost +
-            twentyPercentOfSubtotal;
-          setCartTotal(updatedTotal);
-        } else {
-          // те же расчеты если несрочный пошив
-          const updatedTotal =
-            subtotal - newDisc - discountAmount + deliveryCost;
-          setDiscount(newDisc);
-          setCartTotal(updatedTotal);
-          setUrgencyFee(0);
-        }
-      } else {
-        // если нет скидки по промокоду
-        if (urgentMaking) {
-          // те же расчеты если срочный пошив
-          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
-          setUrgencyFee(twentyPercentOfSubtotal);
-          const updatedTotal =
-            subtotal -
-            discount -
-            discountAmount +
-            deliveryCost +
-            twentyPercentOfSubtotal;
-          setCartTotal(updatedTotal);
-        } else {
-          // те же расчеты несрочный пошив
-          const updatedTotal =
-            subtotal - discount - discountAmount + deliveryCost;
-          setCartTotal(updatedTotal);
-          setUrgencyFee(0);
-        }
+      if (urgentMaking && discountPercent <= 0) {
+        // counts +20% on the total of the cart before >2 item discount
+        setUrgencyFee(subtotal * 0.2);
+        setCartTotal(updTotal + (urgencyFee - urgencyFee * 0.05));
+        setTwoItemDiscount(threePlusItemsDiscount + urgencyFee * 0.05);
       }
     } else {
-      // рассчитываем итоговую стоимость, если нет автоматических скидок по 2+ товарам категории
-      setTwoItemDiscount(0);
-      if (discount) {
-        // те же расчеты с учетом скидки по промокоду
-        const newDisc = discountPercent * subtotal;
-        setDiscount(newDisc);
-        const updTotal = subtotal - newDisc + deliveryCost;
-        setCartTotal(updTotal);
+      const updTotal = subtotal + deliveryCost;
+      setCartTotal(updTotal);
+
+      if (discountPercent > 0) {
+        setCartTotal(updTotal * (1 - discountPercent));
+        setDiscount(discountPercent * updTotal);
         if (urgentMaking) {
-          // те же расчеты со срочным пошивом
-          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
-          setUrgencyFee(twentyPercentOfSubtotal);
-          const updatedTotal =
-            subtotal - discount + deliveryCost + twentyPercentOfSubtotal;
-          setCartTotal(updatedTotal);
-        } else {
-          // те же расчеты с несрочным пошивом
-          const updatedTotal = subtotal - discount + deliveryCost;
-          setCartTotal(updatedTotal);
-          setUrgencyFee(0);
+          setUrgencyFee(subtotal * 0.2);
+          setCartTotal((updTotal + urgencyFee) * (1 - discountPercent));
+          setDiscount(discountPercent * (updTotal + urgencyFee));
         }
-      } else {
-        // те же расчеты когда нет скидки по промокоду
-        if (urgentMaking) {
-          // те же расчеты со срочным пошивом
-          const twentyPercentOfSubtotal = (subtotal * 20) / 100;
-          setUrgencyFee(twentyPercentOfSubtotal);
-          const updatedTotal =
-            subtotal - discount + deliveryCost + twentyPercentOfSubtotal;
-          setCartTotal(updatedTotal);
-        } else {
-          // те же расчеты с несрочным пошивом
-          const updatedTotal = subtotal + deliveryCost;
-          setCartTotal(updatedTotal);
-          setUrgencyFee(0);
-        }
+      }
+      if (urgentMaking && discountPercent <= 0) {
+        setUrgencyFee(subtotal * 0.2);
+        setCartTotal(updTotal + urgencyFee);
       }
     }
   };
@@ -276,6 +180,7 @@ export const useCartControl = () => {
     countCartTotal();
   }, [
     cartItemsList,
+    discountPercent,
     discount,
     twoItemDiscount,
     deliveryCost,
@@ -430,22 +335,24 @@ export const useCartControl = () => {
       if (isValidPromo.status === 200) {
         setDbPc(promocode);
         // если такой промокод есть, то считаем скидку
-        if (discount === 0) {
-          // если до этого была ноль
-          setDiscountPercent(response.percent / 100);
-          const disc = (response.percent / 100) * subtotal;
-          setDiscount(disc);
-          setPromoUsed(true);
-          setPromocode('');
-        } else {
-          // если до этого уже была скидка
-          setDiscountPercent(response.percent / 100);
-          // плюсуем существующую скидку
-          const disc = discount + (response.percent / 100) * subtotal;
-          setDiscount(disc);
-          setPromoUsed(true);
-          setPromocode('');
-        }
+        // if (discount === 0) {
+        // если до этого была ноль
+        setDiscountPercent(response.percent / 100);
+        // ?! maybe shouldnt count discount here
+        // const disc = (response.percent / 100) * subtotal;
+        // setDiscount(disc);
+        setPromoUsed(true);
+        setPromocode('');
+        // } else {
+        //   // ?! and then dont need this
+        //   // если до этого уже была скидка
+        //   setDiscountPercent(response.percent / 100);
+        //   // плюсуем существующую скидку
+        //   const disc = discount + (response.percent / 100) * subtotal;
+        //   setDiscount(disc);
+        //   setPromoUsed(true);
+        //   setPromocode('');
+        // }
       } else {
         // если ошибка с бека
         setPromocodeErr(response);
@@ -644,6 +551,7 @@ export const useCartControl = () => {
     setUrgencyFee,
     urgentMaking,
     setUrgentMaking,
+    liningCost,
     cartTotal,
     setCartTotal,
     userParams,

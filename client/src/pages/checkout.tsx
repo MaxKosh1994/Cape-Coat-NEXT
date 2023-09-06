@@ -27,6 +27,7 @@ export default function CheckoutPage() {
     twoItemDiscount,
     urgencyFee,
     urgentMaking,
+    liningCost,
     cartTotal,
     userParams,
     handleDisplaySizesForm,
@@ -120,6 +121,7 @@ export default function CheckoutPage() {
                 discount={discount}
                 twoItemDiscount={twoItemDiscount}
                 deliveryCost={deliveryCost}
+                liningCost={liningCost}
                 urgencyFee={urgencyFee}
                 urgentMaking={urgentMaking}
                 cartTotal={cartTotal}
