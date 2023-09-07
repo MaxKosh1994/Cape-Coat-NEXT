@@ -11,7 +11,7 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
             <div>
               <div className={styles.inputLocation}>
                 <div className={styles.formControl}>
-                  <label className={styles.formControlLabel}>Имя</label>
+                  <label className={styles.formControlLabel}>Имя*</label>
                   <input
                     role="text"
                     title="Имя*"
@@ -22,7 +22,7 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
                   />
                 </div>
                 <div className={styles.formControl}>
-                  <label className={styles.formControlLabel}>Email</label>
+                  <label className={styles.formControlLabel}>Email*</label>
                   <input
                     role="text"
                     title="Email*"
@@ -33,7 +33,7 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
                   />
                 </div>
                 <div className={styles.formControl}>
-                  <label className={styles.formControlLabel}>Пароль</label>
+                  <label className={styles.formControlLabel}>Пароль*</label>
                   <input
                     role="password"
                     title="Пароль*"
@@ -47,7 +47,7 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
               <div className={styles.inputGroup}>
                 <div className={styles.inputLocation}>
                   <div className={styles.formControl}>
-                    <label className={styles.formControlLabel}>Телефон</label>
+                    <label className={styles.formControlLabel}>Телефон*</label>
                     <input
                       role="text"
                       title="Телефон*"

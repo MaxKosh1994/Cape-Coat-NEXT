@@ -10,6 +10,7 @@ import { delCartItem, getCartItems } from '@/app/cartSlice';
 import {
   delCartItemThunk,
   emptyCartThunk,
+  getCartItemsByIdThunk,
   getCartItemsThunk,
 } from '@/app/thunkActionsCart';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
@@ -104,9 +105,16 @@ export const useCartControl = () => {
   // стукается через санку на бек, грузит список товаров добавленных в корзину
   const fetchCartItems = async (): Promise<void> => {
     try {
-      const cartItems = await dispatch(getCartItemsThunk());
-
-      setCartItemsList(cartItems);
+      if (localStorage.getItem('cartItems')) {
+        const itemsLocal = JSON.parse(localStorage.getItem('cartItems'));
+        const itemsFoundFromLocal = await dispatch(
+          getCartItemsByIdThunk(itemsLocal)
+        );
+        setCartItemsList(itemsFoundFromLocal);
+      } else {
+        const cartItems = await dispatch(getCartItemsThunk());
+        setCartItemsList(cartItems);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -116,12 +124,13 @@ export const useCartControl = () => {
     let liningCost = 0;
     // counting subtotal of all items adding 1400 to the items with lining
     const subtotal = cartItemsList.reduce((sum, item) => {
-      if (item.Carts[0].CartItem.lining !== '') {
-        liningCost += 1400;
-        return sum + item.price + 1400;
-      } else {
-        return sum + item.price;
-      }
+      // TODO раскомментить когда в локал запишутся мерки
+      // if (item.Carts[0].CartItem.lining !== '') {
+      //   liningCost += 1400;
+      //   return sum + item.price + 1400;
+      // } else {
+      return sum + item.price;
+      // }
     }, 0);
     setLiningCost(liningCost);
     if (cartItemsList.length > 2) {
@@ -131,7 +140,6 @@ export const useCartControl = () => {
       // upds total - discount for >2 items + cost of delivery
       const updTotal = subtotal + deliveryCost - threePlusItemsDiscount;
       setCartTotal(updTotal);
-      console.log(discountPercent);
       // if there is a promocode discount
       if (discountPercent > 0) {
         // counts new total with discount from promo
@@ -156,6 +164,7 @@ export const useCartControl = () => {
         setTwoItemDiscount(threePlusItemsDiscount + urgencyFee * 0.05);
       }
     } else {
+      setTwoItemDiscount(0);
       const updTotal = subtotal + deliveryCost;
       setCartTotal(updTotal);
 
@@ -211,11 +220,18 @@ export const useCartControl = () => {
   // удаляет из массива и с бека через санку
   const handleDeleteItemFromCart = async (itemId: number): Promise<void> => {
     try {
-      const data = { itemId, user };
-      await dispatch(delCartItemThunk(data));
-      const updatedCartItems = await dispatch(getCartItemsThunk());
-      setCartItemsList(updatedCartItems);
-      dispatch(delCartItem(itemId));
+      if (user) {
+        const data = { itemId, user };
+        await dispatch(delCartItemThunk(data));
+        const updatedCartItems = await dispatch(getCartItemsThunk());
+        // setCartItemsList(updatedCartItems);
+      } else {
+        await dispatch(delCartItem(itemId));
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const updatedCartItems = cartItems.filter((item) => item.id !== itemId);
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+        await dispatch(getCartItemsByIdThunk(updatedCartItems));
+      }
     } catch (err) {
       console.log(err);
       setDelError('Не получилось удалить товар, попробуйте позже.');
@@ -326,7 +342,6 @@ export const useCartControl = () => {
       setShowParamsForm({});
     }
   };
-  console.log(userParams);
 
   // отслеживает инпут промокода
   const handlePromocodeChange = async (
@@ -577,6 +592,7 @@ export const useCartControl = () => {
     countCartTotal,
     handleCreateOrder,
     createOrder,
+    userParamsRef,
   };
   // setState тоже можно возвращать и юзать в компоненте снаружи
 };

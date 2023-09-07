@@ -5,6 +5,8 @@ import styles from '../../styles/Checkout.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import DelBtn from './DelBtn';
+import { useAppSelector } from '@/app/hooks';
+import { RootState } from '@/app/store';
 
 export default function ItemDisplay({
   item,
@@ -17,6 +19,7 @@ export default function ItemDisplay({
   handleSaveSizesInputs,
   handleCustomFormChange,
 }) {
+  const user = useAppSelector((state: RootState) => state.sessionSlice.user);
   return (
     <div className={styles.basketItem}>
       <div className={styles.basketItemLeft}>
@@ -53,8 +56,14 @@ export default function ItemDisplay({
         </div>
         <div className={styles.basketItemContent}>
           <div className={styles.basketItemProperties}>
-            {item.Carts[0].CartItem.selected_material ? (
-              <div>Материал: {item.Carts[0].CartItem.selected_material}</div>
+            {user ? (
+              item.Carts[0].CartItem.selected_material ? (
+                <div>Материал: {item.Carts[0].CartItem.selected_material}</div>
+              ) : (
+                <div>Материал: {item.Material.name}</div>
+              )
+            ) : item.selected_material ? (
+              <div>Материал: {item.selected_material}</div>
             ) : (
               <div>Материал: {item.Material.name}</div>
             )}
@@ -83,67 +92,67 @@ export default function ItemDisplay({
           )}
         </div>
         {item.in_stock ? (
-          <>
-            <div className={styles.basketItemContent}>
-              <div className={styles.itemPrices}>
-                <span className={styles.itemPricesPrice}>
-                  {item.model_params}
-                </span>
-              </div>
+          <div className={styles.basketItemContent}>
+            <div className={styles.itemPrices}>
+              <span className={styles.itemPricesPrice}>
+                {item.model_params}
+              </span>
             </div>
-          </>
+          </div>
         ) : (
           <>
-            {userParams[index] || item.Carts[0].CartItem.added ? (
-              <>
-                <div className={styles.userParameters}>
-                  <div className={styles.itemPrices}>
-                    <span className={styles.itemPricesPrice}>
-                      {userParams[index] ||
-                        `Ваш рост: ${
-                          item.Carts[0].CartItem.height
-                        }см, Длина изделия: ${
-                          item.Carts[0].CartItem.length
-                        }см, Длина рукава: ${
-                          item.Carts[0].CartItem.sleeve
-                        }см, Объем груди: ${
-                          item.Carts[0].CartItem.bust
-                        }см, Объем талии: ${
-                          item.Carts[0].CartItem.waist
-                        }см, Объем бедер: ${item.Carts[0].CartItem.hips}см${
-                          item.Carts[0].CartItem.lining
-                            ? `, Утепление: ${item.Carts[0].CartItem.lining}`
-                            : ''
-                        }${
-                          item.Carts[0].CartItem.buttons
-                            ? `, Фурнитура: ${item.Carts[0].CartItem.buttons}`
-                            : ''
-                        }${
-                          item.Carts[0].CartItem.loops ? `, со шлёвками` : ''
-                        }${
-                          item.Carts[0].CartItem.saddle
-                            ? `, седло: ${item.Carts[0].CartItem.saddle}`
-                            : ''
-                        }`}
-                    </span>
+            {user ? (
+              userParams[index] || item.Carts[0].CartItem.added ? (
+                <>
+                  <div className={styles.userParameters}>
+                    <div className={styles.itemPrices}>
+                      <span className={styles.itemPricesPrice}>
+                        {userParams[index] ||
+                          `Ваш рост: ${
+                            item.Carts[0].CartItem.height
+                          }см, Длина изделия: ${
+                            item.Carts[0].CartItem.length
+                          }см, Длина рукава: ${
+                            item.Carts[0].CartItem.sleeve
+                          }см, Объем груди: ${
+                            item.Carts[0].CartItem.bust
+                          }см, Объем талии: ${
+                            item.Carts[0].CartItem.waist
+                          }см, Объем бедер: ${item.Carts[0].CartItem.hips}см${
+                            item.Carts[0].CartItem.lining
+                              ? `, Утепление: ${item.Carts[0].CartItem.lining}`
+                              : ''
+                          }${
+                            item.Carts[0].CartItem.buttons
+                              ? `, Фурнитура: ${item.Carts[0].CartItem.buttons}`
+                              : ''
+                          }${
+                            item.Carts[0].CartItem.loops ? `, со шлёвками` : ''
+                          }${
+                            item.Carts[0].CartItem.saddle
+                              ? `, седло: ${item.Carts[0].CartItem.saddle}`
+                              : ''
+                          }`}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <button
-                  className={styles.showSizeFormBtn}
-                  onClick={() => handleDisplaySizesForm(index, item.id)}
-                >
-                  Изменить мерки
-                </button>
-              </>
-            ) : (
-              <>
+                  <button
+                    className={styles.showSizeFormBtn}
+                    onClick={() => handleDisplaySizesForm(index, item.id)}
+                  >
+                    Изменить мерки
+                  </button>
+                </>
+              ) : (
                 <button
                   className={styles.showSizeFormBtn}
                   onClick={() => handleDisplaySizesForm(index, item.id)}
                 >
                   Ввести мерки
                 </button>
-              </>
+              )
+            ) : (
+              <></>
             )}
           </>
         )}

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { RootState } from '@/app/store';
-import { useAppSelector } from '@/app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useCartControl } from '@/components/Cart/useCartControl';
 import styles from '../styles/Checkout.module.css';
 import Link from 'next/link';
@@ -14,7 +14,7 @@ import RightBlock from '@/components/Cart/RightBlock';
 
 export default function CheckoutPage() {
   const {
-    cartItemsList,
+    // cartItemsList,
     showParamsForm,
     deliveryCost,
     showAddressInputs,
@@ -41,17 +41,15 @@ export default function CheckoutPage() {
     handleUrgentChange,
     handleDeliveryChange,
     handleCommentChange,
-    countCartTotal,
     handleCreateOrder,
     handleCustomFormChange,
   } = useCartControl();
 
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
-  // const cartItemsList = useAppSelector(
-  //   (state: RootState) => state.cartSlice.cartItems
-  // );
-  // console.log(cartItemsList);
-
+  const cartItemsList = useAppSelector(
+    (state: RootState) => state.cartSlice.cartItems
+  );
+  console.log(cartItemsList);
   return (
     <>
       <Head>
@@ -103,7 +101,6 @@ export default function CheckoutPage() {
                     }
                   />
                 )}
-                {/* <UrgencyForm /> */}
                 <UrgencyForm handleUrgentChange={handleUrgentChange} />
                 <CommentForm handleCommentChange={handleCommentChange} />
                 <DeliveryForm
