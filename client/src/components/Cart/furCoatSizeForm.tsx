@@ -12,22 +12,10 @@ export default function FurCoatSizeForm({ itemId, onFurCoatSizeChange }) {
     <>
       <div>
         <input
-          type="checkbox"
-          name="loops"
-          id={`loops${itemId}`}
-          className={styles.sizesFormCheckbox}
-          onChange={handleInputChange}
-        />
-        <label htmlFor={`loops${itemId}`} className={styles.sizesFormLabel}>
-          Хочу шлёвки
-        </label>
-      </div>
-      <div>
-        <input
           type="radio"
           name="buttons"
           id={`pugovitsy${itemId}`}
-          value="pugovitsy"
+          value="пуговицы"
           className={styles.sizesFormCheckbox}
           onChange={handleInputChange}
         />
@@ -39,13 +27,25 @@ export default function FurCoatSizeForm({ itemId, onFurCoatSizeChange }) {
         <input
           type="radio"
           name="buttons"
-          value="knopki"
+          value="кнопки"
           id={`knopki${itemId}`}
           className={styles.sizesFormCheckbox}
           onChange={handleInputChange}
         />
         <label htmlFor={`knopki${itemId}`} className={styles.sizesFormLabel}>
           Хочу кнопки
+        </label>
+      </div>
+      <div>
+        <input
+          type="checkbox"
+          name="loops"
+          id={`loops${itemId}`}
+          className={styles.sizesFormCheckbox}
+          onChange={handleInputChange}
+        />
+        <label htmlFor={`loops${itemId}`} className={styles.sizesFormLabel}>
+          Хочу шлёвки
         </label>
       </div>
       <div>
@@ -58,8 +58,8 @@ export default function FurCoatSizeForm({ itemId, onFurCoatSizeChange }) {
           className={styles.sizesFormSelect}
           onChange={handleInputChange}
         >
-          <option value="minus15">Утепление до -15 градусов</option>
-          <option value="minus25">Утепление до -25 градусов</option>
+          <option value="-15 градусов">Утепление до -15 градусов</option>
+          <option value="-25 градусов">Утепление до -25 градусов</option>
         </select>
       </div>
     </>
