@@ -40,8 +40,6 @@ export const removeFromFavorites = async (data: IProductCard) => {
 
 export const addToCart = async (data: IProductCard) => {
   try {
-    console.log('data', data);
-    // console.log('cartData', cartData);
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_URL}cart/item/add`,
       data,
