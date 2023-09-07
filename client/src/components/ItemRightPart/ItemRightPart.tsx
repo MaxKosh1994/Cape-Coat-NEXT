@@ -21,7 +21,6 @@ export default function ItemRightPart({
   materialsData,
 }: ItemRightPartProps): JSX.Element {
   const isMobile = useMediaQuery('(max-width: 768px)');
-  console.log(typeof itemId)
   return (
     <div
       className={`${styles.grid__item} ${styles.large_one_third}`}

@@ -62,7 +62,6 @@ export default function Favorites() {
     itemData = [];
   }
 
-  console.log('itemData', itemData);
   const renderProductCards =
     itemData && Array.isArray(itemData)
       ? itemData.map((item) => (

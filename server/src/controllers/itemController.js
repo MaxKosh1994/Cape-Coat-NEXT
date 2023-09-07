@@ -193,8 +193,6 @@ module.exports.getAllItemsWithFavorites = async (req, res) => {
         ],
       });
 
-      console.log(items);
-
       res.status(200).json(items);
     } else {
       res.status(401).json({ message: 'Unauthorized' });
