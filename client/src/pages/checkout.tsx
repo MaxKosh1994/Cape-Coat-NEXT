@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { RootState } from '@/app/store';
-import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { useAppSelector } from '@/app/hooks';
 import { useCartControl } from '@/components/Cart/useCartControl';
 import styles from '../styles/Checkout.module.css';
 import Link from 'next/link';
@@ -11,10 +11,10 @@ import DeliveryForm from '@/components/Cart/DeliveryForm';
 import PersonalDataForm from '@/components/Cart/PersonalDataForm';
 import ItemDisplay from '@/components/Cart/ItemDisplay';
 import RightBlock from '@/components/Cart/RightBlock';
+import LSItemDisplay from '@/components/Cart/LSCart/LSItemDisplay';
 
 export default function CheckoutPage() {
   const {
-    // cartItemsList,
     showParamsForm,
     deliveryCost,
     showAddressInputs,
@@ -49,7 +49,7 @@ export default function CheckoutPage() {
   const cartItemsList = useAppSelector(
     (state: RootState) => state.cartSlice.cartItems
   );
-  console.log(cartItemsList);
+
   return (
     <>
       <Head>
@@ -78,22 +78,36 @@ export default function CheckoutPage() {
                 <section
                   className={`${styles.orderBlock} ${styles.orderBlockBasket}`}
                 >
-                  {cartItemsList?.map((item, index) => (
-                    <ItemDisplay
-                      key={item.id}
-                      index={index}
-                      item={item}
-                      handleDeleteItemFromCart={handleDeleteItemFromCart}
-                      userParams={userParams}
-                      handleDisplaySizesForm={handleDisplaySizesForm}
-                      showParamsForm={showParamsForm}
-                      handleChange={handleChange}
-                      handleSaveSizesInputs={handleSaveSizesInputs}
-                      handleCustomFormChange={handleCustomFormChange}
-                    />
-                  ))}
+                  {user
+                    ? cartItemsList?.map((item, index) => (
+                        <ItemDisplay
+                          key={item.id}
+                          index={index}
+                          item={item}
+                          handleDeleteItemFromCart={handleDeleteItemFromCart}
+                          userParams={userParams}
+                          handleDisplaySizesForm={handleDisplaySizesForm}
+                          showParamsForm={showParamsForm}
+                          handleChange={handleChange}
+                          handleSaveSizesInputs={handleSaveSizesInputs}
+                          handleCustomFormChange={handleCustomFormChange}
+                        />
+                      ))
+                    : cartItemsList?.map((item, index) => (
+                        <LSItemDisplay
+                          key={item.id}
+                          index={index}
+                          item={item}
+                          handleDeleteItemFromCart={handleDeleteItemFromCart}
+                          userParams={userParams}
+                          handleDisplaySizesForm={handleDisplaySizesForm}
+                          showParamsForm={showParamsForm}
+                          handleChange={handleChange}
+                          handleSaveSizesInputs={handleSaveSizesInputs}
+                          handleCustomFormChange={handleCustomFormChange}
+                        />
+                      ))}
                 </section>
-
                 {!user && (
                   <PersonalDataForm
                     handlePersonalDataInputChange={

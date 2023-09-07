@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import { useRouter } from 'next/router';
-import { delCartItem, getCartItems } from '@/app/cartSlice';
+import { delCartItem, emptyCart, getCartItems } from '@/app/cartSlice';
 import {
   delCartItemThunk,
   emptyCartThunk,
@@ -31,10 +31,10 @@ export const useCartControl = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   // товары в корзине
-  const [cartItemsList, setCartItemsList] = useState<ISingleItem[]>([]);
-  // const cartItemsList = useAppSelector(
-  //   (state: RootState) => state.cartSlice.cartItems
-  // );
+  // const [cartItemsList, setCartItemsList] = useState<ISingleItem[]>([]);
+  const cartItemsList = useAppSelector(
+    (state: RootState) => state.cartSlice.cartItems
+  );
   // ошибка при удалении товара из корзины
   const [delError, setDelError] = useState<string>('');
   // сумма корзины
@@ -105,15 +105,15 @@ export const useCartControl = () => {
   // стукается через санку на бек, грузит список товаров добавленных в корзину
   const fetchCartItems = async (): Promise<void> => {
     try {
-      if (localStorage.getItem('cartItems')) {
+      if (!user) {
         const itemsLocal = JSON.parse(localStorage.getItem('cartItems'));
         const itemsFoundFromLocal = await dispatch(
           getCartItemsByIdThunk(itemsLocal)
         );
-        setCartItemsList(itemsFoundFromLocal);
+        // setCartItemsList(itemsFoundFromLocal);
       } else {
         const cartItems = await dispatch(getCartItemsThunk());
-        setCartItemsList(cartItems);
+        // setCartItemsList(cartItems);
       }
     } catch (err) {
       console.log(err);
@@ -124,13 +124,23 @@ export const useCartControl = () => {
     let liningCost = 0;
     // counting subtotal of all items adding 1400 to the items with lining
     const subtotal = cartItemsList.reduce((sum, item) => {
-      // TODO раскомментить когда в локал запишутся мерки
-      // if (item.Carts[0].CartItem.lining !== '') {
-      //   liningCost += 1400;
-      //   return sum + item.price + 1400;
-      // } else {
-      return sum + item.price;
-      // }
+      const localData = JSON.parse(localStorage.getItem('cartItems')) || [];
+      if (user) {
+        if (item?.Carts[0]?.CartItem?.lining !== '') {
+          liningCost += 1400;
+          return sum + item.price + 1400;
+        } else {
+          return sum + item.price;
+        }
+      } else {
+        // TODO некорректно отображает есть\нет утепления
+        if (localData?.find((data) => data.id === item.id).lining !== '') {
+          liningCost += 1400;
+          return sum + item.price + 1400;
+        } else {
+          return sum + item.price;
+        }
+      }
     }, 0);
     setLiningCost(liningCost);
     if (cartItemsList.length > 2) {
@@ -223,8 +233,7 @@ export const useCartControl = () => {
       if (user) {
         const data = { itemId, user };
         await dispatch(delCartItemThunk(data));
-        const updatedCartItems = await dispatch(getCartItemsThunk());
-        // setCartItemsList(updatedCartItems);
+        await dispatch(getCartItemsThunk());
       } else {
         await dispatch(delCartItem(itemId));
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -310,7 +319,44 @@ export const useCartControl = () => {
       ...prevState,
       itemId: itemId,
     }));
-
+    console.log(paramsFormData);
+    if (!user) {
+      // введенные мерки сохраняются в локалсторедж к соответствующим товарам
+      const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      const itemToUpdate = cartItems.find((item) => item.id === itemId);
+      if (itemToUpdate) {
+        itemToUpdate.height = paramsFormData.height || '';
+        itemToUpdate.length = paramsFormData.length || '';
+        itemToUpdate.sleeve = paramsFormData.sleeve || '';
+        itemToUpdate.bust = paramsFormData.bust || '';
+        itemToUpdate.waist = paramsFormData.waist || '';
+        itemToUpdate.hips = paramsFormData.hips || '';
+        itemToUpdate.saddle = paramsFormData.saddle || '';
+        itemToUpdate.loops = paramsFormData.loops || false;
+        itemToUpdate.buttons = paramsFormData.buttons || '';
+        itemToUpdate.lining = paramsFormData.lining || '';
+      }
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      // сохраняет параметры для отображения
+      const userParams = `Ваш рост: ${
+        paramsFormData.height
+      }см, длина изделия: ${paramsFormData.length}см, длина рукава: ${
+        paramsFormData.sleeve
+      }см, объем груди: ${paramsFormData.bust}см, объем талии: ${
+        paramsFormData.waist
+      }см, объем бедер: ${paramsFormData.hips}см${
+        paramsFormData.saddle ? `, седло: ${paramsFormData.saddle}` : ''
+      }${paramsFormData.lining ? `, утепление: ${paramsFormData.lining}` : ''}${
+        paramsFormData.buttons ? `, фурнитура: ${paramsFormData.buttons}` : ''
+      }${paramsFormData.loops ? `, со шлёвками` : ''}`;
+      setUserParams((prevTexts) => {
+        const updatedTexts = [...prevTexts];
+        updatedTexts[index] = userParams;
+        return updatedTexts;
+      });
+      setParamsFormData({});
+      setShowParamsForm({});
+    }
     // записывает мерки к товару в CartItems
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}cart/measures/${itemId}`,
@@ -416,7 +462,7 @@ export const useCartControl = () => {
         body: JSON.stringify(data),
       });
       const re = await response.json();
-      console.log(re);
+      console.log('ответ createOrder ===>', re);
       if (re.message === 'Что-то пошло не так, попробуйте позже') {
         // если ошибка на беке
         setOrderStatus(re.message);
@@ -432,8 +478,10 @@ export const useCartControl = () => {
         }, 2000);
       } else {
         // если все ок - очищает корзину, массив в редаксе и редиректит на спасибку
-        await dispatch(emptyCartThunk(user));
         router.push('/thankyou');
+        await dispatch(emptyCartThunk(user));
+        await dispatch(emptyCart());
+        localStorage.setItem('cartItems', JSON.stringify([]));
         sendMail(name, user, re.message);
       }
     } catch (err) {
@@ -455,63 +503,68 @@ export const useCartControl = () => {
       }
 
       // проверяем заполнил ли клиент мерки для всех товаров на пошив
-      const isMeasuresAdded = cartItemsList
-        .filter((item) => !item.in_stock)
-        .every((item) => {
-          // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-          // TODO ошибка типизации
-          const cartItems = item.Carts.map((cart) => cart.CartItem);
-          return cartItems.every((cartItem) => {
-            return (
-              cartItem.height !== '' &&
-              cartItem.length !== '' &&
-              cartItem.sleeve !== '' &&
-              cartItem.bust !== '' &&
-              cartItem.waist !== '' &&
-              cartItem.hips !== ''
-            );
-          });
-        });
-      console.log(cartItemsList.map((item) => item));
+      // TODO отдебажить
+      // const isMeasuresAdded = cartItemsList
+      //   .filter((item) => !item.in_stock)
+      //   .every((item) => {
+      //     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //     // TODO ошибка типизации
+      //     const cartItems = item.Carts.map((cart) => cart.CartItem);
+      //     return cartItems.every((cartItem) => {
+      //       return (
+      //         cartItem.height !== '' &&
+      //         cartItem.length !== '' &&
+      //         cartItem.sleeve !== '' &&
+      //         cartItem.bust !== '' &&
+      //         cartItem.waist !== '' &&
+      //         cartItem.hips !== ''
+      //       );
+      //     });
+      //   });
       // если адрес корректный
       if (addressString.length > 18) {
         // проверяем мерки
-        if (!isMeasuresAdded) {
-          setOrderStatus('Пожалуйста, введите все мерки для пошива изделия');
-          setTimeout(() => {
-            setOrderStatus('');
-          }, 2000);
-        } else {
-          // если адрес и мерки в порядке
+        // TODO раскомментить после дебага
+        // if (!isMeasuresAdded) {
+        //   setOrderStatus('Пожалуйста, введите все мерки для пошива изделия');
+        //   setTimeout(() => {
+        //     setOrderStatus('');
+        //   }, 2000);
+        // } else {
+        // если адрес и мерки в порядке
 
-          // создаем объект, который передадим на бек,
-          // в нем email клиента, сумма заказа, адрес, комментарии и срочный ли пошив
-          if (user) {
-            // если клиент залогинен, собираем объект
-            const orderData = {
-              user,
-              cartTotal,
-              addressString,
-              commentsInput,
-              urgentMaking,
-              dbPc,
-            };
-            // вызываем функцию создания заказа
-            createOrder(orderData);
-          } else {
-            // если клиент не залогинен - собираем объект с данными из формы персональных данных
-            const orderData = {
-              personalData,
-              cartTotal,
-              addressString,
-              commentsInput,
-              urgentMaking,
-              dbPc,
-            };
-            // вызываем функцию создания заказа
-            createOrder(orderData);
-          }
+        // создаем объект, который передадим на бек,
+        // в нем email клиента, сумма заказа, адрес, комментарии и срочный ли пошив
+        if (user) {
+          // если клиент залогинен, собираем объект
+          const orderData = {
+            user,
+            cartTotal,
+            addressString,
+            commentsInput,
+            urgentMaking,
+            dbPc,
+          };
+          // вызываем функцию создания заказа
+          createOrder(orderData);
+        } else {
+          // если клиент не залогинен - собираем объект с данными из формы персональных данных
+          const itemsWithMeasurements = JSON.parse(
+            localStorage.getItem('cartItems')
+          );
+          const orderData = {
+            personalData,
+            cartTotal,
+            addressString,
+            commentsInput,
+            urgentMaking,
+            dbPc,
+            itemsWithMeasurements,
+          };
+          // вызываем функцию создания заказа
+          createOrder(orderData);
         }
+        // }
       } else {
         // если адрес доставки некорректный
         setOrderStatus;
@@ -531,7 +584,6 @@ export const useCartControl = () => {
 
   return {
     cartItemsList,
-    setCartItemsList,
     setShowParamsForm,
     showParamsForm,
     paramsFormData,

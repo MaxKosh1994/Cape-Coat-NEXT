@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../../styles/Checkout.module.css';
+import { useCartControl } from './useCartControl';
 
 export default function PersonalDataForm({ handlePersonalDataInputChange }) {
   return (
@@ -28,6 +29,7 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
                     title="Email*"
                     placeholder=""
                     name="email"
+                    type="email"
                     className={styles.formInput}
                     onChange={handlePersonalDataInputChange}
                   />
@@ -39,6 +41,7 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
                     title="Пароль*"
                     placeholder=""
                     name="password"
+                    type="password"
                     className={styles.formInput}
                     onChange={handlePersonalDataInputChange}
                   />

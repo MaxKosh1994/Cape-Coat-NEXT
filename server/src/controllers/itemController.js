@@ -78,8 +78,6 @@ module.exports.findItemsById = async (req, res) => {
       ...item.toJSON(),
       selected_material: materialNamesById[item.id],
     }));
-
-    console.log(itemsWithMaterialName);
     res.json(itemsWithMaterialName);
   } catch (err) {
     console.log(err);
@@ -236,8 +234,6 @@ module.exports.getAllItemsWithFavorites = async (req, res) => {
           },
         ],
       });
-
-      console.log(items);
 
       res.status(200).json(items);
     } else {
