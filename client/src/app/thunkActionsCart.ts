@@ -14,7 +14,6 @@ export const getCartItemsThunk = (): AppThunk => async (dispatch: Dispatch) => {
       credentials: 'include',
     });
     const data = await dispatch(getCartItems(res.data));
-    console.log('data=====', data);
     return data.payload;
   } catch (err) {
     // dispatch(handleError(err))

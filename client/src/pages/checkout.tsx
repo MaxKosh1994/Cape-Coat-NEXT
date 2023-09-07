@@ -50,7 +50,6 @@ export default function CheckoutPage() {
   // const cartItemsList = useAppSelector(
   //   (state: RootState) => state.cartSlice.cartItems
   // );
-  // console.log(cartItemsList);
 
   return (
     <>

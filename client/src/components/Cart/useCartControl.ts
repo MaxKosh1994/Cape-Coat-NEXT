@@ -131,7 +131,7 @@ export const useCartControl = () => {
       // upds total - discount for >2 items + cost of delivery
       const updTotal = subtotal + deliveryCost - threePlusItemsDiscount;
       setCartTotal(updTotal);
-      console.log(discountPercent);
+
       // if there is a promocode discount
       if (discountPercent > 0) {
         // counts new total with discount from promo

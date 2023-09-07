@@ -132,7 +132,7 @@ const useProductCardLogic = (
           const inCart = await addToCart(cartData);
           const itemInCart = inCart[1];
           setIsCart(itemInCart);
-          dispatch(addCartItem(inCart));
+          dispatch(addCartItem(inCart[0]));
         } else {
           const delCart = await removeFromCart(cartData);
           await dispatch(getCartItemsThunk(user));

@@ -21,7 +21,6 @@ export const dataAxios = async (
       const responseData: object = await response.data;
       setMessage((prev) => responseData.message);
       setContent((prev) => [...prev, responseData.res]);
-      console.log(responseData.res)
       return responseData;
     } else if (url === `delete-${address}`) {//!DELETE
       const response = await axios.delete(
