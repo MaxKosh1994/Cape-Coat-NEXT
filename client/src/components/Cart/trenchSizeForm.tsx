@@ -3,8 +3,14 @@ import styles from '../../styles/Checkout.module.css';
 
 export default function TrenchSizeForm({ itemId, onTrenchSizeChange }) {
   const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target;
-    onTrenchSizeChange({ [name]: checked });
+    // const { name, checked } = event.target;
+    // onTrenchSizeChange({ [name]: checked });
+    const { name, value, checked } = event.target;
+    if (name === 'loops') {
+      onTrenchSizeChange({ loops: checked });
+    } else if (name === 'buttons') {
+      onTrenchSizeChange({ buttons: value });
+    }
   };
 
   return (
@@ -26,7 +32,7 @@ export default function TrenchSizeForm({ itemId, onTrenchSizeChange }) {
           type="checkbox"
           name="buttons"
           id={`buttons${itemId}`}
-          value="pugovitsy"
+          value="пуговицы"
           className={styles.sizesFormCheckbox}
           onChange={handleCheckboxChange}
         />

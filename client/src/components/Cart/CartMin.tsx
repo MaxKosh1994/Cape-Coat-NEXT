@@ -3,10 +3,10 @@ import styles from './CartMin.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
 import LikeButton from '@/components/likeButton/LikeButton';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useCartControl } from './useCartControl';
+import DelBtn from './DelBtn';
 
 const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
   show,
@@ -17,7 +17,6 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
     delError,
     cartTotal,
     setCartTotal,
-
     fetchCartItems,
     emptyCart,
     handleDeleteItemFromCart,
@@ -114,15 +113,10 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
                     <div className={styles.basketItemContentRight}>
                       <div className={styles.iconsContainer}>
                         <LikeButton itemId={item.id} />
-                        <button
-                          className={styles.basketItemDeleteButton}
-                          type="button"
-                          onClick={() => handleDeleteItemFromCart(item.id)}
-                        >
-                          <DeleteOutlineIcon
-                            sx={{ fontSize: '2rem', color: '#656565' }}
-                          />
-                        </button>
+                        <DelBtn
+                          itemId={item.id}
+                          handleDeleteItemFromCart={handleDeleteItemFromCart}
+                        />
                       </div>
                       {item.in_stock ? (
                         <>
