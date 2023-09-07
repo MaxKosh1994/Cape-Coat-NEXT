@@ -103,6 +103,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     });
+
     
     if (res.ok) {
       const data: ItemState = await res.json();
@@ -116,15 +117,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
       //TODO здесь прокинуты item нужно понять как
 
+      //TODO почему itemId - это строка?!
+
       const similarItems = await getItems(isMobile, data.item);
 
       console.log({ similarItems });
+    
 
       return {
         props: {
           itemData: data.item,
           imageData: imageData,
-          itemId: itemId,
+          itemId: +itemId,
           materialsData: data.materials,
           similarItems: similarItems,
         },

@@ -26,12 +26,12 @@ const FavoriteIconButton: React.FC<FavoriteIconButtonProps> = ({
   //   // console.log(setIsItemInFavoritesLog);
   //   console.log(isItemInFavoritesLog);
   // }, []);
+  // console.log('localStorage', localStorage);
+  // const localStorageData = localStorage.getItem('favorites');
 
-  const localStorageData = localStorage.getItem('favorites');
+  // const favoriteItems = JSON.parse(localStorageData || '[]');
 
-  const favoriteItems = JSON.parse(localStorageData || '[]');
-
-  const isItemInFavoritesLog = favoriteItems.includes(itemId);
+  // const isItemInFavoritesLog = favoriteItems.includes(itemId);
 
   return (
     <IconButton
@@ -39,7 +39,7 @@ const FavoriteIconButton: React.FC<FavoriteIconButtonProps> = ({
       aria-label="Add to favorites"
       onClick={onClick}
     >
-      {isFavorite || isItemInFavoritesLog ? (
+      {isFavorite ? (
         <FavoriteIcon
           className={styles.IconImage}
           style={{ color: 'rgb(0 0 0 / 70%)' }}

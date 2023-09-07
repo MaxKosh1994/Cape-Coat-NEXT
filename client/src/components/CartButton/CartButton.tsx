@@ -32,7 +32,7 @@ export default function CartButton({
   const cartItems = useSelector(
     (state: RootState) => state.cartSlice.cartItems
   );
-
+  // console.log(typeof itemId)
   const { user } = useSelector((state: RootState) => state.sessionSlice);
 
   useEffect(() => {
@@ -60,20 +60,20 @@ export default function CartButton({
 
       if (isItemInCart) {
         const updatedCartItems = cartItemsFromStorage.map((item) =>
-          item.id === itemId ? { ...item, material: materialName } : item
+          item.id === itemId ? { ...item, material_name: materialName } : item
         );
-        console.log(updatedCartItems)
+        console.log(updatedCartItems);
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
         dispatch(delItemInCart(updatedCartItems));
-        setIsInCart(false);
+        setIsInCart(!isInCart);
       } else {
         const updatedCartItems = [
           ...cartItemsFromStorage,
-          { id: itemId, material: materialName },
+          { id: itemId, material_name: materialName },
         ];
 
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-        setIsInCart(true);
+        setIsInCart(!isInCart);
         dispatch(addCartItem(updatedCartItems));
       }
       return;
@@ -96,7 +96,7 @@ export default function CartButton({
         return;
       }
       if (!isInCart) {
-        const materialName = { material: selectedMaterialName };
+        const materialName = { material_name: selectedMaterialName };
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_URL}cart/item/${itemId}`,
           {
@@ -106,6 +106,8 @@ export default function CartButton({
             body: JSON.stringify(materialName),
           }
         );
+
+        console.log('res', res);
 
         if (res.ok) {
           setIsInCart(true);

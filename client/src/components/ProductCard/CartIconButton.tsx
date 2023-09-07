@@ -25,12 +25,12 @@ const CartIconButton: React.FC<CartIconButtonProps> = ({
   //   setIsItemInCart(itemsInCart.includes(itemId));
   // }, [itemId]);
 
-  const localStorageData = localStorage.getItem('cartItems');
+  // const localStorageData = localStorage.getItem('cartItems');
 
-  const itemsInCart = JSON.parse(localStorageData || '[]');
+  // const itemsInCart = JSON.parse(localStorageData || '[]');
 
 
-  const isItemInCart = itemsInCart.some((element) => element.id === itemId);
+  // const isItemInCart = itemsInCart.some((element) => element.id === itemId);
 
   return (
     <IconButton
@@ -38,7 +38,7 @@ const CartIconButton: React.FC<CartIconButtonProps> = ({
       onClick={onClick}
       aria-label="Add to cart"
     >
-      {isCart || isItemInCart ? (
+      {isCart ? (
         <AddTaskIcon
           className={styles.IconImage}
           style={{ color: 'rgb(0 0 0 / 70%)' }}

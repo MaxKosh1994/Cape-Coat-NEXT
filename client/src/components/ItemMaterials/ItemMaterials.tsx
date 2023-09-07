@@ -20,6 +20,9 @@ export default function ItemMaterials({
 }: IitemMaterialsProps): JSX.Element {
   const materialsUrl = process.env.NEXT_PUBLIC_MATERIALS_URL;
 
+  // console.log(typeof itemId)
+  console.log({materialsData})
+
   const textileData = materialsData?.map((material) => ({
     id: material.id,
     url: `${materialsUrl}${material.photo}`,
