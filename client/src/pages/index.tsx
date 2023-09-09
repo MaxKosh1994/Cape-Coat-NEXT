@@ -67,7 +67,7 @@ const Home = () => {
             <VerticalBlock
               key={verticalBlockData[object].blockName}
               blockName={verticalBlockData[object].blockName}
-              imgUrl={verticalBlockData[object].imgUrl}
+              imgName={verticalBlockData[object].imgName}
               url={verticalBlockData[object].url}
             />
           ))}

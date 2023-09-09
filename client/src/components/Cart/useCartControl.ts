@@ -105,23 +105,16 @@ export const useCartControl = () => {
   // стукается через санку на бек, грузит список товаров добавленных в корзину
   const fetchCartItems = async (): Promise<void> => {
     try {
-      console.log('fetching for cart');
       if (!user) {
         const itemsLocal = JSON.parse(localStorage.getItem('cartItems'));
-        const itemsFoundFromLocal = await dispatch(
-          getCartItemsByIdThunk(itemsLocal)
-        );
-        // setCartItemsList(itemsFoundFromLocal);
+        await dispatch(getCartItemsByIdThunk(itemsLocal));
       } else {
-        const cartItems = await dispatch(getCartItemsThunk());
-        // setCartItemsList(cartItems);
+        await dispatch(getCartItemsThunk());
       }
     } catch (err) {
       console.log(err);
     }
   };
-
-  console.log(cartItemsList);
 
   const countCartTotal = (): void => {
     let liningCost = 0;
@@ -203,7 +196,7 @@ export const useCartControl = () => {
     // стукается через санку на бек, грузит список товаров добавленных в корзину
     userParamsRef.current = userParams;
     fetchCartItems();
-  }, [dispatch, user, userParamsRef]);
+  }, [dispatch, user, userParamsRef, showParamsForm]);
 
   useEffect(() => {
     if (cartItemsList.length > 0) {
@@ -213,7 +206,6 @@ export const useCartControl = () => {
 
   useEffect(() => {
     // подсчет ИТОГО заказа
-
     countCartTotal();
   }, [
     cartItemsList,
@@ -225,6 +217,7 @@ export const useCartControl = () => {
     urgencyFee,
     dispatch,
     cartTotal,
+    userParamsRef,
   ]);
 
   useEffect(() => {
@@ -511,11 +504,10 @@ export const useCartControl = () => {
       // проверяем заполнил ли клиент мерки для всех товаров на пошив
       let isMeasuresAdded;
       if (user) {
+        console.log(cartItemsList.filter((item) => !item.in_stock));
         isMeasuresAdded = cartItemsList
           .filter((item) => !item.in_stock)
           .every((item) => {
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // TODO ошибка типизации
             const cartItems = item.Carts.map((cart) => cart.CartItem);
             return cartItems.every((cartItem) => {
               return (
@@ -529,69 +521,71 @@ export const useCartControl = () => {
             });
           });
       } else {
+        // проверяем мерки в локалсторедж
         const localData = JSON.parse(localStorage.getItem('cartItems')) || [];
         isMeasuresAdded = localData
           .filter((item) => !item.in_stock)
-          .every((item) => {
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // TODO ошибка типизации
-            const cartItems = item.map((oneItem) => oneItem);
-            return cartItems.every((cartItem) => {
-              return (
-                cartItem.height !== '' &&
-                cartItem.length !== '' &&
-                cartItem.sleeve !== '' &&
-                cartItem.bust !== '' &&
-                cartItem.waist !== '' &&
-                cartItem.hips !== ''
-              );
-            });
+          .every((oneItem) => {
+            return (
+              oneItem.height !== undefined &&
+              oneItem.height !== '' &&
+              oneItem.length !== undefined &&
+              oneItem.length !== '' &&
+              oneItem.sleeve !== undefined &&
+              oneItem.sleeve !== '' &&
+              oneItem.bust !== undefined &&
+              oneItem.bust !== '' &&
+              oneItem.waist !== undefined &&
+              oneItem.waist !== '' &&
+              oneItem.hips !== undefined &&
+              oneItem.hips !== ''
+            );
           });
       }
       // если адрес корректный
       if (addressString.length > 18) {
         // проверяем мерки
         // TODO раскомментить после дебага
-        // if (!isMeasuresAdded) {
-        //   setOrderStatus('Пожалуйста, введите все мерки для пошива изделия');
-        //   setTimeout(() => {
-        //     setOrderStatus('');
-        //   }, 2000);
-        // } else {
-        // если адрес и мерки в порядке
-
-        // создаем объект, который передадим на бек,
-        // в нем email клиента, сумма заказа, адрес, комментарии и срочный ли пошив
-        if (user) {
-          // если клиент залогинен, собираем объект
-          const orderData = {
-            user,
-            cartTotal,
-            addressString,
-            commentsInput,
-            urgentMaking,
-            dbPc,
-          };
-          // вызываем функцию создания заказа
-          createOrder(orderData);
+        if (!isMeasuresAdded) {
+          setOrderStatus('Пожалуйста, введите все мерки для пошива изделия');
+          setTimeout(() => {
+            setOrderStatus('');
+          }, 2000);
         } else {
-          // если клиент не залогинен - собираем объект с данными из формы персональных данных
-          const itemsWithMeasurements = JSON.parse(
-            localStorage.getItem('cartItems')
-          );
-          const orderData = {
-            personalData,
-            cartTotal,
-            addressString,
-            commentsInput,
-            urgentMaking,
-            dbPc,
-            itemsWithMeasurements,
-          };
-          // вызываем функцию создания заказа
-          createOrder(orderData);
+          // если адрес и мерки в порядке
+
+          // создаем объект, который передадим на бек,
+          // в нем email клиента, сумма заказа, адрес, комментарии и срочный ли пошив
+          if (user) {
+            // если клиент залогинен, собираем объект
+            const orderData = {
+              user,
+              cartTotal,
+              addressString,
+              commentsInput,
+              urgentMaking,
+              dbPc,
+            };
+            // вызываем функцию создания заказа
+            // createOrder(orderData);
+          } else {
+            // если клиент не залогинен - собираем объект с данными из формы персональных данных
+            const itemsWithMeasurements = JSON.parse(
+              localStorage.getItem('cartItems')
+            );
+            const orderData = {
+              personalData,
+              cartTotal,
+              addressString,
+              commentsInput,
+              urgentMaking,
+              dbPc,
+              itemsWithMeasurements,
+            };
+            // вызываем функцию создания заказа
+            createOrder(orderData);
+          }
         }
-        // }
       } else {
         // если адрес доставки некорректный
         setOrderStatus;

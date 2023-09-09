@@ -16,7 +16,7 @@ export default function HorizontalBlock({
   return (
     <div className={styles.horizontalContainer}>
       <Image
-        src={`${process.env.NEXT_PUBLIC_CATEGORY_URL}${imgName}`}
+        src={`${process.env.NEXT_PUBLIC_MAIN_URL}/${imgName}`}
         alt=""
         fill={true}
         className={styles.horizImg}

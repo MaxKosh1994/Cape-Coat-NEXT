@@ -48,7 +48,6 @@ module.exports.findItemsById = async (req, res) => {
   try {
     const requestData = req.body;
     const ids = requestData.map((item) => item.id);
-    console.log('=====>', ids);
 
     const items = await Item.findAll({
       where: {

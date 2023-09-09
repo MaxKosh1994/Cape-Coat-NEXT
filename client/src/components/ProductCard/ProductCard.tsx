@@ -63,11 +63,10 @@ const ProductCard: React.FC<IProductCard> = ({
       </Link>
       {newPrice ? (
         <div className={styles.CardContent}>
-          <h3 className={styles.Price}>Цена:</h3>
-          <h3 className={styles.OldPrice}>{numeral(price).format('0,0')} ₽</h3>
           <h3 className={styles.NewPrice}>
             {numeral(newPrice).format('0,0')} ₽
           </h3>
+          <h3 className={styles.OldPrice}>{numeral(price).format('0,0')} ₽</h3>
           <div className={styles.Icons}>
             <FavoriteIconButton
               isFavorite={isFavorite}
@@ -79,9 +78,7 @@ const ProductCard: React.FC<IProductCard> = ({
         </div>
       ) : (
         <div className={styles.CardContent}>
-          <h3 className={styles.PriceOne}>
-            Цена: {numeral(price).format('0,0')} ₽
-          </h3>
+          <h3 className={styles.PriceOne}>{numeral(price).format('0,0')} ₽</h3>
           <div className={styles.Icons}>
             <FavoriteIconButton
               isFavorite={isFavorite}

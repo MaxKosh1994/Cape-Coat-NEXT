@@ -6,18 +6,23 @@ import Link from 'next/link';
 
 interface VerticalBlockProps {
   blockName: string;
-  imgUrl: string;
+  imgName: string;
   url: string;
 }
 
 export default function VerticalBlock({
   blockName,
-  imgUrl,
+  imgName,
   url,
 }: VerticalBlockProps) {
   return (
     <div className={styles.verticalContainer}>
-      <Image src={imgUrl} alt="" fill={true} className={styles.verticalImg} />
+      <Image
+        src={`${process.env.NEXT_PUBLIC_MAIN_URL}/${imgName}`}
+        alt=""
+        fill={true}
+        className={styles.verticalImg}
+      />
       <div className={styles.textVerticalImg}>
         <Typography>
           <span>{blockName}</span>

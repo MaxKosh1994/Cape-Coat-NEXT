@@ -2,7 +2,7 @@ export type VerticalBlockType = Record<string, VerticalBlockObj>;
 
 export type VerticalBlockObj = {
   blockName: string;
-  imgUrl: string;
+  imgName: string;
   url: string;
 };
 
