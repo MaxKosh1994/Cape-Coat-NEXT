@@ -105,6 +105,7 @@ export const useCartControl = () => {
   // стукается через санку на бек, грузит список товаров добавленных в корзину
   const fetchCartItems = async (): Promise<void> => {
     try {
+      console.log('fetching for cart');
       if (!user) {
         const itemsLocal = JSON.parse(localStorage.getItem('cartItems'));
         const itemsFoundFromLocal = await dispatch(
@@ -119,6 +120,8 @@ export const useCartControl = () => {
       console.log(err);
     }
   };
+
+  console.log(cartItemsList);
 
   const countCartTotal = (): void => {
     let liningCost = 0;

@@ -9,7 +9,10 @@ import {
   removeFromCart,
 } from './thunkProduct';
 import { fetchFavouritesData } from '../../app/thunkActionsFavourite';
-import { getCartItemsThunk } from '../../app/thunkActionsCart';
+import {
+  getCartItemsByIdThunk,
+  getCartItemsThunk,
+} from '../../app/thunkActionsCart';
 import {
   addCartItem,
   delCartItem,
@@ -107,11 +110,13 @@ const useProductCardLogic = (
       } else {
         const updatedCartItems = [
           ...cartItemsFromStorage,
-          { id, material_name },
+          { id, material_name, in_stock: newPrice ? true : false },
         ];
+        console.log(updatedCartItems);
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
         setIsCart(!isCart);
-        dispatch(addCartItem(updatedCartItems));
+        console.log(updatedCartItems);
+        dispatch(getCartItemsByIdThunk(updatedCartItems));
       }
     } else {
       setIsCart(!isCart);

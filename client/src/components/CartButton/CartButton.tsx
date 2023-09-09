@@ -10,7 +10,10 @@ import {
 import { useAppDispatch } from '@/app/hooks';
 import './CartButtonStyle.css';
 import { Item } from '@/app/itemSlice';
-import { getCartItemsThunk } from '@/app/thunkActionsCart';
+import {
+  getCartItemsByIdThunk,
+  getCartItemsThunk,
+} from '@/app/thunkActionsCart';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 
@@ -38,7 +41,6 @@ export default function CartButton({
   const cartItems = useSelector(
     (state: RootState) => state.cartSlice.cartItems
   );
-  const { user } = useSelector((state: RootState) => state.sessionSlice);
 
   useEffect(() => {
     if (user) {
@@ -89,12 +91,16 @@ export default function CartButton({
         } else {
           const updatedCartItems = [
             ...cartItemsFromStorage,
-            { id: itemId, material_name: materialName },
+            {
+              id: itemId,
+              material_name: materialName,
+              in_stock: itemData.in_stock,
+            },
           ];
 
           localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
           setIsInCart(!isInCart);
-          dispatch(addCartItem(updatedCartItems));
+          dispatch(getCartItemsByIdThunk(updatedCartItems));
           return;
         }
       } else {

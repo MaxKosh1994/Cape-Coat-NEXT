@@ -14,13 +14,8 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
   show,
   handleCartIconClick,
 }) => {
-  const {
-    delError,
-    cartTotal,
-    setCartTotal,
-    fetchCartItems,
-    handleDeleteItemFromCart,
-  } = useCartControl();
+  const { delError, setCartTotal, fetchCartItems, handleDeleteItemFromCart } =
+    useCartControl();
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
   const cartItemsList = useAppSelector(
     (state: RootState) => state.cartSlice.cartItems
@@ -54,6 +49,7 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
       handleCartIconClick();
     }, 1001);
   };
+  console.log(cartItemsList);
 
   return (
     <div
