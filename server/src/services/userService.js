@@ -14,7 +14,7 @@ module.exports.findOrCreateUserByEmail = async (
   phone,
   password,
 ) => {
-  const currUser = await await User.findOrCreate({
+  const currUser = await User.findOrCreate({
     where: { email },
     defaults: {
       full_name,

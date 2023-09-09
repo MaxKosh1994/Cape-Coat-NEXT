@@ -133,8 +133,10 @@ export const useCartControl = () => {
           return sum + item.price;
         }
       } else {
-        // TODO некорректно отображает есть\нет утепления
-        if (localData?.find((data) => data.id === item.id).lining !== '') {
+        if (
+          localData?.find((data) => data.id === item.id)?.lining &&
+          localData?.find((data) => data.id === item.id).lining !== ''
+        ) {
           liningCost += 1400;
           return sum + item.price + 1400;
         } else {
@@ -208,6 +210,7 @@ export const useCartControl = () => {
 
   useEffect(() => {
     // подсчет ИТОГО заказа
+
     countCartTotal();
   }, [
     cartItemsList,
@@ -503,24 +506,45 @@ export const useCartControl = () => {
       }
 
       // проверяем заполнил ли клиент мерки для всех товаров на пошив
-      // TODO отдебажить
-      // const isMeasuresAdded = cartItemsList
-      //   .filter((item) => !item.in_stock)
-      //   .every((item) => {
-      //     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //     // TODO ошибка типизации
-      //     const cartItems = item.Carts.map((cart) => cart.CartItem);
-      //     return cartItems.every((cartItem) => {
-      //       return (
-      //         cartItem.height !== '' &&
-      //         cartItem.length !== '' &&
-      //         cartItem.sleeve !== '' &&
-      //         cartItem.bust !== '' &&
-      //         cartItem.waist !== '' &&
-      //         cartItem.hips !== ''
-      //       );
-      //     });
-      //   });
+      let isMeasuresAdded;
+      if (user) {
+        isMeasuresAdded = cartItemsList
+          .filter((item) => !item.in_stock)
+          .every((item) => {
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // TODO ошибка типизации
+            const cartItems = item.Carts.map((cart) => cart.CartItem);
+            return cartItems.every((cartItem) => {
+              return (
+                cartItem.height !== '' &&
+                cartItem.length !== '' &&
+                cartItem.sleeve !== '' &&
+                cartItem.bust !== '' &&
+                cartItem.waist !== '' &&
+                cartItem.hips !== ''
+              );
+            });
+          });
+      } else {
+        const localData = JSON.parse(localStorage.getItem('cartItems')) || [];
+        isMeasuresAdded = localData
+          .filter((item) => !item.in_stock)
+          .every((item) => {
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // TODO ошибка типизации
+            const cartItems = item.map((oneItem) => oneItem);
+            return cartItems.every((cartItem) => {
+              return (
+                cartItem.height !== '' &&
+                cartItem.length !== '' &&
+                cartItem.sleeve !== '' &&
+                cartItem.bust !== '' &&
+                cartItem.waist !== '' &&
+                cartItem.hips !== ''
+              );
+            });
+          });
+      }
       // если адрес корректный
       if (addressString.length > 18) {
         // проверяем мерки

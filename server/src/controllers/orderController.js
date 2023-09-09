@@ -17,13 +17,13 @@ module.exports.createOrder = async (req, res) => {
     } else if (req.body.personalData) {
       const { personalData } = req.body;
       const hashedPassword = await bcrypt.hash(personalData.password, 10);
-
-      currUser = await findOrCreateUserByEmail(
+      const [userData, newUser] = await findOrCreateUserByEmail(
         personalData.name,
         personalData.email,
-        hashedPassword,
         personalData.phone,
+        hashedPassword,
       );
+      currUser = userData;
     }
     const newOrder = await Order.create(
       {
@@ -93,50 +93,30 @@ module.exports.createOrder = async (req, res) => {
           selected_material: oneItem.material_name
             ? oneItem.material_name.toString()
             : '',
-          height: oneItem.height.toString(),
-          length: oneItem.length.toString(),
-          sleeve: oneItem.sleeve.toString(),
-          bust: oneItem.bust.toString(),
-          waist: oneItem.waist.toString(),
-          hips: oneItem.hips.toString(),
-          saddle: oneItem.saddle.toString(),
+          height: oneItem.height ? oneItem.height.toString() : '',
+          length: oneItem.length ? oneItem.length.toString() : '',
+          sleeve: oneItem.sleeve ? oneItem.sleeve.toString() : '',
+          bust: oneItem.bust ? oneItem.bust.toString() : '',
+          waist: oneItem.waist ? oneItem.waist.toString() : '',
+          hips: oneItem.hips ? oneItem.hips.toString() : '',
+          saddle: oneItem.saddle ? oneItem.saddle.toString() : '',
           loops: Boolean(oneItem.loops),
-          buttons: oneItem.buttons.toString(),
-          lining: oneItem.lining.toString(),
+          buttons: oneItem.buttons ? oneItem.buttons.toString() : '',
+          lining: oneItem.lining ? oneItem.lining.toString() : '',
         }));
         await OrderItem.bulkCreate(orderItemsData);
 
-        if (req.body.dbPc) {
-          const usedPCCheck = await checkUserUsedPromocode(
-            req.body.dbPc,
-            currUser.email,
-          );
-          if (usedPCCheck.success) {
-            const itemIds = orderItemsData.map((item) => item.id);
-            await checkStockItemAsPurchased(itemIds);
-            res.json({
-              success: true,
-              message: `Заказ номер ${newOrder.id} создан. Мы свяжемся с вами в течение дня.`,
-            });
-          } else {
-            res.json({
-              success: false,
-              message: usedPCCheck.message,
-            });
-          }
-        } else {
-          const itemIds = orderItemsData.map((item) => item.id);
-          await checkStockItemAsPurchased(itemIds);
-          res.json({
-            success: true,
-            message: `Заказ номер ${newOrder.id} создан. Мы свяжемся с вами в течение дня.`,
-          });
-        }
+        const itemIds = orderItemsData.map((item) => item.id);
+        await checkStockItemAsPurchased(itemIds);
+        res.json({
+          success: true,
+          message: `Заказ номер ${newOrder.id} создан. Мы свяжемся с вами в течение дня.`,
+        });
       }
 
       //! Отправка сообщений для менеджера
-
       const { MANAGER_TELEGRAM_ID } = process.env;
+
       const message = `Покупатель ${currUser.full_name} сделал заказ номер ${newOrder.id} на сумму ${newOrder.total}.\n\nПочта: ${currUser.email}\nНомер телефона: ${currUser.phone}\nCоц.сети: ${currUser.telegram_instagram}`;
       await sendMessageToUser(MANAGER_TELEGRAM_ID, message);
 
