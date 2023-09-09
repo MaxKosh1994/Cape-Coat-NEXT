@@ -12,3 +12,14 @@ export type HorizontalBlockObj = {
   blockName: string;
   imgName: string;
 };
+
+export interface HorizontalBlockProps {
+  blockName: string;
+  imgName: string;
+}
+
+export interface VerticalBlockProps {
+  blockName: string;
+  imgName: string;
+  url: string;
+}

@@ -3,12 +3,7 @@ import styles from '../../styles/Home.module.css';
 import Image from 'next/image';
 import { Typography } from '@mui/material';
 import Link from 'next/link';
-
-interface VerticalBlockProps {
-  blockName: string;
-  imgName: string;
-  url: string;
-}
+import { VerticalBlockProps } from '@/TypeScript/mainTypes';
 
 export default function VerticalBlock({
   blockName,
