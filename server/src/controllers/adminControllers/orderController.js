@@ -51,17 +51,13 @@ module.exports.updateOrderItemField = async (req, res) => {
     const orderId = await req.params.id;
     const itemId = await req.params.itemId;
 
-    console.log(req.body, orderId, itemId);
-
     const orderItem = await OrderItem.findOne({
       where: {
         order_id: orderId,
         item_id: itemId,
       },
     });
-
-    console.log(orderItem);
-
+    
     if (!orderItem) {
       res.status(404).json({ message: 'Не найдено OrderItem для обновления' });
       return;

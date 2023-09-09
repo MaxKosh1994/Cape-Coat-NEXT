@@ -32,7 +32,6 @@ const ProductCard: React.FC<IProductCard> = ({
       initialIsFavorite,
       initialIsCart,
       newPrice,
-      isItemInFavoritesState,
       urlName
     );
   const router = useRouter();

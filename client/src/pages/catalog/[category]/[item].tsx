@@ -102,9 +102,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       credentials: 'include',
     });
 
+    
     if (res.ok) {
       const data: ItemState = await res.json();
-      console.log('data', data);
 
       const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL;
 
@@ -114,12 +114,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       }));
 
       const similarItems = await getItems(isMobile, data.item);
-
+    
       return {
         props: {
           itemData: data.item,
           imageData: imageData,
-          itemId: itemId,
+          itemId: +itemId,
           materialsData: data.materials,
           similarItems: similarItems,
         },

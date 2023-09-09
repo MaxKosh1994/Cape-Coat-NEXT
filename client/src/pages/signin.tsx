@@ -37,7 +37,7 @@ export default function SignIn() {
           if (user) {
             router.push('/');
           } else {
-            router.back();
+            router.push('/');
           }
         }
       }

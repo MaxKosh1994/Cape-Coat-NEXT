@@ -87,7 +87,7 @@ module.exports.getBestSellers = async (req, res) => {
         },
       ],
     });
-
+    console.log(bestsellers);
     res.json(bestsellers);
   } catch (err) {
     res.status(500).json({ message: 'Ошибка сервера' });

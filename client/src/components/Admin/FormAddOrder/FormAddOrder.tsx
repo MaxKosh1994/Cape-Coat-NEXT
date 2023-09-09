@@ -490,8 +490,6 @@ export default function FormAddOrder() {
       userParams,
     };
 
-    console.log(userParams);
-
     if (!personalData) {
       setModalInfo('Не хватает данных о заказчике');
       setOpenCreateOrderModal(true);

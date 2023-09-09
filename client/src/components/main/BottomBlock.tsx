@@ -22,9 +22,13 @@ export default function BottomBlock() {
         }
       );
       const response = await allItems.json();
+      const items = response.map((item) => ({
+        ...item,
+        isFavorite: false,
+        isCart: false,
+      }));
       if (allItems.status === 200) {
-        let items;
-        const filterStock = response.filter((item) => item.in_stock === false);
+        const filterStock = items.filter((item) => item.in_stock === false);
         setItemsForMain(filterStock);
       }
     } catch (error) {
@@ -88,7 +92,7 @@ export default function BottomBlock() {
           </>
         )}
       </div>
-      <Link href='catalog/all-items'>
+      <Link href="catalog/all-items">
         <button className={styles.allBtn}>Смотреть все товары</button>
       </Link>
     </>

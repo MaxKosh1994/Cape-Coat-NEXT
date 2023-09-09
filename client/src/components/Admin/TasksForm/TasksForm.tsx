@@ -93,7 +93,7 @@ export default function TasksForm({
   const handleTaskInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTaskData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  console.log(itemInfo);
+
   const handleCreatePDF = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const doc = new jsPDF();
@@ -112,7 +112,7 @@ export default function TasksForm({
       if (taskData.hasOwnProperty(key)) {
         const label = fieldNames[key];
         const value = String(taskData[key]); // Convert the value to a string
-        console.log(label, typeof value);
+
         if (value === 'null' || value === '') {
           continue;
         }
