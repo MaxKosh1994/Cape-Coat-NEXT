@@ -28,6 +28,7 @@ export default function CartButton({
   const [isInCart, setIsInCart] = useState(false);
 
   const dispatch = useAppDispatch();
+  const user = useSelector((state) => state.sessionSlice.user);
 
   const cartItems = useSelector(
     (state: RootState) => state.cartSlice.cartItems
@@ -43,33 +44,33 @@ export default function CartButton({
   const cartHandler = async () => {
     // //!------ЕСЛИ ЮЗЕРА НЕТ - ЛОГИКА ДОБАВЛЕНИЯ В ЛОКАЛ------
 
-    // if (!user) {
-    //   const cartItemsFromStorage =
-    //     JSON.parse(localStorage.getItem('cartItems')) || [];
+    if (!user) {
+      const cartItemsFromStorage =
+        JSON.parse(localStorage.getItem('cartItems')) || [];
 
-    //   const materialName = selectedMaterialName
-    //     ? selectedMaterialName
-    //     : itemData.Material.name;
+      const materialName = selectedMaterialName
+        ? selectedMaterialName
+        : itemData.Material.name;
 
-    //   const isItemInCart = cartItemsFromStorage.find(
-    //     (item) => item.id === itemId
-    //   );
+      const isItemInCart = cartItemsFromStorage.find(
+        (item) => item.id === itemId
+      );
 
-    //   if (isItemInCart) {
-    //     const updatedCartItems = cartItemsFromStorage.map((item) =>
-    //       item.id === itemId ? { ...item, material: materialName } : item
-    //     );
-    //     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-    //   } else {
-    //     const updatedCartItems = [
-    //       ...cartItemsFromStorage,
-    //       { id: itemId, material: materialName },
-    //     ];
+      if (isItemInCart) {
+        const updatedCartItems = cartItemsFromStorage.map((item) =>
+          item.id === itemId ? { ...item, material_name: materialName } : item
+        );
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+      } else {
+        const updatedCartItems = [
+          ...cartItemsFromStorage,
+          { id: itemId, material_name: materialName },
+        ];
 
-    //     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-    //   }
-    //   return;
-    // }
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+      }
+      return;
+    }
 
     // //! -----------------------------------------------------
 
@@ -104,7 +105,7 @@ export default function CartButton({
           const data = await res.json();
           const addToCart = data.filter((el) => el.id == itemId)[0];
 
-          console.log('addToCart, addToCart', addToCart)
+          console.log('addToCart, addToCart', addToCart);
 
           dispatch(addCartItem(addToCart));
         }
