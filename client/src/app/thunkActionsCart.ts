@@ -13,9 +13,8 @@ export const getCartItemsThunk = (): AppThunk => async (dispatch: Dispatch) => {
       },
       credentials: 'include',
     });
-
-    dispatch(getCartItems(res.data));
-    return res.data;
+    const data = await dispatch(getCartItems(res.data));
+    return data.payload;
   } catch (err) {
     // dispatch(handleError(err))
     console.log(err);

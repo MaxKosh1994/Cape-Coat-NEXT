@@ -17,14 +17,14 @@ export default function BasePage({ pageName, itemsArr }) {
           {itemsArr.map((item) => (
             <ProductCard
               key={item.id}
-              material_name={item.material_name}
+              material_name={item.Material.name}
               id={item.id}
               article={item.article}
               photo={item?.photo || item?.Photos[0]?.photo}
               name={item.name}
               price={item.price}
-              isFavorite={false}
-              isCart={false}
+              isFavorite={item.isFavorite}
+              isCart={item.isCart}
               newPrice={item.new_price}
             />
           ))}

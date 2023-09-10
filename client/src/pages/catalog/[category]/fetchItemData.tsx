@@ -70,9 +70,15 @@ export const getItems = async (
       }
     );
     const response: Item[] = await allItems.json();
+    const items = response.map((item) => ({
+      ...item,
+      isFavorite: false,
+      isCart: false,
+    }));
 
     if (allItems.status === 200) {
-      const filteredItems = response.filter(
+      console.log(allItems)
+      const filteredItems = items.filter(
         (item) =>
           item.category_id === itemData.category_id &&
           item.material_id !== itemData.material_id

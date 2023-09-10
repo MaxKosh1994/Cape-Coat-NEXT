@@ -15,6 +15,7 @@ export default function SignUp() {
   const [formData, setFormData] = useState<ISignUpInputs>({
     full_name: '',
     email: '',
+    phone: '',
     password: '',
   });
   const [errorMsg, setErrorMsg] = useState<boolean>(false);
@@ -62,7 +63,7 @@ export default function SignUp() {
           {errorMsg && <p>{error}</p>}
           <TextField
             className={styles.textField}
-            placeholder="Имя и фамилия"
+            placeholder="Имя и фамилия*"
             name="full_name"
             inputProps={{
               style: {
@@ -77,7 +78,7 @@ export default function SignUp() {
           />
           <TextField
             className={styles.textField}
-            placeholder="Email"
+            placeholder="Email*"
             name="email"
             type="email"
             inputProps={{
@@ -93,7 +94,23 @@ export default function SignUp() {
           />
           <TextField
             className={styles.textField}
-            placeholder="Пароль"
+            placeholder="Телефон*"
+            name="phone"
+            type="phone"
+            inputProps={{
+              style: {
+                fontFamily: 'Ysabeau Infant',
+              },
+            }}
+            value={formData.phone}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            className={styles.textField}
+            placeholder="Пароль*"
             name="password"
             type="password"
             inputProps={{

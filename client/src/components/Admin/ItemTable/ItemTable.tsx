@@ -10,7 +10,6 @@ export default function ItemTable(props) {
     props.setId((prev) => id);
   };
 
-  console.log(props.content);
   return (
     <div className={styles.mainContainer}>
       <table className={styles.table}>

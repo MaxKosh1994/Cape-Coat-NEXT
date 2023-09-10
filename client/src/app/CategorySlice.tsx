@@ -57,7 +57,6 @@ const rtkSlice = createSlice({
       if (index !== -1) {
         const currentIsCart = state.categoryItems[index].isCart;
         state.categoryItems[index].isCart = !currentIsCart;
-
         if (currentIsCart) {
           state.itemsInCart = state.itemsInCart.filter(
             (cartId) => cartId !== id

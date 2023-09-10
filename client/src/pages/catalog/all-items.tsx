@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import BasePage from '@/components/ItemPage/BasePage';
+import Custom404 from '../404';
 
 export default function AllItemsPage() {
   const [allItems, setAllItems] = useState([]);
@@ -10,7 +11,12 @@ export default function AllItemsPage() {
           process.env.NEXT_PUBLIC_URL + 'item/allItems'
         );
         if (response.status === 200) {
-          const items = await response.json();
+          const result = await response.json();
+          const items = result.map((item) => ({
+            ...item,
+            isFavorite: false,
+            isCart: false,
+          }));
           setAllItems(items);
         }
       })();
@@ -19,5 +25,13 @@ export default function AllItemsPage() {
     }
   }, []);
 
-  return <BasePage pageName="Все товары" itemsArr={allItems} />;
+  return (
+    <>
+      {allItems.length ? (
+        <BasePage pageName="Все товары" itemsArr={allItems} />
+      ) : (
+        <Custom404 />
+      )}
+    </>
+  );
 }

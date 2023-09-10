@@ -5,4 +5,5 @@ export interface ISignInInputs {
 
 export interface ISignUpInputs extends ISignInInputs {
   full_name: string;
+  phone: string;
 }
