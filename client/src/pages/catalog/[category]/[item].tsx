@@ -94,6 +94,7 @@ function Item({
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { item: itemId, isMobile } = context.query;
+  console.log('context.query', context.query);
 
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}item/${itemId}`, {
@@ -119,7 +120,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         props: {
           itemData: data.item,
           imageData: imageData,
-          itemId: itemId,
+          itemId: Number(itemId),
           materialsData: data.materials,
           similarItems: similarItems,
         },
