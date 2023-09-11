@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { Token } = require('../../db/models');
 const { findUserByEmail, findOrCreateUserByEmail } = require('./userService');
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -76,4 +77,30 @@ module.exports.checkSession = async (session) => {
   } catch (err) {
     throw new Error('Ошибка сервера');
   }
+};
+
+module.exports.generateToken = async (email) => {
+  const token = await bcrypt.hash(Date.now().toString(), 10);
+  const currUser = await findUserByEmail(email);
+  if (!currUser) {
+    return '';
+  }
+  await Token.create({
+    resetToken: token,
+    user_id: currUser.id,
+  });
+  return token;
+};
+
+module.exports.validateToken = async (token) => {
+  const tokenRecord = await Token.findOne({ resetToken: token });
+  const currentDateTime = new Date();
+  if (!tokenRecord || tokenRecord.expirationDate > currentDateTime) {
+    return { success: false, message: 'Истек срок токена' };
+  }
+  return { success: true, message: 'Токен валидный' };
+};
+
+module.exports.deleteToken = async (resetToken) => {
+  await Token.deleteOne({ resetToken });
 };
