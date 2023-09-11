@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { Token } = require('../../db/models');
+const { User, Token } = require('../../db/models');
 const { findUserByEmail, findOrCreateUserByEmail } = require('./userService');
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -93,14 +93,23 @@ module.exports.generateToken = async (email) => {
 };
 
 module.exports.validateToken = async (token) => {
-  const tokenRecord = await Token.findOne({ resetToken: token });
+  const tokenRecord = await Token.findOne({
+    where: { resetToken: token },
+    include: {
+      model: User,
+      attributes: ['email'],
+    },
+    raw: true,
+    nest: true,
+  });
+  const user = tokenRecord.User.email;
   const currentDateTime = new Date();
   if (!tokenRecord || tokenRecord.expirationDate > currentDateTime) {
     return { success: false, message: 'Истек срок токена' };
   }
-  return { success: true, message: 'Токен валидный' };
+  return { success: true, user };
 };
 
 module.exports.deleteToken = async (resetToken) => {
-  await Token.deleteOne({ resetToken });
+  await Token.destroy({ where: { resetToken } });
 };

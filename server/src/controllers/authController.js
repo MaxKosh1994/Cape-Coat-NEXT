@@ -98,16 +98,15 @@ module.exports.forgotPass = async (req, res) => {
 
 module.exports.resetPass = async (req, res) => {
   try {
-    const { user } = req.session;
-    const { token, newPassword } = req.body;
+    const { token, password } = req.body;
     const isTokenValid = await validateToken(token);
     if (isTokenValid.success) {
-      const wasPassUpdated = await updUserPass(user, newPassword);
+      const wasPassUpdated = await updUserPass(isTokenValid.user, password);
       if (wasPassUpdated.success) {
-        res.status(200).json({ message: wasPassUpdated.message });
-        await deleteToken(token);
+        res.status(200).json(wasPassUpdated);
+        // await deleteToken(token);
       } else {
-        res.status(500).json({ message: wasPassUpdated.message });
+        res.status(500).json(wasPassUpdated);
       }
     } else {
       res
