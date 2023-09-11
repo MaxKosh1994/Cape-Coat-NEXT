@@ -55,7 +55,7 @@ const ProductCard: React.FC<IProductCard> = ({
         <span className={styles.CardMedia}>
           <img
             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${photo}`}
-            alt="Product Image"
+            alt={name}
             className={styles.Image}
           />
         </span>
