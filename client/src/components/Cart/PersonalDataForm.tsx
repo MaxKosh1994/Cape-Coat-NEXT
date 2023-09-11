@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../../styles/Checkout.module.css';
 
 export default function PersonalDataForm({ handlePersonalDataInputChange }) {
@@ -11,7 +11,7 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
             <div>
               <div className={styles.inputLocation}>
                 <div className={styles.formControl}>
-                  <label className={styles.formControlLabel}>Имя</label>
+                  <label className={styles.formControlLabel}>Имя*</label>
                   <input
                     role="text"
                     title="Имя*"
@@ -22,42 +22,53 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
                   />
                 </div>
                 <div className={styles.formControl}>
-                  <label className={styles.formControlLabel}>Email</label>
+                  <label className={styles.formControlLabel}>Email*</label>
                   <input
                     role="text"
                     title="Email*"
                     placeholder=""
                     name="email"
+                    type="email"
                     className={styles.formInput}
                     onChange={handlePersonalDataInputChange}
                   />
                 </div>
                 <div className={styles.formControl}>
-                  <label className={styles.formControlLabel}>Пароль</label>
+                  <label className={styles.formControlLabel}>Пароль*</label>
                   <input
                     role="password"
                     title="Пароль*"
                     placeholder=""
                     name="password"
+                    type="password"
                     className={styles.formInput}
                     onChange={handlePersonalDataInputChange}
                   />
                 </div>
               </div>
-              <div className={styles.inputGroup}>
-                <div className={styles.inputLocation}>
-                  <div className={styles.formControl}>
-                    <label className={styles.formControlLabel}>Телефон</label>
-                    <input
-                      role="text"
-                      title="Телефон*"
-                      name="phone"
-                      placeholder=""
-                      className={styles.formInput}
-                      onChange={handlePersonalDataInputChange}
-                    />
-                  </div>
-                </div>
+              <div className={styles.formControl}>
+                <label className={styles.formControlLabel}>Телефон*</label>
+                <input
+                  role="text"
+                  title="Телефон*"
+                  name="phone"
+                  placeholder=""
+                  className={styles.formInput}
+                  onChange={handlePersonalDataInputChange}
+                />
+              </div>
+              <div className={styles.formControl}>
+                <label className={styles.formControlLabel}>
+                  Телеграм/Соцсети
+                </label>
+                <input
+                  role="text"
+                  title="Телеграм/соцсети*"
+                  name="telegram_instagram"
+                  placeholder=""
+                  className={styles.formInput}
+                  onChange={handlePersonalDataInputChange}
+                />
               </div>
             </div>
           </div>

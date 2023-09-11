@@ -8,11 +8,13 @@ const {
   addFavourites,
   getAllItems,
   getAllItemsWithFavorites,
+  findItemsById,
 } = require('../controllers/itemController');
 
-module.exports = itemRouter.get('/allItems', getAllItems);
-module.exports = itemRouter.get('/allFavorites', getAllItemsWithFavorites);
-module.exports = itemRouter.get('/favourites/:email', favourites);
-module.exports = itemRouter.post('/favourites/:id', addFavourites);
-
-module.exports = itemRouter.get('/:id', oneItem);
+module.exports = itemRouter
+  .get('/allItems', getAllItems)
+  .get('/allFavorites', getAllItemsWithFavorites)
+  .get('/favourites/:email', favourites)
+  .post('/favourites/:id', addFavourites)
+  .post('/itemsById', findItemsById)
+  .get('/:id', oneItem);

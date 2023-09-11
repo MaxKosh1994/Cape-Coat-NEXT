@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const {
   Item,
   User,
@@ -37,6 +38,47 @@ module.exports.oneItem = async (req, res) => {
     } else {
       res.status(404).json('Нет такого товара');
     }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+};
+
+module.exports.findItemsById = async (req, res) => {
+  try {
+    const requestData = req.body;
+    const ids = requestData.map((item) => item.id);
+
+    const items = await Item.findAll({
+      where: {
+        id: {
+          [Op.in]: ids,
+        },
+      },
+      include: [
+        {
+          model: Photo,
+          limit: 1,
+        },
+        {
+          model: Material,
+        },
+        {
+          model: Category,
+        },
+      ],
+    });
+
+    const materialNamesById = {};
+    requestData.forEach((item) => {
+      materialNamesById[item.id] = item.material_name;
+    });
+
+    const itemsWithMaterialName = items.map((item) => ({
+      ...item.toJSON(),
+      selected_material: materialNamesById[item.id],
+    }));
+    res.json(itemsWithMaterialName);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: 'Ошибка сервера' });

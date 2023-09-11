@@ -39,6 +39,7 @@
   padding-bottom: 0px;
   display: flex;
   justify-content: space-between;
+  padding-left: 1px;
 }
 
 .Price {
@@ -59,7 +60,7 @@
   letter-spacing: 0.05em;
   text-decoration-line: line-through;
   /* font-weight: bold; */
-  margin-left: -3px;
+  margin-left: -50px;
   margin-right: 7px;
 }
 
@@ -89,13 +90,12 @@
 }
 
 @media (max-width: 1300px) {
-  
   .OldPrice {
     font-size: 16px;
     line-height: 18px;
     margin-left: 3px;
   }
-  
+
   .NewPrice {
     font-size: 16px;
     line-height: 18px;
@@ -103,38 +103,34 @@
   }
 }
 
-
 @media (max-width: 1255px) {
-
   .Price {
     font-size: 16px;
   }
-  
+
   .OldPrice {
-    font-size: 15,2px;
+    font-size: 15, 2px;
     line-height: 18px;
     margin-left: 3px;
   }
-  
+
   .NewPrice {
-    font-size: 15,2px;
+    font-size: 15, 2px;
     line-height: 18px;
   }
 }
 
-
 @media (max-width: 1235px) {
-
   .Price {
     font-size: 16px;
   }
-  
+
   .OldPrice {
     font-size: 15px;
     line-height: 18px;
     margin-left: 3px;
   }
-  
+
   .NewPrice {
     font-size: 15px;
     line-height: 18px;
@@ -153,48 +149,44 @@
     font-size: 18px;
     line-height: 19px;
   }
-  
+
   .OldPrice {
     font-size: 17px;
     line-height: 19px;
     margin-left: 3px;
   }
-  
+
   .NewPrice {
     font-size: 17px;
     line-height: 19px;
   }
 
   .PriceOne {
-    font-size: 17px
+    font-size: 17px;
   }
 }
 
-
 @media (max-width: 1210px) {
-
   .Price {
     font-size: 17px;
   }
-  
+
   .OldPrice {
     font-size: 16px;
     line-height: 20px;
     margin-left: 3px;
   }
-  
+
   .NewPrice {
     font-size: 16px;
     line-height: 20px;
   }
 }
 
-
 @media (max-width: 1000px) {
   .NameCard {
     font-size: 16px;
   }
-
 
   .PriceOne {
     font-size: 17px;
@@ -208,38 +200,35 @@
 }
 
 @media (max-width: 942px) {
-
   .Price {
     font-size: 16px;
     line-height: 10px;
   }
-  
+
   .OldPrice {
     font-size: 16px;
     line-height: 10px;
     margin-left: 3px;
   }
-  
+
   .NewPrice {
     font-size: 16px;
     line-height: 10px;
   }
 }
 
-
 @media (max-width: 932px) {
-
   .Price {
     font-size: 15px;
     line-height: 10px;
   }
-  
+
   .OldPrice {
     font-size: 15px;
     line-height: 10px;
     margin-left: 3px;
   }
-  
+
   .NewPrice {
     font-size: 15px;
     line-height: 10px;
@@ -247,18 +236,17 @@
 }
 
 @media (max-width: 900px) {
-
   .Price {
     font-size: 14px;
     line-height: 11px;
   }
-  
+
   .OldPrice {
     font-size: 14px;
     line-height: 11px;
     margin-left: 3px;
   }
-  
+
   .NewPrice {
     font-size: 14px;
     line-height: 11px;
@@ -281,13 +269,13 @@
     font-size: 20px;
     line-height: 20px;
   }
-  
+
   .OldPrice {
     font-size: 19px;
     line-height: 20px;
     margin-left: 3px;
   }
-  
+
   .NewPrice {
     font-size: 19px;
     line-height: 20px;
@@ -303,8 +291,6 @@
   }
 }
 
-
-
 @media (max-width: 768px) {
   .Card {
     width: calc((100% - 45px) / 2);
@@ -313,18 +299,17 @@
 }
 
 @media (max-width: 700px) {
-
   .Price {
     font-size: 19px;
     line-height: 20px;
   }
-  
+
   .OldPrice {
     font-size: 18px;
     line-height: 25px;
     margin-left: 3px;
   }
-  
+
   .NewPrice {
     font-size: 18px;
     line-height: 25px;
@@ -342,13 +327,13 @@
     font-size: 20px;
     line-height: 20px;
   }
-  
+
   .OldPrice {
     font-size: 20px;
     line-height: 25px;
     margin-left: 3px;
   }
-  
+
   .NewPrice {
     font-size: 20px;
     line-height: 25px;

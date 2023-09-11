@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const { User } = require('../../db/models');
 const { findUserByEmail, findOrCreateUserByEmail } = require('./userService');
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

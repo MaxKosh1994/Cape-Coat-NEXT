@@ -4,8 +4,12 @@ import { Button } from '@mui/material';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import Link from 'next/link';
 import Router from 'next/router';
+import { RootState } from '@/app/store';
+import { useAppSelector } from '@/app/hooks';
 
-export default function thankYouPage() {
+export default function ThankYouPage() {
+  const user = useAppSelector((state: RootState) => state.sessionSlice.user);
+
   return (
     <div className={styles.mainContainer}>
       <div className={styles.headerContainer}>
@@ -34,23 +38,24 @@ export default function thankYouPage() {
       <div className={styles.buttonContainer}>
         <Button
           className={styles.button}
-          variant='contained'
-          color='primary'
-          type='submit'
+          variant="contained"
+          color="primary"
+          type="submit"
           onClick={() => Router.push('/')}
         >
           На главную
         </Button>
-
-        <Button
-          className={styles.button}
-          variant='contained'
-          color='primary'
-          type='submit'
-          onClick={() => Router.push('/account')}
-        >
-          Заказы
-        </Button>
+        {user && (
+          <Button
+            className={styles.button}
+            variant="contained"
+            color="primary"
+            type="submit"
+            onClick={() => Router.push('/account')}
+          >
+            Заказы
+          </Button>
+        )}
       </div>
     </div>
   );

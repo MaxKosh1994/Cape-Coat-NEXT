@@ -11,10 +11,10 @@ import DeliveryForm from '@/components/Cart/DeliveryForm';
 import PersonalDataForm from '@/components/Cart/PersonalDataForm';
 import ItemDisplay from '@/components/Cart/ItemDisplay';
 import RightBlock from '@/components/Cart/RightBlock';
+import LSItemDisplay from '@/components/Cart/LSCart/LSItemDisplay';
 
 export default function CheckoutPage() {
   const {
-    cartItemsList,
     showParamsForm,
     deliveryCost,
     showAddressInputs,
@@ -41,15 +41,14 @@ export default function CheckoutPage() {
     handleUrgentChange,
     handleDeliveryChange,
     handleCommentChange,
-    countCartTotal,
     handleCreateOrder,
     handleCustomFormChange,
   } = useCartControl();
 
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
-  // const cartItemsList = useAppSelector(
-  //   (state: RootState) => state.cartSlice.cartItems
-  // );
+  const cartItemsList = useAppSelector(
+    (state: RootState) => state.cartSlice.cartItems
+  );
 
   return (
     <>
@@ -79,22 +78,36 @@ export default function CheckoutPage() {
                 <section
                   className={`${styles.orderBlock} ${styles.orderBlockBasket}`}
                 >
-                  {cartItemsList?.map((item, index) => (
-                    <ItemDisplay
-                      key={item.id}
-                      index={index}
-                      item={item}
-                      handleDeleteItemFromCart={handleDeleteItemFromCart}
-                      userParams={userParams}
-                      handleDisplaySizesForm={handleDisplaySizesForm}
-                      showParamsForm={showParamsForm}
-                      handleChange={handleChange}
-                      handleSaveSizesInputs={handleSaveSizesInputs}
-                      handleCustomFormChange={handleCustomFormChange}
-                    />
-                  ))}
+                  {user
+                    ? cartItemsList?.map((item, index) => (
+                        <ItemDisplay
+                          key={item.id}
+                          index={index}
+                          item={item}
+                          handleDeleteItemFromCart={handleDeleteItemFromCart}
+                          userParams={userParams}
+                          handleDisplaySizesForm={handleDisplaySizesForm}
+                          showParamsForm={showParamsForm}
+                          handleChange={handleChange}
+                          handleSaveSizesInputs={handleSaveSizesInputs}
+                          handleCustomFormChange={handleCustomFormChange}
+                        />
+                      ))
+                    : cartItemsList?.map((item, index) => (
+                        <LSItemDisplay
+                          key={item.id}
+                          index={index}
+                          item={item}
+                          handleDeleteItemFromCart={handleDeleteItemFromCart}
+                          userParams={userParams}
+                          handleDisplaySizesForm={handleDisplaySizesForm}
+                          showParamsForm={showParamsForm}
+                          handleChange={handleChange}
+                          handleSaveSizesInputs={handleSaveSizesInputs}
+                          handleCustomFormChange={handleCustomFormChange}
+                        />
+                      ))}
                 </section>
-
                 {!user && (
                   <PersonalDataForm
                     handlePersonalDataInputChange={
@@ -102,7 +115,6 @@ export default function CheckoutPage() {
                     }
                   />
                 )}
-                {/* <UrgencyForm /> */}
                 <UrgencyForm handleUrgentChange={handleUrgentChange} />
                 <CommentForm handleCommentChange={handleCommentChange} />
                 <DeliveryForm

@@ -7,21 +7,19 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useCartControl } from './useCartControl';
 import DelBtn from './DelBtn';
+import { RootState } from '@/app/store';
+import { emptyCart } from '@/app/cartSlice';
 
 const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
   show,
   handleCartIconClick,
 }) => {
-  const {
-    cartItemsList,
-    delError,
-    cartTotal,
-    setCartTotal,
-    fetchCartItems,
-    emptyCart,
-    handleDeleteItemFromCart,
-  } = useCartControl();
-  const user = useAppSelector((state) => state.sessionSlice.user);
+  const { delError, setCartTotal, fetchCartItems, handleDeleteItemFromCart } =
+    useCartControl();
+  const user = useAppSelector((state: RootState) => state.sessionSlice.user);
+  const cartItemsList = useAppSelector(
+    (state: RootState) => state.cartSlice.cartItems
+  );
   const dispatch = useAppDispatch();
   const [showDiv, setShowDiv] = useState<boolean>(show);
 
@@ -40,12 +38,18 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
     setCartTotal(subtotal + subtotalStock);
   }, [cartItemsList]);
 
+  const emptyCartMin = async () => {
+    await dispatch(emptyCart());
+    localStorage.removeItem('cartItems');
+  };
+
   const handleCloseCart = () => {
     setShowDiv((prev) => !prev);
     setTimeout(() => {
       handleCartIconClick();
     }, 1001);
   };
+  console.log(cartItemsList);
 
   return (
     <div
@@ -147,7 +151,11 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
                 </div>
               ))}
               <div className={styles.totalOrder}>
-                Сумма: {cartTotal.toLocaleString()} &#8381;
+                Сумма:{' '}
+                {cartItemsList
+                  .reduce((sum, item) => sum + item.price, 0)
+                  .toLocaleString()}{' '}
+                &#8381;
               </div>
               <Link href="/checkout">
                 <button className={styles.orderButton}>
@@ -156,7 +164,7 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
                   </span>
                 </button>
               </Link>
-              <button className={styles.clearCartButton} onClick={emptyCart}>
+              <button className={styles.clearCartButton} onClick={emptyCartMin}>
                 <span className={styles.buttonContent}>Очистить корзину</span>
               </button>
             </div>

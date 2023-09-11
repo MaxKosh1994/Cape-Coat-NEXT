@@ -6,10 +6,11 @@ import React, {
   useRef,
 } from 'react';
 import { useRouter } from 'next/router';
-import { delCartItem, getCartItems } from '@/app/cartSlice';
+import { delCartItem, emptyCart, getCartItems } from '@/app/cartSlice';
 import {
   delCartItemThunk,
   emptyCartThunk,
+  getCartItemsByIdThunk,
   getCartItemsThunk,
 } from '@/app/thunkActionsCart';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
@@ -30,10 +31,10 @@ export const useCartControl = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   // товары в корзине
-  const [cartItemsList, setCartItemsList] = useState<ISingleItem[]>([]);
-  // const cartItemsList = useAppSelector(
-  //   (state: RootState) => state.cartSlice.cartItems
-  // );
+  // const [cartItemsList, setCartItemsList] = useState<ISingleItem[]>([]);
+  const cartItemsList = useAppSelector(
+    (state: RootState) => state.cartSlice.cartItems
+  );
   // ошибка при удалении товара из корзины
   const [delError, setDelError] = useState<string>('');
   // сумма корзины
@@ -71,6 +72,8 @@ export const useCartControl = () => {
     name: '',
     email: '',
     phone: '',
+    password: '',
+    telegram_instagram: '',
   });
   // форма адреса
   const [addressInputs, setAddressInputs] = useState<IAddressInputs>({
@@ -104,9 +107,12 @@ export const useCartControl = () => {
   // стукается через санку на бек, грузит список товаров добавленных в корзину
   const fetchCartItems = async (): Promise<void> => {
     try {
-      const cartItems = await dispatch(getCartItemsThunk());
-
-      setCartItemsList(cartItems);
+      if (!user) {
+        const itemsLocal = JSON.parse(localStorage.getItem('cartItems'));
+        await dispatch(getCartItemsByIdThunk(itemsLocal));
+      } else {
+        await dispatch(getCartItemsThunk());
+      }
     } catch (err) {
       console.log(err);
     }
@@ -116,11 +122,24 @@ export const useCartControl = () => {
     let liningCost = 0;
     // counting subtotal of all items adding 1400 to the items with lining
     const subtotal = cartItemsList.reduce((sum, item) => {
-      if (item.Carts[0].CartItem.lining !== '') {
-        liningCost += 1400;
-        return sum + item.price + 1400;
+      const localData = JSON.parse(localStorage.getItem('cartItems')) || [];
+      if (user) {
+        if (item?.Carts[0]?.CartItem?.lining !== '') {
+          liningCost += 1400;
+          return sum + item.price + 1400;
+        } else {
+          return sum + item.price;
+        }
       } else {
-        return sum + item.price;
+        if (
+          localData?.find((data) => data.id === item.id)?.lining &&
+          localData?.find((data) => data.id === item.id).lining !== ''
+        ) {
+          liningCost += 1400;
+          return sum + item.price + 1400;
+        } else {
+          return sum + item.price;
+        }
       }
     }, 0);
     setLiningCost(liningCost);
@@ -131,7 +150,6 @@ export const useCartControl = () => {
       // upds total - discount for >2 items + cost of delivery
       const updTotal = subtotal + deliveryCost - threePlusItemsDiscount;
       setCartTotal(updTotal);
-
       // if there is a promocode discount
       if (discountPercent > 0) {
         // counts new total with discount from promo
@@ -156,6 +174,7 @@ export const useCartControl = () => {
         setTwoItemDiscount(threePlusItemsDiscount + urgencyFee * 0.05);
       }
     } else {
+      setTwoItemDiscount(0);
       const updTotal = subtotal + deliveryCost;
       setCartTotal(updTotal);
 
@@ -179,7 +198,7 @@ export const useCartControl = () => {
     // стукается через санку на бек, грузит список товаров добавленных в корзину
     userParamsRef.current = userParams;
     fetchCartItems();
-  }, [dispatch, user, userParamsRef]);
+  }, [dispatch, user, userParamsRef, showParamsForm]);
 
   useEffect(() => {
     if (cartItemsList.length > 0) {
@@ -200,6 +219,7 @@ export const useCartControl = () => {
     urgencyFee,
     dispatch,
     cartTotal,
+    userParamsRef,
   ]);
 
   useEffect(() => {
@@ -211,11 +231,17 @@ export const useCartControl = () => {
   // удаляет из массива и с бека через санку
   const handleDeleteItemFromCart = async (itemId: number): Promise<void> => {
     try {
-      const data = { itemId, user };
-      await dispatch(delCartItemThunk(data));
-      const updatedCartItems = await dispatch(getCartItemsThunk());
-      setCartItemsList(updatedCartItems);
-      dispatch(delCartItem(itemId));
+      if (user) {
+        const data = { itemId, user };
+        await dispatch(delCartItemThunk(data));
+        await dispatch(getCartItemsThunk());
+      } else {
+        await dispatch(delCartItem(itemId));
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const updatedCartItems = cartItems.filter((item) => item.id !== itemId);
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+        await dispatch(getCartItemsByIdThunk(updatedCartItems));
+      }
     } catch (err) {
       console.log(err);
       setDelError('Не получилось удалить товар, попробуйте позже.');
@@ -294,7 +320,44 @@ export const useCartControl = () => {
       ...prevState,
       itemId: itemId,
     }));
-
+    console.log(paramsFormData);
+    if (!user) {
+      // введенные мерки сохраняются в локалсторедж к соответствующим товарам
+      const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      const itemToUpdate = cartItems.find((item) => item.id === itemId);
+      if (itemToUpdate) {
+        itemToUpdate.height = paramsFormData.height || '';
+        itemToUpdate.length = paramsFormData.length || '';
+        itemToUpdate.sleeve = paramsFormData.sleeve || '';
+        itemToUpdate.bust = paramsFormData.bust || '';
+        itemToUpdate.waist = paramsFormData.waist || '';
+        itemToUpdate.hips = paramsFormData.hips || '';
+        itemToUpdate.saddle = paramsFormData.saddle || '';
+        itemToUpdate.loops = paramsFormData.loops || false;
+        itemToUpdate.buttons = paramsFormData.buttons || '';
+        itemToUpdate.lining = paramsFormData.lining || '';
+      }
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      // сохраняет параметры для отображения
+      const userParams = `Ваш рост: ${
+        paramsFormData.height
+      }см, длина изделия: ${paramsFormData.length}см, длина рукава: ${
+        paramsFormData.sleeve
+      }см, объем груди: ${paramsFormData.bust}см, объем талии: ${
+        paramsFormData.waist
+      }см, объем бедер: ${paramsFormData.hips}см${
+        paramsFormData.saddle ? `, седло: ${paramsFormData.saddle}` : ''
+      }${paramsFormData.lining ? `, утепление: ${paramsFormData.lining}` : ''}${
+        paramsFormData.buttons ? `, фурнитура: ${paramsFormData.buttons}` : ''
+      }${paramsFormData.loops ? `, со шлёвками` : ''}`;
+      setUserParams((prevTexts) => {
+        const updatedTexts = [...prevTexts];
+        updatedTexts[index] = userParams;
+        return updatedTexts;
+      });
+      setParamsFormData({});
+      setShowParamsForm({});
+    }
     // записывает мерки к товару в CartItems
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}cart/measures/${itemId}`,
@@ -326,7 +389,6 @@ export const useCartControl = () => {
       setShowParamsForm({});
     }
   };
-  console.log(userParams);
 
   // отслеживает инпут промокода
   const handlePromocodeChange = async (
@@ -401,7 +463,7 @@ export const useCartControl = () => {
         body: JSON.stringify(data),
       });
       const re = await response.json();
-      console.log(re);
+      console.log('ответ createOrder ===>', re);
       if (re.message === 'Что-то пошло не так, попробуйте позже') {
         // если ошибка на беке
         setOrderStatus(re.message);
@@ -417,8 +479,10 @@ export const useCartControl = () => {
         }, 2000);
       } else {
         // если все ок - очищает корзину, массив в редаксе и редиректит на спасибку
-        await dispatch(emptyCartThunk(user));
         router.push('/thankyou');
+        await dispatch(emptyCartThunk(user));
+        await dispatch(emptyCart());
+        localStorage.setItem('cartItems', JSON.stringify([]));
         sendMail(name, user, re.message);
       }
     } catch (err) {
@@ -440,24 +504,46 @@ export const useCartControl = () => {
       }
 
       // проверяем заполнил ли клиент мерки для всех товаров на пошив
-      const isMeasuresAdded = cartItemsList
-        .filter((item) => !item.in_stock)
-        .every((item) => {
-          // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-          // TODO ошибка типизации
-          const cartItems = item.Carts.map((cart) => cart.CartItem);
-          return cartItems.every((cartItem) => {
+      let isMeasuresAdded;
+      if (user) {
+        console.log(cartItemsList.filter((item) => !item.in_stock));
+        isMeasuresAdded = cartItemsList
+          .filter((item) => !item.in_stock)
+          .every((item) => {
+            const cartItems = item.Carts.map((cart) => cart.CartItem);
+            return cartItems.every((cartItem) => {
+              return (
+                cartItem.height !== '' &&
+                cartItem.length !== '' &&
+                cartItem.sleeve !== '' &&
+                cartItem.bust !== '' &&
+                cartItem.waist !== '' &&
+                cartItem.hips !== ''
+              );
+            });
+          });
+      } else {
+        // проверяем мерки в локалсторедж
+        const localData = JSON.parse(localStorage.getItem('cartItems')) || [];
+        isMeasuresAdded = localData
+          .filter((item) => !item.in_stock)
+          .every((oneItem) => {
             return (
-              cartItem.height !== '' &&
-              cartItem.length !== '' &&
-              cartItem.sleeve !== '' &&
-              cartItem.bust !== '' &&
-              cartItem.waist !== '' &&
-              cartItem.hips !== ''
+              oneItem.height !== undefined &&
+              oneItem.height !== '' &&
+              oneItem.length !== undefined &&
+              oneItem.length !== '' &&
+              oneItem.sleeve !== undefined &&
+              oneItem.sleeve !== '' &&
+              oneItem.bust !== undefined &&
+              oneItem.bust !== '' &&
+              oneItem.waist !== undefined &&
+              oneItem.waist !== '' &&
+              oneItem.hips !== undefined &&
+              oneItem.hips !== ''
             );
           });
-        });
-      console.log(cartItemsList.map((item) => item));
+      }
       // если адрес корректный
       if (addressString.length > 18) {
         // проверяем мерки
@@ -485,6 +571,9 @@ export const useCartControl = () => {
             createOrder(orderData);
           } else {
             // если клиент не залогинен - собираем объект с данными из формы персональных данных
+            const itemsWithMeasurements = JSON.parse(
+              localStorage.getItem('cartItems')
+            );
             const orderData = {
               personalData,
               cartTotal,
@@ -492,9 +581,22 @@ export const useCartControl = () => {
               commentsInput,
               urgentMaking,
               dbPc,
+              itemsWithMeasurements,
             };
             // вызываем функцию создания заказа
-            createOrder(orderData);
+            if (
+              !personalData.name ||
+              !personalData.email ||
+              !personalData.password ||
+              !personalData.phone
+            ) {
+              setOrderStatus('Пожалуйста, заполните все поля личных данных');
+              setTimeout(() => {
+                setOrderStatus('');
+              }, 2000);
+            } else {
+              createOrder(orderData);
+            }
           }
         }
       } else {
@@ -516,7 +618,6 @@ export const useCartControl = () => {
 
   return {
     cartItemsList,
-    setCartItemsList,
     setShowParamsForm,
     showParamsForm,
     paramsFormData,
@@ -577,6 +678,7 @@ export const useCartControl = () => {
     countCartTotal,
     handleCreateOrder,
     createOrder,
+    userParamsRef,
   };
   // setState тоже можно возвращать и юзать в компоненте снаружи
 };
