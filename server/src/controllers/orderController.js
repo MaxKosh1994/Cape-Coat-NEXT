@@ -22,6 +22,7 @@ module.exports.createOrder = async (req, res) => {
         personalData.email,
         personalData.phone,
         hashedPassword,
+        personalData.telegram_instagram,
       );
       currUser = userData;
     }

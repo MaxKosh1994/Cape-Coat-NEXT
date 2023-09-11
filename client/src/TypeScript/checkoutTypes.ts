@@ -23,6 +23,7 @@ export interface IPersonalData {
   name: string;
   email: string;
   phone: string;
+  password?: string;
   telegram_instagram?: string;
 }
 

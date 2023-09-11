@@ -45,7 +45,7 @@ export default function ThankYouPage() {
         >
           На главную
         </Button>
-        {!user && (
+        {user && (
           <Button
             className={styles.button}
             variant="contained"

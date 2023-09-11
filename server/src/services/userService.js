@@ -13,6 +13,7 @@ module.exports.findOrCreateUserByEmail = async (
   email,
   phone,
   password,
+  telegram_instagram,
 ) => {
   const currUser = await User.findOrCreate({
     where: { email },
@@ -21,6 +22,7 @@ module.exports.findOrCreateUserByEmail = async (
       email,
       phone,
       password,
+      telegram_instagram,
     },
   });
   return currUser;

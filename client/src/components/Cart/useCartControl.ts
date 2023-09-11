@@ -72,6 +72,8 @@ export const useCartControl = () => {
     name: '',
     email: '',
     phone: '',
+    password: '',
+    telegram_instagram: '',
   });
   // форма адреса
   const [addressInputs, setAddressInputs] = useState<IAddressInputs>({
@@ -545,7 +547,6 @@ export const useCartControl = () => {
       // если адрес корректный
       if (addressString.length > 18) {
         // проверяем мерки
-        // TODO раскомментить после дебага
         if (!isMeasuresAdded) {
           setOrderStatus('Пожалуйста, введите все мерки для пошива изделия');
           setTimeout(() => {
@@ -567,7 +568,7 @@ export const useCartControl = () => {
               dbPc,
             };
             // вызываем функцию создания заказа
-            // createOrder(orderData);
+            createOrder(orderData);
           } else {
             // если клиент не залогинен - собираем объект с данными из формы персональных данных
             const itemsWithMeasurements = JSON.parse(
@@ -583,7 +584,19 @@ export const useCartControl = () => {
               itemsWithMeasurements,
             };
             // вызываем функцию создания заказа
-            createOrder(orderData);
+            if (
+              !personalData.name ||
+              !personalData.email ||
+              !personalData.password ||
+              !personalData.phone
+            ) {
+              setOrderStatus('Пожалуйста, заполните все поля личных данных');
+              setTimeout(() => {
+                setOrderStatus('');
+              }, 2000);
+            } else {
+              createOrder(orderData);
+            }
           }
         }
       } else {

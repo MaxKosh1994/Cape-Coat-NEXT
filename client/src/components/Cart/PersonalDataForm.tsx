@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from '../../styles/Checkout.module.css';
-import { useCartControl } from './useCartControl';
 
 export default function PersonalDataForm({ handlePersonalDataInputChange }) {
   return (
@@ -47,20 +46,29 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
                   />
                 </div>
               </div>
-              <div className={styles.inputGroup}>
-                <div className={styles.inputLocation}>
-                  <div className={styles.formControl}>
-                    <label className={styles.formControlLabel}>Телефон*</label>
-                    <input
-                      role="text"
-                      title="Телефон*"
-                      name="phone"
-                      placeholder=""
-                      className={styles.formInput}
-                      onChange={handlePersonalDataInputChange}
-                    />
-                  </div>
-                </div>
+              <div className={styles.formControl}>
+                <label className={styles.formControlLabel}>Телефон*</label>
+                <input
+                  role="text"
+                  title="Телефон*"
+                  name="phone"
+                  placeholder=""
+                  className={styles.formInput}
+                  onChange={handlePersonalDataInputChange}
+                />
+              </div>
+              <div className={styles.formControl}>
+                <label className={styles.formControlLabel}>
+                  Телеграм/Соцсети
+                </label>
+                <input
+                  role="text"
+                  title="Телеграм/соцсети*"
+                  name="telegram_instagram"
+                  placeholder=""
+                  className={styles.formInput}
+                  onChange={handlePersonalDataInputChange}
+                />
               </div>
             </div>
           </div>
