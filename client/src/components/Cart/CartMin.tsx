@@ -40,7 +40,7 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
 
   const emptyCartMin = async () => {
     await dispatch(emptyCart());
-    localStorage.removeItem('cartItems');
+    localStorage.setItem('cartItems', []);
   };
 
   const handleCloseCart = () => {
@@ -49,7 +49,6 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
       handleCartIconClick();
     }, 1001);
   };
-  console.log(cartItemsList);
 
   return (
     <div

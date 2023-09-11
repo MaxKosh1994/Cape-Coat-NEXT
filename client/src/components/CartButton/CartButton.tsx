@@ -100,12 +100,11 @@ export default function CartButton({
 
           localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
           setIsInCart(!isInCart);
-          dispatch(getCartItemsByIdThunk(updatedCartItems));
+          await dispatch(getCartItemsByIdThunk(updatedCartItems));
           return;
         }
       } else {
         if (!isInCart) {
-          //TODO нужно починить так, чтобы при sale тоже либо выбирался материал, либо selectedMaterialName обновлялся после товара не в кате гории sale
           const material = selectedMaterialName
             ? selectedMaterialName
             : itemData.Material.name;
