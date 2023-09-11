@@ -59,12 +59,12 @@ const useProductCardLogic = (
         );
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
         setIsFavorite(!isFavorite);
-        dispatch(setFavourites(updatedFavorites));
+        await dispatch(setFavourites(updatedFavorites));
       } else {
         const updatedFavorites = [...favoritesFromStorage, id];
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
         setIsFavorite(!isFavorite);
-        dispatch(setFavourites(updatedFavorites));
+        await dispatch(setFavourites(updatedFavorites));
       }
     } else {
       setIsFavorite(!isFavorite);
@@ -85,8 +85,8 @@ const useProductCardLogic = (
           : addToFavorites;
         const favorite = await favoriteAction(favoriteData);
         setFavCard(favorite);
-        dispatch(fetchFavouritesData(favorite));
-        dispatch(setLikedStatus(!isFavorite));
+        await dispatch(fetchFavouritesData(favorite));
+        await dispatch(setLikedStatus(!isFavorite));
       } catch (err) {
         console.log(err);
       }
@@ -105,7 +105,7 @@ const useProductCardLogic = (
           (item) => item.id !== id
         );
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-        dispatch(delItemInCart(updatedCartItems));
+        await dispatch(getCartItemsByIdThunk(updatedCartItems));
         setIsCart(!isCart);
       } else {
         const updatedCartItems = [
@@ -116,7 +116,7 @@ const useProductCardLogic = (
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
         setIsCart(!isCart);
         console.log(updatedCartItems);
-        dispatch(getCartItemsByIdThunk(updatedCartItems));
+        await dispatch(getCartItemsByIdThunk(updatedCartItems));
       }
     } else {
       setIsCart(!isCart);
@@ -199,7 +199,14 @@ const useProductCardLogic = (
       const cartFromStorage = JSON.parse(
         localStorage.getItem('cartItems') || '[]'
       );
-      dispatch(getCartItems(cartFromStorage));
+      async function fetchUpdCartItems(cartFromStorage) {
+        try {
+          await dispatch(getCartItemsByIdThunk(cartFromStorage));
+        } catch (error) {
+          console.error('Error while fetching cart items:', error);
+        }
+      }
+      fetchUpdCartItems(cartFromStorage);
       const isItemInCart = cartFromStorage.some((element) => element.id === id);
       setIsCart(isItemInCart);
     }

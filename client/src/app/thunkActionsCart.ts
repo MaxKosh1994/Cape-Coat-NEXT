@@ -22,29 +22,30 @@ export const getCartItemsThunk = (): AppThunk => async (dispatch: Dispatch) => {
   }
 };
 
-export const getCartItemsByIdThunk = (itemIds): AppThunk =>
-async (dispatch: Dispatch) => {
-  try {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_URL}item/itemsById`,
-      itemIds,
-      {
-        method: 'POST',
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      }
-    );
-    const resp = await dispatch(getCartItems(res.data));
-    return resp.payload;
-  } catch (err) {
-    // dispatch(handleError(err))
-    console.log(err);
-    return err;
-  }
-};
+export const getCartItemsByIdThunk =
+  (itemIds): AppThunk =>
+  async (dispatch: Dispatch) => {
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_URL}item/itemsById`,
+        itemIds,
+        {
+          method: 'POST',
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        }
+      );
+      const resp = await dispatch(getCartItems(res.data));
+      return resp.payload;
+    } catch (err) {
+      // dispatch(handleError(err))
+      console.log(err);
+      return err;
+    }
+  };
 
 export const delCartItemThunk =
   (data: { itemId: number; user: string }): AppThunk =>
@@ -112,7 +113,6 @@ export const addCartItemsThunk =
       );
 
       dispatch(getCartItems(res.data.newCartItem));
-      dispatch(getCartItems());
       return res.data;
     } catch (err) {
       // dispatch(handleError(err))
