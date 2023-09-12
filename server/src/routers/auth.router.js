@@ -7,10 +7,14 @@ const {
   logout,
   register,
   session,
+  forgotPass,
+  resetPass,
 } = require('../controllers/authController');
 
 module.exports = authRouter
   .post('/login', login)
   .get('/logout', logout)
   .post('/register', register)
+  .post('/forgot-pass', forgotPass)
+  .post('/reset-pass', resetPass)
   .get('/session', session);
