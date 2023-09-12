@@ -8,7 +8,7 @@ import InfoModal from '../../InfoModal';
 import ItemInputs from '../../ItemInputs';
 import CustomFormControl from '../../CustomFormControl';
 import InputFiles from '../../InputFiles';
-import CheckBox from '../../checkbox';
+import CheckBox from '../../CheckBox';
 import CustomButton from '../../CustomButton';
 
 import Box from '@mui/material/Box';
@@ -22,8 +22,8 @@ export default function ItemModal({
   setOpen,
   message,
   setMessage,
+  itemData,
 }) {
-  console.log(id);
   const formRef = useRef(null);
   const [files, setFile] = useState({});
   const [description, setDescription] = useState({
@@ -44,23 +44,93 @@ export default function ItemModal({
   const addressCat = 'category';
   const addressCol = 'collection';
   const addressMat = 'material';
+  const [formData, setFormData] = useState({
+    name: '',
+    article: '',
+    description: '',
+    model_params: '',
+    characteristics: '',
+    price: '',
+    new_price: '',
+    in_stock: false,
+    purchased: false,
+    bestseller: false,
+    collection_id: 1,
+    material_id: 1,
+    category_id: 1,
+  });
+  const [isInStock, setIsInStock] = useState(false);
+  const resetFormData = () => {
+    setFormData({
+      name: '',
+      article: '',
+      description: '',
+      model_params: '',
+      characteristics: '',
+      price: '',
+      new_price: '',
+      in_stock: false,
+      purchased: false,
+      bestseller: false,
+      collection_id: 1,
+      material_id: 1,
+      category_id: 1,
+    });
+    setNameCat('');
+    setNameCol('');
+    setNameMat('');
+  };
+  useEffect(() => {
+    if (itemData !== null) {
+      setFormData({
+        name: itemData.name || '',
+        article: itemData.article || '',
+        description: itemData.description || '',
+        model_params: itemData.model_params || '',
+        characteristics: itemData.characteristics || '',
+        price: itemData.price || '',
+        new_price: itemData.new_price || '',
+        in_stock: itemData.in_stock || false,
+        purchased: itemData.purchased || false,
+        bestseller: itemData.bestseller || false,
+        collection_id: itemData.collection_id || 1,
+        material_id: itemData.material_id || 1,
+        category_id: itemData.category_id || 1,
+      });
+      setNameCat(itemData.category_id || 1);
+      setNameCol(itemData.collection_id || 1);
+      setNameMat(itemData.material_id || 1);
+    }
+  }, [itemData]);
 
   useEffect(() => {
     dataAxios(setCategory, setMessage, addressCat);
     dataAxios(setCollection, setMessage, addressCol);
     dataAxios(setMaterial, setMessage, addressMat);
   }, []);
+  useEffect(() => {
+    if (!openChange) {
+      resetFormData();
+    }
+  }, [openChange]);
 
   const changeHandlerFiles = (e) => {
     setFile({ ...files, photos: e.target.files });
   };
 
-  const changeHandlerDescription = (e) => {
-    setDescription({ ...description, [e.target.name]: e.target.value });
-  };
+  const changeHandler = (props) => {
+    const { name, value } = props.target;
 
-  const changeHandlerDescript = (e) => {
-    setDescription({ ...description, [e.target.name]: e.target.checked });
+    setDescription({ ...description, [name]: value });
+    setFormData({ ...formData, [name]: value });
+  };
+  const changeCheckboxHandler = (name, value) => {
+    setDescription({ ...description, [name]: value });
+    setFormData({ ...formData, [name]: value });
+
+    if (name === 'in_stock') {
+      setIsInStock(value);
+    }
   };
 
   const handleCategoryChange = (e) => {
@@ -77,43 +147,58 @@ export default function ItemModal({
   const submit = async (e, url) => {
     try {
       e.preventDefault();
-      const formData = new FormData();
+
+      if (formData.in_stock && !formData.new_price) {
+        setMessage('Заполните поле с новой ценой');
+        setOpen(true);
+        setTimeout(() => {
+          setMessage('');
+          setOpen(false);
+        }, 1000);
+        return;
+      }
+
+      const formDataToSend = new FormData();
+
       if (
         url === `create-${address}` ||
         (url === `update-${address}` && files)
       ) {
         for (let key in files.photos) {
-          formData.append('photos', files.photos[key]);
+          formDataToSend.append('photos', files.photos[key]);
         }
       }
-      formData.append('description', JSON.stringify(description));
-      const val = await Object.fromEntries(formData.entries());
-      await dataAxios(setContent, setMessage, address, formData, url, id);
+
+      formDataToSend.append('description', JSON.stringify(description));
+
+      await dataAxios(setContent, setMessage, address, formDataToSend, url, id);
       setOpen(true);
       setTimeout(() => {
         setMessage('');
         setOpen(false);
       }, 1000);
+
       formRef.current.reset();
       setOpenChange(false);
     } catch (err) {
       console.log(err);
     }
   };
+
   return (
     <>
       <Modal
         className={styles.modal}
         open={openChange}
         onClose={() => setOpenChange(false)}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
       >
         <div className={styles.mainContainer}>
           <form
             ref={formRef}
             onSubmit={submit}
-            encType='multipart/form-data'
+            encType="multipart/form-data"
             className={styles.formContainer}
           >
             <div className={styles.selectContainer}>
@@ -125,7 +210,7 @@ export default function ItemModal({
                 name={'collection_id'}
                 label={'collection'}
                 handleChange={handleCollectionChange}
-                changeHandlerDescription={changeHandlerDescription}
+                changeHandlerDescription={changeHandler}
               />
               <CustomFormControl
                 styleSize={'200'}
@@ -135,7 +220,7 @@ export default function ItemModal({
                 name={'category_id'}
                 label={'category'}
                 handleChange={handleCategoryChange}
-                changeHandlerDescription={changeHandlerDescription}
+                changeHandlerDescription={changeHandler}
               />
               <CustomFormControl
                 infoText={'Выберите материал'}
@@ -144,26 +229,29 @@ export default function ItemModal({
                 name={'material_id'}
                 label={'material'}
                 handleChange={handleMaterialChange}
-                changeHandlerDescription={changeHandlerDescription}
+                changeHandlerDescription={changeHandler}
+                required={isInStock}
               />
             </div>
             <Box className={styles.inputBox}>
-              <ItemInputs changeHandler={changeHandlerDescription} />
+              <ItemInputs changeHandler={changeHandler} formData={formData} />
             </Box>
 
             <div className={styles.checkBoxContainer}>
               <div className={styles.checkBoxMiniContainer}>
                 <CheckBox
-                  changeHandler={changeHandlerDescript}
+                  changeCheckboxHandler={changeCheckboxHandler}
                   name={'bestseller'}
                   placeholder={'bestseller'}
                   label={' bestseller'}
+                  checked={formData.bestseller}
                 />
                 <CheckBox
-                  changeHandler={changeHandlerDescript}
+                  changeCheckboxHandler={changeCheckboxHandler}
                   name={'in_stock'}
                   placeholder={'in_stock'}
                   label={' В наличии'}
+                  checked={formData.in_stock}
                 />
               </div>
               <InputFiles

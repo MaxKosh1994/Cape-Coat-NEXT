@@ -24,13 +24,18 @@ export default function addContent() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   let [id, setId] = useState();
+  const [itemData, setItemData] = useState(null);
+
   useEffect(() => {
     if (!openItem) {
       setId(undefined);
     }
   }, [openItem]);
 
-  const handleOpenItem = () => setOpenItem(true);
+  const handleOpenItem = (data) => {
+    setOpenItem(true);
+    setItemData(data);
+  };
   const handleOpenCat = () => setOpenCat(true);
   const handleOpenCol = () => setOpenCol(true);
   const handleOpenMat = () => setOpenMat(true);
@@ -45,12 +50,6 @@ export default function addContent() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (!isAdmin) {
-      router.push('/signin');
-    }
-  }, [isAdmin]);
-
   return (
     <>
       {isAdmin && (
@@ -59,29 +58,29 @@ export default function addContent() {
           <div className={styles.routesDiv}>
             <Button
               className={styles.button}
-              onClick={handleOpenItem}
-              type='button'
+              onClick={() => handleOpenItem(null)}
+              type="button"
             >
               Добавить товар
             </Button>
             <Button
               className={styles.button}
               onClick={handleOpenCat}
-              type='button'
+              type="button"
             >
               Добавить категорию
             </Button>
             <Button
               className={styles.button}
               onClick={handleOpenCol}
-              type='button'
+              type="button"
             >
               Добавить коллекцию
             </Button>
             <Button
               className={styles.button}
               onClick={handleOpenMat}
-              type='button'
+              type="button"
             >
               Добавить материал
             </Button>
@@ -103,6 +102,7 @@ export default function addContent() {
             setOpen={setOpen}
             message={message}
             setMessage={setMessage}
+            itemData={itemData}
           />
           <MatModal
             openChange={openMat}
