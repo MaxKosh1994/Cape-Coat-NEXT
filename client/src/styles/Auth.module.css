@@ -46,6 +46,7 @@
   font-size: 1.8rem;
   text-align: center;
   margin: 10px 0px;
+  margin-left: 30px;
   display: flex;
   flex-direction: column;
 }
@@ -56,15 +57,21 @@
   text-underline-offset: 3px;
 }
 
-.header {
+.header,
+.errMsg {
   font-size: 1.6rem;
   text-align: center;
   margin-bottom: 10px;
 }
 
+.errMsg {
+  color: red;
+}
+
 @media only screen and (min-width: 120px) and (max-width: 800px) {
   .formContainer {
     width: 80vw;
+    flex-direction: column;
   }
 
   .signInForm {
@@ -72,8 +79,14 @@
     font-size: 2rem;
   }
 
-  .header {
+  .successUpd {
+    margin-left: 0;
+  }
+
+  .header,
+  .errMsg {
     font-size: 1.6rem;
+    text-align: center;
   }
 
   .redirMsg {
@@ -92,6 +105,10 @@
 
   .signInForm > button {
     font-size: 1.3rem;
+  }
+
+  .successUpd {
+    margin-left: 0;
   }
 
   .redirMsg {

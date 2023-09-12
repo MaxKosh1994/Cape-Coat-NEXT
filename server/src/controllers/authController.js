@@ -103,7 +103,7 @@ module.exports.resetPass = async (req, res) => {
       const wasPassUpdated = await updUserPass(isTokenValid.user, password);
       if (wasPassUpdated.success) {
         res.status(200).json(wasPassUpdated);
-        // await deleteToken(token);
+        await deleteToken(token);
       } else {
         res.status(500).json(wasPassUpdated);
       }

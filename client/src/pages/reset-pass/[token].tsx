@@ -19,6 +19,7 @@ export default function ForgotPass() {
   const [newPass, setNewPass] = useState({ password1: '', password2: '' });
   const [showErrorMsg, setShowErrorMsg] = useState<boolean>(false);
   const [updSuccess, setUpdSuccess] = useState<string>('');
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewPass({ ...newPass, [e.target.name]: e.target.value });
   };
@@ -26,7 +27,11 @@ export default function ForgotPass() {
   const handleUpdPass = async (e) => {
     e.preventDefault();
     const { token } = router.query;
-    if (newPass.password1 && newPass.password2) {
+    if (
+      newPass.password1 &&
+      newPass.password2 &&
+      newPass.password1 === newPass.password2
+    ) {
       const response = await dispatch(resetPassThunk(token, newPass.password1));
       if (response.success) {
         setShowErrorMsg(false);
@@ -60,7 +65,6 @@ export default function ForgotPass() {
           <>
             <TaskAltIcon
               style={{
-                marginRight: `40px`,
                 fontSize: '50px',
                 color: 'green',
               }}
@@ -72,7 +76,7 @@ export default function ForgotPass() {
         ) : (
           <form className={styles.signInForm}>
             <h3 className={styles.header}>Введите новый пароль</h3>
-            {showErrorMsg && <p>{error}</p>}
+            {showErrorMsg && <p className={styles.errMsg}>{error}</p>}
             <TextField
               className={styles.textField}
               placeholder="Пароль"
