@@ -56,6 +56,45 @@ export const signInUserThunk = (inputsData) => async (dispatch) => {
   }
 };
 
+export const forgotPassThunk = (userEmail) => async (dispatch) => {
+  try {
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_URL}auth/forgot-pass`,
+      userEmail,
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    dispatch(handleError(error));
+  }
+};
+
+export const resetPassThunk = (token, password) => async (dispatch) => {
+  try {
+    const data = { token, password };
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_URL}auth/reset-pass`,
+      data,
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    dispatch(handleError(error));
+  }
+};
+
 export const signOutUserThunk = () => async (dispatch) => {
   try {
     await axios.get(`${process.env.NEXT_PUBLIC_URL}auth/logout`, {

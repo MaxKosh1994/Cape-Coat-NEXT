@@ -9,6 +9,7 @@
   object-fit: cover;
   width: 100%;
   z-index: 0;
+  object-position: 100% 80%;
 }
 
 .textHorizImg {
@@ -136,6 +137,10 @@
   .horizontalContainer {
     height: 100vh;
     width: 100%;
+  }
+
+  .horizImg {
+    object-position: 40% 80%;
   }
 
   .textHorizImg {

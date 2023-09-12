@@ -23,7 +23,7 @@ const Home = () => {
         />
         <meta
           name="keywords"
-          content=" заказ одежды, на заказ, Cape&Coat, одежда по меркам"
+          content="заказ одежды, пошив одежды, в нижнем новгороде, пошив одежды рядом, на заказ, Cape&Coat, одежда по меркам, женская одежда на заказ, пошив на заказ для женщин, пошив платья, пошив платья на заказ, пошив пальто, пошив женских пальто, пошив костюма, пошив костюма на заказ, пошив женских костюмов, пошив брюк женских, пошив брюк, пошив юбок, пошив на заказ, пошив тренча, пошив шуб, пошив шуб на заказ, пошив искусственных шуб, индивидуальный пошив шубы, пошив женского пиджака, пошив пиджака, пошив одежды цена"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -67,7 +67,7 @@ const Home = () => {
             <VerticalBlock
               key={verticalBlockData[object].blockName}
               blockName={verticalBlockData[object].blockName}
-              imgUrl={verticalBlockData[object].imgUrl}
+              imgName={verticalBlockData[object].imgName}
               url={verticalBlockData[object].url}
             />
           ))}

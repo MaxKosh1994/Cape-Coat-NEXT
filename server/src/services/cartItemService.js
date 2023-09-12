@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Material, Item, Cart, CartItem, Photo } = require('../../db/models');
 const { findUserCart } = require('./cartServices');
 

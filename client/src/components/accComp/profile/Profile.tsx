@@ -35,12 +35,6 @@ export default function Profile() {
             <p className={styles.pFive}>{userInfo?.full_name}</p>
           </div>
           <div className={styles.liContainer}>
-            <h5 className={styles.headerFive}>Адрес</h5>
-            <div className={styles.pContainer}>
-              <p className={styles.pFive}>{userInfo?.address}</p>
-            </div>
-          </div>
-          <div className={styles.liContainer}>
             <h5 className={styles.headerFive}>Номер телефона</h5>
             <div className={styles.pContainer}>
               <p className={styles.pFive}>{userInfo?.phone}</p>

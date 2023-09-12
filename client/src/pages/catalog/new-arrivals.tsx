@@ -5,6 +5,7 @@ import { Typography } from '@mui/material';
 import Head from 'next/head';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import BasePage from '@/components/ItemPage/BasePage';
+import Custom404 from '../404';
 
 export default function NewArrivalsPage() {
   const [newArrivalsItems, setNewArrivalsItems] = useState([]);
@@ -15,7 +16,12 @@ export default function NewArrivalsPage() {
           process.env.NEXT_PUBLIC_URL + 'catalog/new-arrivals'
         );
         if (response.status === 200) {
-          const collection = await response.json();
+          const result = await response.json();
+          const collection = result.map((el) => ({
+            ...el,
+            isFavorite: false,
+            isCart: false,
+          }));
           setNewArrivalsItems(collection);
         }
       })();
@@ -24,5 +30,13 @@ export default function NewArrivalsPage() {
     }
   }, []);
 
-  return <BasePage pageName="Новые поступления" itemsArr={newArrivalsItems} />;
+  return (
+    <>
+      {newArrivalsItems.length ? (
+        <BasePage pageName="Новые поступления" itemsArr={newArrivalsItems} />
+      ) : (
+        <Custom404 />
+      )}
+    </>
+  );
 }

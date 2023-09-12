@@ -5,8 +5,12 @@ import CoatSizeForm from '@/components/Cart/coatSizeForm';
 import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
 import { useCartControl } from './useCartControl';
 
-export default function CustomFormPart({ catId, itemId }) {
-  const { handleCustomFormChange } = useCartControl();
+export default function CustomFormPart({
+  catId,
+  itemId,
+  handleCustomFormChange,
+}) {
+  // const { handleCustomFormChange } = useCartControl();
   const renderComponent = () => {
     switch (catId) {
       case 4:

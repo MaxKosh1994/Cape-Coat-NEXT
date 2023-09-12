@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         through: models.UserPromocode,
         foreignKey: 'user_id',
       });
+      this.hasMany(models.Token, { foreignKey: 'user_id' });
     }
   }
   User.init(
@@ -21,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       phone: DataTypes.STRING,
       full_name: DataTypes.STRING,
-      address: DataTypes.STRING,
       telegram_instagram: DataTypes.STRING,
       admin: DataTypes.BOOLEAN,
     },

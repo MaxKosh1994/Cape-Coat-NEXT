@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { User } = require('../../db/models');
+const { User, Token } = require('../../db/models');
 const { findUserByEmail, findOrCreateUserByEmail } = require('./userService');
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -77,4 +77,39 @@ module.exports.checkSession = async (session) => {
   } catch (err) {
     throw new Error('Ошибка сервера');
   }
+};
+
+module.exports.generateToken = async (email) => {
+  const token = await bcrypt.hash(Date.now().toString(), 10);
+  const currUser = await findUserByEmail(email);
+  if (!currUser) {
+    return '';
+  }
+  await Token.create({
+    resetToken: token,
+    user_id: currUser.id,
+  });
+  return token;
+};
+
+module.exports.validateToken = async (token) => {
+  const tokenRecord = await Token.findOne({
+    where: { resetToken: token },
+    include: {
+      model: User,
+      attributes: ['email'],
+    },
+    raw: true,
+    nest: true,
+  });
+  const user = tokenRecord.User.email;
+  const currentDateTime = new Date();
+  if (!tokenRecord || tokenRecord.expirationDate > currentDateTime) {
+    return { success: false, message: 'Истек срок токена' };
+  }
+  return { success: true, user };
+};
+
+module.exports.deleteToken = async (resetToken) => {
+  await Token.destroy({ where: { resetToken } });
 };

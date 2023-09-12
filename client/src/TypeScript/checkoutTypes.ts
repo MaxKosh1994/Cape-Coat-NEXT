@@ -22,7 +22,8 @@ export interface IAddressInputs {
 export interface IPersonalData {
   name: string;
   email: string;
-  number: string;
+  phone: string;
+  password?: string;
   telegram_instagram?: string;
 }
 

@@ -3,12 +3,12 @@ import { HorizontalBlockType, VerticalBlockType } from '@/TypeScript/mainTypes';
 export const verticalBlockData: VerticalBlockType = {
   collection: {
     blockName: 'Коллекция Aw-2023',
-    imgUrl: `${process.env.NEXT_PUBLIC_COLLECTION_URL}IMG_8836.JPG`,
+    imgName: 'VERT1.JPG',
     url: 'collection',
   },
   newArrivals: {
-    blockName: 'Новые поступления',
-    imgUrl: `${process.env.NEXT_PUBLIC_CATEGORY_URL}coats.jpg`,
+    blockName: 'Новинки',
+    imgName: 'VERT2.JPG',
     url: 'new-arrivals',
   },
 };
@@ -16,10 +16,10 @@ export const verticalBlockData: VerticalBlockType = {
 export const horizontalBlockData: HorizontalBlockType = {
   bestsellers: {
     blockName: 'bestsellers',
-    imgName: 'dresses.jpg',
+    imgName: 'HORIZ1.JPG',
   },
   sale: {
     blockName: 'sale',
-    imgName: 'trenches.jpg',
+    imgName: 'HORIZ2.JPG',
   },
 };

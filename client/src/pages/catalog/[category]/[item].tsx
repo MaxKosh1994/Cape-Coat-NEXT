@@ -48,7 +48,7 @@ function Item({
 
         <meta
           name="keywords"
-          content="одежда, на заказ, пошив, Нижний Новгород,распродажа"
+          content="одежда, на заказ, пошив, Нижний Новгород, распродажа, пошив платья, пошив платья на заказ, пошив пальто, пошив женских пальто, пошив костюма, пошив костюма на заказ, пошив женских костюмов, пошив брюк женских, пошив брюк, пошив юбок, пошив на заказ, пошив тренча, пошив шуб, пошив шуб на заказ, пошив искусственных шуб, индивидуальный пошив шубы, пошив женского пиджака, пошив пиджака, пошив одежды цена"
         />
         <meta name="author" content="Cape and coat" />
         <meta name="robots" content="index, follow" />
@@ -94,6 +94,7 @@ function Item({
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { item: itemId, isMobile } = context.query;
+  console.log('context.query', context.query);
 
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}item/${itemId}`, {
@@ -104,7 +105,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     if (res.ok) {
       const data: ItemState = await res.json();
-      console.log('data', data);
 
       const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL;
 
@@ -119,7 +119,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         props: {
           itemData: data.item,
           imageData: imageData,
-          itemId: itemId,
+          itemId: Number(itemId),
           materialsData: data.materials,
           similarItems: similarItems,
         },

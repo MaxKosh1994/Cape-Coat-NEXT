@@ -3,13 +3,14 @@ const { findUserByEmail } = require('./userService');
 
 module.exports.findUserCart = async (userId) => {
   try {
-    const userCart = await Cart.findOne({
+    const userCart = await Cart.findOrCreate({
       where: {
         user_id: userId,
       },
       raw: true,
     });
-    return userCart;
+    const [userCartData, isCreated] = userCart;
+    return userCartData;
   } catch (error) {
     throw new Error('Ошибка сервера');
   }

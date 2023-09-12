@@ -153,17 +153,14 @@ module.exports.addToCart = async (req, res) => {
     const email = req?.session?.user;
 
     const { id } = req.params;
-    const { material } = req.body;
-    const user = await findUserByEmail(email);
+    // eslint-disable-next-line camelcase
+    const { material_name } = req.body;
+
     if (email) {
       const currUser = await findUserByEmail(email);
       const userCart = await findUserCart(currUser.id);
-
-      const newCart = await createUserCart(currUser.id);
-      const newCartItem = await createCartItem(userCart.id, id, material);
-      const cartItems = await getUserCartItems(user.id);
-
-      res.status(200).json(cartItems);
+      const newCartItem = await createCartItem(userCart.id, id, material_name);
+      res.status(200).json(newCartItem);
     } else {
       res.status(401).json({ message: 'Unauthorized' });
     }
@@ -206,10 +203,7 @@ module.exports.addToCartInOneCat = async (req, res) => {
   try {
     const { user } = req.session;
     const cardInCart = req.body;
-    console.log('cardInCart ---------->', cardInCart);
     const currUser = await findUserByEmail(user);
-
-    console.log('user -------------->', user);
 
     const findCart = await Cart.findOrCreate({
       where: {
@@ -218,8 +212,6 @@ module.exports.addToCartInOneCat = async (req, res) => {
       raw: true,
       nest: true,
     });
-
-    console.log('findCart ----------------->', findCart);
 
     const itemCart = await CartItem.findOrCreate({
       where: {
@@ -230,7 +222,6 @@ module.exports.addToCartInOneCat = async (req, res) => {
       plain: true,
     });
 
-    console.log('itemCart ---------->', itemCart)
     if (itemCart) {
       res.status(200).json(itemCart);
     } else {

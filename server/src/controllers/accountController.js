@@ -76,7 +76,7 @@ module.exports.getAllOrders = async (req, res) => {
 module.exports.updateInfo = async (req, res) => {
   try {
     const { user } = req.session;
-    const { full_name, address, phone, telegram_instagram } = req.body;
+    const { full_name, phone, telegram_instagram } = req.body;
 
     if (!full_name) {
       return res
@@ -92,9 +92,6 @@ module.exports.updateInfo = async (req, res) => {
 
     if (full_name) {
       userExisting.full_name = full_name;
-    }
-    if (address) {
-      userExisting.address = address;
     }
     if (phone) {
       userExisting.phone = phone;

@@ -13,7 +13,7 @@ import { addToFavorites } from '@/components/ProductCard/thunkProduct';
 import { toggleFavorite } from '@/app/CategorySlice';
 
 export default function Favorites() {
-  const itemData = useSelector(
+  let itemData = useSelector(
     (state: RootState) => state.favouriteSlice.favoriteItemList
   );
   const { user } = useSelector((state: RootState) => state.sessionSlice);
@@ -41,7 +41,7 @@ export default function Favorites() {
             }
           );
           if (response.status === 200) {
-            const itemData = await response.json();
+            let itemData = await response.json();
 
             fetchedItems.push(itemData);
           } else if (response.status === 404) {
@@ -51,13 +51,17 @@ export default function Favorites() {
           console.log(err);
         }
       }
+
       setFavoriteItems(fetchedItems);
     };
 
     fetchData();
   }, []);
 
-  console.log('itemData', itemData);
+  if (!user) {
+    itemData = [];
+  }
+
   const renderProductCards =
     itemData && Array.isArray(itemData)
       ? itemData.map((item) => (
@@ -69,13 +73,12 @@ export default function Favorites() {
             photo={item.Photos[0].photo}
             name={item.name}
             price={item.price}
+            newPrice={item.new_price}
             isFavorite={item.isFavorite}
             isCart={item.isCart}
           />
         ))
       : null;
-
-  console.log('favoriteItems', favoriteItems);
 
   const renderProductCardsLocal =
     favoriteItems && Array.isArray(favoriteItems)
@@ -88,7 +91,8 @@ export default function Favorites() {
             photo={item.item.Photos[0].photo}
             name={item.item.name}
             price={item.item.price}
-            isFavorite={true}
+            newPrice={item.item.new_price}
+            isFavorite={item.item.isFavorite}
             isCart={item.isCart}
           />
         ))
