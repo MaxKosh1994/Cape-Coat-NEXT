@@ -7,13 +7,12 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { RootState } from '@/app/store';
 import { useRouter } from 'next/router';
-import { forgotPassThunk, resetPassThunk } from '@/app/thunkActionsAuth';
+import { resetPassThunk } from '@/app/thunkActionsAuth';
 import { handleError } from '@/app/sessionSlice';
 import Link from 'next/link';
 
 export default function ForgotPass() {
   const error = useAppSelector((state: RootState) => state.sessionSlice.error);
-  const user = useAppSelector((state: RootState) => state.sessionSlice.user);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -61,9 +60,8 @@ export default function ForgotPass() {
           <>
             <TaskAltIcon
               style={{
-                marginRight: `30px`,
-                marginTop: '5px',
-                fontSize: '40px',
+                marginRight: `40px`,
+                fontSize: '50px',
                 color: 'green',
               }}
             />

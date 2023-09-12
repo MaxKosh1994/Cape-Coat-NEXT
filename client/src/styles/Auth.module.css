@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh;
+  height: 60vh;
   width: 28vw;
   margin: 0 auto;
 }
@@ -37,13 +37,13 @@
 }
 
 .successSent {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   text-align: center;
   margin: 10px 0px;
 }
 
 .successUpd {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   text-align: center;
   margin: 10px 0px;
   display: flex;
@@ -51,6 +51,7 @@
 }
 
 .successUpd > a {
+  margin-top: 5px;
   text-decoration: underline;
   text-underline-offset: 3px;
 }

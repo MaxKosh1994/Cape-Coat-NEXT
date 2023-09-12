@@ -68,7 +68,7 @@ module.exports.forgotPass = async (req, res) => {
           pass: 'dzfe wzzk dkln smoj',
         },
       });
-      const resetLink = `https://localhost:3000/reset-password/${token}`;
+      const resetLink = `localhost:3000/reset-pass/${token}`;
       const mailOptions = {
         from: `CapeNCoat <${process.env.NODEMAILER_EMAIL}>`,
         to: 'sashainiesta@gmail.com',
@@ -81,7 +81,6 @@ module.exports.forgotPass = async (req, res) => {
           console.log(error);
           res.status(500).json({ message: 'Не удалось отправить ссылку' });
         } else {
-          console.log(info.response);
           res.status(200).json({
             message: 'Ссылка для сброса пароля отправлена вам на почту',
           });
