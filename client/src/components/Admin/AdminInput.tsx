@@ -1,18 +1,21 @@
 import TextField from '@mui/material/TextField';
 
 export default function AdminInput(props) {
+  const isRequired = props.name === 'new_price' && props.formData.in_stock;
+
   return (
     <>
       <TextField
+        value={props.value}
         style={{ marginBottom: '10px' }}
-        autoComplete='off'
-        required
+        autoComplete="off"
+        required={isRequired}
         onChange={props.changeHandler}
         name={props.name}
         type={props.types}
         fullWidth
         label={props.label}
-        id='fullWidth'
+        id="fullWidth"
         InputLabelProps={{
           style: {
             fontWeight: '700',

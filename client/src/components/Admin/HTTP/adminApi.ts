@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const dataAxios = async (
   setContent,
@@ -9,20 +9,23 @@ export const dataAxios = async (
   id = undefined
 ): Promise<object> => {
   try {
-    if (url === `create-${address}`) {//!POST
+    if (url === `create-${address}`) {
+      //!POST
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_URL}admin/${address}/${url}`,
         formData,
         {
           withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { 'Content-Type': 'multipart/form-data' },
         }
       );
       const responseData: object = await response.data;
       setMessage((prev) => responseData.message);
       setContent((prev) => [...prev, responseData.res]);
+
       return responseData;
-    } else if (url === `delete-${address}`) {//!DELETE
+    } else if (url === `delete-${address}`) {
+      //!DELETE
       const response = await axios.delete(
         `${process.env.NEXT_PUBLIC_URL}admin/${address}/${url}/${id}`,
         { withCredentials: true }
@@ -31,21 +34,36 @@ export const dataAxios = async (
       setContent((prev) => [...prev.filter((el) => el.id !== id)]);
       setMessage((prev) => responseData.message);
       return responseData;
-    } else if (url === `update-${address}`) {//!PATCH
+    } else if (url === `update-${address}`) {
+      //!PATCH
       const response = await axios.patch(
         `${process.env.NEXT_PUBLIC_URL}admin/${address}/${url}/${id}`,
         formData,
         {
           withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { 'Content-Type': 'multipart/form-data' },
         }
       );
-      const responseData: object = await response.data;
-      setContent((prev) => [...prev.filter((el) => el.id !== id)]);
-      setContent((prev) => [...prev, responseData.res]);
+      const responseData = await response.data;
+
+      setContent((prev) => {
+        const updatedContent = prev.map((item) => {
+          if (item.id === id) {
+            return {
+              ...responseData.res,
+              Photos: item.Photos,
+            };
+          } else {
+            return item;
+          }
+        });
+        return updatedContent;
+      });
+
       setMessage((prev) => responseData.message);
       return responseData;
-    } else if (url === undefined) {//!GET
+    } else if (url === undefined) {
+      //!GET
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_URL}admin/${address}/read-${address}`,
         { withCredentials: true }
@@ -65,9 +83,9 @@ export const allOrderDataFetch = async (setOrder): Promise<object> => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}admin/order/allorder`,
       {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
       }
     );
     const data = await response.json();
@@ -86,9 +104,9 @@ export const updateOrderDataFetch = async (
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}admin/order/update/${id}`,
       {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ status: status }),
       }
     );
@@ -107,9 +125,9 @@ export const updateOrderFieldFetch = async (
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_URL}admin/order/updateOrderField/${id}`,
     {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ [fieldName]: fieldValue }),
     }
   );
@@ -125,9 +143,9 @@ export const updateOrderItemFieldFetch = async (
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_URL}admin/order/updateOrderItemField/${id}/${itemId}`,
     {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ [fieldName]: fieldValue }),
     }
   );
