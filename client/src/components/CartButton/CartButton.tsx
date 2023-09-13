@@ -42,6 +42,9 @@ export default function CartButton({
     (state: RootState) => state.cartSlice.cartItems
   );
 
+  console.log({ selectedMaterialName });
+  console.log('!!!!!!!!', itemData.Material.name);
+
   useEffect(() => {
     if (user) {
       const isInCart = cartItems.some(
@@ -108,6 +111,8 @@ export default function CartButton({
           const material = selectedMaterialName
             ? selectedMaterialName
             : itemData.Material.name;
+
+          console.log({ material });
 
           const materialName = { material_name: material };
           const res = await fetch(
