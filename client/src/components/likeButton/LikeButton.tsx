@@ -13,6 +13,7 @@ import {
   fetchItemData,
   fetchOneFavourite,
 } from '@/app/thunkActionsFavourite';
+import { setFavourites } from '@/app/favouriteSlice';
 
 interface LikeButtonProps {
   itemId: number;
@@ -32,18 +33,46 @@ const LikeButton: React.FC<LikeButtonProps> = ({ itemId }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (favourites.length > 0) {
-      const checkLike = favourites.some((el) => el.item_id == itemId);
+    if (user) {
+      const checkLike = favourites.some((el) => el.id == itemId);
+
       setIsLiked(checkLike);
+    } else {
+      const likeFromStorage = JSON.parse(
+        localStorage.getItem('favorites') || '[]'
+      );
+      const isItemInFav = likeFromStorage.includes(itemId);;
+      setIsLiked(isItemInFav);
     }
-  }, []);
+  }, [favourites, user, itemId]);
 
   const favHandler = async () => {
-    if (itemId) {
-      dispatch(fetchOneFavourite(itemId));
-      setIsLiked(!isLiked);
-    }
+    if (!user) {
+      const favoritesFromStorage =
+        JSON.parse(localStorage.getItem('favorites')) || [];
+
+      const isItemInFavorites = favoritesFromStorage.includes(itemId);
+
+      if (isItemInFavorites) {
+        const updatedFavorites = favoritesFromStorage.filter(
+          (favId) => favId !== itemId
+        );
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        setIsLiked(!isLiked);
+        await dispatch(setFavourites(updatedFavorites));
+      } else {
+        const updatedFavorites = [...favoritesFromStorage, itemId];
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        setIsLiked(!isLiked);
+        await dispatch(setFavourites(updatedFavorites));
+      }
+    } else {
+      if (itemId) {
+        dispatch(fetchOneFavourite(itemId));
+        setIsLiked(!isLiked);
+      }
   };
+}
 
   return (
     <IconButton onClick={favHandler} size="small">
