@@ -100,12 +100,19 @@ export default function SignIn() {
           >
             Войти
           </Button>
-          <p className={styles.redirMsg}>
-            Еще не зарегистрированы?{' '}
-            <Link href="/signup" className={styles.redirect}>
-              Создайте аккаунт
-            </Link>
-          </p>
+          <div className={styles.redirMsg}>
+            <div>
+              <Link href="/forgot-pass" className={styles.redirect}>
+                Восстановите доступ
+              </Link>
+            </div>
+            <div>или</div>
+            <div>
+              <Link href="/signup" className={styles.redirect}>
+                Создайте аккаунт
+              </Link>
+            </div>
+          </div>
         </form>
       </div>
     </>
