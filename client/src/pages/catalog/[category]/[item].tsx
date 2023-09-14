@@ -17,6 +17,7 @@ interface ItemProps {
   itemId: number;
   materialsData: ImaterialsData[];
   similarItems: Item[];
+  error: { message: string };
 }
 export interface ImaterialsData {
   id: number;
@@ -31,8 +32,14 @@ function Item({
   itemId,
   materialsData,
   similarItems,
+  error,
 }: ItemProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
+  if (error) {
+    return (
+      <div className="error-message">Произошла ошибка: {error.message}</div>
+    );
+  }
 
   return (
     <>
@@ -93,7 +100,9 @@ function Item({
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { item: itemId, isMobile } = context.query;
+  const { item: itemId } = context.query;
+  const isMobileQueryParam = context.query.isMobile;
+  const isMobile = isMobileQueryParam === 'true';
   console.log('context.query', context.query);
 
   try {
@@ -124,11 +133,17 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           similarItems: similarItems,
         },
       };
+    } else {
+      const errorData = await res.json();
+      throw new Error(errorData.message);
     }
   } catch (error) {
     console.error(error);
+
     return {
-      notFound: true,
+      props: {
+        error: { message: 'Произошла ошибка при загрузке данных.' },
+      },
     };
   }
 }
