@@ -64,3 +64,9 @@ export interface ISingleItem {
 export interface ICartState {
   cartItems: ISingleItem[];
 }
+
+export interface ILocalStorageCartItems {
+  id: number;
+  material_name?: string;
+  in_stock?: boolean;
+}

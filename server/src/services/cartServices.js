@@ -17,12 +17,16 @@ module.exports.findUserCart = async (userId) => {
 };
 
 module.exports.getOrCreateUserCart = async (userId) => {
-  const cart = await Cart.findOrCreate({
-    where: {
-      user_id: userId,
-    },
-  });
-  return cart;
+  try {
+    const cart = await Cart.findOrCreate({
+      where: {
+        user_id: userId,
+      },
+    });
+    return cart;
+  } catch (error) {
+    throw new Error('Ошибка сервера');
+  }
 };
 
 module.exports.createUserCart = async (userId) => {

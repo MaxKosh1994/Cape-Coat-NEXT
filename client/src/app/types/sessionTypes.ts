@@ -5,3 +5,4 @@ export interface ISessionState {
   session: boolean;
   isAdmin: boolean;
 }
+

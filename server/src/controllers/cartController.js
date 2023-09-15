@@ -24,7 +24,7 @@ module.exports.getCart = async (req, res) => {
       const cartItems = await getUserCartItems(user.id);
       res.json(cartItems);
     } else {
-      res.status(401).json({ message: 'Unauthorized' });
+      res.status(401).json({ message: 'Войдите в аккаунт' });
     }
   } catch (err) {
     console.log(err);
@@ -145,6 +145,7 @@ module.exports.addMeasures = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: 'Ошибка сервера' });
   }
 };
 
@@ -162,10 +163,9 @@ module.exports.addToCart = async (req, res) => {
       const newCartItem = await createCartItem(userCart.id, id, material_name);
       res.status(200).json(newCartItem);
     } else {
-      res.status(401).json({ message: 'Unauthorized' });
+      res.status(401).json({ message: 'Пользователь не вошел в систему' });
     }
   } catch (error) {
-    console.log('cart error', error);
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 };
@@ -192,10 +192,10 @@ module.exports.checkCart = async (req, res) => {
         res.status(200).json({ cartItem: [] });
       }
     } else {
-      res.status(401).json({ message: 'Unauthorized' });
+      res.status(401).json({ message: 'Пользователь не вошел в систему' });
     }
   } catch (err) {
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: 'Ошибка сервера' });
   }
 };
 
@@ -225,7 +225,7 @@ module.exports.addToCartInOneCat = async (req, res) => {
     if (itemCart) {
       res.status(200).json(itemCart);
     } else {
-      res.status(404);
+      res.status(400).json({ message: 'Такого товара нет в корзине' });
     }
   } catch (err) {
     console.log(err);
@@ -262,7 +262,7 @@ module.exports.delToCartInOneCat = async (req, res) => {
       await delItemInCart.destroy();
       res.status(200).json({ item_id: deletedItemId, user: deleteUserItem });
     } else {
-      res.status(404);
+      res.status(400).json({ message: 'Такого товара нет в корзине' });
     }
   } catch (err) {
     console.log(err);

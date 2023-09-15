@@ -3,6 +3,8 @@ import { addCartItem, delCartItem, emptyCart, getCartItems } from './cartSlice';
 
 import { AppThunk, RootState } from './store';
 import { Dispatch } from '@reduxjs/toolkit';
+import { handleError } from './sessionSlice';
+import { ILocalStorageCartItems } from './types/cartTypes';
 
 export const getCartItemsThunk = (): AppThunk => async (dispatch: Dispatch) => {
   try {
@@ -16,14 +18,13 @@ export const getCartItemsThunk = (): AppThunk => async (dispatch: Dispatch) => {
     const data = await dispatch(getCartItems(res.data));
     return data.payload;
   } catch (err) {
-    // dispatch(handleError(err))
-    console.log(err);
-    return err;
+    const { response } = err;
+    dispatch(handleError(response?.data));
   }
 };
 
 export const getCartItemsByIdThunk =
-  (itemIds): AppThunk =>
+  (itemIds: ILocalStorageCartItems[]): AppThunk =>
   async (dispatch: Dispatch) => {
     try {
       const res = await axios.post(
@@ -41,9 +42,8 @@ export const getCartItemsByIdThunk =
       const resp = await dispatch(getCartItems(res.data));
       return resp.payload;
     } catch (err) {
-      // dispatch(handleError(err))
-      console.log(err);
-      return err;
+      const { response } = err;
+      dispatch(handleError(response?.data));
     }
   };
 
@@ -68,9 +68,8 @@ export const delCartItemThunk =
       }
       return res.data;
     } catch (err) {
-      // dispatch(handleError(err))
-      console.log(err);
-      return err;
+      const { response } = err;
+      dispatch(handleError(response?.data));
     }
   };
 
@@ -91,9 +90,8 @@ export const emptyCartThunk =
       dispatch(emptyCart());
       return res.status;
     } catch (err) {
-      // dispatch(handleError(err))
-      console.log(err);
-      return err;
+      const { response } = err;
+      dispatch(handleError(response?.data));
     }
   };
 
@@ -115,9 +113,8 @@ export const addCartItemsThunk =
       dispatch(getCartItems(res.data.newCartItem));
       return res.data;
     } catch (err) {
-      // dispatch(handleError(err))
-      console.log(err);
-      return err;
+      const { response } = err;
+      dispatch(handleError(response?.data));
     }
   };
 
@@ -142,7 +139,7 @@ export const checkCartItemThunk =
 
       dispatch(getCartItems(res.data.cartItem));
     } catch (err) {
-      console.log(err);
-      return err;
+      const { response } = err;
+      dispatch(handleError(response?.data));
     }
   };
