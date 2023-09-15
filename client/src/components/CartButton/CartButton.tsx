@@ -126,7 +126,8 @@ export default function CartButton({
           );
           if (res.ok) {
             const data = await res.json();
-            dispatch(addCartItem(data));
+            await dispatch(getCartItemsThunk());
+            // dispatch(addCartItem(data));
             setIsInCart(!isInCart);
           }
         }

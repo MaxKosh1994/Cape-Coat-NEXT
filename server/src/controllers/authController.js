@@ -64,13 +64,16 @@ module.exports.forgotPass = async (req, res) => {
         host: 'smtp.gmail.com',
         port: 587,
         auth: {
+          // TODO исправить в ENV почту
           user: process.env.NODEMAILER_EMAIL,
           pass: 'dzfe wzzk dkln smoj',
         },
       });
+      // TODO исправить на адрес сайта
       const resetLink = `localhost:3000/reset-pass/${token}`;
       const mailOptions = {
         from: `CapeNCoat <${process.env.NODEMAILER_EMAIL}>`,
+        // TODO исправить на переменную email
         to: 'sashainiesta@gmail.com',
         subject: 'Сброс пароля на CapeNCoat',
         text: `Перейдите по ссылке чтобы установить новый пароль: ${resetLink}`,

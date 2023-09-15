@@ -100,6 +100,7 @@ export const useCartControl = () => {
     buttons: '',
     lining: '',
   });
+  const [showSpinner, setShowSpinner] = useState<boolean>(false);
   // записывет параметры товаров по индексу в массиве
   const [userParams, setUserParams] = useState<string[]>([]);
   const userParamsRef = useRef(userParams);
@@ -423,6 +424,8 @@ export const useCartControl = () => {
         // если ошибка с бека
         setPromocodeErr(response);
         setTimeout(() => {
+          setDbPc('');
+          setPromoUsed(false);
           setPromocodeErr('');
         }, 1000);
         setCartTotal(subtotal);
@@ -431,6 +434,8 @@ export const useCartControl = () => {
       // если пользователь уже ввел 1 промокод
       setPromocodeErr('Вы уже использовали промокод');
       setTimeout(() => {
+        setDbPc('');
+        setPromoUsed(false);
         setPromocodeErr('');
       }, 1000);
     } else {
@@ -455,6 +460,7 @@ export const useCartControl = () => {
 
   // Стучится на бек и создает заказ, если все проверки прошли
   const createOrder = async (data: IOrderData): Promise<void> => {
+    setShowSpinner(true);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL}order/new`, {
         method: 'POST',
@@ -463,23 +469,29 @@ export const useCartControl = () => {
         body: JSON.stringify(data),
       });
       const re = await response.json();
-      console.log('ответ createOrder ===>', re);
+
       if (re.message === 'Что-то пошло не так, попробуйте позже') {
         // если ошибка на беке
+        setShowSpinner(false);
         setOrderStatus(re.message);
         setTimeout(() => {
           setOrderStatus('');
         }, 2000);
       } else if (re.message === 'Вы уже использовали этот промокод') {
+        setShowSpinner(false);
         setOrderStatus(re.message);
         setPromoUsed(false);
+        setDbPc('');
         setDiscount(0);
         setTimeout(() => {
           setOrderStatus('');
         }, 2000);
       } else {
         // если все ок - очищает корзину, массив в редаксе и редиректит на спасибку
-        router.push('/thankyou');
+        setTimeout(() => {
+          setShowSpinner(false);
+          router.push('/thankyou');
+        }, 1200);
         await dispatch(emptyCartThunk(user));
         await dispatch(emptyCart());
         localStorage.setItem('cartItems', JSON.stringify([]));
@@ -617,6 +629,7 @@ export const useCartControl = () => {
   };
 
   return {
+    showSpinner,
     cartItemsList,
     setShowParamsForm,
     showParamsForm,

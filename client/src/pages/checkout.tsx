@@ -5,6 +5,7 @@ import { useCartControl } from '@/components/Cart/useCartControl';
 import styles from '../styles/Checkout.module.css';
 import Link from 'next/link';
 import Head from 'next/head';
+import CircularProgress from '@mui/material/CircularProgress';
 import UrgencyForm from '@/components/Cart/UrgencyForm';
 import CommentForm from '@/components/Cart/CommentForm';
 import DeliveryForm from '@/components/Cart/DeliveryForm';
@@ -15,6 +16,7 @@ import LSItemDisplay from '@/components/Cart/LSCart/LSItemDisplay';
 
 export default function CheckoutPage() {
   const {
+    showSpinner,
     showParamsForm,
     deliveryCost,
     showAddressInputs,
@@ -49,6 +51,7 @@ export default function CheckoutPage() {
   const cartItemsList = useAppSelector(
     (state: RootState) => state.cartSlice.cartItems
   );
+  console.log(showSpinner);
 
   return (
     <>
@@ -58,7 +61,11 @@ export default function CheckoutPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {cartItemsList?.length === 0 ? (
+      {showSpinner ? (
+        <div className={styles.spinnerCart}>
+          <CircularProgress color="inherit" />
+        </div>
+      ) : cartItemsList?.length === 0 ? (
         <>
           {orderStatus && <p className="order-status-cart">{orderStatus}</p>}
           <p className={styles.emptyCartMsg}>

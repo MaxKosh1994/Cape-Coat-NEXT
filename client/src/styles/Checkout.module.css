@@ -15,6 +15,14 @@
   margin-top: 80px;
 }
 
+.spinnerCart {
+  height: 65vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
 .order {
   text-rendering: optimizeSpeed;
   font-size: 14px;

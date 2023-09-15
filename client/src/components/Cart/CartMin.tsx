@@ -49,7 +49,7 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
       handleCartIconClick();
     }, 1001);
   };
-
+  console.log(cartItemsList);
   return (
     <div
       className={`${styles.container}  ${

@@ -33,11 +33,8 @@ const rtkSlice = createSlice({
       state.session = false;
       state.isAdmin = false;
     },
-    handleError(
-      state,
-      action: PayloadAction<{ response: { data: { message: string } } }>
-    ) {
-      state.error = action.payload.response.data.message;
+    handleError(state, action: PayloadAction<{ message: string }>) {
+      state.error = action?.payload?.message;
     },
     checkSession(
       state,
