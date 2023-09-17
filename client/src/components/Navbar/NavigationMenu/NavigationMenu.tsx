@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styles from './NavigationComp.module.css';
-import {
-  fetchNavigationMenuCategoryData,
-  fetchNavigationMenuCollectionData,
-} from './fetchNavigationMenuData';
+import { fetchNavigationMenuCategoryData } from './fetchNavigationMenuData';
 
 interface IProps {
   isScrolled: boolean;
@@ -50,22 +46,16 @@ const NavigationMenu: React.FC<IProps> = ({
 
   onSearchIconClick,
 }) => {
-  const router = useRouter();
-  const isHomePage = router.pathname === '/';
   const [submenuStates, setSubmenuStates] = useState<{
     [index: number]: boolean;
   }>({});
 
   const [categories, setCategories] = useState<ICategories[]>([]);
-  const [collections, setCollections] = useState<ICollections[]>([]);
 
   useEffect(() => {
     const getData = async () => {
       const categoryData = await fetchNavigationMenuCategoryData();
       setCategories(categoryData.categories);
-
-      const collectionsData = await fetchNavigationMenuCollectionData();
-      setCollections(collectionsData.collections);
     };
 
     getData();
@@ -80,7 +70,7 @@ const NavigationMenu: React.FC<IProps> = ({
   const menuItems: IMenuItem[] = [
     { label: 'О бренде', link: '/about' },
     { label: 'Каталог', link: '/catalog', submenu: categories },
-    { label: 'Коллекции', link: '/catalog/collection', submenu: collections },
+    { label: 'Коллекция', link: '/catalog/collection' },
     { label: 'Sale', link: '/catalog/sale' },
     { label: 'FAQ', link: '/FAQ/orderFAQ', submenu: faqSubMenu },
     { label: 'Контакты', link: '/address' },
@@ -117,21 +107,7 @@ const NavigationMenu: React.FC<IProps> = ({
               >
                 {item.submenu.map((el) => (
                   <li key={el.id} className={styles.dropdownMenuItem}>
-                    {el.link ? (
-                      <Link href={el.link} passHref>
-                        {el.name}
-                      </Link>
-                    ) : (
-                      <Link
-                        href={{
-                          pathname: `${item.link}/${el.urlName}`,
-                          // query: { id: el.id },
-                        }}
-                        passHref
-                      >
-                        {el.name}
-                      </Link>
-                    )}
+                    <Link href={item.link || '#'}>{el.name}</Link>
                   </li>
                 ))}
               </ul>
