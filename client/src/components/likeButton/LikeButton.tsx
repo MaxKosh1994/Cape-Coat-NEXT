@@ -21,6 +21,7 @@ interface LikeButtonProps {
 
 const LikeButton: React.FC<LikeButtonProps> = ({ itemId }) => {
   const [isLiked, setIsLiked] = useState(false);
+
   const user = useSelector((state: RootState) => state.sessionSlice.user);
   const dispatch = useAppDispatch();
   const favourites = useAppSelector(
@@ -34,14 +35,13 @@ const LikeButton: React.FC<LikeButtonProps> = ({ itemId }) => {
 
   useEffect(() => {
     if (user) {
-      const checkLike = favourites.some((el) => el.id == itemId);
-
+      const checkLike = favourites.some((el) => el.item_id == itemId);
       setIsLiked(checkLike);
     } else {
       const likeFromStorage = JSON.parse(
         localStorage.getItem('favorites') || '[]'
       );
-      const isItemInFav = likeFromStorage.includes(itemId);;
+      const isItemInFav = likeFromStorage.includes(itemId);
       setIsLiked(isItemInFav);
     }
   }, [favourites, user, itemId]);
@@ -68,11 +68,11 @@ const LikeButton: React.FC<LikeButtonProps> = ({ itemId }) => {
       }
     } else {
       if (itemId) {
-        dispatch(fetchOneFavourite(itemId));
+        await dispatch(fetchOneFavourite(itemId));
         setIsLiked(!isLiked);
       }
+    }
   };
-}
 
   return (
     <IconButton onClick={favHandler} size="small">
