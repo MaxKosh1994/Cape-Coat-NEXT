@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import styles from '../../styles/Checkout.module.css';
+import { useCartControl } from './useCartControl';
 
-export default function TrenchSizeForm({ itemId, onTrenchSizeChange }) {
-  const handleCheckboxChange = (event) => {
-    // const { name, checked } = event.target;
-    // onTrenchSizeChange({ [name]: checked });
-    const { name, value, checked } = event.target;
+export default function TrenchSizeForm({ itemId }: { itemId: number }) {
+  const { handleCustomFormChange } = useCartControl();
+
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value, checked } = e.target;
     if (name === 'loops') {
-      onTrenchSizeChange({ loops: checked });
+      handleCustomFormChange({ loops: checked });
     } else if (name === 'buttons') {
-      onTrenchSizeChange({ buttons: value });
+      handleCustomFormChange({ buttons: value });
     }
   };
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import BasePage from '@/components/ItemPage/BasePage';
 import Custom404 from '../404';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 export default function BestsellersPage() {
   const [bestsellerItems, setBestsellerItems] = useState([]);
@@ -12,7 +13,7 @@ export default function BestsellersPage() {
         );
         if (response.status === 200) {
           const result = await response.json();
-          const items = result.map((item) => ({
+          const items = result.map((item: IBasePageItem) => ({
             ...item,
             isFavorite: false,
             isCart: false,

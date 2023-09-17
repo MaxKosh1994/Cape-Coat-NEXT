@@ -152,64 +152,73 @@ const useProductCardLogic = (
 
   useEffect(() => {
     if (user) {
-      const cartFromStorage =
-        JSON.parse(localStorage.getItem('cartItems')) || [];
+      const cartItemsFromStorage = localStorage.getItem('cartItems');
+      let cartFromStorage = [];
 
-      if (cartFromStorage.length > 0) {
-        Promise.all(
-          cartFromStorage.map(async (cartId) => {
-            const cartData = {
-              id: cartId.id,
-              material_name: cartId.material_name,
-            };
-            return addToCart(cartData);
-          })
-        )
-          .then(() => {
-            // Удалить данные из localStorage после успешной отправки
-            localStorage.removeItem('cartItems');
-
-            // Запросить обновленные данные об избранных с сервера
-            dispatch(getCartItemsThunk());
-          })
-          .catch((error) => {
-            console.error('Error while adding item in cart:', error);
-          });
-      }
-      const fetchData = async () => {
+      if (cartItemsFromStorage) {
         try {
-          const response = await fetch(
-            process.env.NEXT_PUBLIC_URL + 'cart/cartInCat',
-            {
-              method: 'GET',
-              credentials: 'include',
-            }
-          );
-          if (response.status === 200) {
-            const allItemInCart = await response.json();
-            const isProductInCart = allItemInCart.includes(id);
-            setIsCart(isProductInCart);
-          }
-          dispatch(toggleCart(id));
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      fetchData();
-    } else {
-      const cartFromStorage = JSON.parse(
-        localStorage.getItem('cartItems') || '[]'
-      );
-      async function fetchUpdCartItems(cartFromStorage) {
-        try {
-          await dispatch(getCartItemsByIdThunk(cartFromStorage));
+          cartFromStorage = JSON.parse(cartItemsFromStorage);
         } catch (error) {
-          console.error('Error while fetching cart items:', error);
+          console.error('Error parsing cartItems from localStorage:', error);
         }
+        if (cartFromStorage.length > 0) {
+          Promise.all(
+            cartFromStorage.map(async (cartId) => {
+              const cartData = {
+                id: cartId.id,
+                material_name: cartId.material_name,
+              };
+              return addToCart(cartData);
+            })
+          )
+            .then(() => {
+              // Удалить данные из localStorage после успешной отправки
+              localStorage.removeItem('cartItems');
+
+              // Запросить обновленные данные об избранных с сервера
+              dispatch(getCartItemsThunk());
+            })
+            .catch((error) => {
+              console.error('Error while adding item in cart:', error);
+            });
+        }
+        const fetchData = async () => {
+          try {
+            const response = await fetch(
+              process.env.NEXT_PUBLIC_URL + 'cart/cartInCat',
+              {
+                method: 'GET',
+                credentials: 'include',
+              }
+            );
+            if (response.status === 200) {
+              const allItemInCart = await response.json();
+              const isProductInCart = allItemInCart.includes(id);
+              setIsCart(isProductInCart);
+            }
+            dispatch(toggleCart(id));
+          } catch (err) {
+            console.log(err);
+          }
+        };
+        fetchData();
+      } else {
+        const cartFromStorage = JSON.parse(
+          localStorage.getItem('cartItems') || '[]'
+        );
+        async function fetchUpdCartItems(cartFromStorage) {
+          try {
+            await dispatch(getCartItemsByIdThunk(cartFromStorage));
+          } catch (error) {
+            console.error('Error while fetching cart items:', error);
+          }
+        }
+        fetchUpdCartItems(cartFromStorage);
+        const isItemInCart = cartFromStorage.some(
+          (element) => element.id === id
+        );
+        setIsCart(isItemInCart);
       }
-      fetchUpdCartItems(cartFromStorage);
-      const isItemInCart = cartFromStorage.some((element) => element.id === id);
-      setIsCart(isItemInCart);
     }
   }, [user]);
 

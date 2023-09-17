@@ -1,23 +1,28 @@
 import React from 'react';
 import styles from '../../styles/Checkout.module.css';
+import { useCartControl } from './useCartControl';
+import { useAppSelector } from '@/app/hooks';
+import { RootState } from '@/app/store';
 
-export default function RightBlock({
-  promocode,
-  handlePromocodeChange,
-  handleApplyPromocode,
-  promocodeErr,
-  promoUsed,
-  discount,
-  twoItemDiscount,
-  deliveryCost,
-  liningCost,
-  urgencyFee,
-  urgentMaking,
-  cartTotal,
-  cartItemsList,
-  orderStatus,
-  handleCreateOrder,
-}) {
+export default function RightBlock() {
+  const { handlePromocodeChange, handleApplyPromocode, handleCreateOrder } =
+    useCartControl();
+  const cartItemsList = useAppSelector(
+    (state: RootState) => state.cartSlice.cartItems
+  );
+  const {
+    promocode,
+    promocodeErr,
+    promoUsed,
+    discount,
+    twoItemDiscount,
+    deliveryCost,
+    liningCost,
+    urgencyFee,
+    urgentMaking,
+    cartTotal,
+    orderStatus,
+  } = useAppSelector((state: RootState) => state.cartControlSlice);
   return (
     <div className={`${styles.orderBlock} ${styles.orderBlockSummary}`}>
       <h1 className={styles.headerItemCart}>Ваш заказ</h1>

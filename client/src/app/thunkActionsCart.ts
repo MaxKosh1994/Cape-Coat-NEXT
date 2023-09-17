@@ -13,7 +13,6 @@ export const getCartItemsThunk = (): AppThunk => async (dispatch: Dispatch) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include',
     });
     const data = await dispatch(getCartItems(res.data));
     return data.payload;
@@ -36,7 +35,6 @@ export const getCartItemsByIdThunk =
           headers: {
             'Content-Type': 'application/json',
           },
-          credentials: 'include',
         }
       );
       const resp = await dispatch(getCartItems(res.data));
@@ -60,7 +58,6 @@ export const delCartItemThunk =
           headers: {
             'Content-Type': 'application/json',
           },
-          credentials: 'include',
         }
       );
       if (res.status === 200) {

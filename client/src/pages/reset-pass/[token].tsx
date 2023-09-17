@@ -24,7 +24,7 @@ export default function ForgotPass() {
     setNewPass({ ...newPass, [e.target.name]: e.target.value });
   };
 
-  const handleUpdPass = async (e) => {
+  const handleUpdPass = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const { token } = router.query;
     if (
@@ -33,21 +33,14 @@ export default function ForgotPass() {
       newPass.password1 === newPass.password2
     ) {
       const response = await dispatch(resetPassThunk(token, newPass.password1));
-      if (response.success) {
+      if (response?.success) {
         setShowErrorMsg(false);
         setUpdSuccess(response.message);
       } else {
         setShowErrorMsg(true);
-        handleError({
-          response: { data: { message: response.message } },
-        });
       }
     } else {
-      await dispatch(
-        handleError({
-          response: { data: { message: 'Введенные пароли не совпадают' } },
-        })
-      );
+      await dispatch(handleError({ message: 'Введенные пароли не совпадают' }));
       setShowErrorMsg(true);
     }
   };

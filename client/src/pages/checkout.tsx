@@ -15,43 +15,15 @@ import RightBlock from '@/components/Cart/RightBlock';
 import LSItemDisplay from '@/components/Cart/LSCart/LSItemDisplay';
 
 export default function CheckoutPage() {
-  const {
-    showSpinner,
-    showParamsForm,
-    deliveryCost,
-    showAddressInputs,
-    delError,
-    orderStatus,
-    promoUsed,
-    promocode,
-    promocodeErr,
-    discount,
-    twoItemDiscount,
-    urgencyFee,
-    urgentMaking,
-    liningCost,
-    cartTotal,
-    userParams,
-    handleDisplaySizesForm,
-    handlePersonalDataInputChange,
-    handleDeleteItemFromCart,
-    handleSaveSizesInputs,
-    handlePromocodeChange,
-    handleApplyPromocode,
-    handleChange,
-    handleInputChange,
-    handleUrgentChange,
-    handleDeliveryChange,
-    handleCommentChange,
-    handleCreateOrder,
-    handleCustomFormChange,
-  } = useCartControl();
+  const { showSpinner, delError } = useCartControl();
 
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
   const cartItemsList = useAppSelector(
     (state: RootState) => state.cartSlice.cartItems
   );
-  console.log(showSpinner);
+  const orderStatus = useAppSelector(
+    (state: RootState) => state.cartControlSlice.orderStatus
+  );
 
   return (
     <>
@@ -87,66 +59,22 @@ export default function CheckoutPage() {
                 >
                   {user
                     ? cartItemsList?.map((item, index) => (
-                        <ItemDisplay
-                          key={item.id}
-                          index={index}
-                          item={item}
-                          handleDeleteItemFromCart={handleDeleteItemFromCart}
-                          userParams={userParams}
-                          handleDisplaySizesForm={handleDisplaySizesForm}
-                          showParamsForm={showParamsForm}
-                          handleChange={handleChange}
-                          handleSaveSizesInputs={handleSaveSizesInputs}
-                          handleCustomFormChange={handleCustomFormChange}
-                        />
+                        <ItemDisplay key={item.id} index={index} item={item} />
                       ))
                     : cartItemsList?.map((item, index) => (
                         <LSItemDisplay
                           key={item.id}
                           index={index}
                           item={item}
-                          handleDeleteItemFromCart={handleDeleteItemFromCart}
-                          userParams={userParams}
-                          handleDisplaySizesForm={handleDisplaySizesForm}
-                          showParamsForm={showParamsForm}
-                          handleChange={handleChange}
-                          handleSaveSizesInputs={handleSaveSizesInputs}
-                          handleCustomFormChange={handleCustomFormChange}
                         />
                       ))}
                 </section>
-                {!user && (
-                  <PersonalDataForm
-                    handlePersonalDataInputChange={
-                      handlePersonalDataInputChange
-                    }
-                  />
-                )}
-                <UrgencyForm handleUrgentChange={handleUrgentChange} />
-                <CommentForm handleCommentChange={handleCommentChange} />
-                <DeliveryForm
-                  handleDeliveryChange={handleDeliveryChange}
-                  handleInputChange={handleInputChange}
-                  showAddressInputs={showAddressInputs}
-                />
+                {!user && <PersonalDataForm />}
+                <UrgencyForm />
+                <CommentForm />
+                <DeliveryForm />
               </div>
-              <RightBlock
-                promocode={promocode}
-                handlePromocodeChange={handlePromocodeChange}
-                handleApplyPromocode={handleApplyPromocode}
-                promocodeErr={promocodeErr}
-                promoUsed={promoUsed}
-                discount={discount}
-                twoItemDiscount={twoItemDiscount}
-                deliveryCost={deliveryCost}
-                liningCost={liningCost}
-                urgencyFee={urgencyFee}
-                urgentMaking={urgentMaking}
-                cartTotal={cartTotal}
-                cartItemsList={cartItemsList}
-                orderStatus={orderStatus}
-                handleCreateOrder={handleCreateOrder}
-              />
+              <RightBlock />
             </section>
           </div>
         </>

@@ -1,12 +1,14 @@
 import React, { ChangeEvent } from 'react';
 import styles from '../../styles/Checkout.module.css';
+import { useCartControl } from './useCartControl';
 
-export default function CoatSizeForm({ itemId, onCoatSizeChange }) {
+export default function CoatSizeForm({ itemId }: { itemId: number }) {
+  const { handleCustomFormChange } = useCartControl();
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    console.log(name, value, type, checked);
     const newValue = type === 'checkbox' ? checked : value;
-    onCoatSizeChange({ [name]: newValue });
+    handleCustomFormChange({ [name]: newValue });
   };
 
   return (

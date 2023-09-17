@@ -20,14 +20,17 @@ export default function ForgotPass() {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrEmail(e.target.value);
   };
-  const handleForgotPass = async (e) => {
+  const handleForgotPass = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setShowSpinner(true);
     if (currEmail) {
       const response = await dispatch(forgotPassThunk({ email: currEmail }));
-      response
-        ? setSentLink(response.message) && setShowSpinner(false)
-        : setShowErrorMsg(true);
+      if (response !== null) {
+        setSentLink(response.message);
+        setShowSpinner(false);
+      } else {
+        setShowErrorMsg(true);
+      }
     }
   };
 
