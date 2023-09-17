@@ -1,27 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { MouseEvent } from 'react';
 import { useRouter } from 'next/router';
 import styles from '../../../styles/Catalog.module.css';
-// import Category from '../Category/Category';
-import axios from 'axios';
 import Image from 'next/image';
-import Link from 'next/link';
-import Category from '../../../pages/catalog/[category]';
-import { ICategoryList } from '@/TypeScript/categoryList.type';
+import { ICategory } from '@/TypeScript/categoryList.type';
 
 export default function CategoryList({
-  id,
-  imageUrl,
-  category,
-  urlName,
-}: ICategoryList) {
+  categoryInfo,
+}: {
+  categoryInfo: ICategory;
+}) {
   const router = useRouter();
-  const [englishName, setEnglishName] = useState('');
 
   //TODO подумать над query, чтобы не отображалось в адресной строке
-  const categoryHandler = async (e) => {
+  const categoryHandler = async (e: MouseEvent<HTMLDivElement>) => {
     const target = e.target;
     if (!target) return;
-    const pathname = `/catalog/${urlName}`;
+    const pathname = `/catalog/${categoryInfo.urlName}`;
     router.push(
       {
         pathname,
@@ -32,16 +26,16 @@ export default function CategoryList({
   };
 
   return (
-    <div className="oneCategory" id={id}>
+    <div className="oneCategory" id={categoryInfo.id}>
       <div className={styles.categoryContainer} onClick={categoryHandler}>
         <Image
-          src={imageUrl}
+          src={`${process.env.NEXT_PUBLIC_CATEGORY_URL}${categoryInfo.photo}`}
           className={styles.image}
           width={400}
           height={600}
-          alt={category}
+          alt={categoryInfo.name}
         />
-        <p className={styles.categoryName}>{category}</p>
+        <p className={styles.categoryName}>{categoryInfo.name}</p>
       </div>
     </div>
   );

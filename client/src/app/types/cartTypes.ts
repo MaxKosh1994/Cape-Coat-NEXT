@@ -70,3 +70,19 @@ export interface ILocalStorageCartItems {
   material_name?: string;
   in_stock?: boolean;
 }
+
+export interface ILocalStorageCartItem {
+  id: number;
+  material_name: string;
+  in_stock: boolean;
+  height: string;
+  length: string;
+  sleeve: string;
+  bust: string;
+  waist: string;
+  hips: string;
+  saddle: string;
+  loops: boolean;
+  buttons: string;
+  lining: string;
+}

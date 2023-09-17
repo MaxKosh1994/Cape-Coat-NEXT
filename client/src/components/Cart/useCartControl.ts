@@ -23,7 +23,7 @@ import {
   IPersonalData,
   IShowParamsForm,
 } from '@/TypeScript/checkoutTypes';
-import { ISingleItem } from '@/app/types/cartTypes';
+import { ILocalStorageCartItem } from '@/app/types/cartTypes';
 
 export const useCartControl = () => {
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
@@ -109,8 +109,11 @@ export const useCartControl = () => {
   const fetchCartItems = async (): Promise<void> => {
     try {
       if (!user) {
-        const itemsLocal = JSON.parse(localStorage.getItem('cartItems'));
-        await dispatch(getCartItemsByIdThunk(itemsLocal));
+        const itemsLocal = localStorage.getItem('cartItems');
+        if (itemsLocal !== null) {
+          const parsedItems = JSON.parse(itemsLocal);
+          await dispatch(getCartItemsByIdThunk(parsedItems));
+        }
       } else {
         await dispatch(getCartItemsThunk());
       }
@@ -123,9 +126,11 @@ export const useCartControl = () => {
     let liningCost = 0;
     // counting subtotal of all items adding 1400 to the items with lining
     const subtotal = cartItemsList.reduce((sum, item) => {
-      const localData = JSON.parse(localStorage.getItem('cartItems')) || [];
+      const itemsLocal = localStorage.getItem('cartItems');
+      const localData = itemsLocal ? JSON.parse(itemsLocal) : [];
+
       if (user) {
-        if (item?.Carts[0]?.CartItem?.lining !== '') {
+        if (item?.Carts[0]?.lining !== '') {
           liningCost += 1400;
           return sum + item.price + 1400;
         } else {
@@ -133,8 +138,10 @@ export const useCartControl = () => {
         }
       } else {
         if (
-          localData?.find((data) => data.id === item.id)?.lining &&
-          localData?.find((data) => data.id === item.id).lining !== ''
+          localData?.find((data: ILocalStorageCartItem) => data.id === item.id)
+            ?.lining &&
+          localData?.find((data: ILocalStorageCartItem) => data.id === item.id)
+            .lining !== ''
         ) {
           liningCost += 1400;
           return sum + item.price + 1400;
@@ -238,10 +245,16 @@ export const useCartControl = () => {
         await dispatch(getCartItemsThunk());
       } else {
         await dispatch(delCartItem(itemId));
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        const updatedCartItems = cartItems.filter((item) => item.id !== itemId);
-        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-        await dispatch(getCartItemsByIdThunk(updatedCartItems));
+
+        const itemsLocal = localStorage.getItem('cartItems');
+        if (itemsLocal !== null) {
+          const cartItems = JSON.parse(itemsLocal) || [];
+          const updatedCartItems = cartItems.filter(
+            (item: ILocalStorageCartItem) => item.id !== itemId
+          );
+          localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+          await dispatch(getCartItemsByIdThunk(updatedCartItems));
+        }
       }
     } catch (err) {
       console.log(err);
@@ -324,40 +337,47 @@ export const useCartControl = () => {
     console.log(paramsFormData);
     if (!user) {
       // введенные мерки сохраняются в локалсторедж к соответствующим товарам
-      const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-      const itemToUpdate = cartItems.find((item) => item.id === itemId);
-      if (itemToUpdate) {
-        itemToUpdate.height = paramsFormData.height || '';
-        itemToUpdate.length = paramsFormData.length || '';
-        itemToUpdate.sleeve = paramsFormData.sleeve || '';
-        itemToUpdate.bust = paramsFormData.bust || '';
-        itemToUpdate.waist = paramsFormData.waist || '';
-        itemToUpdate.hips = paramsFormData.hips || '';
-        itemToUpdate.saddle = paramsFormData.saddle || '';
-        itemToUpdate.loops = paramsFormData.loops || false;
-        itemToUpdate.buttons = paramsFormData.buttons || '';
-        itemToUpdate.lining = paramsFormData.lining || '';
+      const itemsLocal = localStorage.getItem('cartItems');
+      if (itemsLocal !== null) {
+        const cartItems = JSON.parse(itemsLocal) || [];
+        const itemToUpdate = cartItems.find(
+          (item: ILocalStorageCartItem) => item.id === itemId
+        );
+        if (itemToUpdate) {
+          itemToUpdate.height = paramsFormData.height || '';
+          itemToUpdate.length = paramsFormData.length || '';
+          itemToUpdate.sleeve = paramsFormData.sleeve || '';
+          itemToUpdate.bust = paramsFormData.bust || '';
+          itemToUpdate.waist = paramsFormData.waist || '';
+          itemToUpdate.hips = paramsFormData.hips || '';
+          itemToUpdate.saddle = paramsFormData.saddle || '';
+          itemToUpdate.loops = paramsFormData.loops || false;
+          itemToUpdate.buttons = paramsFormData.buttons || '';
+          itemToUpdate.lining = paramsFormData.lining || '';
+        }
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        // сохраняет параметры для отображения
+        const userParams = `Ваш рост: ${
+          paramsFormData.height
+        }см, длина изделия: ${paramsFormData.length}см, длина рукава: ${
+          paramsFormData.sleeve
+        }см, объем груди: ${paramsFormData.bust}см, объем талии: ${
+          paramsFormData.waist
+        }см, объем бедер: ${paramsFormData.hips}см${
+          paramsFormData.saddle ? `, седло: ${paramsFormData.saddle}` : ''
+        }${
+          paramsFormData.lining ? `, утепление: ${paramsFormData.lining}` : ''
+        }${
+          paramsFormData.buttons ? `, фурнитура: ${paramsFormData.buttons}` : ''
+        }${paramsFormData.loops ? `, со шлёвками` : ''}`;
+        setUserParams((prevTexts) => {
+          const updatedTexts = [...prevTexts];
+          updatedTexts[index] = userParams;
+          return updatedTexts;
+        });
+        setParamsFormData({});
+        setShowParamsForm({});
       }
-      localStorage.setItem('cartItems', JSON.stringify(cartItems));
-      // сохраняет параметры для отображения
-      const userParams = `Ваш рост: ${
-        paramsFormData.height
-      }см, длина изделия: ${paramsFormData.length}см, длина рукава: ${
-        paramsFormData.sleeve
-      }см, объем груди: ${paramsFormData.bust}см, объем талии: ${
-        paramsFormData.waist
-      }см, объем бедер: ${paramsFormData.hips}см${
-        paramsFormData.saddle ? `, седло: ${paramsFormData.saddle}` : ''
-      }${paramsFormData.lining ? `, утепление: ${paramsFormData.lining}` : ''}${
-        paramsFormData.buttons ? `, фурнитура: ${paramsFormData.buttons}` : ''
-      }${paramsFormData.loops ? `, со шлёвками` : ''}`;
-      setUserParams((prevTexts) => {
-        const updatedTexts = [...prevTexts];
-        updatedTexts[index] = userParams;
-        return updatedTexts;
-      });
-      setParamsFormData({});
-      setShowParamsForm({});
     }
     // записывает мерки к товару в CartItems
     const response = await fetch(
@@ -536,10 +556,10 @@ export const useCartControl = () => {
           });
       } else {
         // проверяем мерки в локалсторедж
-        const localData = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const localData = JSON.parse(localStorage.getItem('cartItems') || '[]');
         isMeasuresAdded = localData
-          .filter((item) => !item.in_stock)
-          .every((oneItem) => {
+          .filter((item: ILocalStorageCartItem) => !item.in_stock)
+          .every((oneItem: ILocalStorageCartItem) => {
             return (
               oneItem.height !== undefined &&
               oneItem.height !== '' &&
@@ -584,7 +604,7 @@ export const useCartControl = () => {
           } else {
             // если клиент не залогинен - собираем объект с данными из формы персональных данных
             const itemsWithMeasurements = JSON.parse(
-              localStorage.getItem('cartItems')
+              localStorage.getItem('cartItems') || '[]'
             );
             const orderData = {
               personalData,
