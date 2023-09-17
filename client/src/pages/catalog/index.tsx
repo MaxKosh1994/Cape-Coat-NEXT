@@ -26,7 +26,7 @@ export default function Catalog() {
       console.log(err);
     }
   }, []);
-
+  
   return (
     <>
       <Head>

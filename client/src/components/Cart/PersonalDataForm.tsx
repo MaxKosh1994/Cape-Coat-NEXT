@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from '../../styles/Checkout.module.css';
+import { useCartControl } from './useCartControl';
+import { useAppSelector } from '@/app/hooks';
+import { RootState } from '@/app/store';
 
-export default function PersonalDataForm({ handlePersonalDataInputChange }) {
+export default function PersonalDataForm() {
+  const { handlePersonalDataInputChange } = useCartControl();
+  const personalData = useAppSelector(
+    (state: RootState) => state.cartControlSlice.personalData
+  );
   return (
     <section className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}>
       <h2 className={styles.headerItemCart}>Ваши данные</h2>
@@ -18,6 +25,7 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
                     placeholder=""
                     name="name"
                     className={styles.formInput}
+                    defaultValue={personalData.name}
                     onChange={handlePersonalDataInputChange}
                   />
                 </div>
@@ -30,6 +38,7 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
                     name="email"
                     type="email"
                     className={styles.formInput}
+                    defaultValue={personalData.email}
                     onChange={handlePersonalDataInputChange}
                   />
                 </div>
@@ -42,6 +51,7 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
                     name="password"
                     type="password"
                     className={styles.formInput}
+                    defaultValue={personalData.password}
                     onChange={handlePersonalDataInputChange}
                   />
                 </div>
@@ -54,6 +64,7 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
                   name="phone"
                   placeholder=""
                   className={styles.formInput}
+                  defaultValue={personalData.phone}
                   onChange={handlePersonalDataInputChange}
                 />
               </div>
@@ -67,6 +78,7 @@ export default function PersonalDataForm({ handlePersonalDataInputChange }) {
                   name="telegram_instagram"
                   placeholder=""
                   className={styles.formInput}
+                  defaultValue={personalData.telegram_instagram}
                   onChange={handlePersonalDataInputChange}
                 />
               </div>

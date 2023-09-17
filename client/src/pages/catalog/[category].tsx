@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import BasePage from '@/components/ItemPage/BasePage';
 import Custom404 from '../404';
-import { IBasePageItem } from '@/components/ItemPage/basePageTypes';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 export default function Category() {
   const [catName, setCatName] = useState('');

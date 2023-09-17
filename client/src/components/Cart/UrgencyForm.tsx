@@ -1,9 +1,13 @@
 import React from 'react';
 import styles from '../../styles/Checkout.module.css';
 import { useCartControl } from './useCartControl';
+import { useAppSelector } from '@/app/hooks';
 
-export default function UrgencyForm({ handleUrgentChange }) {
-  // const { handleUrgentChange } = useCartControl();
+export default function UrgencyForm() {
+  const { handleUrgentChange } = useCartControl();
+  const urgentMaking = useAppSelector(
+    (state) => state.cartControlSlice.urgentMaking
+  );
 
   return (
     <section className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}>
@@ -18,6 +22,7 @@ export default function UrgencyForm({ handleUrgentChange }) {
             name="urgent"
             className={styles.checkboxIcon}
             onChange={handleUrgentChange}
+            checked={urgentMaking}
           />
           <span className={styles.checkboxLabel}>
             <span className={styles.checkboxHeader}>

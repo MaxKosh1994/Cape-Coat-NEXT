@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import BasePage from '@/components/ItemPage/BasePage';
 import Custom404 from '../404';
-import { IBasePageItem } from '@/components/ItemPage/basePageTypes';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 export default function NewArrivalsPage() {
   const [newArrivalsItems, setNewArrivalsItems] = useState([]);

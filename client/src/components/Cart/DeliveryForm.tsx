@@ -1,12 +1,15 @@
 import React from 'react';
 import styles from '../../styles/Checkout.module.css';
 import BackToTopArrow from '../ToTopArrow/ToTopArrow';
+import { useCartControl } from './useCartControl';
+import { useAppSelector } from '@/app/hooks';
+import { RootState } from '@/app/store';
 
-export default function DeliveryForm({
-  handleDeliveryChange,
-  handleInputChange,
-  showAddressInputs,
-}) {
+export default function DeliveryForm() {
+  const { handleDeliveryChange, handleInputChange } = useCartControl();
+  const showAddressInputs = useAppSelector(
+    (state: RootState) => state.cartControlSlice.showAddressInputs
+  );
   return (
     <section className={`${styles.orderBlock} ${styles.orderBlockDeliveries}`}>
       <h2 className={styles.headerItemCart}>Способ доставки</h2>
