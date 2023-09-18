@@ -1,31 +1,12 @@
-import { useState, useEffect } from 'react';
 import BasePage from '@/components/ItemPage/BasePage';
 import Custom404 from '../404';
-import { IBasePageItem } from '@/TypeScript/basePageTypes';
+import { Item } from '@/app/itemSlice';
 
-export default function SalePage() {
-  const [saleItems, setSaleItems] = useState([]);
-  useEffect(() => {
-    try {
-      (async function (): Promise<void> {
-        const response = await fetch(
-          process.env.NEXT_PUBLIC_URL + 'catalog/sale'
-        );
-        if (response.status === 200) {
-          const result = await response.json();
-          const items = result.map((item: IBasePageItem) => ({
-            ...item,
-            isFavorite: false,
-            isCart: false,
-          }));
-          setSaleItems(items);
-        }
-      })();
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+interface SalePageProps {
+  saleItems: Item[];
+}
 
+export default function SalePage({ saleItems }: SalePageProps) {
   return (
     <>
       {saleItems.length ? (
@@ -35,4 +16,40 @@ export default function SalePage() {
       )}
     </>
   );
+}
+
+export async function getServerSideProps(): Promise<{
+  props: SalePageProps;
+}> {
+  try {
+    const response = await fetch(process.env.NEXT_PUBLIC_URL + 'catalog/sale');
+    if (response.status === 200) {
+      const result: Item[] = await response.json();
+      const items = result.map((item) => ({
+        ...item,
+        isFavorite: false,
+        isCart: false,
+      }));
+
+      return {
+        props: {
+          saleItems: items,
+        },
+      };
+    } else {
+      return {
+        props: {
+          saleItems: [],
+        },
+      };
+    }
+  } catch (err) {
+    console.error(err);
+
+    return {
+      props: {
+        saleItems: [],
+      },
+    };
+  }
 }

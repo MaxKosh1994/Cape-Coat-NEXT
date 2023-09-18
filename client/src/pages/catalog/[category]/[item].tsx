@@ -1,16 +1,13 @@
 import React from 'react';
-
 import './itemStyle.css';
-
 import ItemLeftPart from '@/components/ItemLeftPart/ItemLeftPart';
 import ItemRightPart from '@/components/ItemRightPart/ItemRightPart';
-
 import Head from 'next/head';
 import BasePage from '@/components/ItemPage/BasePage';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { getItems } from './fetchItemData';
+import { getItems } from '../../../app/fetchItemData';
 import { Item, ItemState } from '@/app/itemSlice';
 import { GetServerSidePropsContext } from 'next';
+import Custom404 from '@/pages/404';
 interface ItemProps {
   itemData: Item;
   imageData: { id: number; url: string }[];
@@ -34,17 +31,21 @@ function Item({
   similarItems,
   error,
 }: ItemProps) {
-  const isMobile = useMediaQuery('(max-width: 768px)');
   if (error) {
     return (
       <div className="error-message">Произошла ошибка: {error.message}</div>
     );
   }
 
+  if (!itemData) {
+    return <Custom404 />;
+  }
+
   return (
     <>
       <Head>
-        <title>Cape&Coat | {itemData.name}</title>
+        <title>Cape&Coat | {`${itemData.name}`}</title>
+
         <meta
           name="description"
           content={`Откройте для себя ${itemData.name} на Cape&Coat, качественная одежда на все случаи жизни`}
@@ -103,7 +104,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { item: itemId } = context.query;
   const isMobileQueryParam = context.query.isMobile;
   const isMobile = isMobileQueryParam === 'true';
-  console.log('context.query', context.query);
 
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}item/${itemId}`, {
@@ -131,20 +131,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           itemId: Number(itemId),
           materialsData: data.materials,
           similarItems: similarItems,
+          error: null,
         },
       };
-    } else {
-      const errorData = await res.json();
-      throw new Error(errorData.message);
+    } else if (!res.ok) {
+      return {
+        props: {
+          itemData: null,
+        },
+      };
     }
   } catch (error) {
     console.error(error);
-
-    return {
-      props: {
-        error: { message: 'Произошла ошибка при загрузке данных.' },
-      },
-    };
   }
 }
 

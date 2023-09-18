@@ -39,6 +39,7 @@ interface IMenuItem {
   label: string;
   link?: string;
   submenu?: (ICategories | ICollections | IFaqMenuItem)[];
+  urlName?: string;
 }
 
 const NavigationMenu: React.FC<IProps> = ({
@@ -51,10 +52,10 @@ const NavigationMenu: React.FC<IProps> = ({
   }>({});
 
   const [categories, setCategories] = useState<ICategories[]>([]);
-
   useEffect(() => {
     const getData = async () => {
       const categoryData = await fetchNavigationMenuCategoryData();
+
       setCategories(categoryData.categories);
     };
 
@@ -96,9 +97,23 @@ const NavigationMenu: React.FC<IProps> = ({
           onMouseLeave={() => handleMouseLeave(index)}
         >
           <>
-            <Link href={item.link || '#'} passHref className={styles.menuLink}>
-              {item.label}
-            </Link>
+            {item.urlName ? (
+              <Link
+                href={`${item.link}/${item.urlName}`}
+                passHref
+                className={styles.menuLink}
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <Link
+                href={item.link || '#'}
+                passHref
+                className={styles.menuLink}
+              >
+                {item.label}
+              </Link>
+            )}
             {item.submenu && (
               <ul
                 className={`${styles.dropdownMenu} ${
@@ -107,7 +122,11 @@ const NavigationMenu: React.FC<IProps> = ({
               >
                 {item.submenu.map((el) => (
                   <li key={el.id} className={styles.dropdownMenuItem}>
-                    <Link href={item.link || '#'}>{el.name}</Link>
+                    {el.urlName ? (
+                      <Link href={`${item.link}/${el.urlName}`}>{el.name}</Link>
+                    ) : (
+                      <Link href={el.link || '#'}>{el.name}</Link>
+                    )}
                   </li>
                 ))}
               </ul>
