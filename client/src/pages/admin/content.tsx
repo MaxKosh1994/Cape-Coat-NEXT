@@ -16,7 +16,7 @@ import { useRouter } from 'next/router';
 
 import { Button } from '@mui/material';
 
-export default function addContent() {
+export default function AddContent() {
   const [openCat, setOpenCat] = useState<boolean>(false);
   const [openCol, setOpenCol] = useState<boolean>(false);
   const [openMat, setOpenMat] = useState<boolean>(false);

@@ -42,9 +42,6 @@ export default function CartButton({
     (state: RootState) => state.cartSlice.cartItems
   );
 
-  console.log({ selectedMaterialName });
-  console.log('!!!!!!!!', itemData.Material.name);
-
   useEffect(() => {
     if (user) {
       const isInCart = cartItems.some(

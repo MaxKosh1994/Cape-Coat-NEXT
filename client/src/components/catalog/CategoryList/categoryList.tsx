@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import styles from '../../../styles/Catalog.module.css';
-// import Category from '../Category/Category';
-import axios from 'axios';
 import Image from 'next/image';
-import Link from 'next/link';
-import Category from '../../../pages/catalog/[category]';
 import { ICategoryList } from '@/TypeScript/categoryList.type';
 
 export default function CategoryList({
@@ -15,10 +11,8 @@ export default function CategoryList({
   urlName,
 }: ICategoryList) {
   const router = useRouter();
-  const [englishName, setEnglishName] = useState('');
 
-  //TODO подумать над query, чтобы не отображалось в адресной строке
-  const categoryHandler = async (e) => {
+  const categoryHandler = async (e: { target: any }) => {
     const target = e.target;
     if (!target) return;
     const pathname = `/catalog/${urlName}`;
@@ -32,7 +26,7 @@ export default function CategoryList({
   };
 
   return (
-    <div className="oneCategory" id={id}>
+    <div className="oneCategory" id={id.toString()}>
       <div className={styles.categoryContainer} onClick={categoryHandler}>
         <Image
           src={imageUrl}

@@ -61,7 +61,7 @@ export const getItems = async (
   // setSimilarItems: React.Dispatch<React.SetStateAction<Item[]>>,
   isMobile: boolean,
   itemData: Item
-): Promise<void> => {
+): Promise<Item[]> => {
   try {
     const allItems = await fetch(
       `${process.env.NEXT_PUBLIC_URL}item/allItems`,
@@ -77,7 +77,6 @@ export const getItems = async (
     }));
 
     if (allItems.status === 200) {
-      console.log(allItems)
       const filteredItems = items.filter(
         (item) =>
           item.category_id === itemData.category_id &&
@@ -88,9 +87,12 @@ export const getItems = async (
         ? filteredItems.slice(0, 2)
         : filteredItems.slice(0, 4);
       // setSimilarItems(cutFilteredItems);
-      return cutFilteredItems;
+      return Promise.resolve(cutFilteredItems);
+    } else {
+      return Promise.reject(new Error('Failed to fetch items'));
     }
   } catch (error) {
     console.log(error);
+    return Promise.reject(error);
   }
 };

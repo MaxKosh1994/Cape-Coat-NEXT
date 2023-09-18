@@ -1,6 +1,6 @@
 export interface ICategoryList {
-  id: string,
-  imageUrl: string,
-  category: string,
-  urlName: string,
+  id: number;
+  imageUrl: string;
+  category: string;
+  urlName: string;
 }

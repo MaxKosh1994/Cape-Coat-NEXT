@@ -40,27 +40,52 @@ const ProductCard: React.FC<IProductCard> = ({
 
   return (
     <div className={styles.Card} key={id}>
-      <Link
-        href={
-          router.pathname === '/'
-            ? `/${urlName}/${id}`
-            : `/catalog/${linkToShow}/${id}`
-        }
-        as={
-          router.pathname === '/'
-            ? `/catalog/${urlName}/${id}`
-            : `/catalog/${linkToShow}/${id}`
-        }
-      >
-        <span className={styles.CardMedia}>
-          <img
-            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${photo}`}
-            alt={name}
-            className={styles.Image}
-          />
-        </span>
-        <h1 className={styles.NameCard}>{name}</h1>
-      </Link>
+      {linkToShow[0] === '/' ? (
+        <Link
+          href={
+            router.pathname === '/'
+              ? `/${urlName}/${id}`
+              : `/catalog${linkToShow}/${id}`
+          }
+          as={
+            router.pathname === '/'
+              ? `/catalog/${urlName}/${id}`
+              : `/catalog${linkToShow}/${id}`
+          }
+        >
+          <span className={styles.CardMedia}>
+            <img
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${photo}`}
+              alt={name}
+              className={styles.Image}
+            />
+          </span>
+          <h1 className={styles.NameCard}>{name}</h1>
+        </Link>
+      ) : (
+        <Link
+          href={
+            router.pathname === '/'
+              ? `/${urlName}/${id}`
+              : `/catalog${linkToShow}/${id}`
+          }
+          as={
+            router.pathname === '/'
+              ? `/catalog/${urlName}/${id}`
+              : `/catalog/${linkToShow}/${id}`
+          }
+        >
+          <span className={styles.CardMedia}>
+            <img
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${photo}`}
+              alt={name}
+              className={styles.Image}
+            />
+          </span>
+          <h1 className={styles.NameCard}>{name}</h1>
+        </Link>
+      )}
+
       {newPrice ? (
         <div className={styles.CardContent}>
           <h3 className={styles.NewPrice}>
