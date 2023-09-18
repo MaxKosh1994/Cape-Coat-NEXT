@@ -8,7 +8,8 @@ import {
   setFavourites,
   setFavoriteItemList,
 } from './favouriteSlice';
-import { IItem } from '../components/accountComp/Orders/Orders';
+import { IItem } from '@/components/accComp/orders/types';
+
 
 interface IFetchItemData {
   id: number;

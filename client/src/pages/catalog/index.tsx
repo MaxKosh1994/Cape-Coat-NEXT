@@ -2,8 +2,8 @@ import React from 'react';
 import CategoryList from '../../components/catalog/CategoryList/categoryList';
 import styles from '../../styles/Catalog.module.css';
 import { Typography } from '@mui/material';
-import Link from 'next/link';
 import Head from 'next/head';
+import { ICategory } from '@/TypeScript/categoryList.type';
 
 interface Category {
   id: number;
@@ -31,14 +31,8 @@ function Catalog({ allCategories }: CatalogProps) {
         </span>
       </Typography>
       <div className={styles.catalogueContainer}>
-        {allCategories.map((cat) => (
-          <CategoryList
-            key={cat.id}
-            id={cat.id}
-            imageUrl={`${process.env.NEXT_PUBLIC_CATEGORY_URL}${cat.photo}`}
-            category={cat.name}
-            urlName={cat.urlName}
-          />
+        {allCategories.map((cat: ICategory) => (
+          <CategoryList key={cat.id} categoryInfo={cat} />
         ))}
       </div>
     </>

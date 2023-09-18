@@ -7,19 +7,23 @@ import Link from 'next/link';
 import DelBtn from './DelBtn';
 import { useAppSelector } from '@/app/hooks';
 import { RootState } from '@/app/store';
+import { useCartControl } from './useCartControl';
+import { ISingleItem } from '@/app/types/cartTypes';
 
 export default function ItemDisplay({
   item,
   index,
-  handleDeleteItemFromCart,
-  userParams,
-  handleDisplaySizesForm,
-  showParamsForm,
-  handleChange,
-  handleSaveSizesInputs,
-  handleCustomFormChange,
+}: {
+  item: ISingleItem;
+  index: number;
 }) {
-  const user = useAppSelector((state: RootState) => state.sessionSlice.user);
+  const { handleDeleteItemFromCart, handleDisplaySizesForm } = useCartControl();
+  const userParams = useAppSelector(
+    (state: RootState) => state.cartControlSlice.userParams
+  );
+  const showParamsForm = useAppSelector(
+    (state) => state.cartControlSlice.showParamsForm
+  );
   return (
     <div className={styles.basketItem}>
       <div className={styles.basketItemLeft}>
@@ -147,13 +151,7 @@ export default function ItemDisplay({
           </>
         )}
         {showParamsForm[item.id] && (
-          <MeasurementsForm
-            index={index}
-            item={item}
-            handleChange={handleChange}
-            handleSaveSizesInputs={handleSaveSizesInputs}
-            handleCustomFormChange={handleCustomFormChange}
-          />
+          <MeasurementsForm index={index} item={item} />
         )}
       </div>
     </div>

@@ -64,7 +64,7 @@ export const signInUserThunk =
   };
 
 export const forgotPassThunk =
-  (userEmail: string): AppThunk =>
+  (userEmail: { email: string }): AppThunk =>
   async (dispatch: Dispatch) => {
     try {
       const res = await axios.post(
@@ -81,14 +81,16 @@ export const forgotPassThunk =
     } catch (err) {
       const { response } = err;
       dispatch(handleError(response?.data));
+      return null;
     }
   };
 
 export const resetPassThunk =
-  (token: string, password: string): AppThunk =>
+  (token: string | string[] | undefined, password: string): AppThunk =>
   async (dispatch: Dispatch) => {
     try {
       const data = { token, password };
+      console.log('sent');
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_URL}auth/reset-pass`,
         data,

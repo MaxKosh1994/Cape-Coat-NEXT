@@ -1,10 +1,13 @@
 import React, { ChangeEvent } from 'react';
 import styles from '../../styles/Checkout.module.css';
+import { useCartControl } from './useCartControl';
 
-export default function TrousersSizeForm({ onTrousersSizeChange }) {
+export default function TrousersSizeForm() {
+  const { handleCustomFormChange } = useCartControl();
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    onTrousersSizeChange({ [name]: value });
+    handleCustomFormChange({ [name]: value });
   };
 
   return (

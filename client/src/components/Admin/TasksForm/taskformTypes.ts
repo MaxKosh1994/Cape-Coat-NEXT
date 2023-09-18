@@ -1,3 +1,5 @@
+import { ISingleItem } from '@/app/types/cartTypes';
+
 export interface ITaskData {
   taskNum: number;
   date: string;
@@ -78,4 +80,55 @@ export interface ITaskInfo {
   status?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ITaskOrderItem {
+  id: number;
+  name: string;
+  article: string;
+  description: string;
+  model_params: string;
+  characteristics: string;
+  price: number;
+  new_price: number;
+  in_stock: boolean;
+  purchased: boolean;
+  bestseller: boolean;
+  collection_id: number;
+  material_id: number;
+  category_id: number;
+  createdAt: string;
+  updatedAt: string;
+  OrderItem: {
+    order_id: number;
+    item_id: number;
+    selected_material: string;
+    height: string;
+    length: string;
+    sleeve: string;
+    bust: string;
+    waist: string;
+    hips: string;
+    saddle: string;
+    loops: boolean;
+    buttons: string;
+    lining: string;
+    createdAt?: string;
+    updatedAt?: string;
+  };
+  Material?: {
+    id: number;
+    name: string | undefined;
+    photo: string;
+    category_id: number;
+    createdAt?: string;
+    updatedAt?: string;
+  };
+}
+
+export interface TasksFormProps {
+  openModal: boolean;
+  itemInfo: ITaskOrderItem;
+  taskInfo: ITaskInfo;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import { useRouter } from 'next/router';
-import { delCartItem, emptyCart, getCartItems } from '@/app/cartSlice';
+import { delCartItem, emptyCart } from '@/app/cartSlice';
 import {
   delCartItemThunk,
   emptyCartThunk,
@@ -15,102 +15,81 @@ import {
 } from '@/app/thunkActionsCart';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { RootState } from '@/app/store';
+import { ICustomFormInputs, IOrderData } from '@/TypeScript/checkoutTypes';
+import { ILocalStorageCartItem } from '@/app/types/cartTypes';
 import {
-  IAddressInputs,
-  ICustomFormInputs,
-  IOrderData,
-  IParamsFormData,
-  IPersonalData,
-  IShowParamsForm,
-} from '@/TypeScript/checkoutTypes';
-import { ISingleItem } from '@/app/types/cartTypes';
+  setAddressInputs,
+  setCartTotal,
+  setCommentsInput,
+  setDeliveryCost,
+  setDiscount,
+  setDiscountPercent,
+  setLiningCost,
+  setOrderStatus,
+  setParamsFormData,
+  setPersonalData,
+  setPromoUsed,
+  setPromocode,
+  setPromocodeErr,
+  setSelectedDelivery,
+  setShowAddressInputs,
+  setShowParamsForm,
+  setTwoItemDiscount,
+  setUrgencyFee,
+  setUrgentMaking,
+  setUserParams,
+} from '@/app/cartControlSlice';
 
 export const useCartControl = () => {
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
   const name = useAppSelector((state: RootState) => state.sessionSlice.name);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  // товары в корзине
-  // const [cartItemsList, setCartItemsList] = useState<ISingleItem[]>([]);
   const cartItemsList = useAppSelector(
     (state: RootState) => state.cartSlice.cartItems
   );
+  const {
+    urgentMaking,
+    urgencyFee,
+    userParams,
+    showParamsForm,
+    commentsInput,
+    paramsFormData,
+    selectedDelivery,
+    deliveryCost,
+    showAddressInputs,
+    addressInputs,
+    personalData,
+    promocode,
+    promocodeErr,
+    promoUsed,
+    discount,
+    discountPercent,
+    twoItemDiscount,
+    liningCost,
+    cartTotal,
+    orderStatus,
+  } = useAppSelector((state) => state.cartControlSlice);
+
   // ошибка при удалении товара из корзины
   const [delError, setDelError] = useState<string>('');
-  // сумма корзины
-  const [cartTotal, setCartTotal] = useState<number>(0);
-  // введенный промокод
-  const [promocode, setPromocode] = useState<string>('');
+
   // промокод для отправки на бек
   const [dbPc, setDbPc] = useState<string>('');
-  // использовал ли юзер промокод
-  const [promoUsed, setPromoUsed] = useState<boolean>(false);
-  // ошибка с промокодом
-  const [promocodeErr, setPromocodeErr] = useState<string>('');
-  // размер скидки
-  const [discount, setDiscount] = useState<number>(0);
-  // размер скидки в %
-  const [discountPercent, setDiscountPercent] = useState<number>(0);
-  // скидка за 2+ товара
-  const [twoItemDiscount, setTwoItemDiscount] = useState<number>(0);
-  // комментарии к заказу
-  const [commentsInput, setCommentsInput] = useState<string>('');
-  // ошибка заказа или статус
-  const [orderStatus, setOrderStatus] = useState<string>('');
-  // какая выбрана доставка
-  const [selectedDelivery, setSelectedDelivery] = useState<string>('showroom');
-  // отображать или нет форму адреса
-  const [showAddressInputs, setShowAddressInputs] = useState<boolean>(false);
-  // чекбокс срочного пошива
-  const [urgentMaking, setUrgentMaking] = useState<boolean>(false);
-  // стоимость срочного пошива
-  const [urgencyFee, setUrgencyFee] = useState<number>(0);
-  // стоимость утепления
-  const [liningCost, setLiningCost] = useState<number>(0);
-  // форма для незарегистрированного пользователя
-  const [personalData, setPersonalData] = useState<IPersonalData>({
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    telegram_instagram: '',
-  });
-  // форма адреса
-  const [addressInputs, setAddressInputs] = useState<IAddressInputs>({
-    city: '',
-    street: '',
-    number: '',
-    flat: '',
-  });
-  // стоимость доставки
-  const [deliveryCost, setDeliveryCost] = useState<number>(0);
-  // отображать форму мерок, записывает индекс в массиве
-  const [showParamsForm, setShowParamsForm] = useState<IShowParamsForm>({});
-  // введенные в форму мерки
-  const [paramsFormData, setParamsFormData] = useState<IParamsFormData>({
-    itemId: 0,
-    height: '',
-    length: '',
-    sleeve: '',
-    bust: '',
-    waist: '',
-    hips: '',
-    saddle: '',
-    loops: false,
-    buttons: '',
-    lining: '',
-  });
+
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
-  // записывет параметры товаров по индексу в массиве
-  const [userParams, setUserParams] = useState<string[]>([]);
+
   const userParamsRef = useRef(userParams);
 
   // стукается через санку на бек, грузит список товаров добавленных в корзину
   const fetchCartItems = async (): Promise<void> => {
     try {
       if (!user) {
-        const itemsLocal = JSON.parse(localStorage.getItem('cartItems'));
-        await dispatch(getCartItemsByIdThunk(itemsLocal));
+        const itemsLocal = localStorage.getItem('cartItems');
+        if (itemsLocal !== null) {
+          const parsedItems = JSON.parse(itemsLocal);
+          await dispatch(getCartItemsByIdThunk(parsedItems));
+        }
       } else {
         await dispatch(getCartItemsThunk());
       }
@@ -123,9 +102,10 @@ export const useCartControl = () => {
     let liningCost = 0;
     // counting subtotal of all items adding 1400 to the items with lining
     const subtotal = cartItemsList.reduce((sum, item) => {
-      const localData = JSON.parse(localStorage.getItem('cartItems')) || [];
+      const itemsLocal = localStorage.getItem('cartItems');
+      const localData = itemsLocal ? JSON.parse(itemsLocal) : [];
       if (user) {
-        if (item?.Carts[0]?.CartItem?.lining !== '') {
+        if (item?.Carts[0]?.lining !== '') {
           liningCost += 1400;
           return sum + item.price + 1400;
         } else {
@@ -133,8 +113,10 @@ export const useCartControl = () => {
         }
       } else {
         if (
-          localData?.find((data) => data.id === item.id)?.lining &&
-          localData?.find((data) => data.id === item.id).lining !== ''
+          localData?.find((data: ILocalStorageCartItem) => data.id === item.id)
+            ?.lining &&
+          localData?.find((data: ILocalStorageCartItem) => data.id === item.id)
+            .lining !== ''
         ) {
           liningCost += 1400;
           return sum + item.price + 1400;
@@ -143,54 +125,60 @@ export const useCartControl = () => {
         }
       }
     }, 0);
-    setLiningCost(liningCost);
+    dispatch(setLiningCost(liningCost));
     if (cartItemsList.length > 2) {
       // 5% discount for >2 items in cart from all item prices + delivery
       const threePlusItemsDiscount = (subtotal + deliveryCost) * 0.05;
-      setTwoItemDiscount(threePlusItemsDiscount);
+      dispatch(setTwoItemDiscount(threePlusItemsDiscount));
       // upds total - discount for >2 items + cost of delivery
       const updTotal = subtotal + deliveryCost - threePlusItemsDiscount;
-      setCartTotal(updTotal);
+      dispatch(setCartTotal(updTotal));
       // if there is a promocode discount
       if (discountPercent > 0) {
         // counts new total with discount from promo
-        setCartTotal(updTotal * (1 - discountPercent));
+        dispatch(setCartTotal(updTotal * (1 - discountPercent)));
         // sets discount size off of subtotal and deliverycost
-        setDiscount(discountPercent * updTotal);
+        dispatch(setDiscount(discountPercent * updTotal));
         if (urgentMaking) {
           // counts +20% on the total of the cart after >2 item discount
-          setUrgencyFee(subtotal * 0.2);
+          dispatch(setUrgencyFee(subtotal * 0.2));
           // counts new total from total with >2 discount + discount from promo + urgency fee + delivery
-          setCartTotal(
-            updTotal * (1 - discountPercent) + (urgencyFee - urgencyFee * 0.05)
+          dispatch(
+            setCartTotal(
+              updTotal * (1 - discountPercent) +
+                (urgencyFee - urgencyFee * 0.05)
+            )
           );
           // count discount size from total before any discount + fee + delivery
-          setDiscount(discountPercent * (updTotal + urgencyFee));
+          dispatch(setDiscount(discountPercent * (updTotal + urgencyFee)));
         }
       }
       if (urgentMaking && discountPercent <= 0) {
         // counts +20% on the total of the cart before >2 item discount
-        setUrgencyFee(subtotal * 0.2);
-        setCartTotal(updTotal + (urgencyFee - urgencyFee * 0.05));
-        setTwoItemDiscount(threePlusItemsDiscount + urgencyFee * 0.05);
+        dispatch(setUrgencyFee(subtotal * 0.2));
+        dispatch(setCartTotal(updTotal + (urgencyFee - urgencyFee * 0.05)));
+        dispatch(
+          setTwoItemDiscount(threePlusItemsDiscount + urgencyFee * 0.05)
+        );
       }
     } else {
-      setTwoItemDiscount(0);
+      dispatch(setTwoItemDiscount(0));
       const updTotal = subtotal + deliveryCost;
-      setCartTotal(updTotal);
-
+      dispatch(setCartTotal(updTotal));
       if (discountPercent > 0) {
-        setCartTotal(updTotal * (1 - discountPercent));
-        setDiscount(discountPercent * updTotal);
+        dispatch(setCartTotal(updTotal * (1 - discountPercent)));
+        dispatch(setDiscount(discountPercent * updTotal));
         if (urgentMaking) {
-          setUrgencyFee(subtotal * 0.2);
-          setCartTotal((updTotal + urgencyFee) * (1 - discountPercent));
-          setDiscount(discountPercent * (updTotal + urgencyFee));
+          dispatch(setUrgencyFee(subtotal * 0.2));
+          dispatch(
+            setCartTotal((updTotal + urgencyFee) * (1 - discountPercent))
+          );
+          dispatch(setDiscount(discountPercent * (updTotal + urgencyFee)));
         }
       }
       if (urgentMaking && discountPercent <= 0) {
-        setUrgencyFee(subtotal * 0.2);
-        setCartTotal(updTotal + urgencyFee);
+        dispatch(setUrgencyFee(subtotal * 0.2));
+        dispatch(setCartTotal(updTotal + urgencyFee));
       }
     }
   };
@@ -203,7 +191,10 @@ export const useCartControl = () => {
 
   useEffect(() => {
     if (cartItemsList.length > 0) {
-      setUserParams(Array(cartItemsList.length).fill(''));
+      const setParams = async () => {
+        await dispatch(setUserParams(Array(cartItemsList.length).fill('')));
+      };
+      setParams();
     }
   }, [cartItemsList]);
 
@@ -238,10 +229,16 @@ export const useCartControl = () => {
         await dispatch(getCartItemsThunk());
       } else {
         await dispatch(delCartItem(itemId));
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        const updatedCartItems = cartItems.filter((item) => item.id !== itemId);
-        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-        await dispatch(getCartItemsByIdThunk(updatedCartItems));
+
+        const itemsLocal = localStorage.getItem('cartItems');
+        if (itemsLocal !== null) {
+          const cartItems = JSON.parse(itemsLocal) || [];
+          const updatedCartItems = cartItems.filter(
+            (item: ILocalStorageCartItem) => item.id !== itemId
+          );
+          localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+          await dispatch(getCartItemsByIdThunk(updatedCartItems));
+        }
       }
     } catch (err) {
       console.log(err);
@@ -251,65 +248,65 @@ export const useCartControl = () => {
 
   // отображает форму введения мерок под товаром
   const handleDisplaySizesForm = (index: number, itemId: number): void => {
-    setShowParamsForm((prevState) => ({
-      ...prevState,
-      [itemId]: !prevState[itemId],
-    }));
+    const updatedValue = !showParamsForm[itemId];
+    dispatch(setShowParamsForm({ itemId, value: updatedValue }));
   };
 
   // записывает изменения в форме персональных данных (если клиент не залогинен)
   const handlePersonalDataInputChange = (
     e: ChangeEvent<HTMLInputElement>
   ): void => {
-    setPersonalData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    dispatch(
+      setPersonalData({ ...personalData, [e.target.name]: e.target.value })
+    );
   };
 
   // записывает изменения в инпутах формы введения мерок
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setParamsFormData({ ...paramsFormData, [e.target.name]: e.target.value });
+    // setParamsFormData({ ...paramsFormData, [e.target.name]: e.target.value });
+    dispatch(
+      setParamsFormData({ ...paramsFormData, [e.target.name]: e.target.value })
+    );
   };
 
   // дозаписывает изменения в кастомизированных формах
   // имеется в виду для брюк добавляет седло
   // для пальто и шуб утепление, etc
   const handleCustomFormChange = (updatedFields: ICustomFormInputs): void => {
-    setParamsFormData((prevState) => ({
-      ...prevState,
-      ...updatedFields,
-    }));
+    dispatch(setParamsFormData({ ...paramsFormData, ...updatedFields }));
   };
 
   // отслеживает изменения в инпутах формы адреса доставки
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setAddressInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    dispatch(
+      setAddressInputs({ ...addressInputs, [e.target.name]: e.target.value })
+    );
   };
 
   // отслеживает чекбокс Срочный пошив
   const handleUrgentChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setUrgentMaking(e.target.checked);
+    dispatch(setUrgentMaking(e.target.checked));
   };
 
   // отслеживает радио кнопки доставки - шоурум или сдек
   const handleDeliveryChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setSelectedDelivery(e.target.value);
+    dispatch(setSelectedDelivery(e.target.value));
   };
 
   // рассчитывает стоимость доставки, если в шоурум - 0, если по адресу считает 300
   const countDeliveryCost = (): void => {
     if (selectedDelivery === 'showroom') {
-      setDeliveryCost(0);
-      setShowAddressInputs(false);
+      dispatch(setDeliveryCost(0));
+      dispatch(setShowAddressInputs(false));
     } else {
-      setDeliveryCost(300);
-      setShowAddressInputs(true);
+      dispatch(setDeliveryCost(300));
+      dispatch(setShowAddressInputs(true));
     }
   };
 
   // отслеживает изменения в блоке Комментарии
-  const handleCommentChange = async (
-    e: ChangeEvent<HTMLInputElement>
-  ): Promise<void> => {
-    setCommentsInput(e.target.value);
+  const handleCommentChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    dispatch(setCommentsInput(e.target.value));
   };
 
   // отрабатывает по клику на СОХРАНИТЬ при введении мерок
@@ -317,47 +314,48 @@ export const useCartControl = () => {
     index: number,
     itemId: number
   ): Promise<void> => {
-    setParamsFormData((prevState) => ({
-      ...prevState,
-      itemId: itemId,
-    }));
-    console.log(paramsFormData);
+    dispatch(setParamsFormData({ ...paramsFormData, itemId: itemId }));
     if (!user) {
       // введенные мерки сохраняются в локалсторедж к соответствующим товарам
-      const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-      const itemToUpdate = cartItems.find((item) => item.id === itemId);
-      if (itemToUpdate) {
-        itemToUpdate.height = paramsFormData.height || '';
-        itemToUpdate.length = paramsFormData.length || '';
-        itemToUpdate.sleeve = paramsFormData.sleeve || '';
-        itemToUpdate.bust = paramsFormData.bust || '';
-        itemToUpdate.waist = paramsFormData.waist || '';
-        itemToUpdate.hips = paramsFormData.hips || '';
-        itemToUpdate.saddle = paramsFormData.saddle || '';
-        itemToUpdate.loops = paramsFormData.loops || false;
-        itemToUpdate.buttons = paramsFormData.buttons || '';
-        itemToUpdate.lining = paramsFormData.lining || '';
+      const itemsLocal = localStorage.getItem('cartItems');
+      if (itemsLocal !== null) {
+        const cartItems = JSON.parse(itemsLocal) || [];
+        const itemToUpdate = cartItems.find(
+          (item: ILocalStorageCartItem) => item.id === itemId
+        );
+        if (itemToUpdate) {
+          itemToUpdate.height = paramsFormData.height || '';
+          itemToUpdate.length = paramsFormData.length || '';
+          itemToUpdate.sleeve = paramsFormData.sleeve || '';
+          itemToUpdate.bust = paramsFormData.bust || '';
+          itemToUpdate.waist = paramsFormData.waist || '';
+          itemToUpdate.hips = paramsFormData.hips || '';
+          itemToUpdate.saddle = paramsFormData.saddle || '';
+          itemToUpdate.loops = paramsFormData.loops || false;
+          itemToUpdate.buttons = paramsFormData.buttons || '';
+          itemToUpdate.lining = paramsFormData.lining || '';
+        }
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        // сохраняет параметры для отображения
+        const userParamsText = `Ваш рост: ${
+          paramsFormData.height
+        }см, длина изделия: ${paramsFormData.length}см, длина рукава: ${
+          paramsFormData.sleeve
+        }см, объем груди: ${paramsFormData.bust}см, объем талии: ${
+          paramsFormData.waist
+        }см, объем бедер: ${paramsFormData.hips}см${
+          paramsFormData.saddle ? `, седло: ${paramsFormData.saddle}` : ''
+        }${
+          paramsFormData.lining ? `, утепление: ${paramsFormData.lining}` : ''
+        }${
+          paramsFormData.buttons ? `, фурнитура: ${paramsFormData.buttons}` : ''
+        }${paramsFormData.loops ? `, со шлёвками` : ''}`;
+        const updatedUserParams = [...userParams];
+        updatedUserParams[index] = userParamsText;
+        dispatch(setUserParams(updatedUserParams));
+        setParamsFormData({});
+        handleDisplaySizesForm(index, itemId);
       }
-      localStorage.setItem('cartItems', JSON.stringify(cartItems));
-      // сохраняет параметры для отображения
-      const userParams = `Ваш рост: ${
-        paramsFormData.height
-      }см, длина изделия: ${paramsFormData.length}см, длина рукава: ${
-        paramsFormData.sleeve
-      }см, объем груди: ${paramsFormData.bust}см, объем талии: ${
-        paramsFormData.waist
-      }см, объем бедер: ${paramsFormData.hips}см${
-        paramsFormData.saddle ? `, седло: ${paramsFormData.saddle}` : ''
-      }${paramsFormData.lining ? `, утепление: ${paramsFormData.lining}` : ''}${
-        paramsFormData.buttons ? `, фурнитура: ${paramsFormData.buttons}` : ''
-      }${paramsFormData.loops ? `, со шлёвками` : ''}`;
-      setUserParams((prevTexts) => {
-        const updatedTexts = [...prevTexts];
-        updatedTexts[index] = userParams;
-        return updatedTexts;
-      });
-      setParamsFormData({});
-      setShowParamsForm({});
     }
     // записывает мерки к товару в CartItems
     const response = await fetch(
@@ -373,7 +371,7 @@ export const useCartControl = () => {
     if (response.status === 200) {
       // выводит мерки, если всё ок
       // и прячет форму
-      const userParams = `Ваш рост: ${res.height}см, длина изделия: ${
+      const userParamsText = `Ваш рост: ${res.height}см, длина изделия: ${
         res.length
       }см, длина рукава: ${res.sleeve}см, объем груди: ${
         res.bust
@@ -382,20 +380,21 @@ export const useCartControl = () => {
       }${res.lining ? `, утепление: ${res.lining}` : ''}${
         res.buttons ? `, фурнитура: ${res.buttons}` : ''
       }${res.loops ? `, со шлёвками` : ''}`;
-      setUserParams((prevTexts) => {
-        const updatedTexts = [...prevTexts];
-        updatedTexts[index] = userParams;
-        return updatedTexts;
-      });
-      setShowParamsForm({});
+      // setUserParams((prevTexts) => {
+      //   const updatedTexts = [...prevTexts];
+      //   updatedTexts[index] = userParams;
+      //   return updatedTexts;
+      // });
+      const updatedUserParams = [...userParams];
+      updatedUserParams[index] = userParamsText;
+      dispatch(setUserParams(updatedUserParams));
+      handleDisplaySizesForm(index, itemId);
     }
   };
 
   // отслеживает инпут промокода
-  const handlePromocodeChange = async (
-    e: ChangeEvent<HTMLInputElement>
-  ): Promise<void> => {
-    setPromocode(e.target.value.trim());
+  const handlePromocodeChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    dispatch(setPromocode(e.target.value.trim()));
   };
 
   // отрабатывает по нажатию на ПРИМЕНИТЬ (промокод)
@@ -417,32 +416,32 @@ export const useCartControl = () => {
       const response = await isValidPromo.json();
       if (isValidPromo.status === 200) {
         setDbPc(promocode);
-        setDiscountPercent(response.percent / 100);
-        setPromoUsed(true);
-        setPromocode('');
+        dispatch(setDiscountPercent(response.percent / 100));
+        dispatch(setPromoUsed(true));
+        dispatch(setPromocode(''));
       } else {
         // если ошибка с бека
-        setPromocodeErr(response);
+        dispatch(setPromocodeErr(response));
         setTimeout(() => {
           setDbPc('');
-          setPromoUsed(false);
-          setPromocodeErr('');
+          dispatch(setPromoUsed(false));
+          dispatch(setPromocodeErr(''));
         }, 1000);
-        setCartTotal(subtotal);
+        dispatch(setCartTotal(subtotal));
       }
     } else if (promoUsed) {
       // если пользователь уже ввел 1 промокод
-      setPromocodeErr('Вы уже использовали промокод');
+      dispatch(setPromocodeErr('Вы уже использовали промокод'));
       setTimeout(() => {
         setDbPc('');
-        setPromoUsed(false);
-        setPromocodeErr('');
+        dispatch(setPromoUsed(false));
+        dispatch(setPromocodeErr(''));
       }, 1000);
     } else {
       // если отправляет пустую строку
-      setPromocodeErr('Вы не ввели промокод');
+      dispatch(setPromocodeErr('Вы не ввели промокод'));
       setTimeout(() => {
-        setPromocodeErr('');
+        dispatch(setPromocodeErr(''));
       }, 1000);
     }
   };
@@ -473,18 +472,18 @@ export const useCartControl = () => {
       if (re.message === 'Что-то пошло не так, попробуйте позже') {
         // если ошибка на беке
         setShowSpinner(false);
-        setOrderStatus(re.message);
+        dispatch(setOrderStatus(re.message));
         setTimeout(() => {
-          setOrderStatus('');
+          dispatch(setOrderStatus(''));
         }, 2000);
       } else if (re.message === 'Вы уже использовали этот промокод') {
         setShowSpinner(false);
-        setOrderStatus(re.message);
-        setPromoUsed(false);
+        dispatch(setOrderStatus(re.message));
+        dispatch(setPromoUsed(false));
         setDbPc('');
-        setDiscount(0);
+        dispatch(setDiscount(0));
         setTimeout(() => {
-          setOrderStatus('');
+          dispatch(setOrderStatus(''));
         }, 2000);
       } else {
         // если все ок - очищает корзину, массив в редаксе и редиректит на спасибку
@@ -536,10 +535,10 @@ export const useCartControl = () => {
           });
       } else {
         // проверяем мерки в локалсторедж
-        const localData = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const localData = JSON.parse(localStorage.getItem('cartItems') || '[]');
         isMeasuresAdded = localData
-          .filter((item) => !item.in_stock)
-          .every((oneItem) => {
+          .filter((item: ILocalStorageCartItem) => !item.in_stock)
+          .every((oneItem: ILocalStorageCartItem) => {
             return (
               oneItem.height !== undefined &&
               oneItem.height !== '' &&
@@ -560,9 +559,11 @@ export const useCartControl = () => {
       if (addressString.length > 18) {
         // проверяем мерки
         if (!isMeasuresAdded) {
-          setOrderStatus('Пожалуйста, введите все мерки для пошива изделия');
+          dispatch(
+            setOrderStatus('Пожалуйста, введите все мерки для пошива изделия')
+          );
           setTimeout(() => {
-            setOrderStatus('');
+            dispatch(setOrderStatus(''));
           }, 2000);
         } else {
           // если адрес и мерки в порядке
@@ -584,7 +585,7 @@ export const useCartControl = () => {
           } else {
             // если клиент не залогинен - собираем объект с данными из формы персональных данных
             const itemsWithMeasurements = JSON.parse(
-              localStorage.getItem('cartItems')
+              localStorage.getItem('cartItems') || '[]'
             );
             const orderData = {
               personalData,
@@ -602,9 +603,11 @@ export const useCartControl = () => {
               !personalData.password ||
               !personalData.phone
             ) {
-              setOrderStatus('Пожалуйста, заполните все поля личных данных');
+              dispatch(
+                setOrderStatus('Пожалуйста, заполните все поля личных данных')
+              );
               setTimeout(() => {
-                setOrderStatus('');
+                dispatch(setOrderStatus(''));
               }, 2000);
             } else {
               createOrder(orderData);
@@ -613,67 +616,26 @@ export const useCartControl = () => {
         }
       } else {
         // если адрес доставки некорректный
-        setOrderStatus;
-        setOrderStatus('Пожалуйста, заполните адрес доставки');
+        dispatch(setOrderStatus('Пожалуйста, заполните адрес доставки'));
         setTimeout(() => {
-          setOrderStatus('');
+          dispatch(setOrderStatus(''));
         }, 2000);
       }
     } else {
       // если не выбран способ доставки
-      setOrderStatus('Пожалуйста, выберите способ доставки');
+      dispatch(setOrderStatus('Пожалуйста, выберите способ доставки'));
       setTimeout(() => {
-        setOrderStatus('');
+        dispatch(setOrderStatus(''));
       }, 2000);
     }
   };
 
   return {
     showSpinner,
-    cartItemsList,
-    setShowParamsForm,
-    showParamsForm,
-    paramsFormData,
-    setParamsFormData,
-    commentsInput,
-    setCommentsInput,
-    selectedDelivery,
-    setSelectedDelivery,
-    deliveryCost,
-    setDeliveryCost,
-    showAddressInputs,
-    setShowAddressInputs,
-    addressInputs,
-    setAddressInputs,
-    personalData,
-    setPersonalData,
     delError,
     setDelError,
-    orderStatus,
-    setOrderStatus,
-    promoUsed,
-    setPromoUsed,
-    promocode,
-    setPromocode,
     dbPc,
     setDbPc,
-    promocodeErr,
-    setPromocodeErr,
-    discountPercent,
-    setDiscountPercent,
-    discount,
-    setDiscount,
-    twoItemDiscount,
-    setTwoItemDiscount,
-    urgencyFee,
-    setUrgencyFee,
-    urgentMaking,
-    setUrgentMaking,
-    liningCost,
-    cartTotal,
-    setCartTotal,
-    userParams,
-    setUserParams,
     fetchCartItems,
     countDeliveryCost,
     handleDisplaySizesForm,
@@ -693,5 +655,4 @@ export const useCartControl = () => {
     createOrder,
     userParamsRef,
   };
-  // setState тоже можно возвращать и юзать в компоненте снаружи
 };

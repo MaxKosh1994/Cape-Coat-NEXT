@@ -2,14 +2,19 @@ import React from 'react';
 import CustomFormPart from './CustomFormPart';
 import Link from 'next/link';
 import styles from '../../styles/Checkout.module.css';
+import { useCartControl } from './useCartControl';
+import { ISingleItem } from '@/app/types/cartTypes';
 
 export default function MeasurementsForm({
   index,
   item,
-  handleChange,
-  handleSaveSizesInputs,
-  handleCustomFormChange,
+}: {
+  index: number;
+  item: ISingleItem;
 }) {
+  const { handleChange, handleSaveSizesInputs } =
+    useCartControl();
+
   return (
     <>
       <div className={styles.basketItemContent}>
@@ -91,7 +96,6 @@ export default function MeasurementsForm({
             <CustomFormPart
               catId={item.category_id}
               itemId={item.id}
-              handleCustomFormChange={handleCustomFormChange}
             />
           </div>
           <button

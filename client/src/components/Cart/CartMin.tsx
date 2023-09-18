@@ -9,18 +9,19 @@ import { useCartControl } from './useCartControl';
 import DelBtn from './DelBtn';
 import { RootState } from '@/app/store';
 import { emptyCart } from '@/app/cartSlice';
+import { setCartTotal } from '@/app/cartControlSlice';
 
 const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
   show,
   handleCartIconClick,
 }) => {
-  const { delError, setCartTotal, fetchCartItems, handleDeleteItemFromCart } =
+  const dispatch = useAppDispatch();
+  const { delError, fetchCartItems, handleDeleteItemFromCart } =
     useCartControl();
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
   const cartItemsList = useAppSelector(
     (state: RootState) => state.cartSlice.cartItems
   );
-  const dispatch = useAppDispatch();
   const [showDiv, setShowDiv] = useState<boolean>(show);
 
   useEffect(() => {
@@ -35,12 +36,12 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
       .filter((item) => !item.in_stock)
       .reduce((sum, item) => sum + item.price, 0);
 
-    setCartTotal(subtotal + subtotalStock);
+    dispatch(setCartTotal(subtotal + subtotalStock));
   }, [cartItemsList]);
 
   const emptyCartMin = async () => {
     await dispatch(emptyCart());
-    localStorage.setItem('cartItems', []);
+    localStorage.setItem('cartItems', '[]');
   };
 
   const handleCloseCart = () => {
@@ -49,7 +50,7 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
       handleCartIconClick();
     }, 1001);
   };
-  console.log(cartItemsList);
+
   return (
     <div
       className={`${styles.container}  ${

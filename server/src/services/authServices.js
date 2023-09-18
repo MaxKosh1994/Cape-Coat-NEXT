@@ -107,6 +107,12 @@ module.exports.validateToken = async (token) => {
       raw: true,
       nest: true,
     });
+    if (tokenRecord === null) {
+      return {
+        success: false,
+        message: 'Отправьте новый запрос о сбросе пароля',
+      };
+    }
     const user = tokenRecord.User.email;
     const currentDateTime = new Date();
     if (!tokenRecord || tokenRecord.expirationDate > currentDateTime) {
@@ -114,7 +120,10 @@ module.exports.validateToken = async (token) => {
     }
     return { success: true, user };
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return {
+      success: false,
+      message: 'Ошибка сервера',
+    };
   }
 };
 

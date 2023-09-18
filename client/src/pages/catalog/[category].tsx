@@ -1,6 +1,7 @@
 import BasePage from '@/components/ItemPage/BasePage';
 import Custom404 from '../404';
 import { Item } from '@/app/itemSlice';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 interface IResult {
   items: Item[];
@@ -42,7 +43,7 @@ export async function getServerSideProps(context: {
     );
     if (response.status === 200) {
       const result: IResult = await response.json();
-      const items = result.items.map((item) => ({
+      const items = result.items.map((item: IBasePageItem) => ({
         ...item,
         isFavorite: false,
         isCart: false,
