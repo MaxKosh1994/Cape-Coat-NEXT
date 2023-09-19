@@ -33,6 +33,7 @@ export default function ForgotPass() {
       newPass.password1 === newPass.password2
     ) {
       const response = await dispatch(resetPassThunk(token, newPass.password1));
+      // TODO ошибка типизации
       if (response?.success) {
         setShowErrorMsg(false);
         setUpdSuccess(response.message);

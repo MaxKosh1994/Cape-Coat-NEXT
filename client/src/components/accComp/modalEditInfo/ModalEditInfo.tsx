@@ -20,9 +20,9 @@ export default function ModalEditInfo({
 
   useEffect(() => {
     setInputsUserInfo({
-      full_name: userInfo?.full_name,
-      phone: userInfo?.phone,
-      telegram_instagram: userInfo?.telegram_instagram,
+      full_name: userInfo?.full_name || '',
+      phone: userInfo?.phone || '',
+      telegram_instagram: userInfo?.telegram_instagram || '',
     });
   }, [userInfo]);
 
@@ -35,6 +35,7 @@ export default function ModalEditInfo({
 
   const handleClose = (event: React.FormEvent) => {
     event.preventDefault();
+    // TODO исправить типизацию
     editUserInfo(inputsUserInfo, userInfo, setUserInfo, setOpen, setInfo);
   };
 
@@ -42,8 +43,8 @@ export default function ModalEditInfo({
     <Modal
       open={open}
       onClose={() => setOpen(false)}
-      aria-labelledby='modal-modal-title'
-      aria-describedby='modal-modal-description'
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
     >
       <Box className={styles.container}>
         <form onSubmit={handleClose}>
@@ -54,44 +55,44 @@ export default function ModalEditInfo({
               </div>
             )}
             <TextField
-              autoComplete='off'
-              className='text-field'
-              label='ФИО'
-              name='full_name'
-              type='text'
+              autoComplete="off"
+              className="text-field"
+              label="ФИО"
+              name="full_name"
+              type="text"
               value={inputsUserInfo?.full_name || ''}
               fullWidth
-              margin='normal'
+              margin="normal"
               required
               onChange={changeHandler}
             />
             <TextField
-              autoComplete='off'
-              className='text-field'
-              label='Номер телефона'
-              name='phone'
-              type='text'
+              autoComplete="off"
+              className="text-field"
+              label="Номер телефона"
+              name="phone"
+              type="text"
               value={inputsUserInfo?.phone || ''}
               fullWidth
-              margin='normal'
+              margin="normal"
               onChange={changeHandler}
             />
             <TextField
-              autoComplete='off'
-              className='text-field'
-              label='Ваш Telegram/Instagram'
-              name='telegram_instagram'
-              type='text'
+              autoComplete="off"
+              className="text-field"
+              label="Ваш Telegram/Instagram"
+              name="telegram_instagram"
+              type="text"
               value={inputsUserInfo?.telegram_instagram || ''}
               fullWidth
-              margin='normal'
+              margin="normal"
               onChange={changeHandler}
             />
             <Button
               className={styles.button}
-              type='submit'
-              variant='contained'
-              color='primary'
+              type="submit"
+              variant="contained"
+              color="primary"
               style={{
                 backgroundColor: 'black',
                 color: 'white',

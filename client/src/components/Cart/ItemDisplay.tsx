@@ -17,13 +17,11 @@ export default function ItemDisplay({
   item: ISingleItem;
   index: number;
 }) {
-  const { handleDeleteItemFromCart, handleDisplaySizesForm } = useCartControl();
-  const userParams = useAppSelector(
-    (state: RootState) => state.cartControlSlice.userParams
+  const { handleDisplaySizesForm } = useCartControl();
+  const { userParams, showParamsForm } = useAppSelector(
+    (state: RootState) => state.cartControlSlice
   );
-  const showParamsForm = useAppSelector(
-    (state) => state.cartControlSlice.showParamsForm
-  );
+  console.log(item);
   return (
     <div className={styles.basketItem}>
       <div className={styles.basketItemLeft}>
@@ -47,10 +45,7 @@ export default function ItemDisplay({
           </Link>
           <div className={styles.iconsContainer}>
             <LikeButton itemId={item.id} />
-            <DelBtn
-              itemId={item.id}
-              handleDeleteItemFromCart={handleDeleteItemFromCart}
-            />
+            <DelBtn itemId={item.id} />
           </div>
         </div>
         <div className={styles.basketItemContent}>

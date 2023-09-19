@@ -13,7 +13,7 @@ interface Category {
 }
 
 interface CatalogProps {
-  allCategories: Category[];
+  allCategories: ICategory[];
 }
 
 function Catalog({ allCategories }: CatalogProps) {

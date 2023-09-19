@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { ICartControlState } from './types/cartControlTypes';
 
-const initialState = {
+const initialState: ICartControlState = {
   urgentMaking: false, // чекбокс срочного пошива
   urgencyFee: 0, // стоимость срочного пошива
   userParams: [], // записывет параметры товаров по индексу в массиве

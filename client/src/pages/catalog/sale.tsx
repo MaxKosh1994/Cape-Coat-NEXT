@@ -1,21 +1,12 @@
 import BasePage from '@/components/ItemPage/BasePage';
-import Custom404 from '../404';
-import { Item } from '@/app/itemSlice';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 interface SalePageProps {
-  saleItems: Item[];
+  saleItems: IBasePageItem[];
 }
 
 export default function SalePage({ saleItems }: SalePageProps) {
-  return (
-    <>
-      {saleItems.length ? (
-        <BasePage pageName="Sale" itemsArr={saleItems} />
-      ) : (
-        <Custom404 />
-      )}
-    </>
-  );
+  return <BasePage pageName="Sale" itemsArr={saleItems} />;
 }
 
 export async function getServerSideProps(): Promise<{
@@ -24,7 +15,7 @@ export async function getServerSideProps(): Promise<{
   try {
     const response = await fetch(process.env.NEXT_PUBLIC_URL + 'catalog/sale');
     if (response.status === 200) {
-      const result: Item[] = await response.json();
+      const result: IBasePageItem[] = await response.json();
       const items = result.map((item) => ({
         ...item,
         isFavorite: false,

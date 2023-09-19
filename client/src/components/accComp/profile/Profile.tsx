@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './Profile.module.css';
 import { Button } from '@mui/material';
 import ModalEditInfo from '../modalEditInfo/ModalEditInfo';
-import { IUserInfo } from './UserDataTypes';
+import { IUserInfo } from './userDataTypes';
 import fetchUserInfo from './FetchUserInfo';
 
 export default function Profile() {

@@ -28,6 +28,7 @@ export default function SignIn() {
     event.preventDefault();
     if (formData.email && formData.password) {
       const resp = await dispatch(signInUserThunk(formData));
+      // TODO ошибка типизации
       if (resp.message) {
         setErrorMsg(resp.response.data.message);
       } else {

@@ -2,6 +2,7 @@ import React from 'react';
 import { Pagination } from '@mui/material';
 import { styled } from '@mui/system';
 import BasePage from '@/components/ItemPage/BasePage';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 const CollectionContainer = styled('div')({
   display: 'grid',
@@ -48,7 +49,7 @@ interface CollectionItem {
 }
 
 interface CollectionPageProps {
-  collectionItems: CollectionItem[];
+  collectionItems: IBasePageItem[];
   collectionName: string;
   currentPage: number;
   handlePageChange: (event: React.ChangeEvent<unknown>, page: number) => void;

@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 
-export default function CheckBox(props) {
+// TODO типизация пропсов, any как заглушка
+export default function CheckBox(props: any) {
   const [checked, setChecked] = useState(props.defaultChecked || false);
 
   useEffect(() => {
     setChecked(props.checked || false);
   }, [props.checked]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.checked;
     setChecked(newValue);
     props.changeCheckboxHandler(props.name, newValue);

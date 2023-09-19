@@ -1,4 +1,5 @@
-export default function InputFiles(props) {
+// TODO нужна типизация, any заглушка
+export default function InputFiles(props: any) {
   return (
     <>
       <div
@@ -32,6 +33,7 @@ export default function InputFiles(props) {
         <input
           id="fileCatInput"
           required
+          // TODO ошибка типизации
           filename={props.files}
           onChange={props.changeHandlerFiles}
           type="file"

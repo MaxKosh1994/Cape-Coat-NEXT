@@ -26,6 +26,7 @@ export default function ForgotPass() {
     if (currEmail) {
       const response = await dispatch(forgotPassThunk({ email: currEmail }));
       if (response !== null) {
+        // TODO ошибка типизации
         setSentLink(response.message);
         setShowSpinner(false);
       } else {

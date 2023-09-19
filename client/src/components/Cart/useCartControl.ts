@@ -105,7 +105,7 @@ export const useCartControl = () => {
       const itemsLocal = localStorage.getItem('cartItems');
       const localData = itemsLocal ? JSON.parse(itemsLocal) : [];
       if (user) {
-        if (item?.Carts[0]?.lining !== '') {
+        if (item?.Carts[0]?.CartItem.lining !== '') {
           liningCost += 1400;
           return sum + item.price + 1400;
         } else {
@@ -305,7 +305,7 @@ export const useCartControl = () => {
   };
 
   // отслеживает изменения в блоке Комментарии
-  const handleCommentChange = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handleCommentChange = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     dispatch(setCommentsInput(e.target.value));
   };
 
@@ -447,6 +447,7 @@ export const useCartControl = () => {
   };
 
   //!  отправляет письмо с подтверждением заказа
+  // TODO ошибка типизации
   function sendMail(name: string, user: string, order: string) {
     Email.send({
       SecureToken: 'ef79f30f-8ef6-4205-979a-b8e46f36a527',
@@ -494,6 +495,7 @@ export const useCartControl = () => {
         await dispatch(emptyCartThunk(user));
         await dispatch(emptyCart());
         localStorage.setItem('cartItems', JSON.stringify([]));
+        // TODO ошибка типизации
         sendMail(name, user, re.message);
       }
     } catch (err) {

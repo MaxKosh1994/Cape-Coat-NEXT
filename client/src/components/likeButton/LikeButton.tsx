@@ -49,13 +49,13 @@ const LikeButton: React.FC<LikeButtonProps> = ({ itemId }) => {
   const favHandler = async () => {
     if (!user) {
       const favoritesFromStorage =
-        JSON.parse(localStorage.getItem('favorites')) || [];
+        JSON.parse(localStorage.getItem('favorites')!) || '[]';
 
       const isItemInFavorites = favoritesFromStorage.includes(itemId);
 
       if (isItemInFavorites) {
         const updatedFavorites = favoritesFromStorage.filter(
-          (favId) => favId !== itemId
+          (favId: number) => favId !== itemId
         );
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
         setIsLiked(!isLiked);

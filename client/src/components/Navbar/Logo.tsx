@@ -1,16 +1,16 @@
-import React from "react"
+import React from 'react';
 
 export default function Logo() {
-  const logoStyle = {
-    width: "250px",
-    height: "150px",
-    position: "fixed",
+  const logoStyle: React.CSSProperties = {
+    width: '250px',
+    height: '150px',
+    position: 'fixed',
     top: -50,
     left: 0,
     right: 0,
-    margin: "auto",
+    margin: 'auto',
     zIndex: 9999,
-  }
+  };
   return (
     <div style={logoStyle}>
       <svg
@@ -138,5 +138,5 @@ export default function Logo() {
         </g>
       </svg>
     </div>
-  )
+  );
 }

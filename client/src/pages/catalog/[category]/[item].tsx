@@ -8,12 +8,13 @@ import { getItems } from '../../../app/fetchItemData';
 import { Item, ItemState } from '@/app/itemSlice';
 import { GetServerSidePropsContext } from 'next';
 import Custom404 from '@/pages/404';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 interface ItemProps {
   itemData: Item;
   imageData: { id: number; url: string }[];
   itemId: number;
   materialsData: ImaterialsData[];
-  similarItems: Item[];
+  similarItems: IBasePageItem[];
   error: { message: string };
 }
 export interface ImaterialsData {

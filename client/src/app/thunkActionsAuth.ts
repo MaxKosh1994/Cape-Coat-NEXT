@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import {
   startSession,
   endSession,
@@ -25,12 +25,11 @@ export const signUpUserThunk =
           headers: {
             'Content-Type': 'application/json',
           },
-          credentials: 'include',
         }
       );
       dispatch(startSession(res.data));
       return res.data;
-    } catch (err) {
+    } catch (err: AxiosError | any) {
       const { response } = err;
       dispatch(handleError(response?.data));
     }
@@ -48,16 +47,16 @@ export const signInUserThunk =
           headers: {
             'Content-Type': 'application/json',
           },
-          credentials: 'include',
         }
       );
 
       dispatch(startSession(res.data));
-      dispatch(fetchFavouritesData());
-      dispatch(getCartItemsThunk());
+      // TODO исправить - лучше диспатчить в компоненте каж
+      // dispatch(fetchFavouritesData());
+      // dispatch(getCartItemsThunk());
 
       return res.data;
-    } catch (err) {
+    } catch (err: AxiosError | any) {
       const { response } = err;
       dispatch(handleError(response?.data));
     }
@@ -78,7 +77,7 @@ export const forgotPassThunk =
         }
       );
       return res.data;
-    } catch (err) {
+    } catch (err: AxiosError | any) {
       const { response } = err;
       dispatch(handleError(response?.data));
       return null;
@@ -102,7 +101,7 @@ export const resetPassThunk =
         }
       );
       return res.data;
-    } catch (err) {
+    } catch (err: AxiosError | any) {
       const { response } = err;
       dispatch(handleError(response?.data));
     }
@@ -117,7 +116,7 @@ export const signOutUserThunk = (): AppThunk => async (dispatch: Dispatch) => {
     dispatch(endSession());
     dispatch(setFavourites([]));
     dispatch(getCartItems([]));
-  } catch (err) {
+  } catch (err: AxiosError | any) {
     const { response } = err;
     dispatch(handleError(response?.data));
   }
@@ -139,7 +138,7 @@ export const isUserLoginThunk = (): AppThunk => async (dispatch: Dispatch) => {
         dispatch(endSession());
       }
     }
-  } catch (err) {
+  } catch (err: AxiosError | any) {
     const { response } = err;
     dispatch(handleError(response?.data));
   }

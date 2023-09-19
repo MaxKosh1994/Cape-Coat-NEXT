@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, MouseEvent } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
@@ -16,10 +16,11 @@ export default function SureModal({ open, setOpen }: ISureModal) {
   const logOutHandler = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     try {
+      // TODO проблема типизации
       await dispatch(signOutUserThunk());
       setInfo('Вы вышли из аккаунта');
       setOpen(false);
-      dispatch(checkSession(false));
+      dispatch(checkSession({ isLogin: false, user: '', isAdmin: false }));
       router.push('/');
     } catch (Error) {
       console.log(Error);

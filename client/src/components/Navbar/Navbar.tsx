@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, MouseEvent } from 'react';
 import Image from 'next/image';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
@@ -103,14 +103,15 @@ export default function Navbar() {
     handleMobileMenuClose();
   };
 
-  const handleMobileMenuOpen = (event) => {
+  // TODO ошибка типизации, any заглушка
+  const handleMobileMenuOpen = (event: any) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
   const [showCart, setShowCart] = useState(false);
   const [prevAsPath, setPrevAsPath] = useState(router.asPath);
 
-  const handleCartIconClick = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleCartIconClick = (e: MouseEvent<HTMLButtonElement>): void => {
     setShowCart((prev) => !prev);
   };
 

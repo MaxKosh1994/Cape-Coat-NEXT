@@ -7,14 +7,13 @@ import {
   delItemInCart,
   getCartItems,
 } from '@/app/cartSlice';
-import { useAppDispatch } from '@/app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import './CartButtonStyle.css';
 import { Item } from '@/app/itemSlice';
 import {
   getCartItemsByIdThunk,
   getCartItemsThunk,
 } from '@/app/thunkActionsCart';
-import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 
 interface IcartButtonProps {
@@ -36,27 +35,27 @@ export default function CartButton({
   const [isInCart, setIsInCart] = useState(false);
 
   const dispatch = useAppDispatch();
-  const user = useSelector((state) => state.sessionSlice.user);
+  const user = useAppSelector((state) => state.sessionSlice.user);
 
-  const cartItems = useSelector(
+  const cartItems = useAppSelector(
     (state: RootState) => state.cartSlice.cartItems
   );
 
   useEffect(() => {
-    if (user) {
-      const isInCart = cartItems.some(
-        (el) => el.id == itemId || el.item_id == itemId
-      );
-      setIsInCart(isInCart);
-    } else {
-      const cartFromStorage = JSON.parse(
-        localStorage.getItem('cartItems') || '[]'
-      );
-      const isItemInCart = cartFromStorage.some(
-        (element) => element.id === itemId
-      );
-      setIsInCart(isItemInCart);
-    }
+    // if (user) {
+    //   const isInCart = cartItems.some(
+    //     (el) => el.id == itemId || el.item_id == itemId
+    //   );
+    //   setIsInCart(isInCart);
+    // } else {
+    //   const cartFromStorage = JSON.parse(
+    //     localStorage.getItem('cartItems') || '[]'
+    //   );
+    //   const isItemInCart = cartFromStorage.some(
+    //     (element) => element.id === itemId
+    //   );
+    //   setIsInCart(isItemInCart);
+    // }
   }, [cartItems, user, itemId]);
 
   const cartHandler = async () => {
@@ -76,58 +75,55 @@ export default function CartButton({
       }
       if (!user) {
         const cartItemsFromStorage =
-          JSON.parse(localStorage.getItem('cartItems')) || [];
+          JSON.parse(localStorage.getItem('cartItems')!) || '[]';
 
-        const materialName = selectedMaterialName
-          ? selectedMaterialName
-          : itemData.Material.name;
+        // const materialName = selectedMaterialName
+        //   ? selectedMaterialName
+        //   : itemData.Material.name;
 
-        const isItemInCart = cartItemsFromStorage.find(
-          (item) => item.id === itemId
-        );
+        // const isItemInCart = cartItemsFromStorage.find(
+        //   (item) => item.id === itemId
+        // );
 
-        if (isItemInCart) {
-          setIsInCart(isInCart);
-        } else {
-          const updatedCartItems = [
-            ...cartItemsFromStorage,
-            {
-              id: itemId,
-              material_name: materialName,
-              in_stock: itemData.in_stock,
-            },
-          ];
+        // if (isItemInCart) {
+        //   setIsInCart(isInCart);
+        // } else {
+        //   const updatedCartItems = [
+        //     ...cartItemsFromStorage,
+        //     {
+        //       id: itemId,
+        //       material_name: materialName,
+        //       in_stock: itemData.in_stock,
+        //     },
+        //   ];
 
-          localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-          setIsInCart(!isInCart);
-          await dispatch(getCartItemsByIdThunk(updatedCartItems));
-          return;
-        }
+        //   localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+        //   setIsInCart(!isInCart);
+        //   await dispatch(getCartItemsByIdThunk(updatedCartItems));
+        //   return;
+        // }
       } else {
-        if (!isInCart) {
-          const material = selectedMaterialName
-            ? selectedMaterialName
-            : itemData.Material.name;
+        // if (!isInCart) {
+        //   const material = selectedMaterialName
+        //     ? selectedMaterialName
+        //     : itemData.Material.name;
 
-          console.log({ material });
-
-          const materialName = { material_name: material };
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_URL}cart/item/${itemId}`,
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              credentials: 'include',
-              body: JSON.stringify(materialName),
-            }
-          );
-          if (res.ok) {
-            const data = await res.json();
-            await dispatch(getCartItemsThunk());
-            // dispatch(addCartItem(data));
-            setIsInCart(!isInCart);
-          }
-        }
+        //   const materialName = { material_name: material };
+        //   const res = await fetch(
+        //     `${process.env.NEXT_PUBLIC_URL}cart/item/${itemId}`,
+        //     {
+        //       method: 'POST',
+        //       headers: { 'Content-Type': 'application/json' },
+        //       credentials: 'include',
+        //       body: JSON.stringify(materialName),
+        //     }
+        //   );
+        //   if (res.ok) {
+        //     const data = await res.json();
+        //     await dispatch(getCartItemsThunk());
+        //     setIsInCart(!isInCart);
+        //   }
+        // }
       }
     } catch (error) {
       console.log(error);

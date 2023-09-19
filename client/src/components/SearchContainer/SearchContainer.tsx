@@ -30,6 +30,8 @@ export default function SearchContainer({
       {filteredItems.length > 0
         ? isVisible && (
             <div className={styles.resultContainer} ref={containerRef}>
+              {/* //  TODO пересечение типов, исправить 
+              */}
               {filteredItems.map((item) => (
                 <SearchItemCard key={item.id} item={item} />
               ))}

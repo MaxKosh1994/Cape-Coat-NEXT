@@ -1,7 +1,7 @@
 export interface IProductCard {
   id: number;
   material_name: string;
-  article: string;
+  article: string | number;
   photo: string;
   name: string;
   price: number;

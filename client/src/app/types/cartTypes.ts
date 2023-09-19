@@ -12,18 +12,26 @@ export interface CartItem {
   buttons?: null | string;
   cart_id: number;
   createdAt?: string;
-  height?: null | number;
-  hips?: null | number;
+  height?: null | string;
+  hips?: null | string;
   item_id?: number;
-  length?: null | number;
+  length?: null | string;
   lining?: null | string;
   loops?: null | boolean;
   saddle?: null | string;
-  sleeve?: null | number;
+  sleeve?: null | string;
   updatedAt?: string;
-  waist?: null | number;
+  waist?: null | string;
   user_id?: number;
   selected_material?: null | string;
+}
+
+export interface ICart {
+  id: number;
+  user_id: number;
+  createdAt: string;
+  updatedAt: string;
+  CartItem: CartItem;
 }
 
 export interface CartItemMaterial {
@@ -40,10 +48,9 @@ export interface MaterialItem {
 }
 
 export interface ISingleItem {
-  Carts: CartItem[];
-  CartItems: CartItemMaterial[];
+  Carts: ICart[];
   Photos: ItemPhoto[];
-  Material: MaterialItem[];
+  Material: MaterialItem;
   article: string;
   bestseller: boolean;
   category_id: number;
@@ -54,6 +61,7 @@ export interface ISingleItem {
   id: number;
   in_stock: boolean;
   material_id: number;
+  selected_material?: string;
   model_params: string;
   name: string;
   new_price: number;

@@ -25,6 +25,7 @@ export default function SignUp() {
   };
 
   //TODO в функцию ввести свой token и почту, с которой будем отправлять сообщение (https://www.youtube.com/watch?v=yP85ECOVMe8)
+  // TODO ошибка типизации
 
   function sendMail(full_name: string, email: string) {
     Email.send({
@@ -40,6 +41,8 @@ export default function SignUp() {
     e.preventDefault();
     if (formData.full_name && formData.email && formData.password) {
       const resp = await dispatch(signUpUserThunk(formData));
+      // TODO ошибка типизации
+
       if (resp?.response?.data?.message) {
         setErrorMsg(resp.response.data.message);
       } else {

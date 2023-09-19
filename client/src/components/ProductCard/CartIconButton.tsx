@@ -16,8 +16,7 @@ const CartIconButton: React.FC<CartIconButtonProps> = ({
   onClick,
   itemId,
 }) => {
-
-
+  // TODO удалить если ненужный код
   // const [isItemInCart, setIsItemInCart] = useState(false);
   // useEffect(() => {
   //   const localStorageData = localStorage.getItem('cartItems');
@@ -28,7 +27,6 @@ const CartIconButton: React.FC<CartIconButtonProps> = ({
   // const localStorageData = localStorage.getItem('cartItems');
 
   // const itemsInCart = JSON.parse(localStorageData || '[]');
-
 
   // const isItemInCart = itemsInCart.some((element) => element.id === itemId);
 

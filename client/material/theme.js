@@ -31,10 +31,11 @@ const theme = createTheme({
       fontWeight: 500,
       marginBottom: '1.25rem',
     },
-    p: {
+    subtitle1: {
       fontSize: '1.9rem', // Font size for smaller headings
       fontWeight: 500,
       marginBottom: '1.25rem',
+      "'Ysabeau Infant', serif"
     },
     body1: {
       fontSize: '1rem', // Font size for regular text content
