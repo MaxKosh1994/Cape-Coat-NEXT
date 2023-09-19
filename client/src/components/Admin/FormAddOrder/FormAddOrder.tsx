@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent, MouseEvent } from 'react';
 import { Button, Checkbox, FormControl, Collapse, Grid } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { IItem } from '@/components/accComp/orders/types';
@@ -25,7 +25,7 @@ export default function FormAddOrder() {
   const [personalData, setPersonalData] = useState<IPersonalData>({
     name: '',
     email: '',
-    number: '',
+    phone: '',
     telegram_instagram: '',
   });
 
@@ -288,7 +288,6 @@ export default function FormAddOrder() {
     } else {
       setDeliveryCost(300);
       setShowAddressInputs(true);
-      // TODO подключить API почты россии для расчета доставки?
     }
   }, [selectedDelivery]);
 
@@ -297,7 +296,11 @@ export default function FormAddOrder() {
   //! Хэндлеры
 
   // записывает изменения в инпутах формы введения мерок
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, itemId: number) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    itemId: number
+  ) => {
+    // TODO проблема типизации
     setParamsFormData((prevState) => ({
       ...prevState,
       [itemId]: {
@@ -312,6 +315,7 @@ export default function FormAddOrder() {
     event: ChangeEvent<HTMLSelectElement>,
     itemId: number
   ) => {
+    // TODO проблема типизации
     setParamsFormData((prevState) => ({
       ...prevState,
       [itemId]: {
@@ -323,6 +327,7 @@ export default function FormAddOrder() {
 
   // Сохранение формы
   const handleSaveSizesInputs = (itemId: number) => {
+    // TODO проблема типизации
     setUserParams((prevTexts) => {
       if (!paramsFormData[itemId]) {
         return { ...prevTexts, [itemId]: itemId };
@@ -348,7 +353,7 @@ export default function FormAddOrder() {
 
   // отслеживает чекбокс Срочный пошив
   const handleUrgentChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUrgentMaking(e.target.checked);
+    setUrgentMaking(e.target.checked ? 'Срочно' : '');
   };
 
   // отслеживает радио кнопки доставки - шоурум или сдек
@@ -357,7 +362,9 @@ export default function FormAddOrder() {
   };
 
   // отслеживает изменения в блоке Комментарии
-  const handleCommentChange = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCommentChange = async (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setCommentsInput(e.target.value);
   };
 
@@ -470,7 +477,7 @@ export default function FormAddOrder() {
   //! ГЛАВНАЯ ЛОГИКА СОЗДАНИЯ ЗАКАЗА
 
   const router = useRouter();
-  let addressString;
+  let addressString: string;
   if (selectedDelivery === 'post') {
     addressString = `${addressInputs.city}, ${addressInputs.street} дом ${addressInputs.number}, квартира ${addressInputs.flat}`;
   } else {
@@ -534,10 +541,10 @@ export default function FormAddOrder() {
                         <div className={styles.formControl}>
                           <label className={styles.formControlLabel}>Имя</label>
                           <input
-                            role='text'
-                            title='Имя'
-                            placeholder=''
-                            name='name'
+                            role="text"
+                            title="Имя"
+                            placeholder=""
+                            name="name"
                             className={styles.formInput}
                             onChange={handlePersonalDataInputChange}
                           />
@@ -547,10 +554,10 @@ export default function FormAddOrder() {
                             Email
                           </label>
                           <input
-                            role='text'
-                            title='Email*'
-                            placeholder=''
-                            name='email'
+                            role="text"
+                            title="Email*"
+                            placeholder=""
+                            name="email"
                             className={styles.formInput}
                             onChange={handlePersonalDataInputChange}
                           />
@@ -563,15 +570,14 @@ export default function FormAddOrder() {
                               Телефон
                             </label>
                             <input
-                              type='tel'
-                              role='text'
-                              title='Телефон'
-                              name='number'
-                              placeholder='+7(***)-***-**-**'
-                              pattern='\+7\(\d{3}\)-\d{3}-\d{2}-\d{2}'
+                              type="tel"
+                              role="text"
+                              title="Телефон"
+                              name="phone"
+                              placeholder="+7(***)-***-**-**"
+                              pattern="\+7\(\d{3}\)-\d{3}-\d{2}-\d{2}"
                               className={styles.formInput}
                               onChange={handlePersonalDataInputChange}
-                              disabled=''
                             />
                           </div>
                           <div className={styles.formControl}>
@@ -579,13 +585,12 @@ export default function FormAddOrder() {
                               Telegram/Instagram
                             </label>
                             <input
-                              role='text'
-                              title='Telegram/Instagram'
-                              name='telegram_instagram'
-                              placeholder=''
+                              role="text"
+                              title="Telegram/Instagram"
+                              name="telegram_instagram"
+                              placeholder=""
                               className={styles.formInput}
                               onChange={handlePersonalDataInputChange}
-                              disabled=''
                             />
                           </div>
                         </div>
@@ -615,12 +620,12 @@ export default function FormAddOrder() {
                       ></label>
                       <textarea
                         className={`${styles.commentInput} ${styles.formInput}`}
-                        role='text'
-                        title='Комментарии'
-                        placeholder='Пожелания заказчика...'
-                        name='comments'
-                        rows='5'
-                        cols='50'
+                        role="text"
+                        title="Комментарии"
+                        placeholder="Пожелания заказчика..."
+                        name="comments"
+                        rows={5}
+                        cols={50}
                         onChange={handleCommentChange}
                       />
                     </div>
@@ -635,12 +640,12 @@ export default function FormAddOrder() {
                 <h2 className={styles.headerUserParams}>Срочный пошив</h2>
                 <div className={styles.formBlock}>
                   <label
-                    id='urgent'
+                    id="urgent"
                     className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
                   >
                     <input
-                      type='checkbox'
-                      name='urgent'
+                      type="checkbox"
+                      name="urgent"
                       className={styles.checkboxIcon}
                       onChange={handleUrgentChange}
                     />
@@ -669,11 +674,10 @@ export default function FormAddOrder() {
                 className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
               >
                 <input
-                  hidden=''
-                  role='radio'
-                  type='radio'
-                  name='delivery'
-                  value='showroom'
+                  role="radio"
+                  type="radio"
+                  name="delivery"
+                  value="showroom"
                   className={styles.checkboxIcon}
                   onChange={handleDeliveryChange}
                   defaultChecked={true}
@@ -690,11 +694,10 @@ export default function FormAddOrder() {
                 className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
               >
                 <input
-                  hidden=''
-                  role='radio'
-                  type='radio'
-                  name='delivery'
-                  value='post'
+                  role="radio"
+                  type="radio"
+                  name="delivery"
+                  value="post"
                   className={styles.checkboxIcon}
                   onChange={handleDeliveryChange}
                 />
@@ -714,10 +717,10 @@ export default function FormAddOrder() {
                             Город
                           </label>
                           <input
-                            role='text'
-                            title='Город'
-                            placeholder=''
-                            name='city'
+                            role="text"
+                            title="Город"
+                            placeholder=""
+                            name="city"
                             className={styles.formInput}
                             onChange={handleInputChange}
                           />
@@ -727,10 +730,10 @@ export default function FormAddOrder() {
                             Улица
                           </label>
                           <input
-                            role='text'
-                            title='Улица*'
-                            placeholder=''
-                            name='street'
+                            role="text"
+                            title="Улица*"
+                            placeholder=""
+                            name="street"
                             className={styles.formInput}
                             onChange={handleInputChange}
                           />
@@ -743,13 +746,12 @@ export default function FormAddOrder() {
                               Дом
                             </label>
                             <input
-                              role='text'
-                              title='Дом'
-                              name='number'
-                              placeholder=''
+                              role="text"
+                              title="Дом"
+                              name="number"
+                              placeholder=""
                               className={styles.formInput}
                               onChange={handleInputChange}
-                              disabled=''
                             />
                             <div className={styles.formControlButtons}></div>
                           </div>
@@ -759,13 +761,12 @@ export default function FormAddOrder() {
                             Квартира/Офис
                           </label>
                           <input
-                            role='text'
-                            name='flat'
-                            title='Квартира/Офис'
-                            placeholder=''
+                            role="text"
+                            name="flat"
+                            title="Квартира/Офис"
+                            placeholder=""
                             className={styles.formInput}
                             onChange={handleInputChange}
-                            disabled=''
                           />
                           <div className={styles.formControlButtons}></div>
                         </div>
@@ -793,7 +794,8 @@ export default function FormAddOrder() {
                     checked={isItemChecked(item)}
                     onChange={() => handleCheckBox(item)}
                   />
-                  <SearchItemCard item={item} />
+                  {/*// TODO перекрещиваются типы, исправить*/}
+                   <SearchItemCard item={item} /> 
                 </Grid>
               ))}
             </Grid>
@@ -803,7 +805,8 @@ export default function FormAddOrder() {
         <div className={styles.selectedItemsContainer}>
           {selectedItems.map((item, index) => (
             <div key={item.id} className={styles.oneItemConteiner}>
-              <SearchItemCard key={item.id} item={item} />
+              {/*// TODO перекрещиваются типы, исправить
+                <SearchItemCard key={item.id} item={item} /> */}
               {item.in_stock ? (
                 <>
                   <div className={styles.basketItemContent}>
@@ -816,94 +819,97 @@ export default function FormAddOrder() {
                 </>
               ) : (
                 <>
+                  {/* 
+                  // TODO проблемы типизации
+                  */}
                   <select
                     value={paramsFormData[item.id]?.selectedMaterial}
                     onChange={(event) => handleMaterialChange(event, item.id)}
-                    name='selectedMaterial'
+                    name="selectedMaterial"
                   >
                     {selectedItemsMaterials[item.id]?.map((material, index) => (
                       <option key={index} value={material.name}>
                         {material.name}
                       </option>
                     ))}
-                  </select>
+                  </select> 
 
-                  <form action=''>
+                  <form action="">
                     <div className={styles.sizesFormBlock}>
                       <div>
                         <label
-                          htmlFor='height'
+                          htmlFor="height"
                           className={styles.sizesFormLabel}
                         >
                           Ваш рост
                         </label>
                         <input
-                          type='text'
-                          name='height'
+                          type="text"
+                          name="height"
                           className={styles.sizesFormInput}
                           onChange={(e) => handleChange(e, item.id)}
                         />
                       </div>
                       <div>
                         <label
-                          htmlFor='length'
+                          htmlFor="length"
                           className={styles.sizesFormLabel}
                         >
                           Длина изделия
                         </label>
                         <input
-                          type='text'
-                          name='length'
+                          type="text"
+                          name="length"
                           className={styles.sizesFormInput}
                           onChange={(e) => handleChange(e, item.id)}
                         />
                       </div>
                       <div>
                         <label
-                          htmlFor='sleeve'
+                          htmlFor="sleeve"
                           className={styles.sizesFormLabel}
                         >
                           Длина рукава
                         </label>
                         <input
-                          type='text'
-                          name='sleeve'
+                          type="text"
+                          name="sleeve"
                           className={styles.sizesFormInput}
                           onChange={(e) => handleChange(e, item.id)}
                         />
                       </div>
                       <div>
-                        <label htmlFor='bust' className={styles.sizesFormLabel}>
+                        <label htmlFor="bust" className={styles.sizesFormLabel}>
                           Объем груди
                         </label>
                         <input
-                          type='text'
-                          name='bust'
+                          type="text"
+                          name="bust"
                           className={styles.sizesFormInput}
                           onChange={(e) => handleChange(e, item.id)}
                         />
                       </div>
                       <div>
                         <label
-                          htmlFor='waist'
+                          htmlFor="waist"
                           className={styles.sizesFormLabel}
                         >
                           Объем талии
                         </label>
                         <input
-                          type='text'
-                          name='waist'
+                          type="text"
+                          name="waist"
                           className={styles.sizesFormInput}
                           onChange={(e) => handleChange(e, item.id)}
                         />
                       </div>
                       <div>
-                        <label htmlFor='hips' className={styles.sizesFormLabel}>
+                        <label htmlFor="hips" className={styles.sizesFormLabel}>
                           Объем бедер
                         </label>
                         <input
-                          type='text'
-                          name='hips'
+                          type="text"
+                          name="hips"
                           className={styles.sizesFormInput}
                           onChange={(e) => handleChange(e, item.id)}
                         />
@@ -911,14 +917,14 @@ export default function FormAddOrder() {
                       {item.category_id === 4 && (
                         <div>
                           <label
-                            htmlFor='saddle'
+                            htmlFor="saddle"
                             className={styles.sizesFormLabel}
                           >
                             &quot;Седло&quot; брюк
                           </label>
                           <input
-                            type='text'
-                            name='saddle'
+                            type="text"
+                            name="saddle"
                             className={styles.sizesFormInput}
                             onChange={(e) => handleChange(e, item.id)}
                           />
@@ -928,8 +934,8 @@ export default function FormAddOrder() {
                         <>
                           <div>
                             <input
-                              type='checkbox'
-                              name='loops'
+                              type="checkbox"
+                              name="loops"
                               id={`loops${item.id}`}
                               className={styles.sizesFormCheckbox}
                               onChange={(e) => handleChange(e, item.id)}
@@ -943,10 +949,10 @@ export default function FormAddOrder() {
                           </div>
                           <div>
                             <input
-                              type='checkbox'
-                              name='buttons'
+                              type="checkbox"
+                              name="buttons"
                               id={`buttons${item.id}`}
-                              value='pugovitsy'
+                              value="pugovitsy"
                               className={styles.sizesFormCheckbox}
                               onChange={(e) => handleChange(e, item.id)}
                             />
@@ -965,8 +971,8 @@ export default function FormAddOrder() {
                         >
                           <div>
                             <input
-                              type='checkbox'
-                              name='loops'
+                              type="checkbox"
+                              name="loops"
                               id={`loops${item.id}`}
                               className={styles.sizesFormCheckbox}
                               onChange={(e) => handleChange(e, item.id)}
@@ -980,10 +986,10 @@ export default function FormAddOrder() {
                           </div>
                           <div>
                             <input
-                              type='radio'
-                              name='buttons'
+                              type="radio"
+                              name="buttons"
                               id={`pugovitsy${item.id}`}
-                              value='pugovitsy'
+                              value="pugovitsy"
                               className={styles.sizesFormCheckbox}
                               onChange={(e) => handleChange(e, item.id)}
                             />
@@ -996,9 +1002,9 @@ export default function FormAddOrder() {
                           </div>
                           <div>
                             <input
-                              type='radio'
-                              name='buttons'
-                              value='knopki'
+                              type="radio"
+                              name="buttons"
+                              value="knopki"
                               id={`knopki${item.id}`}
                               className={styles.sizesFormCheckbox}
                               onChange={(e) => handleChange(e, item.id)}
@@ -1018,18 +1024,18 @@ export default function FormAddOrder() {
                               Утепление
                             </label>
                             <select
-                              name='lining'
+                              name="lining"
                               id={`lining${item.id}`}
                               className={styles.sizesFormSelect}
                               onChange={(e) => handleChange(e, item.id)}
                             >
-                              <option value='none'>
+                              <option value="none">
                                 Без утепления (до 0 градусов)
                               </option>
-                              <option value='minus5'>
+                              <option value="minus5">
                                 Тонкое утепление (до -5 градусов) +1.400₽
                               </option>
-                              <option value='minus10'>
+                              <option value="minus10">
                                 Утепление с мембраной (до -10 градусов)
                                 *идеально для зимы* +1.400₽
                               </option>
@@ -1041,8 +1047,8 @@ export default function FormAddOrder() {
                         <>
                           <div>
                             <input
-                              type='checkbox'
-                              name='loops'
+                              type="checkbox"
+                              name="loops"
                               id={`loops${item.id}`}
                               className={styles.sizesFormCheckbox}
                               onChange={(e) => handleChange(e, item.id)}
@@ -1056,10 +1062,10 @@ export default function FormAddOrder() {
                           </div>
                           <div>
                             <input
-                              type='radio'
-                              name='buttons'
+                              type="radio"
+                              name="buttons"
                               id={`pugovitsy${item.id}`}
-                              value='pugovitsy'
+                              value="pugovitsy"
                               className={styles.sizesFormCheckbox}
                               onChange={(e) => handleChange(e, item.id)}
                             />
@@ -1072,9 +1078,9 @@ export default function FormAddOrder() {
                           </div>
                           <div>
                             <input
-                              type='radio'
-                              name='buttons'
-                              value='knopki'
+                              type="radio"
+                              name="buttons"
+                              value="knopki"
                               id={`knopki${item.id}`}
                               className={styles.sizesFormCheckbox}
                               onChange={(e) => handleChange(e, item.id)}
@@ -1088,21 +1094,21 @@ export default function FormAddOrder() {
                           </div>
                           <div>
                             <label
-                              htmlFor='lining'
+                              htmlFor="lining"
                               className={styles.sizesFormLabel}
                             >
                               Утепление
                             </label>
                             <select
-                              name='lining'
-                              id=''
+                              name="lining"
+                              id=""
                               className={styles.sizesFormSelect}
                               onChange={(e) => handleChange(e, item.id)}
                             >
-                              <option value='minus15'>
+                              <option value="minus15">
                                 Утепление до -15 градусов
                               </option>
-                              <option value='minus25'>
+                              <option value="minus25">
                                 Утепление до -25 градусов
                               </option>
                             </select>
@@ -1142,8 +1148,8 @@ export default function FormAddOrder() {
               >
                 <input
                   className={styles.promocodeInput}
-                  type='text'
-                  placeholder='Промокод'
+                  type="text"
+                  placeholder="Промокод"
                   value={promocode}
                   onChange={handlePromocodeChange}
                 />

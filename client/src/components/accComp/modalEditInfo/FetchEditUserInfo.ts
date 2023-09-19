@@ -1,5 +1,5 @@
 // api.ts
-import { IUserInfo } from '../profile/UserDataTypes';
+import { IUserInfo } from '../profile/userDataTypes';
 import { IInputsEditInfo } from './types';
 
 export async function editUserInfo(

@@ -3,6 +3,7 @@ import { ItemPhoto, MaterialItem } from '@/app/types/cartTypes';
 export interface IBasePageItem {
   Photos: ItemPhoto[];
   Material: MaterialItem;
+  Category?: Category;
   article: string;
   bestseller: boolean;
   category_id: number;
@@ -21,4 +22,13 @@ export interface IBasePageItem {
   photo?: string;
   isFavorite: boolean;
   isCart: boolean;
+}
+
+interface Category {
+  id: number;
+  name: string;
+  photo: string;
+  urlName: string;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -16,6 +16,7 @@ const FavoriteIconButton: React.FC<FavoriteIconButtonProps> = ({
   onClick,
   itemId,
 }) => {
+  // TODO удалить если ненужный код
   // const [isItemInFavoritesLog, setIsItemInFavoritesLog] = useState(false);
   // useEffect(() => {
   //   const localStorageData = localStorage.getItem('favorites');

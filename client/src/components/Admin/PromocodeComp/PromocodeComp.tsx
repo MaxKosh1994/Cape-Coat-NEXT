@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import styles from './PromocodeComp.module.css';
 import IPromo from './types';
 import { createPromo, deletePromo, getAllPromo, updatePromo } from './api';
@@ -22,7 +22,7 @@ export default function PromocodeComp() {
 
   //! Создание нового промокода
 
-  const handleCreate = async (e) => {
+  const handleCreate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!code || !percent) {
       console.error('Code and percent are required');
@@ -41,7 +41,7 @@ export default function PromocodeComp() {
 
   //! Удаление промокода
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: number) => {
     try {
       await deletePromo(id);
       const result = await getAllPromo();
@@ -53,13 +53,13 @@ export default function PromocodeComp() {
 
   //! Редактирование промокода
 
-  const handleEdit = (promo) => {
+  const handleEdit = (promo: IPromo) => {
     setEditingPromo(promo);
     setEditingCode(promo.code);
     setEditingPercent(promo.percent.toString());
   };
 
-  const handleUpdate = async (e) => {
+  const handleUpdate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const updatedPromo = await updatePromo(
@@ -85,19 +85,19 @@ export default function PromocodeComp() {
       <form className={styles.form} onSubmit={handleCreate}>
         <input
           className={styles.input}
-          type='text'
+          type="text"
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          placeholder='Code'
+          placeholder="Code"
         />
         <input
           className={styles.input}
-          type='number'
+          type="number"
           value={percent}
           onChange={(e) => setPercent(e.target.value)}
-          placeholder='Discount percent'
+          placeholder="Discount percent"
         />
-        <button className={styles.button} type='submit'>
+        <button className={styles.button} type="submit">
           СОЗДАТЬ
         </button>
       </form>
@@ -120,24 +120,24 @@ export default function PromocodeComp() {
             <form className={styles.formEdit} onSubmit={handleUpdate}>
               <input
                 className={styles.inputEditForm}
-                type='text'
+                type="text"
                 value={editingCode}
                 onChange={(e) => setEditingCode(e.target.value)}
-                placeholder='Code'
+                placeholder="Code"
               />
               <input
-                type='number'
+                type="number"
                 value={editingPercent}
                 onChange={(e) => setEditingPercent(e.target.value)}
-                placeholder='Discount percent'
+                placeholder="Discount percent"
               />
               <div className={styles.buttonEditContainer}>
-                <button className={styles.buttonSave} type='submit'>
+                <button className={styles.buttonSave} type="submit">
                   SAVE
                 </button>
                 <button
                   className={styles.buttonCancel}
-                  type='button'
+                  type="button"
                   onClick={() => setEditingPromo(null)}
                 >
                   CLOSE

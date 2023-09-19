@@ -14,7 +14,7 @@ const MapComp = () => {
     mapCreated.current = true;
 
     window.ymaps.ready(() => {
-      const map = new window.ymaps.Map(mapRef.current, {
+      const map = new window.ymaps.Map(mapRef.current!, {
         center: [56.316843, 43.98731],
         zoom: 20,
       });

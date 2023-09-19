@@ -26,11 +26,12 @@ import {
   setLikedStatus,
 } from '../../app/favouriteSlice';
 import { RootState } from '../../app/store';
+import { ILocalStorageCartItems } from '@/app/types/cartTypes';
 
 const useProductCardLogic = (
   id: number,
   material_name: string,
-  article: string,
+  article: string | number,
   photo: string,
   name: string,
   price: number,
@@ -49,13 +50,13 @@ const useProductCardLogic = (
   const favoriteHandler = async () => {
     if (!user) {
       const favoritesFromStorage =
-        JSON.parse(localStorage.getItem('favorites')) || [];
+        JSON.parse(localStorage.getItem('favorites')!) || [];
 
       const isItemInFavorites = favoritesFromStorage.includes(id);
 
       if (isItemInFavorites) {
         const updatedFavorites = favoritesFromStorage.filter(
-          (favId) => favId !== id
+          (favId: number) => favId !== id
         );
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
         setIsFavorite(!isFavorite);
@@ -85,7 +86,7 @@ const useProductCardLogic = (
           : addToFavorites;
         const favorite = await favoriteAction(favoriteData);
         setFavCard(favorite);
-        await dispatch(fetchFavouritesData(favorite));
+        await dispatch(fetchFavouritesData());
         await dispatch(setLikedStatus(!isFavorite));
       } catch (err) {
         console.log(err);
@@ -96,13 +97,15 @@ const useProductCardLogic = (
   const cartHandler = async () => {
     if (!user) {
       const cartItemsFromStorage =
-        JSON.parse(localStorage.getItem('cartItems')) || [];
+        JSON.parse(localStorage.getItem('cartItems')!) || [];
 
-      const isItemInCart = cartItemsFromStorage.find((item) => item.id === id);
+      const isItemInCart = cartItemsFromStorage.find(
+        (item: ILocalStorageCartItems) => item.id === id
+      );
 
       if (isItemInCart) {
         const updatedCartItems = cartItemsFromStorage.filter(
-          (item) => item.id !== id
+          (item: ILocalStorageCartItems) => item.id !== id
         );
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
         await dispatch(getCartItemsByIdThunk(updatedCartItems));
@@ -163,19 +166,17 @@ const useProductCardLogic = (
         }
         if (cartFromStorage.length > 0) {
           Promise.all(
-            cartFromStorage.map(async (cartId) => {
+            cartFromStorage.map(async (cartId: ILocalStorageCartItems) => {
               const cartData = {
                 id: cartId.id,
                 material_name: cartId.material_name,
               };
+              // TODO ошибка типизации
               return addToCart(cartData);
             })
           )
             .then(() => {
-              // Удалить данные из localStorage после успешной отправки
               localStorage.removeItem('cartItems');
-
-              // Запросить обновленные данные об избранных с сервера
               dispatch(getCartItemsThunk());
             })
             .catch((error) => {
@@ -206,7 +207,10 @@ const useProductCardLogic = (
         const cartFromStorage = JSON.parse(
           localStorage.getItem('cartItems') || '[]'
         );
-        async function fetchUpdCartItems(cartFromStorage) {
+
+        async function fetchUpdCartItems(
+          cartFromStorage: ILocalStorageCartItems[]
+        ) {
           try {
             await dispatch(getCartItemsByIdThunk(cartFromStorage));
           } catch (error) {
@@ -215,7 +219,7 @@ const useProductCardLogic = (
         }
         fetchUpdCartItems(cartFromStorage);
         const isItemInCart = cartFromStorage.some(
-          (element) => element.id === id
+          (element: ILocalStorageCartItems) => element.id === id
         );
         setIsCart(isItemInCart);
       }
@@ -225,14 +229,15 @@ const useProductCardLogic = (
   useEffect(() => {
     if (user) {
       const favoritesFromStorage =
-        JSON.parse(localStorage.getItem('favorites')) || [];
+        JSON.parse(localStorage.getItem('favorites')!) || [];
 
       if (favoritesFromStorage.length > 0) {
         Promise.all(
-          favoritesFromStorage.map(async (favId) => {
+          favoritesFromStorage.map(async (favId: number) => {
             const favoriteData = {
               id: favId,
             };
+            // TODO ошибка типизации
             return addToFavorites(favoriteData);
           })
         )

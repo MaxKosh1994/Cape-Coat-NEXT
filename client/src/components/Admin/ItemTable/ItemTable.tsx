@@ -3,7 +3,9 @@ import styles from './ItemTable.module.css';
 import { Button } from '@mui/material';
 import Image from 'next/image';
 
-export default function ItemTable(props) {
+// TODO нужна типизация, any заглушка
+export default function ItemTable(props: any) {
+  // TODO проблема типизации
   const handleUpdateItem = (id, item) => {
     console.log('props', item);
     props.handleOpenItem(item);
@@ -29,6 +31,8 @@ export default function ItemTable(props) {
           </tr>
         </thead>
         <tbody>
+          {/* // TODO проблема типизации
+          */}
           {props.content.map((item) => (
             <tr key={item.id}>
               {namesForTable.map((name) => (
@@ -63,7 +67,7 @@ export default function ItemTable(props) {
                 </button>
               </td>
             </tr>
-          ))}
+          ))} 
         </tbody>
       </table>
     </div>

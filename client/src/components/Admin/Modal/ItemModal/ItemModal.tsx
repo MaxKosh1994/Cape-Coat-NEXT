@@ -1,5 +1,5 @@
 import Modal from '@mui/material/Modal';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import * as React from 'react';
 import { dataAxios } from '../../HTTP/adminApi';
 import styles from './ItemModal.module.css';
@@ -23,6 +23,17 @@ export default function ItemModal({
   message,
   setMessage,
   itemData,
+}: {
+  openChange: boolean;
+  setOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
+  id: number | undefined;
+  setContent: React.Dispatch<React.SetStateAction<[]>>;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  message: string;
+  setMessage: React.Dispatch<React.SetStateAction<string>>;
+  // TODO типизация - any заглушка
+  itemData: any;
 }) {
   const formRef = useRef(null);
   const [files, setFile] = useState({});
@@ -114,37 +125,38 @@ export default function ItemModal({
     }
   }, [openChange]);
 
-  const changeHandlerFiles = (e) => {
+  const changeHandlerFiles = (e: ChangeEvent<HTMLInputElement>) => {
     setFile({ ...files, photos: e.target.files });
   };
 
-  const changeHandler = (props) => {
+  // TODO типизация - any заглушка
+  const changeHandler = (props: any) => {
     const { name, value } = props.target;
 
     setDescription({ ...description, [name]: value });
     setFormData({ ...formData, [name]: value });
   };
-  const changeCheckboxHandler = (name, value) => {
+  const changeCheckboxHandler = (name: string, value: string) => {
     setDescription({ ...description, [name]: value });
     setFormData({ ...formData, [name]: value });
 
     if (name === 'in_stock') {
-      setIsInStock(value);
+      setIsInStock(Boolean(value));
     }
   };
 
-  const handleCategoryChange = (e) => {
+  const handleCategoryChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNameCat(e.target.value);
   };
-  const handleCollectionChange = (e) => {
+  const handleCollectionChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNameCol(e.target.value);
   };
 
-  const handleMaterialChange = (e) => {
+  const handleMaterialChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNameMat(e.target.value);
   };
 
-  const submit = async (e, url) => {
+  const submit = async (e: FormEvent<HTMLFormElement>, url: string) => {
     try {
       e.preventDefault();
 
@@ -164,6 +176,7 @@ export default function ItemModal({
         url === `create-${address}` ||
         (url === `update-${address}` && files)
       ) {
+        // TODO ошибка типизации
         for (let key in files.photos) {
           formDataToSend.append('photos', files.photos[key]);
         }
@@ -171,13 +184,14 @@ export default function ItemModal({
 
       formDataToSend.append('description', JSON.stringify(description));
 
+      // TODO ошибка типизации
       await dataAxios(setContent, setMessage, address, formDataToSend, url, id);
       setOpen(true);
       setTimeout(() => {
         setMessage('');
         setOpen(false);
       }, 1000);
-
+      // TODO ошибка типизации
       formRef.current.reset();
       setOpenChange(false);
     } catch (err) {
@@ -197,6 +211,7 @@ export default function ItemModal({
         <div className={styles.mainContainer}>
           <form
             ref={formRef}
+            // TODO ошибка типизации
             onSubmit={submit}
             encType="multipart/form-data"
             className={styles.formContainer}

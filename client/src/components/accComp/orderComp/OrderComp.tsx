@@ -131,7 +131,9 @@ export default function OrderComp({ order }: IOrderCompProps) {
               : `${styles.rightBodyContainer} ${styles.narrow}`
           }
         >
-          {order.Items?.map((item) => (
+         {/* // TODO перекрещиваются типы, исправить 
+         */}
+           {order.Items?.map((item) => (
             <SearchItemCard key={item.id} item={item} />
           ))}
         </div>

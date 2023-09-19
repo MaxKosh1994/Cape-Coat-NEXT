@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './ResultContainerAddOrder.module.css';
+import { IPersonalData } from '@/TypeScript/checkoutTypes';
 
 export default function ResultContainerAddOrder({
   personalData,
@@ -7,6 +8,12 @@ export default function ResultContainerAddOrder({
   addressString,
   commentsInput,
   urgentMaking,
+}: {
+  personalData: IPersonalData;
+  cartTotal: number;
+  addressString: string;
+  commentsInput: string;
+  urgentMaking: string;
 }) {
   return (
     <div className={styles.mainContainer}>
@@ -21,7 +28,7 @@ export default function ResultContainerAddOrder({
         <div className={styles.infoRightDiv}>
           <p className={styles.infoMainP}>{personalData.name}</p>
           <p className={styles.infoMainP}>{personalData.email}</p>
-          <p className={styles.infoMainP}>{personalData.number}</p>
+          <p className={styles.infoMainP}>{personalData.phone}</p>
           <p className={styles.infoMainP}>{personalData.telegram_instagram}</p>
         </div>
       </div>

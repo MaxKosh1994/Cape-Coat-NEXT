@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import { addCartItem, delCartItem, emptyCart, getCartItems } from './cartSlice';
 
 import { AppThunk, RootState } from './store';
@@ -16,7 +16,7 @@ export const getCartItemsThunk = (): AppThunk => async (dispatch: Dispatch) => {
     });
     const data = await dispatch(getCartItems(res.data));
     return data.payload;
-  } catch (err) {
+  } catch (err: AxiosError | any) {
     const { response } = err;
     dispatch(handleError(response?.data));
   }
@@ -39,7 +39,7 @@ export const getCartItemsByIdThunk =
       );
       const resp = await dispatch(getCartItems(res.data));
       return resp.payload;
-    } catch (err) {
+    } catch (err: AxiosError | any) {
       const { response } = err;
       dispatch(handleError(response?.data));
     }
@@ -64,7 +64,7 @@ export const delCartItemThunk =
         dispatch(delCartItem(itemId));
       }
       return res.data;
-    } catch (err) {
+    } catch (err: AxiosError | any) {
       const { response } = err;
       dispatch(handleError(response?.data));
     }
@@ -86,7 +86,7 @@ export const emptyCartThunk =
       );
       dispatch(emptyCart());
       return res.status;
-    } catch (err) {
+    } catch (err: AxiosError | any) {
       const { response } = err;
       dispatch(handleError(response?.data));
     }
@@ -109,7 +109,7 @@ export const addCartItemsThunk =
 
       dispatch(getCartItems(res.data.newCartItem));
       return res.data;
-    } catch (err) {
+    } catch (err: AxiosError | any) {
       const { response } = err;
       dispatch(handleError(response?.data));
     }
@@ -135,7 +135,7 @@ export const checkCartItemThunk =
       );
 
       dispatch(getCartItems(res.data.cartItem));
-    } catch (err) {
+    } catch (err: AxiosError | any) {
       const { response } = err;
       dispatch(handleError(response?.data));
     }

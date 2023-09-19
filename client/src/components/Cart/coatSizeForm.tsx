@@ -5,9 +5,12 @@ import { useCartControl } from './useCartControl';
 export default function CoatSizeForm({ itemId }: { itemId: number }) {
   const { handleCustomFormChange } = useCartControl();
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    const newValue = type === 'checkbox' ? checked : value;
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type } = e.target;
+    const newValue =
+      type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
     handleCustomFormChange({ [name]: newValue });
   };
 

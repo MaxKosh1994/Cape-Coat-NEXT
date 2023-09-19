@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import styles from './CartMin.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -11,13 +11,12 @@ import { RootState } from '@/app/store';
 import { emptyCart } from '@/app/cartSlice';
 import { setCartTotal } from '@/app/cartControlSlice';
 
-const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
-  show,
-  handleCartIconClick,
-}) => {
+const CartMin: React.FC<{
+  show: boolean;
+  handleCartIconClick: (e: MouseEvent<HTMLButtonElement>) => void;
+}> = ({ show, handleCartIconClick }) => {
   const dispatch = useAppDispatch();
-  const { delError, fetchCartItems, handleDeleteItemFromCart } =
-    useCartControl();
+  const { delError, fetchCartItems } = useCartControl();
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
   const cartItemsList = useAppSelector(
     (state: RootState) => state.cartSlice.cartItems
@@ -44,10 +43,10 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
     localStorage.setItem('cartItems', '[]');
   };
 
-  const handleCloseCart = () => {
+  const handleCloseCart = (e: MouseEvent<HTMLButtonElement>) => {
     setShowDiv((prev) => !prev);
     setTimeout(() => {
-      handleCartIconClick();
+      handleCartIconClick(e);
     }, 1001);
   };
 
@@ -117,10 +116,7 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
                     <div className={styles.basketItemContentRight}>
                       <div className={styles.iconsContainer}>
                         <LikeButton itemId={item.id} />
-                        <DelBtn
-                          itemId={item.id}
-                          handleDeleteItemFromCart={handleDeleteItemFromCart}
-                        />
+                        <DelBtn itemId={item.id} />
                       </div>
                       {item.in_stock ? (
                         <>

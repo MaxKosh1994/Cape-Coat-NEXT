@@ -1,6 +1,7 @@
 import AdminInput from './AdminInput';
 
-export default function ItemInputs(props) {
+// TODO нужна типизация, any заглушка
+export default function ItemInputs(props: any) {
   const formData = props.formData;
 
   return (

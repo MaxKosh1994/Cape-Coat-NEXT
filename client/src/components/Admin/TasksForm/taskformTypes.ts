@@ -128,7 +128,7 @@ export interface ITaskOrderItem {
 
 export interface TasksFormProps {
   openModal: boolean;
-  itemInfo: ITaskOrderItem;
+  itemInfo: ITaskOrderItem | IItemData;
   taskInfo: ITaskInfo;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }

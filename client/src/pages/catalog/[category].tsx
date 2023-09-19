@@ -4,13 +4,13 @@ import { Item } from '@/app/itemSlice';
 import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 interface IResult {
-  items: Item[];
+  items: IBasePageItem[];
   catName: string;
 }
 
 interface CategoryProps {
-  catName: string | null;
-  categoryItems: Item[];
+  catName: string;
+  categoryItems: IBasePageItem[];
   error: string | null;
 }
 
@@ -60,7 +60,7 @@ export async function getServerSideProps(context: {
       const result = await response.json();
       return {
         props: {
-          catName: null,
+          catName: '',
           categoryItems: [],
           error: result.message,
         },
@@ -69,7 +69,7 @@ export async function getServerSideProps(context: {
       const result = await response.json();
       return {
         props: {
-          catName: null,
+          catName: '',
           categoryItems: [],
           error: result.message,
         },
@@ -78,7 +78,7 @@ export async function getServerSideProps(context: {
   } catch (err) {
     return {
       props: {
-        catName: null,
+        catName: '',
         categoryItems: [],
         error: 'Server Error',
       },

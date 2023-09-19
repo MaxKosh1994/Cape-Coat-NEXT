@@ -43,7 +43,7 @@ const rtkSlice = createSlice({
       if (index !== -1) {
         const isFavorite = state.categoryItems[index].isFavorite;
         state.categoryItems[index].isFavorite = !isFavorite;
-
+        // TODO исправить типизацию
         if (isFavorite) {
           state.favorites = state.favorites.filter((favId) => favId !== id);
         } else {
@@ -57,6 +57,7 @@ const rtkSlice = createSlice({
       if (index !== -1) {
         const currentIsCart = state.categoryItems[index].isCart;
         state.categoryItems[index].isCart = !currentIsCart;
+        // TODO исправить типизацию
         if (currentIsCart) {
           state.itemsInCart = state.itemsInCart.filter(
             (cartId) => cartId !== id

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
-export default function CustomFormControl(props) {
+// TODO типизация пропсов, any как заглушка
+export default function CustomFormControl(props: any) {
   return (
     <>
       <FormControl sx={{ m: 1, minWidth: 220 }}>
@@ -27,11 +28,13 @@ export default function CustomFormControl(props) {
           autoWidth
           label={props.label}
         >
+          {/* // TODO типизация el
+          */}
           {props.arr.map((el) => (
             <MenuItem value={el.id} key={el.id}>
               {el.name}
             </MenuItem>
-          ))}
+          ))} 
         </Select>
       </FormControl>
     </>

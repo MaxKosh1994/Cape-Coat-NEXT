@@ -2,6 +2,7 @@ import Head from 'next/head';
 import styles from '../../styles/BasePage.module.css';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { IBasePageItem } from '../../TypeScript/basePageTypes';
+import { Item } from '@/app/itemSlice';
 
 export default function BasePage({
   pageName,
@@ -10,7 +11,6 @@ export default function BasePage({
   pageName: string;
   itemsArr: IBasePageItem[];
 }) {
-
   return (
     <>
       <Head>

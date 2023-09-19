@@ -23,7 +23,7 @@ import {
 import InfoModal from '../../components/Admin/InfoModal';
 import NavAdminComp from '@/components/navAdminComp/NavAdminComp';
 import { IOrderAdmin } from '@/components/Admin/order/types';
-import InfoContainer from '@/components/Admin/infoContainer/infoContainer';
+import InfoContainer from '@/components/Admin/infoContainer/InfoContainer';
 import TasksForm from '@/components/Admin/TasksForm/TasksForm';
 import {
   IItemData,
@@ -33,6 +33,8 @@ import Head from 'next/head';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 import { useRouter } from 'next/router';
+
+// TODO типизация, много, не комменчу каждую ошибку
 
 export default function Order() {
   const [orders, setOrders] = useState([]);

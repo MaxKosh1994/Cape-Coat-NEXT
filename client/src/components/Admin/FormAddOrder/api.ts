@@ -18,7 +18,8 @@ export const getAllMaterials = async (itemId: number) => {
   }
 };
 
-export const createOrderFetch = async (data) => {
+// TODO типизировать data нормально, any как заглушка
+export const createOrderFetch = async (data: any) => {
   try {
     const responseFetch = await fetch(
       `${process.env.NEXT_PUBLIC_URL}admin/order/createOrder`,

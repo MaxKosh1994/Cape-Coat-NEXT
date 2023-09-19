@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface Item {
   id: number;
   name: string;
-  article: string;
+  article: string | number;
   description: string;
   model_params: string;
   characteristics: string;
@@ -58,6 +58,7 @@ const initialState: ItemState = {
     material_id: 0,
     category_id: 0,
     Photos: [],
+    Category: { id: 0, name: '', photo: '', urlName: '' },
   },
   materials: [],
 };

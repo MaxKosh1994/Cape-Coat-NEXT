@@ -3,7 +3,7 @@ import styles from './ToTopArrow.module.css';
 import { useMediaQuery } from '@mui/material';
 
 const BackToTopArrow = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
   const isNotDesktop = useMediaQuery('(max-width:1000px)');
 
   useEffect(() => {

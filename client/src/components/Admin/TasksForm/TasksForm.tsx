@@ -108,13 +108,13 @@ export default function TasksForm({
     doc.addFont('MyFont.ttf', 'MyFont', 'normal');
     doc.setFont('MyFont');
 
-    const labelWidth = 80; // Adjust the width of the label column
-    const valueWidth = pdfWidth - 25 - labelWidth; // Calculate width for value column
+    const labelWidth = 80; 
+    const valueWidth = pdfWidth - 25 - labelWidth; 
 
     for (const key in taskData) {
       if (taskData.hasOwnProperty(key)) {
-        const label = fieldNames[key];
-        const value = String(taskData[key]); // Convert the value to a string
+        const label = fieldNames[key as keyof ITaskData];
+        const value = String(taskData[key as keyof ITaskData]); 
 
         if (value === 'null' || value === '') {
           continue;
@@ -131,9 +131,9 @@ export default function TasksForm({
           doc.text(labelLine, 15, yPos);
           doc.text(valueLine, 15 + labelWidth, yPos);
 
-          const lineYPos = yPos + 3; // Adjust the vertical position of the line
-          doc.setLineWidth(0.1); // Adjust line width as needed
-          doc.line(15, lineYPos, pdfWidth - 15, lineYPos); // Draw the line
+          const lineYPos = yPos + 3; 
+          doc.setLineWidth(0.1); 
+          doc.line(15, lineYPos, pdfWidth - 15, lineYPos); 
           yPos += 10;
         }
       }
