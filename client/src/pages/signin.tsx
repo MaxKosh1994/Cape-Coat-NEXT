@@ -39,12 +39,10 @@ export default function SignIn() {
           dispatch(handleError({ message: '' }));
           router.push('/admin/ordersHistory');
         } else {
-          if (user) {
-            dispatch(handleError({ message: '' }));
-            dispatch(fetchFavouritesData());
-            dispatch(getCartItemsThunk());
-            router.push('/');
-          }
+          await dispatch(fetchFavouritesData());
+          await dispatch(getCartItemsThunk());
+          router.push('/');
+          dispatch(handleError({ message: '' }));
         }
       }
     }
