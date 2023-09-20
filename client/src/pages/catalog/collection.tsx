@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pagination } from '@mui/material';
 import { styled } from '@mui/system';
 import BasePage from '@/components/ItemPage/BasePage';
@@ -51,17 +51,22 @@ interface CollectionItem {
 interface CollectionPageProps {
   collectionItems: IBasePageItem[];
   collectionName: string;
-  currentPage: number;
-  handlePageChange: (event: React.ChangeEvent<unknown>, page: number) => void;
 }
 
 function CollectionPage({
   collectionItems,
   collectionName,
-  currentPage,
-  handlePageChange,
 }: CollectionPageProps) {
   const itemsPerPage = 4;
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setCurrentPage(page);
+  };
 
   const lastIndex = currentPage * itemsPerPage;
   const firstIndex = lastIndex - itemsPerPage;
@@ -105,7 +110,6 @@ export async function getServerSideProps() {
         props: {
           collectionItems: collection,
           collectionName,
-          currentPage: 1,
         },
       };
     } else {
@@ -113,7 +117,6 @@ export async function getServerSideProps() {
         props: {
           collectionItems: [],
           collectionName: '',
-          currentPage: 1,
         },
       };
     }
@@ -123,7 +126,6 @@ export async function getServerSideProps() {
       props: {
         collectionItems: [],
         collectionName: '',
-        currentPage: 1,
       },
     };
   }
