@@ -11,3 +11,13 @@ export interface IProductCard {
   isItemInFavoritesState?: boolean;
   urlName?: string;
 }
+
+export interface ILocalStorageCartItems {
+  id: number;
+  material_name: string | undefined;
+}
+
+export interface ILocalStorageFavotiteItems {
+  id: number;
+}
+

@@ -13,20 +13,10 @@ import {
   getCartItemsByIdThunk,
   getCartItemsThunk,
 } from '../../app/thunkActionsCart';
-import {
-  addCartItem,
-  delCartItem,
-  delItemInCart,
-  getCartItems,
-} from '../../app/cartSlice';
-import {
-  addItem,
-  removeItem,
-  setFavourites,
-  setLikedStatus,
-} from '../../app/favouriteSlice';
+import { setFavourites, setLikedStatus } from '../../app/favouriteSlice';
 import { RootState } from '../../app/store';
 import { ILocalStorageCartItems } from '@/app/types/cartTypes';
+import { IProductCard } from '@/TypeScript/ProductCard.type';
 
 const useProductCardLogic = (
   id: number,
@@ -70,7 +60,7 @@ const useProductCardLogic = (
     } else {
       setIsFavorite(!isFavorite);
       try {
-        const favoriteData = {
+        const favoriteData: IProductCard = {
           id,
           material_name,
           article,
@@ -108,23 +98,21 @@ const useProductCardLogic = (
           (item: ILocalStorageCartItems) => item.id !== id
         );
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-        await dispatch(getCartItemsByIdThunk(updatedCartItems));
         setIsCart(!isCart);
+        await dispatch(getCartItemsByIdThunk(updatedCartItems));
       } else {
         const updatedCartItems = [
           ...cartItemsFromStorage,
           { id, material_name, in_stock: newPrice ? true : false },
         ];
-        console.log(updatedCartItems);
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
         setIsCart(!isCart);
-        console.log(updatedCartItems);
         await dispatch(getCartItemsByIdThunk(updatedCartItems));
       }
     } else {
       setIsCart(!isCart);
       try {
-        const cartData = {
+        const cartData: IProductCard = {
           id,
           material_name,
           article,
@@ -141,7 +129,6 @@ const useProductCardLogic = (
           const itemInCart = inCart[1];
           setIsCart(itemInCart);
           await dispatch(getCartItemsThunk());
-          // dispatch(addCartItem(inCart[0]));
         } else {
           const delCart = await removeFromCart(cartData);
           await dispatch(getCartItemsThunk());
@@ -155,80 +142,86 @@ const useProductCardLogic = (
 
   useEffect(() => {
     if (user) {
-      const cartItemsFromStorage = localStorage.getItem('cartItems');
-      let cartFromStorage = [];
+      //TODO если ничего не меняет, то проще так оставить : одна строка вместо кучи кода
 
-      if (cartItemsFromStorage) {
-        try {
-          cartFromStorage = JSON.parse(cartItemsFromStorage);
-        } catch (error) {
-          console.error('Error parsing cartItems from localStorage:', error);
-        }
-        if (cartFromStorage.length > 0) {
-          Promise.all(
-            cartFromStorage.map(async (cartId: ILocalStorageCartItems) => {
-              const cartData = {
-                id: cartId.id,
-                material_name: cartId.material_name,
-              };
-              // TODO ошибка типизации
-              return addToCart(cartData);
-            })
-          )
-            .then(() => {
-              localStorage.removeItem('cartItems');
-              dispatch(getCartItemsThunk());
-            })
-            .catch((error) => {
-              console.error('Error while adding item in cart:', error);
-            });
-        }
-        const fetchData = async () => {
-          try {
-            const response = await fetch(
-              process.env.NEXT_PUBLIC_URL + 'cart/cartInCat',
-              {
-                method: 'GET',
-                credentials: 'include',
-              }
-            );
-            if (response.status === 200) {
-              const allItemInCart = await response.json();
-              const isProductInCart = allItemInCart.includes(id);
-              setIsCart(isProductInCart);
-            }
-            dispatch(toggleCart(id));
-          } catch (err) {
-            console.log(err);
-          }
-        };
-        fetchData();
-      } else {
-        const cartFromStorage = JSON.parse(
-          localStorage.getItem('cartItems') || '[]'
-        );
+      // const cartItemsFromStorage = localStorage.getItem('cartItems');
+      const cartItemsFromStorage =
+        JSON.parse(localStorage.getItem('cartItems')!) || [];
+      // let cartFromStorage = [];
+      // console.log('!!!!!!', cartItemsFromStorage);
+      // console.log('typeof', typeof cartItemsFromStorage);
 
-        async function fetchUpdCartItems(
-          cartFromStorage: ILocalStorageCartItems[]
-        ) {
-          try {
-            await dispatch(getCartItemsByIdThunk(cartFromStorage));
-          } catch (error) {
-            console.error('Error while fetching cart items:', error);
-          }
-        }
-        fetchUpdCartItems(cartFromStorage);
-        const isItemInCart = cartFromStorage.some(
-          (element: ILocalStorageCartItems) => element.id === id
-        );
-        setIsCart(isItemInCart);
+      // if (cartItemsFromStorage) {
+      //   try {
+      //     cartFromStorage = JSON.parse(cartItemsFromStorage);
+      //   } catch (error) {
+      //     console.error('Error parsing cartItems from localStorage:', error);
+      //   }
+      if (cartItemsFromStorage.length > 0) {
+        Promise.all(
+          cartItemsFromStorage.map(async (cartId: ILocalStorageCartItems) => {
+            const cartData = {
+              id: cartId.id,
+              material_name: cartId.material_name,
+            };
+            console.log({ cartData });
+            return addToCart(cartData);
+          })
+        )
+          .then(() => {
+            localStorage.removeItem('cartItems');
+            dispatch(getCartItemsThunk());
+          })
+          .catch((error) => {
+            console.error('Error while adding item in cart:', error);
+          });
       }
+      const fetchData = async () => {
+        try {
+          const response = await fetch(
+            process.env.NEXT_PUBLIC_URL + 'cart/cartInCat',
+            {
+              method: 'GET',
+              credentials: 'include',
+            }
+          );
+          if (response.status === 200) {
+            const allItemInCart = await response.json();
+            const isProductInCart = allItemInCart.includes(id);
+            setIsCart(isProductInCart);
+          }
+          dispatch(toggleCart(id));
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      fetchData();
+      // }
+    } else {
+      const cartFromStorage = JSON.parse(
+        localStorage.getItem('cartItems') || '[]'
+      );
+
+      async function fetchUpdCartItems(
+        cartFromStorage: ILocalStorageCartItems[]
+      ) {
+        try {
+          await dispatch(getCartItemsByIdThunk(cartFromStorage));
+        } catch (error) {
+          console.error('Error while fetching cart items:', error);
+        }
+      }
+      fetchUpdCartItems(cartFromStorage);
+      const isItemInCart = cartFromStorage.some(
+        (element: ILocalStorageCartItems) => element.id === id
+      );
+      setIsCart(isItemInCart);
     }
   }, [user]);
 
   useEffect(() => {
     if (user) {
-      dispatch(getCartItemsThunk());
       const favoritesFromStorage =
         JSON.parse(localStorage.getItem('favorites')!) || [];
 
@@ -238,7 +231,6 @@ const useProductCardLogic = (
             const favoriteData = {
               id: favId,
             };
-            // TODO ошибка типизации
             return addToFavorites(favoriteData);
           })
         )

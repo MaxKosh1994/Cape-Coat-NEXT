@@ -11,7 +11,6 @@ export default function CategoryList({
 }) {
   const router = useRouter();
 
-  //TODO подумать над query, чтобы не отображалось в адресной строке
   const categoryHandler = async (e: MouseEvent<HTMLDivElement>) => {
     const target = e.target;
     if (!target) return;

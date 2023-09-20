@@ -1,32 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import LikeButton from '../likeButton/LikeButton';
+
 import {
   addCartItem,
   delCartItem,
   delItemInCart,
   getCartItems,
 } from '@/app/cartSlice';
-import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { useAppDispatch } from '@/app/hooks';
 import './CartButtonStyle.css';
 import { Item } from '@/app/itemSlice';
 import {
   getCartItemsByIdThunk,
   getCartItemsThunk,
 } from '@/app/thunkActionsCart';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 
-interface ICartButtonProps {
+interface IcartButtonProps {
   itemId: number;
   selectedMaterialId: number;
   selectedMaterialName: string;
   setMaterialAlert: React.Dispatch<React.SetStateAction<string>>;
   itemData: Item;
-}
-
-interface CartItem {
-  id: number;
-  material_name: string;
-  in_stock: boolean;
 }
 
 export default function CartButton({
@@ -35,23 +31,28 @@ export default function CartButton({
   selectedMaterialName,
   setMaterialAlert,
   itemData,
-}: ICartButtonProps): JSX.Element {
-  const [cartData, setCartData] = useState<CartItem[]>([]);
-  const [isInCart, setIsInCart] = useState<boolean>(false);
+}: IcartButtonProps): JSX.Element {
+  // const [cartData, setCartData] = useState([]);
+  const [isInCart, setIsInCart] = useState(false);
 
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.sessionSlice.user);
+  const user = useSelector((state) => state.sessionSlice.user);
 
-  const cartItems = useAppSelector(
+  const cartItems = useSelector(
     (state: RootState) => state.cartSlice.cartItems
   );
 
+  // console.log({ selectedMaterialName });
+  // console.log('!!!!!!!!', itemData.Material.name);
+
   useEffect(() => {
     if (user) {
-      const isInCart = cartItems.some((el) => el.id === itemId);
+      const isInCart = cartItems.some(
+        (el) => el.id == itemId || el.item_id == itemId
+      );
       setIsInCart(isInCart);
     } else {
-      const cartFromStorage: CartItem[] = JSON.parse(
+      const cartFromStorage = JSON.parse(
         localStorage.getItem('cartItems') || '[]'
       );
       const isItemInCart = cartFromStorage.some(
@@ -77,19 +78,19 @@ export default function CartButton({
         return;
       }
       if (!user) {
-        const cartItemsFromStorage: CartItem[] =
-          JSON.parse(localStorage.getItem('cartItems')!) || [];
+        const cartItemsFromStorage =
+          JSON.parse(localStorage.getItem('cartItems')) || [];
 
         const materialName = selectedMaterialName
           ? selectedMaterialName
           : itemData.Material.name;
 
-        const isItemInCart = cartItemsFromStorage.some(
+        const isItemInCart = cartItemsFromStorage.find(
           (item) => item.id === itemId
         );
 
         if (isItemInCart) {
-          setIsInCart(isItemInCart);
+          setIsInCart(isInCart);
         } else {
           const updatedCartItems = [
             ...cartItemsFromStorage,
@@ -101,15 +102,17 @@ export default function CartButton({
           ];
 
           localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-          setIsInCart(true);
+          setIsInCart(!isInCart);
           await dispatch(getCartItemsByIdThunk(updatedCartItems));
           return;
         }
       } else {
         if (!isInCart) {
-          const material = selectedMaterialName
-            ? selectedMaterialName
-            : itemData.Material.name;
+          // const material = selectedMaterialName
+          //   ? selectedMaterialName
+          //   : itemData.Material.name;
+
+          const material = selectedMaterialName || itemData.Material.name;
 
           const materialName = { material_name: material };
           const res = await fetch(
@@ -124,12 +127,13 @@ export default function CartButton({
           if (res.ok) {
             const data = await res.json();
             await dispatch(getCartItemsThunk());
-            setIsInCart(true);
+            // dispatch(addCartItem(data));
+            setIsInCart(!isInCart);
           }
         }
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
