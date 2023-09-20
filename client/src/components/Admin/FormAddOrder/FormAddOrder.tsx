@@ -11,7 +11,7 @@ import InfoModal from '../InfoModal';
 import { useRouter } from 'next/router';
 import ResultContainerAddOrder from '../ResultContainerAddOrder/ResultContainerAddOrder';
 import { ParaglidingSharp } from '@mui/icons-material';
-import { IParamsFormData } from './types';
+import { IMaterial, IMaterials, IParamsFormData } from './types';
 
 export default function FormAddOrder() {
   //! ВСЕ STATES
@@ -75,21 +75,11 @@ export default function FormAddOrder() {
   // стоимость срочного пошива
   const [urgencyFee, setUrgencyFee] = useState(0);
 
-  const [selectedItemsMaterials, setSelectedItemsMaterials] = useState({});
+  const [selectedItemsMaterials, setSelectedItemsMaterials] =
+    useState<IMaterials>({});
 
   // Объявление состояния
-  const [paramsFormData, setParamsFormData] = useState<IParamsFormData>({
-    height: '',
-    length: '',
-    sleeve: '',
-    bust: '',
-    waist: '',
-    hips: '',
-    saddle: '',
-    loops: false,
-    buttons: '',
-    lining: '',
-  });
+  const [paramsFormData, setParamsFormData] = useState<IParamsFormData>({});
 
   // форма адреса
   const [addressInputs, setAddressInputs] = useState({
@@ -301,7 +291,6 @@ export default function FormAddOrder() {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     itemId: number
   ) => {
-    // TODO проблема типизации
     setParamsFormData((prevState) => ({
       ...prevState,
       [itemId]: {
@@ -316,7 +305,6 @@ export default function FormAddOrder() {
     event: ChangeEvent<HTMLSelectElement>,
     itemId: number
   ) => {
-    // TODO проблема типизации
     setParamsFormData((prevState) => ({
       ...prevState,
       [itemId]: {
@@ -328,7 +316,6 @@ export default function FormAddOrder() {
 
   // Сохранение формы
   const handleSaveSizesInputs = (itemId: number) => {
-    // TODO проблема типизации
     setUserParams((prevTexts) => {
       if (!paramsFormData[itemId]) {
         return { ...prevTexts, [itemId]: itemId };
@@ -795,7 +782,6 @@ export default function FormAddOrder() {
                     checked={isItemChecked(item)}
                     onChange={() => handleCheckBox(item)}
                   />
-                  {/*// TODO перекрещиваются типы, исправить*/}
                   <SearchItemCard item={item} />
                 </Grid>
               ))}
@@ -806,8 +792,6 @@ export default function FormAddOrder() {
         <div className={styles.selectedItemsContainer}>
           {selectedItems.map((item, index) => (
             <div key={item.id} className={styles.oneItemConteiner}>
-              {/*// TODO перекрещиваются типы, исправить
-                <SearchItemCard key={item.id} item={item} /> */}
               {item.in_stock ? (
                 <>
                   <div className={styles.basketItemContent}>
@@ -820,19 +804,18 @@ export default function FormAddOrder() {
                 </>
               ) : (
                 <>
-                  {/* 
-                  // TODO проблемы типизации
-                  */}
                   <select
                     value={paramsFormData[item.id]?.selectedMaterial}
                     onChange={(event) => handleMaterialChange(event, item.id)}
                     name='selectedMaterial'
                   >
-                    {selectedItemsMaterials[item.id]?.map((material, index) => (
-                      <option key={index} value={material.name}>
-                        {material.name}
-                      </option>
-                    ))}
+                    {selectedItemsMaterials[item.id]?.map(
+                      (material: IMaterial, index: number) => (
+                        <option key={index} value={material.name}>
+                          {material.name}
+                        </option>
+                      )
+                    )}
                   </select>
 
                   <form action=''>
