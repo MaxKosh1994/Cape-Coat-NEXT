@@ -33,16 +33,20 @@ export default function ForgotPass() {
       newPass.password1 === newPass.password2
     ) {
       const response = await dispatch(resetPassThunk(token, newPass.password1));
-      // TODO ошибка типизации
+
       if (response?.success) {
         setShowErrorMsg(false);
         setUpdSuccess(response.message);
       } else {
-        setShowErrorMsg(true);
+        setTimeout(() => {
+          dispatch(handleError({ message: '' }));
+        }, 2000);
       }
     } else {
-      await dispatch(handleError({ message: 'Введенные пароли не совпадают' }));
-      setShowErrorMsg(true);
+      dispatch(handleError({ message: 'Введенные пароли не совпадают' }));
+      setTimeout(() => {
+        dispatch(handleError({ message: '' }));
+      }, 2000);
     }
   };
 
@@ -70,7 +74,7 @@ export default function ForgotPass() {
         ) : (
           <form className={styles.signInForm}>
             <h3 className={styles.header}>Введите новый пароль</h3>
-            {showErrorMsg && <p className={styles.errMsg}>{error}</p>}
+            {error && <p className={styles.errMsg}>{error}</p>}
             <TextField
               className={styles.textField}
               placeholder="Пароль"

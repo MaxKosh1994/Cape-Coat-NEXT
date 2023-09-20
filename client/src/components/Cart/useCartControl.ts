@@ -446,8 +446,7 @@ export const useCartControl = () => {
     }
   };
 
-  //!  отправляет письмо с подтверждением заказа
-  // TODO ошибка типизации
+  //  отправляет письмо с подтверждением заказа
   function sendMail(name: string, user: string, order: string) {
     Email.send({
       SecureToken: 'ef79f30f-8ef6-4205-979a-b8e46f36a527',
@@ -495,7 +494,6 @@ export const useCartControl = () => {
         await dispatch(emptyCartThunk(user));
         await dispatch(emptyCart());
         localStorage.setItem('cartItems', JSON.stringify([]));
-        // TODO ошибка типизации
         sendMail(name, user, re.message);
       }
     } catch (err) {

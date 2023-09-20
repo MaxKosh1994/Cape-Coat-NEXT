@@ -8,29 +8,36 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { RootState } from '@/app/store';
 import { forgotPassThunk } from '@/app/thunkActionsAuth';
+import { handleError } from '@/app/sessionSlice';
 
 export default function ForgotPass() {
   const error = useAppSelector((state: RootState) => state.sessionSlice.error);
   const dispatch = useAppDispatch();
 
-  const [currEmail, setCurrEmail] = useState('');
-  const [showErrorMsg, setShowErrorMsg] = useState<boolean>(false);
+  const [currEmail, setCurrEmail] = useState<string>('');
   const [sentLink, setSentLink] = useState<string>('');
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrEmail(e.target.value);
   };
+
   const handleForgotPass = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setShowSpinner(true);
     if (currEmail) {
       const response = await dispatch(forgotPassThunk({ email: currEmail }));
+      console.log(response);
       if (response !== null) {
-        // TODO ошибка типизации
         setSentLink(response.message);
         setShowSpinner(false);
       } else {
-        setShowErrorMsg(true);
+        setTimeout(() => {
+          setShowSpinner(false);
+        }, 1000);
+        setTimeout(() => {
+          dispatch(handleError({ message: '' }));
+        }, 2500);
       }
     }
   };
@@ -59,7 +66,7 @@ export default function ForgotPass() {
         ) : (
           <form className={styles.signInForm}>
             <h3 className={styles.header}>Восстановление доступа</h3>
-            {showErrorMsg && <p>{error}</p>}
+            {error && <p>{error}</p>}
             <TextField
               className={styles.textField}
               placeholder="Email"
