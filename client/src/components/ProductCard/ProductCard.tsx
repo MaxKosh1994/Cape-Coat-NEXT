@@ -36,7 +36,7 @@ const ProductCard: React.FC<IProductCard> = ({
     );
   const router = useRouter();
 
-  const linkToShow = router.asPath.replace(/^\/catalog\/|\/\d+$/g, '');
+  const linkToShow = router.asPath.replace(/^\/catalog|\/\d+$/g, '');
 
   return (
     <div className={styles.Card} key={id}>

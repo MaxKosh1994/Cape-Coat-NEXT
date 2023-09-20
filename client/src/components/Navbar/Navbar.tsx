@@ -88,7 +88,8 @@ export default function Navbar() {
   const iconColour = '#423C3D';
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
+    React.useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -103,8 +104,7 @@ export default function Navbar() {
     handleMobileMenuClose();
   };
 
-  // TODO ошибка типизации, any заглушка
-  const handleMobileMenuOpen = (event: any) => {
+  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 

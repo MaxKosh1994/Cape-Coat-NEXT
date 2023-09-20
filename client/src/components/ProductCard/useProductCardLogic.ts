@@ -228,6 +228,7 @@ const useProductCardLogic = (
 
   useEffect(() => {
     if (user) {
+      dispatch(getCartItemsThunk());
       const favoritesFromStorage =
         JSON.parse(localStorage.getItem('favorites')!) || [];
 
@@ -277,7 +278,14 @@ const useProductCardLogic = (
       const favoritesFromStorage = JSON.parse(
         localStorage.getItem('favorites') || '[]'
       );
+      const itemsLocal = localStorage.getItem('cartItems');
+      if (itemsLocal !== null) {
+        const parsedItems = JSON.parse(itemsLocal);
+        dispatch(getCartItemsByIdThunk(parsedItems));
+      }
+
       dispatch(setFavourites(favoritesFromStorage));
+
       const isItemInFavorites = favoritesFromStorage.includes(id);
       setIsFavorite(isItemInFavorites);
     }
