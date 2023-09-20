@@ -6,15 +6,19 @@ import {
   checkSession,
 } from './sessionSlice';
 import { setFavourites } from './favouriteSlice';
-import { fetchFavouritesData } from './thunkActionsFavourite';
-import { getCartItemsThunk } from './thunkActionsCart';
 import { getCartItems } from './cartSlice';
 import { Dispatch } from '@reduxjs/toolkit';
 import { ISignInInputs, ISignUpInputs } from '@/TypeScript/authTypes';
 import { AppThunk } from './store';
+import {
+  ForgotPassThunk,
+  ResetPassThunk,
+  SignInThunk,
+  SignUpThunk,
+} from './types/sessionTypes';
 
 export const signUpUserThunk =
-  (inputsData: ISignUpInputs): AppThunk =>
+  (inputsData: ISignUpInputs): SignUpThunk =>
   async (dispatch: Dispatch) => {
     try {
       const res = await axios.post(
@@ -36,7 +40,7 @@ export const signUpUserThunk =
   };
 
 export const signInUserThunk =
-  (inputsData: ISignInInputs): AppThunk =>
+  (inputsData: ISignInInputs): SignInThunk =>
   async (dispatch: Dispatch) => {
     try {
       const res = await axios.post(
@@ -51,19 +55,16 @@ export const signInUserThunk =
       );
 
       dispatch(startSession(res.data));
-      // TODO исправить - лучше диспатчить в компоненте каж
-      // dispatch(fetchFavouritesData());
-      // dispatch(getCartItemsThunk());
-
       return res.data;
     } catch (err: AxiosError | any) {
       const { response } = err;
       dispatch(handleError(response?.data));
+      return response.data;
     }
   };
 
 export const forgotPassThunk =
-  (userEmail: { email: string }): AppThunk =>
+  (userEmail: { email: string }): ForgotPassThunk =>
   async (dispatch: Dispatch) => {
     try {
       const res = await axios.post(
@@ -85,11 +86,10 @@ export const forgotPassThunk =
   };
 
 export const resetPassThunk =
-  (token: string | string[] | undefined, password: string): AppThunk =>
+  (token: string | string[] | undefined, password: string): ResetPassThunk =>
   async (dispatch: Dispatch) => {
     try {
       const data = { token, password };
-      console.log('sent');
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_URL}auth/reset-pass`,
         data,

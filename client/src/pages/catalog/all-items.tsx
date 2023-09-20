@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import BasePage from '@/components/ItemPage/BasePage';
-import Custom404 from '../404';
 import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 export default function AllItemsPage() {
@@ -26,13 +25,5 @@ export default function AllItemsPage() {
     }
   }, []);
 
-  return (
-    <>
-      {allItems.length ? (
-        <BasePage pageName="Все товары" itemsArr={allItems} />
-      ) : (
-        <Custom404 />
-      )}
-    </>
-  );
+  return <BasePage pageName="Все товары" itemsArr={allItems} />;
 }

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import BasePage from '@/components/ItemPage/BasePage';
-import Custom404 from '../404';
 import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 export default function NewArrivalsPage() {
@@ -26,13 +25,5 @@ export default function NewArrivalsPage() {
     }
   }, []);
 
-  return (
-    <>
-      {newArrivalsItems.length ? (
-        <BasePage pageName="Новые поступления" itemsArr={newArrivalsItems} />
-      ) : (
-        <Custom404 />
-      )}
-    </>
-  );
+  return <BasePage pageName="Новые поступления" itemsArr={newArrivalsItems} />;
 }
