@@ -42,9 +42,6 @@ export default function CartButton({
     (state: RootState) => state.cartSlice.cartItems
   );
 
-  // console.log({ selectedMaterialName });
-  // console.log('!!!!!!!!', itemData.Material.name);
-
   useEffect(() => {
     if (user) {
       const isInCart = cartItems.some(
@@ -59,6 +56,9 @@ export default function CartButton({
         (element) => element.id === itemId
       );
       setIsInCart(isItemInCart);
+      itemData.in_stock === false
+        ? (itemData.Material.name = '')
+        : (selectedMaterialName = '');
     }
   }, [cartItems, user, itemId]);
 
@@ -79,9 +79,9 @@ export default function CartButton({
       }
       if (!user) {
         const cartItemsFromStorage =
-          JSON.parse(localStorage.getItem('cartItems')) || [];
+          JSON.parse(localStorage.getItem('cartItems')!) || [];
 
-        const materialName = selectedMaterialName
+        let materialName = selectedMaterialName
           ? selectedMaterialName
           : itemData.Material.name;
 
@@ -100,7 +100,6 @@ export default function CartButton({
               in_stock: itemData.in_stock,
             },
           ];
-
           localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
           setIsInCart(!isInCart);
           await dispatch(getCartItemsByIdThunk(updatedCartItems));
@@ -108,11 +107,9 @@ export default function CartButton({
         }
       } else {
         if (!isInCart) {
-          // const material = selectedMaterialName
-          //   ? selectedMaterialName
-          //   : itemData.Material.name;
-
-          const material = selectedMaterialName || itemData.Material.name;
+          const material = selectedMaterialName
+            ? selectedMaterialName
+            : itemData.Material.name;
 
           const materialName = { material_name: material };
           const res = await fetch(
