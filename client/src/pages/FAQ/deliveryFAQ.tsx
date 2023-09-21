@@ -15,13 +15,25 @@ export default function deliveryFAQ() {
         </div>
 
         <div className={styles.infoContainer}>
-          <div className={styles.info}>текст</div>
+          <div className={styles.info}>
+            Самостоятельно забрать заказ в Нижнем Новгороде можно в нашей студии
+            на Ильинской 79.
+          </div>
 
-          <div className={styles.info}>текст</div>
+          <div className={styles.info}>
+            Доставка по городу осуществляется курьерской службой Яндекс
+            доставка.
+          </div>
 
-          <div className={styles.info}>текст</div>
+          <div className={styles.info}>
+            Доставка по России осуществляется курьерской службой СДЕК. В
+            отдаленные регионы возможна доставка Почтой России.
+          </div>
 
-          <div className={styles.info}>текст</div>
+          <div className={styles.info}>
+            Стоимость доставки оплачивается по тарифам службы доставки, ее можно
+            уточнить при оформлении заказа у нашего менеджера.
+          </div>
         </div>
       </div>
     </>
