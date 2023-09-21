@@ -48,8 +48,9 @@ const LikeButton: React.FC<LikeButtonProps> = ({ itemId }) => {
 
   const favHandler = async () => {
     if (!user) {
+
       const favoritesFromStorage =
-        JSON.parse(localStorage.getItem('favorites')!) || '[]';
+        JSON.parse(localStorage.getItem('favorites')!) || [];
 
       const isItemInFavorites = favoritesFromStorage.includes(itemId);
 
@@ -65,6 +66,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ itemId }) => {
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
         setIsLiked(!isLiked);
         await dispatch(setFavourites(updatedFavorites));
+        return;
       }
     } else {
       if (itemId) {
