@@ -21,7 +21,11 @@ export default function Orders() {
 
   return (
     <div className={styles.mainDiv}>
-      {infoRes?.length > 0 && <p>{infoRes}</p>}
+      {infoRes?.length > 0 && (
+        <div className={styles.infoContainer}>
+          <p className={styles.infoP}>{infoRes}</p>
+        </div>
+      )}
       {orders?.length > 0 ? (
         <>
           {orders.map((order) => (
