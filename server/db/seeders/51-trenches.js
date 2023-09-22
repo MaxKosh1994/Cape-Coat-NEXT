@@ -16,7 +16,7 @@ module.exports = {
           bestseller: false,
           collection_id: 1,
           material_id: 4,
-          category_id: 2,
+          category_id: 1,
         },
 
         {
@@ -31,7 +31,7 @@ module.exports = {
           bestseller: true,
           collection_id: 1,
           material_id: 4,
-          category_id: 2,
+          category_id: 1,
         },
 
         {
@@ -46,7 +46,7 @@ module.exports = {
           bestseller: false,
           collection_id: 1,
           material_id: 4,
-          category_id: 2,
+          category_id: 1,
         },
 
         {
@@ -61,7 +61,7 @@ module.exports = {
           bestseller: false,
           collection_id: 1,
           material_id: 4,
-          category_id: 2,
+          category_id: 1,
         },
 
         {
@@ -76,7 +76,7 @@ module.exports = {
           bestseller: true,
           collection_id: 1,
           material_id: 4,
-          category_id: 2,
+          category_id: 1,
         },
       ],
       {},

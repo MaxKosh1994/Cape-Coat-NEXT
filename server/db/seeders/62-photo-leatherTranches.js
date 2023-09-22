@@ -5,15 +5,15 @@ module.exports = {
       'Photos',
       [
         {
+          photo: 'IMG_7430.JPG',
+          item_id: 6,
+        },
+        {
           photo: 'IMG_7432.JPG',
           item_id: 6,
         },
         {
           photo: 'IMG_7429.JPG',
-          item_id: 6,
-        },
-        {
-          photo: 'IMG_7430.JPG',
           item_id: 6,
         },
         {
