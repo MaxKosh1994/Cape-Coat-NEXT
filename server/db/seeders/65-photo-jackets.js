@@ -37,6 +37,10 @@ module.exports = {
           item_id: 22,
         },
         {
+          photo: 'IMG_1428.JPG',
+          item_id: 23,
+        },
+        {
           photo: 'IMG_1427 (1).jpg',
           item_id: 23,
         },
@@ -49,15 +53,11 @@ module.exports = {
           item_id: 23,
         },
         {
-          photo: 'IMG_1428.JPG',
-          item_id: 23,
-        },
-        {
-          photo: '889.JPG',
+          photo: '888.JPG',
           item_id: 24,
         },
         {
-          photo: '888.JPG',
+          photo: '889.JPG',
           item_id: 24,
         },
         {

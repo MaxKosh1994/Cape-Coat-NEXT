@@ -16,13 +16,12 @@ module.exports = {
           photo: 'IMG_1456.JPG',
           item_id: 28,
         },
-
         {
-          photo: 'IMG_1478.JPG',
+          photo: 'IMG_1477.JPG',
           item_id: 29,
         },
         {
-          photo: 'IMG_1477.JPG',
+          photo: 'IMG_1478.JPG',
           item_id: 29,
         },
         {
