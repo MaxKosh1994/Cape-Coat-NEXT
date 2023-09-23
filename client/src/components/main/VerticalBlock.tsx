@@ -13,7 +13,7 @@ export default function VerticalBlock({
   return (
     <div className={styles.verticalContainer}>
       <Image
-        src={`${process.env.NEXT_PUBLIC_MAIN_URL}/${imgName}`}
+        src={`${process.env.NEXT_PUBLIC_MAIN_URL}${imgName}`}
         alt=""
         fill={true}
         className={styles.verticalImg}

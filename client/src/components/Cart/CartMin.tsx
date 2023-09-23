@@ -50,8 +50,6 @@ const CartMin: React.FC<{
     }, 1001);
   };
 
-  console.log({ cartItemsList });
-
   return (
     <div
       className={`${styles.container}  ${
@@ -113,7 +111,9 @@ const CartMin: React.FC<{
                         <div>Артикул: {item.article}</div>
                       </div>
                       <div className={styles.basketItemProperties}>
-                        <div>Материал: {item.Material.name}</div>
+                        <div>
+                          Материал: {item.Material.name.split(' - ')[0]}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -124,7 +124,7 @@ const CartMin: React.FC<{
                         <DelBtn itemId={item.id} />
                       </div>
                       {item.in_stock ? (
-                        <>
+                        <div className={styles.twoPrices}>
                           <div className={styles.itemPrice}>
                             <span
                               className={`${styles.itemPricesPrice}  ${styles.strikethrough}`}
@@ -139,7 +139,7 @@ const CartMin: React.FC<{
                               {item.new_price.toLocaleString()} &#8381;
                             </span>
                           </div>
-                        </>
+                        </div>
                       ) : (
                         <div className={styles.itemPrice}>
                           <span className={styles.itemPricesPrice}>

@@ -122,7 +122,7 @@ module.exports.createOrder = async (req, res) => {
         address: addressString,
         total: cartTotal,
         comments: commentsInput || '',
-        urgent: urgentMaking || false,
+        urgent: Boolean(urgentMaking) || false,
       },
       { raw: true },
     );

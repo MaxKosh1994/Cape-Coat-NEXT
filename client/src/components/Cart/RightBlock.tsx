@@ -107,10 +107,10 @@ export default function RightBlock() {
           )}
           {liningCost ? (
             <div className={styles.orderSummaryRow}>
-              <span>Утепление для пальто:</span>
+              <span>Утепление:</span>
               <div className={styles.itemPrices}>
                 <span className={styles.itemPricesPrice}>
-                  {Math.floor(liningCost).toLocaleString()} &#8381;
+                  +{Math.floor(liningCost).toLocaleString()} &#8381;
                 </span>
               </div>
             </div>
@@ -122,11 +122,11 @@ export default function RightBlock() {
             <div className={styles.itemPrices}>
               {twoItemDiscount ? (
                 <span className={styles.itemPricesPrice}>
-                  {Math.floor(discount + twoItemDiscount).toLocaleString()}{' '}
-                  &#8381;
+                  -{(discount + twoItemDiscount).toLocaleString()} &#8381;
                 </span>
               ) : (
                 <span className={styles.itemPricesPrice}>
+                  {discount > 0 ? '-' : ''}
                   {Math.floor(discount).toLocaleString()} &#8381;
                 </span>
               )}
