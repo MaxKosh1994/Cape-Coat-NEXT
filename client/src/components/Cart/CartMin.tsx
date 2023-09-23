@@ -124,7 +124,7 @@ const CartMin: React.FC<{
                         <DelBtn itemId={item.id} />
                       </div>
                       {item.in_stock ? (
-                        <>
+                        <div className={styles.twoPrices}>
                           <div className={styles.itemPrice}>
                             <span
                               className={`${styles.itemPricesPrice}  ${styles.strikethrough}`}
@@ -139,7 +139,7 @@ const CartMin: React.FC<{
                               {item.new_price.toLocaleString()} &#8381;
                             </span>
                           </div>
-                        </>
+                        </div>
                       ) : (
                         <div className={styles.itemPrice}>
                           <span className={styles.itemPricesPrice}>

@@ -44,15 +44,14 @@ module.exports.login = async (req, res) => {
     if (!loginResult.success) {
       return res.status(401).json({ message: loginResult.message });
     }
-
     req.session.user = loginResult.email;
-    req.session.isAdmin = loginResult.admin;
+    req.session.isAdmin = loginResult.isAdmin;
     req.session.save();
 
     res.json({
       email: loginResult.email,
-      name: loginResult.full_name,
-      isAdmin: loginResult.admin,
+      name: loginResult.name,
+      isAdmin: loginResult.isAdmin,
     });
   } catch (err) {
     res.status(500).json({ message: 'Ошибка сервера' });

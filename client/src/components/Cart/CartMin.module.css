@@ -256,6 +256,12 @@
   .basketItemContentRight {
     font-size: 1.3rem;
   }
+
+  .twoPrices {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+  }
 }
 
 @media screen and (max-width: 540px) {
@@ -293,6 +299,12 @@
 
   .basketItemContentRight {
     font-size: 1.3rem;
+  }
+
+  .twoPrices {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
   }
 }
 

@@ -100,13 +100,15 @@ export const useCartControl = () => {
 
   const countCartTotal = (): void => {
     let liningCost = 0;
-    // counting subtotal of all items adding 1400 to the items with lining
+    // подсчитывает подытог, добавляет 1400 к стоимости товара у которого добавлено утепление
     const subtotal = cartItemsList.reduce((sum, item) => {
       const itemsLocal = localStorage.getItem('cartItems');
       const localData = itemsLocal ? JSON.parse(itemsLocal) : [];
       if (user) {
         if (item?.Carts[0]?.CartItem.lining !== '') {
           liningCost += 1400;
+          // здесь рассчитывать тоже без + 1400 и потом плюсовать liningCost к subtotal?
+          // чтобы не применялась скидка к утеплению
           return sum + item.price + 1400;
         } else {
           return sum + item.price;
@@ -125,59 +127,68 @@ export const useCartControl = () => {
         }
       }
     }, 0);
+    // записывает стоимость утепления
     dispatch(setLiningCost(liningCost));
     if (cartItemsList.length > 2) {
-      // 5% discount for >2 items in cart from all item prices + delivery
-      const threePlusItemsDiscount = (subtotal + deliveryCost) * 0.05;
+      // скидка 5% для корзины в которой >2 товаров
+      const threePlusItemsDiscount = subtotal * 0.05;
       dispatch(setTwoItemDiscount(threePlusItemsDiscount));
-      // upds total - discount for >2 items + cost of delivery
+      // обновляет итого с учетом стоимости доставки и скидки 5%
       const updTotal = subtotal + deliveryCost - threePlusItemsDiscount;
       dispatch(setCartTotal(updTotal));
-      // if there is a promocode discount
+      // если есть скидка по промокоду
       if (discountPercent > 0) {
-        // counts new total with discount from promo
-        dispatch(setCartTotal(updTotal * (1 - discountPercent)));
-        // sets discount size off of subtotal and deliverycost
-        dispatch(setDiscount(discountPercent * updTotal));
+        // рассчитывает итог
+        const totalWithBothDiscountsAndDelivery =
+          subtotal * (1 - discountPercent) +
+          deliveryCost -
+          threePlusItemsDiscount;
+        dispatch(setCartTotal(totalWithBothDiscountsAndDelivery));
+        // расчет размера скидки от подытога
+        dispatch(setDiscount(discountPercent * subtotal));
         if (urgentMaking) {
-          // counts +20% on the total of the cart after >2 item discount
+          // расчет стоимости срочного пошива
           dispatch(setUrgencyFee(subtotal * 0.2));
-          // counts new total from total with >2 discount + discount from promo + urgency fee + delivery
+          // перерасчет итого с учетом скидки по промокоду (применяется только к подытогу) + срочный пошив и доставка
           dispatch(
-            setCartTotal(
-              updTotal * (1 - discountPercent) +
-                (urgencyFee - urgencyFee * 0.05)
-            )
+            setCartTotal(totalWithBothDiscountsAndDelivery + urgencyFee)
           );
-          // count discount size from total before any discount + fee + delivery
-          dispatch(setDiscount(discountPercent * (updTotal + urgencyFee)));
         }
       }
+      // если срочный пошив и скидки по промокоду нет
       if (urgentMaking && discountPercent <= 0) {
-        // counts +20% on the total of the cart before >2 item discount
+        // расчет стоимости срочного пошива
         dispatch(setUrgencyFee(subtotal * 0.2));
-        dispatch(setCartTotal(updTotal + (urgencyFee - urgencyFee * 0.05)));
-        dispatch(
-          setTwoItemDiscount(threePlusItemsDiscount + urgencyFee * 0.05)
-        );
+        // перерасчет итого (подытог + доставка - скидка за +2 товара) + срочный пошив
+        dispatch(setCartTotal(updTotal + urgencyFee));
       }
     } else {
+      // <= 2 товаров в корзине
       dispatch(setTwoItemDiscount(0));
       const updTotal = subtotal + deliveryCost;
       dispatch(setCartTotal(updTotal));
+      // если есть скидка по промокоду
       if (discountPercent > 0) {
-        dispatch(setCartTotal(updTotal * (1 - discountPercent)));
-        dispatch(setDiscount(discountPercent * updTotal));
+        // рассчитывает новый итог
+        dispatch(setCartTotal(subtotal * (1 - discountPercent) + deliveryCost));
+        // рассчитывает размер скидки
+        dispatch(setDiscount(discountPercent * subtotal));
         if (urgentMaking) {
+          // рассчитывает стоимость срочного пошива
           dispatch(setUrgencyFee(subtotal * 0.2));
+          // перерасчет итого
           dispatch(
-            setCartTotal((updTotal + urgencyFee) * (1 - discountPercent))
+            setCartTotal(
+              subtotal * (1 - discountPercent) + urgencyFee + deliveryCost
+            )
           );
-          dispatch(setDiscount(discountPercent * (updTotal + urgencyFee)));
         }
       }
+      // если срочный пошив и скидки по промокоду нет
       if (urgentMaking && discountPercent <= 0) {
+        // расчет срочного пошива
         dispatch(setUrgencyFee(subtotal * 0.2));
+        // перерасчет итого (подытог + доставка) + срочный пошив
         dispatch(setCartTotal(updTotal + urgencyFee));
       }
     }

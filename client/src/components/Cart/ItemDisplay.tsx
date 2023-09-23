@@ -21,7 +21,7 @@ export default function ItemDisplay({
   const { userParams, showParamsForm } = useAppSelector(
     (state: RootState) => state.cartControlSlice
   );
-  console.log(item);
+
   return (
     <div className={styles.basketItem}>
       <div className={styles.basketItemLeft}>
