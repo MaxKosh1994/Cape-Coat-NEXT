@@ -128,6 +128,10 @@
   text-transform: uppercase;
 }
 
+.basketItemProperties.basketItemMinorProperties {
+  font-size: 14px;
+}
+
 .basketItemContent {
   width: 100%;
   text-rendering: optimizeSpeed;
@@ -252,6 +256,10 @@
   color: red;
 }
 
+.itemPriceImportant {
+  margin: 5px 0;
+}
+
 .userParameters {
   width: 100%;
   text-rendering: optimizeSpeed;
@@ -264,6 +272,10 @@
   justify-content: space-between;
   margin-bottom: 8px;
   align-items: center;
+}
+
+.userParamsText.itemPricesPrice {
+  font-size: 1rem;
 }
 
 .faqLink {
@@ -328,19 +340,6 @@
   position: relative;
   width: 28px;
   height: 28px;
-  /* align-items: center; 
-  box-shadow: none;
-  color: #000; 
-  font-size: 14px;
-  font-weight: 500; 
-  line-height: 18px;
-  margin: 0;text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-  user-select: none;
-  white-space: nowrap;
-  padding: 0; 
-  flex: 0 1 30px; */
 }
 
 .iconsContainer {
@@ -733,6 +732,10 @@
     line-height: 23px;
   }
 
+  .userParamsText.itemPricesPrice {
+    font-size: 0.9rem;
+  }
+
   .basketItemLeft > a > img {
     width: 100%;
     object-fit: cover;
@@ -854,6 +857,10 @@
 
   .userParameters {
     height: 85px;
+  }
+
+  .userParamsText {
+    font-size: 16px;
   }
 
   .itemPricesPrice {

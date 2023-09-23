@@ -70,7 +70,6 @@ export const useCartControl = () => {
     cartTotal,
     orderStatus,
   } = useAppSelector((state) => state.cartControlSlice);
-
   // ошибка при удалении товара из корзины
   const [delError, setDelError] = useState<string>('');
 
@@ -528,7 +527,6 @@ export const useCartControl = () => {
       // проверяем заполнил ли клиент мерки для всех товаров на пошив
       let isMeasuresAdded;
       if (user) {
-        console.log(cartItemsList.filter((item) => !item.in_stock));
         isMeasuresAdded = cartItemsList
           .filter((item) => !item.in_stock)
           .every((item) => {

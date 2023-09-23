@@ -50,8 +50,6 @@ const CartMin: React.FC<{
     }, 1001);
   };
 
-  console.log({ cartItemsList });
-
   return (
     <div
       className={`${styles.container}  ${
@@ -113,7 +111,9 @@ const CartMin: React.FC<{
                         <div>Артикул: {item.article}</div>
                       </div>
                       <div className={styles.basketItemProperties}>
-                        <div>Материал: {item.Material.name}</div>
+                        <div>
+                          Материал: {item.Material.name.split(' - ')[0]}
+                        </div>
                       </div>
                     </div>
                   </div>

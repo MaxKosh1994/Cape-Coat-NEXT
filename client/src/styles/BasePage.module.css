@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 0 30px;
   max-width: 1350px;
+  min-height: 60vh;
 }
 
 .header {

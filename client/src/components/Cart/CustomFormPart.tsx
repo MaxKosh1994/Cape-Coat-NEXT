@@ -13,26 +13,14 @@ export default function CustomFormPart({
 }) {
   const renderComponent = () => {
     switch (catId) {
-      case 4:
+      case 8:
         return <TrousersSizeForm />;
-      case 1:
-        return (
-          <TrenchSizeForm
-            itemId={itemId}
-          />
-        );
-      case 2:
-        return (
-          <CoatSizeForm
-            itemId={itemId}
-          />
-        );
-      case 5:
-        return (
-          <FurCoatSizeForm
-            itemId={itemId}
-          />
-        );
+      case 1 || 2:
+        return <TrenchSizeForm itemId={itemId} />;
+      case 3:
+        return <CoatSizeForm itemId={itemId} />;
+      case 4:
+        return <FurCoatSizeForm itemId={itemId} />;
       default:
         return null;
     }

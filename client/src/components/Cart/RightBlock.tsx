@@ -126,7 +126,8 @@ export default function RightBlock() {
                 </span>
               ) : (
                 <span className={styles.itemPricesPrice}>
-                  -{Math.floor(discount).toLocaleString()} &#8381;
+                  {discount > 0 ? '-' : ''}
+                  {Math.floor(discount).toLocaleString()} &#8381;
                 </span>
               )}
             </div>

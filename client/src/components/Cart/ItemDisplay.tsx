@@ -49,20 +49,26 @@ export default function ItemDisplay({
           </div>
         </div>
         <div className={styles.basketItemContent}>
-          <div className={styles.basketItemProperties}>
+          <div
+            className={`${styles.basketItemProperties} ${styles.basketItemMinorProperties}`}
+          >
             <div>Артикул: {item.article}</div>
           </div>
         </div>
         <div className={styles.basketItemContent}>
-          <div className={styles.basketItemProperties}>
+          <div
+            className={`${styles.basketItemProperties} ${styles.basketItemMinorProperties}`}
+          >
             {item.Carts[0].CartItem.selected_material ? (
-              <div>Материал: {item.Carts[0].CartItem.selected_material}</div>
+              <>Материал: {item.Carts[0].CartItem.selected_material}</>
             ) : (
-              <div>Материал: {item.Material.name}</div>
+              <>Материал: {item.Material.name}</>
             )}
           </div>
         </div>
-        <div className={styles.basketItemContent}>
+        <div
+          className={`${styles.basketItemContent} ${styles.itemPriceImportant}`}
+        >
           {item.in_stock ? (
             <>
               <div className={styles.itemPrices}>
@@ -98,7 +104,9 @@ export default function ItemDisplay({
               <>
                 <div className={styles.userParameters}>
                   <div className={styles.itemPrices}>
-                    <span className={styles.itemPricesPrice}>
+                    <span
+                      className={`${styles.itemPricesPrice} ${styles.userParamsText}`}
+                    >
                       {userParams[index] ||
                         `Ваш рост: ${
                           item.Carts[0].CartItem.height
