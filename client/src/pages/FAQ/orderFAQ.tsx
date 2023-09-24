@@ -1,7 +1,7 @@
 import NavFAQComp from '@/components/navFAQComp/NavFAQComp';
 import { Typography } from '@mui/material';
 import React from 'react';
-import styles from '../../styles/measurementsFAQ.module.css';
+import styles from '../../styles/orderFAQ.module.css';
 import Link from 'next/link';
 
 export default function orderFAQ() {
@@ -10,7 +10,7 @@ export default function orderFAQ() {
       <NavFAQComp />
       <div className={styles.mainContainer}>
         <div className={styles.headerContainer}>
-          <Typography className={styles.Header} variant="h4" component="h1">
+          <Typography className={styles.Header} variant='h4' component='h1'>
             Оформление заказа
           </Typography>
         </div>
@@ -25,7 +25,7 @@ export default function orderFAQ() {
           <div className={styles.info}>
             Снимите необходимые мерки. Для этого можете воспользоваться услугами
             ателье или сделать это самостоятельно. Ознакомьтесь с{' '}
-            <Link href="measurementsFAQ">
+            <Link href='measurementsFAQ'>
               информацией по самостоятельному снятию мерок
             </Link>
             . Сделайте заказ на сайте. И ожидайте связи с менеджером для
@@ -37,8 +37,8 @@ export default function orderFAQ() {
             пошива Вам уточнят при подтверждении заказа. Пошив осуществляется по
             частичной предоплате. Остальная часть суммы вносится по готовности
             изделия. Забрать готовую вещь Вы можете у нас в студии или оформив
-            доставку. Подробнее о <Link href="deliveryFAQ">доставке</Link> и
-            <Link href="returnFAQ">возврате</Link> .
+            доставку. Подробнее о <Link href='deliveryFAQ'>доставке</Link> и
+            <Link href='returnFAQ'>возврате</Link> .
           </div>
 
           <div className={styles.info}>
