@@ -30,7 +30,8 @@ export default function SignIn() {
     event.preventDefault();
     if (formData.email && formData.password) {
       const resp = await dispatch(signInUserThunk(formData));
-      if (error) {
+      console.log(resp);
+      if (error || resp.message) {
         setTimeout(() => {
           dispatch(handleError({ message: '' }));
         }, 2000);

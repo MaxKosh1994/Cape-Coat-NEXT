@@ -58,6 +58,7 @@ export const signInUserThunk =
       return res.data;
     } catch (err: AxiosError | any) {
       const { response } = err;
+      console.log(err);
       dispatch(handleError(response?.data));
       return response.data;
     }

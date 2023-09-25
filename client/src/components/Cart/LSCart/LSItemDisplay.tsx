@@ -49,18 +49,20 @@ export default function LSItemDisplay({
           </Link>
           <div className={styles.iconsContainer}>
             <LikeButton itemId={item.id} />
-            <DelBtn
-              itemId={item.id}
-            />
+            <DelBtn itemId={item.id} />
           </div>
         </div>
         <div className={styles.basketItemContent}>
-          <div className={styles.basketItemProperties}>
+          <div
+            className={`${styles.basketItemProperties} ${styles.basketItemMinorProperties}`}
+          >
             <div>Артикул: {item.article}</div>
           </div>
         </div>
         <div className={styles.basketItemContent}>
-          <div className={styles.basketItemProperties}>
+          <div
+            className={`${styles.basketItemProperties} ${styles.basketItemMinorProperties}`}
+          >
             {item.selected_material ? (
               <div>Материал: {item.selected_material}</div>
             ) : (
@@ -68,7 +70,9 @@ export default function LSItemDisplay({
             )}
           </div>
         </div>
-        <div className={styles.basketItemContent}>
+        <div
+          className={`${styles.basketItemContent} ${styles.itemPriceImportant}`}
+        >
           {item.in_stock ? (
             <>
               <div className={styles.itemPrices}>
