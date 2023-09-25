@@ -9,7 +9,7 @@ module.exports.findUserByEmail = async (email) => {
     });
     return currUser;
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -33,7 +33,7 @@ module.exports.findOrCreateUserByEmail = async (
     });
     return currUser;
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
