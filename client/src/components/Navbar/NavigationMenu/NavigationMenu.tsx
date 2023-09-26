@@ -71,7 +71,7 @@ const NavigationMenu: React.FC<IProps> = ({
   const menuItems: IMenuItem[] = [
     { label: 'О бренде', link: '/about' },
     { label: 'Каталог', link: '/catalog', submenu: categories },
-    { label: 'Коллекция', link: '/catalog/collection' },
+    { label: 'Коллекция', link: '/collection' },
     { label: 'Sale', link: '/catalog/sale' },
     { label: 'FAQ', link: '/FAQ/orderFAQ', submenu: faqSubMenu },
     { label: 'Контакты', link: '/address' },

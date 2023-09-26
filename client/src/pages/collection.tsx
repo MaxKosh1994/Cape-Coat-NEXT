@@ -1,14 +1,21 @@
 import React from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import styles from '../styles/collectionPage.module.css';
-import LookBookContainer from '@/components/LookBook/LookBookContainer/LookBookContainer';
 import { COLLECTION_ONE_DATA } from '@/components/LookBook/data';
+
+const DynamicLookBook = dynamic(
+  () => import('@/components/LookBook/LookBookContainer/LookBookContainer'),
+  {
+    ssr: false,
+  }
+);
 
 export default function collection() {
   return (
     <>
       <Head>
-        <title>Cape&Coat</title>
+        <title>C&C | Коллекция</title>
         <meta
           name='title'
           content='Cape and Coat - Индивидуальная одежда на заказ'
@@ -51,9 +58,13 @@ export default function collection() {
         <meta property='og:type' content='website' />
       </Head>
       <div className={styles.mainContainer}>
+        <h1 className={styles.header}>Осень-Зима 23/24</h1>
+        <h1 style={{ textDecoration: 'underline' }} className={styles.header}>
+          LookBook
+        </h1>
         {COLLECTION_ONE_DATA.map((el) => (
           <div key={el.id} className={styles.imageBlock}>
-            <LookBookContainer content={el} />
+            <DynamicLookBook content={el} />
           </div>
         ))}
       </div>
