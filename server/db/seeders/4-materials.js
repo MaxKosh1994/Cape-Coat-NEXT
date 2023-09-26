@@ -79,6 +79,8 @@ module.exports = {
           category_id: 5,
         },
         { name: 'Черный', photo: 'IMG_1492.JPG', category_id: 5 },
+        { name: 'Светлый бежевый', photo: 'IMG_2097.JPG', category_id: 5 },
+        { name: 'Тёмный бежевый', photo: 'IMG_2096.JPG', category_id: 5 },
         {
           name: 'Черная эко-кожа - состав: 40% полиэстер, 60% - полиуретановое покрытие',
           photo: 'IMG_1379.JPG',
@@ -99,6 +101,9 @@ module.exports = {
           category_id: 7,
         },
         { name: 'Черный', photo: 'IMG_1492.JPG', category_id: 7 },
+        { name: 'Светлый бежевый', photo: 'IMG_2097.JPG', category_id: 7 },
+        { name: 'Тёмный бежевый', photo: 'IMG_2096.JPG', category_id: 7 },
+        // 31 32 33 34 35 36 37 38
         { name: 'Синий меланж', photo: 'IMG_1467.JPG', category_id: 8 },
         { name: 'Глубокий синий', photo: 'IMG_1468.JPG', category_id: 8 },
         { name: 'Синий рубчик', photo: 'IMG_1469.JPG', category_id: 8 },
@@ -109,6 +114,8 @@ module.exports = {
           category_id: 8,
         },
         { name: 'Черный', photo: 'IMG_1492.JPG', category_id: 8 },
+        { name: 'Светлый бежевый', photo: 'IMG_2097.JPG', category_id: 8 },
+        { name: 'Тёмный бежевый', photo: 'IMG_2096.JPG', category_id: 8 },
       ],
       {},
     );

@@ -1,57 +1,12 @@
 .mainDiv {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   margin-bottom: 30px;
   margin-top: 40px;
   width: 75%;
-  justify-content: center;
   margin: 0 auto;
-}
-
-.headerDiv {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  flex-direction: column;
-}
-
-@media (max-width: 821px) {
-  .TableContainer {
-    width: 90% !important;
-  }
-
-  .mainDiv {
-    margin-top: 30px;
-    width: 90%;
-  }
-
-  .headerDiv {
-    margin-bottom: 40px;
-    margin-left: 40px;
-  }
-}
-
-@media (max-width: 550px) {
-  .TableContainer {
-    width: 90% !important;
-  }
-
-  .mainDiv {
-    margin-top: 10px;
-    width: 92%;
-  }
-
-  .headerDiv {
-    margin-bottom: 20px;
-    flex-direction: column;
-    margin-left: 10px !important;
-  }
-  .tableRow {
-    font-size: smaller !important;
-    font-weight: 100;
-  }
+  min-height: 60vh;
 }
 
 .infoContainer {
@@ -66,20 +21,16 @@
   font-size: 1.5rem;
 }
 
-@media (max-width: 850px) {
-  .ProductCardsContainer {
-    margin-right: -70px;
+@media (max-width: 821px) {
+  .mainDiv {
+    margin-top: 30px;
+    width: 90%;
   }
 }
 
-@media (max-width: 768px) {
-  .ProductCardsContainer {
-    margin-right: -27px;
-  }
-}
-
-@media (max-width: 600px) {
-  .ProductCardsContainer {
-    margin-right: -15px;
+@media (max-width: 550px) {
+  .mainDiv {
+    margin-top: 10px;
+    width: 92%;
   }
 }

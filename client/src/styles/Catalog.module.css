@@ -41,6 +41,7 @@
 @media (max-width: 768px) {
   .headerText {
     margin: -40px auto 20px;
+    margin-top: 30px;
   }
 
   .catalogueContainer {
@@ -63,6 +64,7 @@
 @media (max-width: 499px) {
   .headerText {
     margin: -40px auto 20px;
+    margin-top: 20px;
   }
 
   .catalogueContainer {

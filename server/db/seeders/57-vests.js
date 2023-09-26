@@ -15,7 +15,7 @@ module.exports = {
           in_stock: false,
           bestseller: false,
           collection_id: 1,
-          material_id: 26,
+          material_id: 27,
           category_id: 7,
         },
       ],

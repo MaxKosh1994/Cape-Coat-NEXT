@@ -94,8 +94,10 @@
   }
 
   .rightBodyContainer {
-    align-items: center;
-    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: start;
     margin-left: 0px;
     width: 100%;
   }
@@ -114,30 +116,15 @@
 }
 
 @media (max-width: 550px) {
-  .bodyContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .rightBodyContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-left: 0px;
-    width: 100%;
-  }
-
-  .leftBodyContainer {
-    width: 100%;
-  }
-
   .wide {
     width: 100%;
   }
 
   .narrow {
     width: 100%;
+  }
+
+  .rightSideContainer {
+    margin-left: 40px;
   }
 }

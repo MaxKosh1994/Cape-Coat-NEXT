@@ -15,7 +15,7 @@ module.exports = {
           in_stock: false,
           bestseller: false,
           collection_id: 1,
-          material_id: 4,
+          material_id: 2,
           category_id: 1,
         },
 
@@ -30,7 +30,7 @@ module.exports = {
           in_stock: false,
           bestseller: true,
           collection_id: 1,
-          material_id: 4,
+          material_id: 3,
           category_id: 1,
         },
 
@@ -45,7 +45,7 @@ module.exports = {
           in_stock: false,
           bestseller: false,
           collection_id: 1,
-          material_id: 4,
+          material_id: 3,
           category_id: 1,
         },
 
@@ -60,7 +60,7 @@ module.exports = {
           in_stock: false,
           bestseller: false,
           collection_id: 1,
-          material_id: 4,
+          material_id: 1,
           category_id: 1,
         },
 
@@ -75,7 +75,7 @@ module.exports = {
           in_stock: false,
           bestseller: true,
           collection_id: 1,
-          material_id: 4,
+          material_id: 2,
           category_id: 1,
         },
       ],
