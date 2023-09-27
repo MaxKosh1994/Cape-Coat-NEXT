@@ -28,7 +28,7 @@ module.exports.registerUser = async (full_name, email, phone, password) => {
       message: 'Пользователь с таким email уже существует',
     };
   } catch (err) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -56,7 +56,7 @@ module.exports.loginUser = async (email, password) => {
       isAdmin: currentUser.admin,
     };
   } catch (err) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -75,7 +75,7 @@ module.exports.checkSession = async (session) => {
     }
     return { isLogin: false };
   } catch (err) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -92,7 +92,7 @@ module.exports.generateToken = async (email) => {
     });
     return token;
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -131,6 +131,6 @@ module.exports.deleteToken = async (resetToken) => {
   try {
     await Token.destroy({ where: { resetToken } });
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };

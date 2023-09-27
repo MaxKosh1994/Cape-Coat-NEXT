@@ -1,4 +1,4 @@
-import axios, {AxiosError} from 'axios';
+import axios, { AxiosError } from 'axios';
 import { addCartItem, delCartItem, emptyCart, getCartItems } from './cartSlice';
 
 import { AppThunk, RootState } from './store';
@@ -70,27 +70,25 @@ export const delCartItemThunk =
     }
   };
 
-export const emptyCartThunk =
-  (user: string): AppThunk =>
-  async (dispatch: Dispatch) => {
-    try {
-      const res = await axios.delete(
-        `${process.env.NEXT_PUBLIC_URL}cart/emptyCart/${user}`,
-        {
-          method: 'DELETE',
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      dispatch(emptyCart());
-      return res.status;
-    } catch (err: AxiosError | any) {
-      const { response } = err;
-      dispatch(handleError(response?.data));
-    }
-  };
+export const emptyCartThunk = (): AppThunk => async (dispatch: Dispatch) => {
+  try {
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_URL}cart/emptyCart`,
+      {
+        method: 'DELETE',
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    dispatch(emptyCart());
+    return res.status;
+  } catch (err: AxiosError | any) {
+    const { response } = err;
+    dispatch(handleError(response?.data));
+  }
+};
 
 export const addCartItemsThunk =
   (id: number): AppThunk =>
