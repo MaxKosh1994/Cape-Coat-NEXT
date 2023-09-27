@@ -49,6 +49,6 @@ module.exports.updUserPass = async (email, password) => {
     }
     return { success: true, message: 'Пароль обновлен' };
   } catch (err) {
-    console.log(err);
+    return null;
   }
 };

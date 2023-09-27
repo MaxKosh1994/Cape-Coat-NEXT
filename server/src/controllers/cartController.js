@@ -87,8 +87,8 @@ module.exports.checkPromoCode = async (req, res) => {
 
 module.exports.emptyCart = async (req, res) => {
   try {
-    const userEmail = req.params.user;
-    const currUser = await findUserByEmail(userEmail);
+    const { user } = req.session;
+    const currUser = await findUserByEmail(user);
     const emptyUserCartResult = emptyUserCart(currUser.id);
     res.json(emptyUserCartResult);
   } catch (err) {

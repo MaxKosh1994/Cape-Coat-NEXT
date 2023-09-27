@@ -10,6 +10,7 @@ import DelBtn from './DelBtn';
 import { RootState } from '@/app/store';
 import { emptyCart } from '@/app/cartSlice';
 import { setCartTotal } from '@/app/cartControlSlice';
+import { emptyCartThunk } from '@/app/thunkActionsCart';
 
 const CartMin: React.FC<{
   show: boolean;
@@ -39,8 +40,10 @@ const CartMin: React.FC<{
   }, [cartItemsList]);
 
   const emptyCartMin = async () => {
-    await dispatch(emptyCart());
-    localStorage.setItem('cartItems', '[]');
+    user
+      ? await dispatch(emptyCartThunk())
+      : localStorage.setItem('cartItems', '[]');
+    fetchCartItems();
   };
 
   const handleCloseCart = (e: MouseEvent<HTMLButtonElement>) => {

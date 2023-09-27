@@ -13,7 +13,7 @@ module.exports.getUserCartItems = async (userId) => {
     });
     return cartItems;
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -29,7 +29,7 @@ module.exports.getItemsInUserCart = async (userId) => {
 
     return allItems;
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -40,7 +40,7 @@ module.exports.checkStockItemAsPurchased = async (itemIds) => {
       { where: { id: itemIds, in_stock: true } },
     );
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -56,7 +56,7 @@ module.exports.getItemIdsInCart = async (cartId) => {
 
     return allItems;
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -70,7 +70,7 @@ module.exports.findCartItem = async (cartId, itemId) => {
     });
     return cartItem;
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -83,7 +83,7 @@ module.exports.createCartItem = async (cartId, itemId, materialName) => {
     });
     return newCartItem;
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -101,6 +101,6 @@ module.exports.delUserCartItem = async (cartId, itemId) => {
     }
     return { success: false };
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };

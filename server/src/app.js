@@ -10,7 +10,7 @@ const apiRouter = require('./routers/api.router');
 
 const { PORT, SECRET_KEY_SESSION } = process.env;
 const corsOptions = {
-  origin: [process.env.CORS_PORT, 'https://sendgrid.api-docs.io'],
+  origin: [process.env.CORS_PORT],
   credentials: true,
 };
 
