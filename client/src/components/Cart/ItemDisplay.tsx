@@ -7,19 +7,21 @@ import Link from 'next/link';
 import DelBtn from './DelBtn';
 import { useAppSelector } from '@/app/hooks';
 import { RootState } from '@/app/store';
+import { useCartControl } from './useCartControl';
+import { ISingleItem } from '@/app/types/cartTypes';
 
 export default function ItemDisplay({
   item,
   index,
-  handleDeleteItemFromCart,
-  userParams,
-  handleDisplaySizesForm,
-  showParamsForm,
-  handleChange,
-  handleSaveSizesInputs,
-  handleCustomFormChange,
+}: {
+  item: ISingleItem;
+  index: number;
 }) {
-  const user = useAppSelector((state: RootState) => state.sessionSlice.user);
+  const { handleDisplaySizesForm } = useCartControl();
+  const { userParams, showParamsForm } = useAppSelector(
+    (state: RootState) => state.cartControlSlice
+  );
+
   return (
     <div className={styles.basketItem}>
       <div className={styles.basketItemLeft}>
@@ -43,27 +45,30 @@ export default function ItemDisplay({
           </Link>
           <div className={styles.iconsContainer}>
             <LikeButton itemId={item.id} />
-            <DelBtn
-              itemId={item.id}
-              handleDeleteItemFromCart={handleDeleteItemFromCart}
-            />
+            <DelBtn itemId={item.id} />
           </div>
         </div>
         <div className={styles.basketItemContent}>
-          <div className={styles.basketItemProperties}>
+          <div
+            className={`${styles.basketItemProperties} ${styles.basketItemMinorProperties}`}
+          >
             <div>Артикул: {item.article}</div>
           </div>
         </div>
         <div className={styles.basketItemContent}>
-          <div className={styles.basketItemProperties}>
+          <div
+            className={`${styles.basketItemProperties} ${styles.basketItemMinorProperties}`}
+          >
             {item.Carts[0].CartItem.selected_material ? (
-              <div>Материал: {item.Carts[0].CartItem.selected_material}</div>
+              <>Материал: {item.Carts[0].CartItem.selected_material}</>
             ) : (
-              <div>Материал: {item.Material.name}</div>
+              <>Материал: {item.Material.name}</>
             )}
           </div>
         </div>
-        <div className={styles.basketItemContent}>
+        <div
+          className={`${styles.basketItemContent} ${styles.itemPriceImportant}`}
+        >
           {item.in_stock ? (
             <>
               <div className={styles.itemPrices}>
@@ -99,7 +104,9 @@ export default function ItemDisplay({
               <>
                 <div className={styles.userParameters}>
                   <div className={styles.itemPrices}>
-                    <span className={styles.itemPricesPrice}>
+                    <span
+                      className={`${styles.itemPricesPrice} ${styles.userParamsText}`}
+                    >
                       {userParams[index] ||
                         `Ваш рост: ${
                           item.Carts[0].CartItem.height
@@ -147,13 +154,7 @@ export default function ItemDisplay({
           </>
         )}
         {showParamsForm[item.id] && (
-          <MeasurementsForm
-            index={index}
-            item={item}
-            handleChange={handleChange}
-            handleSaveSizesInputs={handleSaveSizesInputs}
-            handleCustomFormChange={handleCustomFormChange}
-          />
+          <MeasurementsForm index={index} item={item} />
         )}
       </div>
     </div>

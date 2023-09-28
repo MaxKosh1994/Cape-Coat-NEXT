@@ -1,8 +1,14 @@
-import { IProductCard } from '@/TypeScript/ProductCard.type';
+import {
+  ILocalStorageCartItems,
+  ILocalStorageFavotiteItems,
+  IProductCard,
+} from '@/TypeScript/ProductCard.type';
 import axios from 'axios';
 import { da } from 'date-fns/locale';
 
-export const addToFavorites = async (data: IProductCard) => {
+export const addToFavorites = async (
+  data: IProductCard | ILocalStorageFavotiteItems
+) => {
   try {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_URL}favorite/add`,
@@ -38,7 +44,10 @@ export const removeFromFavorites = async (data: IProductCard) => {
   }
 };
 
-export const addToCart = async (data: IProductCard) => {
+export const addToCart = async (
+  data: IProductCard | ILocalStorageCartItems
+) => {
+  console.log({ data });
   try {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_URL}cart/item/add`,

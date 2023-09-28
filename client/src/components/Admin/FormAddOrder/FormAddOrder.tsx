@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent, MouseEvent } from 'react';
 import { Button, Checkbox, FormControl, Collapse, Grid } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { IItem } from '@/components/accComp/orders/types';
@@ -11,6 +11,7 @@ import InfoModal from '../InfoModal';
 import { useRouter } from 'next/router';
 import ResultContainerAddOrder from '../ResultContainerAddOrder/ResultContainerAddOrder';
 import { ParaglidingSharp } from '@mui/icons-material';
+import { IMaterial, IMaterials, IParamsFormData } from './types';
 
 export default function FormAddOrder() {
   //! ВСЕ STATES
@@ -25,7 +26,7 @@ export default function FormAddOrder() {
   const [personalData, setPersonalData] = useState<IPersonalData>({
     name: '',
     email: '',
-    number: '',
+    phone: '',
     telegram_instagram: '',
   });
 
@@ -74,21 +75,11 @@ export default function FormAddOrder() {
   // стоимость срочного пошива
   const [urgencyFee, setUrgencyFee] = useState(0);
 
-  const [selectedItemsMaterials, setSelectedItemsMaterials] = useState({});
+  const [selectedItemsMaterials, setSelectedItemsMaterials] =
+    useState<IMaterials>({});
 
   // Объявление состояния
-  const [paramsFormData, setParamsFormData] = useState({
-    height: '',
-    length: '',
-    sleeve: '',
-    bust: '',
-    waist: '',
-    hips: '',
-    saddle: '',
-    loops: false,
-    buttons: '',
-    lining: '',
-  });
+  const [paramsFormData, setParamsFormData] = useState<IParamsFormData>({});
 
   // форма адреса
   const [addressInputs, setAddressInputs] = useState({
@@ -288,7 +279,6 @@ export default function FormAddOrder() {
     } else {
       setDeliveryCost(300);
       setShowAddressInputs(true);
-      // TODO подключить API почты россии для расчета доставки?
     }
   }, [selectedDelivery]);
 
@@ -297,7 +287,10 @@ export default function FormAddOrder() {
   //! Хэндлеры
 
   // записывает изменения в инпутах формы введения мерок
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, itemId: number) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    itemId: number
+  ) => {
     setParamsFormData((prevState) => ({
       ...prevState,
       [itemId]: {
@@ -348,7 +341,7 @@ export default function FormAddOrder() {
 
   // отслеживает чекбокс Срочный пошив
   const handleUrgentChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUrgentMaking(e.target.checked);
+    setUrgentMaking(e.target.checked ? 'Срочно' : '');
   };
 
   // отслеживает радио кнопки доставки - шоурум или сдек
@@ -357,7 +350,9 @@ export default function FormAddOrder() {
   };
 
   // отслеживает изменения в блоке Комментарии
-  const handleCommentChange = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCommentChange = async (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setCommentsInput(e.target.value);
   };
 
@@ -470,7 +465,7 @@ export default function FormAddOrder() {
   //! ГЛАВНАЯ ЛОГИКА СОЗДАНИЯ ЗАКАЗА
 
   const router = useRouter();
-  let addressString;
+  let addressString: string;
   if (selectedDelivery === 'post') {
     addressString = `${addressInputs.city}, ${addressInputs.street} дом ${addressInputs.number}, квартира ${addressInputs.flat}`;
   } else {
@@ -566,12 +561,11 @@ export default function FormAddOrder() {
                               type='tel'
                               role='text'
                               title='Телефон'
-                              name='number'
+                              name='phone'
                               placeholder='+7(***)-***-**-**'
                               pattern='\+7\(\d{3}\)-\d{3}-\d{2}-\d{2}'
                               className={styles.formInput}
                               onChange={handlePersonalDataInputChange}
-                              disabled=''
                             />
                           </div>
                           <div className={styles.formControl}>
@@ -585,7 +579,6 @@ export default function FormAddOrder() {
                               placeholder=''
                               className={styles.formInput}
                               onChange={handlePersonalDataInputChange}
-                              disabled=''
                             />
                           </div>
                         </div>
@@ -619,8 +612,8 @@ export default function FormAddOrder() {
                         title='Комментарии'
                         placeholder='Пожелания заказчика...'
                         name='comments'
-                        rows='5'
-                        cols='50'
+                        rows={5}
+                        cols={50}
                         onChange={handleCommentChange}
                       />
                     </div>
@@ -669,7 +662,6 @@ export default function FormAddOrder() {
                 className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
               >
                 <input
-                  hidden=''
                   role='radio'
                   type='radio'
                   name='delivery'
@@ -690,7 +682,6 @@ export default function FormAddOrder() {
                 className={`${styles.checkbox} ${styles.checkboxBordered} ${styles.checkboxActive} ${styles.checkboxRadio} ${styles.checkboxRight}`}
               >
                 <input
-                  hidden=''
                   role='radio'
                   type='radio'
                   name='delivery'
@@ -749,7 +740,6 @@ export default function FormAddOrder() {
                               placeholder=''
                               className={styles.formInput}
                               onChange={handleInputChange}
-                              disabled=''
                             />
                             <div className={styles.formControlButtons}></div>
                           </div>
@@ -765,7 +755,6 @@ export default function FormAddOrder() {
                             placeholder=''
                             className={styles.formInput}
                             onChange={handleInputChange}
-                            disabled=''
                           />
                           <div className={styles.formControlButtons}></div>
                         </div>
@@ -803,7 +792,6 @@ export default function FormAddOrder() {
         <div className={styles.selectedItemsContainer}>
           {selectedItems.map((item, index) => (
             <div key={item.id} className={styles.oneItemConteiner}>
-              <SearchItemCard key={item.id} item={item} />
               {item.in_stock ? (
                 <>
                   <div className={styles.basketItemContent}>
@@ -821,11 +809,13 @@ export default function FormAddOrder() {
                     onChange={(event) => handleMaterialChange(event, item.id)}
                     name='selectedMaterial'
                   >
-                    {selectedItemsMaterials[item.id]?.map((material, index) => (
-                      <option key={index} value={material.name}>
-                        {material.name}
-                      </option>
-                    ))}
+                    {selectedItemsMaterials[item.id]?.map(
+                      (material: IMaterial, index: number) => (
+                        <option key={index} value={material.name}>
+                          {material.name}
+                        </option>
+                      )
+                    )}
                   </select>
 
                   <form action=''>

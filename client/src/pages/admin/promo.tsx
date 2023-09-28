@@ -6,7 +6,7 @@ import { RootState } from '@/app/store';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-export default function promo() {
+export default function Promo() {
   const isAdmin = useSelector((state: RootState) => state.sessionSlice.isAdmin);
 
   const router = useRouter();

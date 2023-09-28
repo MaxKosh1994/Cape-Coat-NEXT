@@ -1,16 +1,16 @@
-import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Close } from '@mui/icons-material';
 import styles from './TaskForm.module.css';
 import { jsPDF } from 'jspdf';
 import { myFont } from './myFontBinary';
-import { ITaskData } from './taskformTypes';
+import { ITaskData, TasksFormProps } from './taskformTypes';
 
 export default function TasksForm({
   openModal,
   itemInfo,
   taskInfo,
   setOpenModal,
-}) {
+}: TasksFormProps) {
   const [taskData, setTaskData] = useState<ITaskData>({
     taskNum: 0,
     date: '',
@@ -37,7 +37,7 @@ export default function TasksForm({
     zipper: '',
     comments: '',
   });
-
+  console.log(itemInfo);
   const fieldNames = {
     taskNum: 'Задание',
     date: 'Дата',
@@ -70,7 +70,8 @@ export default function TasksForm({
       taskNum: taskInfo.id,
       date: new Date(taskInfo.createdAt).toLocaleString(),
       itemCategory: itemInfo.name,
-      itemMaterial: itemInfo.Material.name,
+      itemMaterial:
+        itemInfo?.Material?.name || itemInfo?.OrderItem?.selected_material,
       itemArticle: itemInfo.article,
       size: '',
       sizeComments: '',
@@ -90,11 +91,13 @@ export default function TasksForm({
     });
   }, [taskInfo, itemInfo]);
 
-  const handleTaskInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleTaskInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setTaskData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleCreatePDF = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleCreatePDF = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const doc = new jsPDF();
     const pdfWidth = doc.internal.pageSize.getWidth();
@@ -105,13 +108,13 @@ export default function TasksForm({
     doc.addFont('MyFont.ttf', 'MyFont', 'normal');
     doc.setFont('MyFont');
 
-    const labelWidth = 80; // Adjust the width of the label column
-    const valueWidth = pdfWidth - 25 - labelWidth; // Calculate width for value column
+    const labelWidth = 80; 
+    const valueWidth = pdfWidth - 25 - labelWidth; 
 
     for (const key in taskData) {
       if (taskData.hasOwnProperty(key)) {
-        const label = fieldNames[key];
-        const value = String(taskData[key]); // Convert the value to a string
+        const label = fieldNames[key as keyof ITaskData];
+        const value = String(taskData[key as keyof ITaskData]); 
 
         if (value === 'null' || value === '') {
           continue;
@@ -128,9 +131,9 @@ export default function TasksForm({
           doc.text(labelLine, 15, yPos);
           doc.text(valueLine, 15 + labelWidth, yPos);
 
-          const lineYPos = yPos + 3; // Adjust the vertical position of the line
-          doc.setLineWidth(0.1); // Adjust line width as needed
-          doc.line(15, lineYPos, pdfWidth - 15, lineYPos); // Draw the line
+          const lineYPos = yPos + 3; 
+          doc.setLineWidth(0.1); 
+          doc.line(15, lineYPos, pdfWidth - 15, lineYPos); 
           yPos += 10;
         }
       }
@@ -155,7 +158,7 @@ export default function TasksForm({
             ОТ: {itemInfo.OrderItem.waist}, ОБ: {itemInfo.OrderItem.hips}
           </p>
         )}
-        <form action={handleCreatePDF} className={styles.taskForm}>
+        <form onSubmit={handleCreatePDF} className={styles.taskForm}>
           <label htmlFor="taskNum">Задание</label>
           <input
             type="text"
@@ -353,9 +356,7 @@ export default function TasksForm({
             cols={25}
             onChange={handleTaskInputChange}
           />
-          <button className={styles.pdfBtn} onClick={handleCreatePDF}>
-            Создать PDF
-          </button>
+          <button className={styles.pdfBtn}>Создать PDF</button>
         </form>
       </div>
     </div>

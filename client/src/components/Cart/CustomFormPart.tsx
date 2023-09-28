@@ -3,44 +3,28 @@ import TrousersSizeForm from '@/components/Cart/trousersSizeForm';
 import TrenchSizeForm from '@/components/Cart/trenchSizeForm';
 import CoatSizeForm from '@/components/Cart/coatSizeForm';
 import FurCoatSizeForm from '@/components/Cart/furCoatSizeForm';
-import { useCartControl } from './useCartControl';
 
 export default function CustomFormPart({
   catId,
   itemId,
-  handleCustomFormChange,
+}: {
+  catId: number;
+  itemId: number;
 }) {
-  // const { handleCustomFormChange } = useCartControl();
   const renderComponent = () => {
     switch (catId) {
+      case 8:
+        return <TrousersSizeForm />;
+      case 1 || 2:
+        return <TrenchSizeForm itemId={itemId} />;
+      case 3:
+        return <CoatSizeForm itemId={itemId} />;
       case 4:
-        return (
-          <TrousersSizeForm onTrousersSizeChange={handleCustomFormChange} />
-        );
-      case 1:
-        return (
-          <TrenchSizeForm
-            itemId={itemId}
-            onTrenchSizeChange={handleCustomFormChange}
-          />
-        );
-      case 2:
-        return (
-          <CoatSizeForm
-            itemId={itemId}
-            onCoatSizeChange={handleCustomFormChange}
-          />
-        );
-      case 5:
-        return (
-          <FurCoatSizeForm
-            itemId={itemId}
-            onFurCoatSizeChange={handleCustomFormChange}
-          />
-        );
+        return <FurCoatSizeForm itemId={itemId} />;
       default:
         return null;
     }
   };
+
   return <>{renderComponent()}</>;
 }

@@ -12,17 +12,21 @@ module.exports.findUserCart = async (userId) => {
     const [userCartData, isCreated] = userCart;
     return userCartData;
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
 module.exports.getOrCreateUserCart = async (userId) => {
-  const cart = await Cart.findOrCreate({
-    where: {
-      user_id: userId,
-    },
-  });
-  return cart;
+  try {
+    const cart = await Cart.findOrCreate({
+      where: {
+        user_id: userId,
+      },
+    });
+    return cart;
+  } catch (error) {
+    return null;
+  }
 };
 
 module.exports.createUserCart = async (userId) => {
@@ -32,7 +36,7 @@ module.exports.createUserCart = async (userId) => {
     });
     return { success: true, userCart };
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -49,7 +53,7 @@ module.exports.emptyUserCart = async (userId) => {
     }
     return { success: false, message: 'Ошибка сервера' };
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -64,7 +68,7 @@ module.exports.validatePromoCode = async (code) => {
     }
     return { success: false, message: 'Такого промокода не существует' };
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -88,8 +92,7 @@ module.exports.checkUserUsedPromocode = async (code, userEmail) => {
     }
     return { success: false, message: 'Вы уже использовали этот промокод' };
   } catch (error) {
-    console.log(error);
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -107,6 +110,6 @@ module.exports.delUserCartItem = async (cartId, itemId) => {
     }
     return { success: false };
   } catch (error) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };

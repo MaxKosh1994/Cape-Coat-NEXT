@@ -1,16 +1,17 @@
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
 
-export default function CustomButton(props) {
+// TODO типизация пропсов, any заглушка
+export default function CustomButton(props: any) {
   return (
     <>
       <Button
-      onClick={(event) => props.submit(event, props.url)}
+        onClick={(event) => props.submit(event, props.url)}
         type="submit"
         style={{
-          fontWeight: "700",
-          color: " rgb(220, 220, 220)",
-          backgroundColor: "rgba(90, 90, 90, 0.833)",
-          marginTop: "25px",
+          fontWeight: '700',
+          color: ' rgb(220, 220, 220)',
+          backgroundColor: 'rgba(90, 90, 90, 0.833)',
+          marginTop: '25px',
         }}
         variant="contained"
       >

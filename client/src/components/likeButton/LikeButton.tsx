@@ -13,6 +13,7 @@ import {
   fetchItemData,
   fetchOneFavourite,
 } from '@/app/thunkActionsFavourite';
+import { setFavourites } from '@/app/favouriteSlice';
 
 interface LikeButtonProps {
   itemId: number;
@@ -20,6 +21,7 @@ interface LikeButtonProps {
 
 const LikeButton: React.FC<LikeButtonProps> = ({ itemId }) => {
   const [isLiked, setIsLiked] = useState(false);
+
   const user = useSelector((state: RootState) => state.sessionSlice.user);
   const dispatch = useAppDispatch();
   const favourites = useAppSelector(
@@ -32,16 +34,45 @@ const LikeButton: React.FC<LikeButtonProps> = ({ itemId }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (favourites.length > 0) {
+    if (user) {
       const checkLike = favourites.some((el) => el.item_id == itemId);
       setIsLiked(checkLike);
+    } else {
+      const likeFromStorage = JSON.parse(
+        localStorage.getItem('favorites') || '[]'
+      );
+      const isItemInFav = likeFromStorage.includes(itemId);
+      setIsLiked(isItemInFav);
     }
-  }, []);
+  }, [favourites, user, itemId]);
 
   const favHandler = async () => {
-    if (itemId) {
-      dispatch(fetchOneFavourite(itemId));
-      setIsLiked(!isLiked);
+    if (!user) {
+
+      const favoritesFromStorage =
+        JSON.parse(localStorage.getItem('favorites')!) || [];
+
+      const isItemInFavorites = favoritesFromStorage.includes(itemId);
+
+      if (isItemInFavorites) {
+        const updatedFavorites = favoritesFromStorage.filter(
+          (favId: number) => favId !== itemId
+        );
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        setIsLiked(!isLiked);
+        await dispatch(setFavourites(updatedFavorites));
+      } else {
+        const updatedFavorites = [...favoritesFromStorage, itemId];
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        setIsLiked(!isLiked);
+        await dispatch(setFavourites(updatedFavorites));
+        return;
+      }
+    } else {
+      if (itemId) {
+        await dispatch(fetchOneFavourite(itemId));
+        setIsLiked(!isLiked);
+      }
     }
   };
 

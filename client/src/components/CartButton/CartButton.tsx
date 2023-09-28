@@ -32,7 +32,7 @@ export default function CartButton({
   setMaterialAlert,
   itemData,
 }: IcartButtonProps): JSX.Element {
-  const [cartData, setCartData] = useState([]);
+  // const [cartData, setCartData] = useState([]);
   const [isInCart, setIsInCart] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -56,6 +56,9 @@ export default function CartButton({
         (element) => element.id === itemId
       );
       setIsInCart(isItemInCart);
+      itemData.in_stock === false
+        ? (itemData.Material.name = '')
+        : (selectedMaterialName = '');
     }
   }, [cartItems, user, itemId]);
 
@@ -76,9 +79,9 @@ export default function CartButton({
       }
       if (!user) {
         const cartItemsFromStorage =
-          JSON.parse(localStorage.getItem('cartItems')) || [];
+          JSON.parse(localStorage.getItem('cartItems')!) || [];
 
-        const materialName = selectedMaterialName
+        let materialName = selectedMaterialName
           ? selectedMaterialName
           : itemData.Material.name;
 
@@ -97,7 +100,6 @@ export default function CartButton({
               in_stock: itemData.in_stock,
             },
           ];
-
           localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
           setIsInCart(!isInCart);
           await dispatch(getCartItemsByIdThunk(updatedCartItems));
@@ -121,7 +123,8 @@ export default function CartButton({
           );
           if (res.ok) {
             const data = await res.json();
-            dispatch(addCartItem(data));
+            await dispatch(getCartItemsThunk());
+            // dispatch(addCartItem(data));
             setIsInCart(!isInCart);
           }
         }

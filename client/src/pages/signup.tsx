@@ -7,6 +7,7 @@ import { signUpUserThunk } from '../app/thunkActionsAuth';
 import Link from 'next/link';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { handleError } from '@/app/sessionSlice';
 
 export default function SignUp() {
   const error = useAppSelector((state) => state.sessionSlice.error);
@@ -18,14 +19,12 @@ export default function SignUp() {
     phone: '',
     password: '',
   });
-  const [errorMsg, setErrorMsg] = useState<boolean>(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   //TODO в функцию ввести свой token и почту, с которой будем отправлять сообщение (https://www.youtube.com/watch?v=yP85ECOVMe8)
-
   function sendMail(full_name: string, email: string) {
     Email.send({
       SecureToken: 'ef79f30f-8ef6-4205-979a-b8e46f36a527',
@@ -40,9 +39,11 @@ export default function SignUp() {
     e.preventDefault();
     if (formData.full_name && formData.email && formData.password) {
       const resp = await dispatch(signUpUserThunk(formData));
-      if (resp?.response?.data?.message) {
-        setErrorMsg(resp.response.data.message);
-      } else {
+      if (error) {
+        setTimeout(() => {
+          dispatch(handleError({ message: '' }));
+        }, 2000);
+      } else if (resp !== undefined && resp.email) {
         router.push('/');
         sendMail(formData.full_name, formData.email);
       }
@@ -60,7 +61,7 @@ export default function SignUp() {
       <div className={styles.formContainer}>
         <form className={styles.signInForm}>
           <h3 className={styles.header}>Создайте аккаунт</h3>
-          {errorMsg && <p>{error}</p>}
+          {error && <p>{error}</p>}
           <TextField
             className={styles.textField}
             placeholder="Имя и фамилия*"

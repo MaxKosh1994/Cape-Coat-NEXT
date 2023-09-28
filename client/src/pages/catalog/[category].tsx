@@ -1,63 +1,87 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { RootState } from '../../app/store';
-import { ICategory, category, categoryClear } from '../../app/CategorySlice';
-import { useRouter } from 'next/router';
 import BasePage from '@/components/ItemPage/BasePage';
 import Custom404 from '../404';
-import { useLocation } from 'react-router-dom';
-import Link from 'next/link';
-import { ca } from 'date-fns/locale';
+import { Item } from '@/app/itemSlice';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
-export default function Category() {
-  const [catName, setCatName] = useState('');
-  const [categoryItems, setCategoryItems] = useState([]);
+interface IResult {
+  items: IBasePageItem[];
+  catName: string;
+}
 
-  const nameOneCategory = useRouter().query.category;
+interface CategoryProps {
+  catName: string;
+  categoryItems: IBasePageItem[];
+  error: string | null;
+}
 
-  const dispatch = useDispatch();
+export default function Category({
+  catName,
+  categoryItems,
+  error,
+}: CategoryProps) {
+  if (error) {
+    return <Custom404 />;
+  }
 
-  const card = useSelector(
-    (state: RootState) => state.CategorySlice.categoryItems
-  );
+  return <BasePage pageName={catName} itemsArr={categoryItems} />;
+}
 
-  useEffect(() => {
-    try {
-      (async function (): Promise<void> {
-        const response = await fetch(
-          process.env.NEXT_PUBLIC_URL + `category/${nameOneCategory}`,
-          {
-            credentials: 'include',
-          }
-        );
-        if (response.status === 200) {
-          const result = await response.json();
-          const items = result.items.map((item) => ({
-            ...item,
-            isFavorite: false,
-            isCart: false,
-          }));
+export async function getServerSideProps(context: {
+  query: {
+    category: string;
+  };
+}): Promise<{
+  props: CategoryProps;
+}> {
+  try {
+    const { category: nameOneCategory } = context.query;
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_URL + `category/${nameOneCategory}`,
+      {
+        credentials: 'include',
+      }
+    );
+    if (response.status === 200) {
+      const result: IResult = await response.json();
+      const items = result.items.map((item: IBasePageItem) => ({
+        ...item,
+        isFavorite: false,
+        isCart: false,
+      }));
 
-          setCategoryItems(items);
-          setCatName(result.catName);
-        } else if (response.status === 404) {
-          const result = await response.json();
-          console.log(result.message);
-        }
-      })();
-    } catch (err) {
-      console.log(err);
+      return {
+        props: {
+          catName: result.catName,
+          categoryItems: items,
+          error: null,
+        },
+      };
+    } else if (response.status === 404) {
+      const result = await response.json();
+      return {
+        props: {
+          catName: '',
+          categoryItems: [],
+          error: result.message,
+        },
+      };
+    } else {
+      const result = await response.json();
+      return {
+        props: {
+          catName: '',
+          categoryItems: [],
+          error: result.message,
+        },
+      };
     }
-  }, [nameOneCategory]);
-
-  return (
-    <>
-      {categoryItems.length ? (
-        <BasePage pageName={catName} itemsArr={categoryItems} />
-      ) : (
-        <Custom404 />
-      )}
-    </>
-  );
+  } catch (err) {
+    return {
+      props: {
+        catName: '',
+        categoryItems: [],
+        error: 'Server Error',
+      },
+    };
+  }
 }

@@ -19,7 +19,7 @@ export default function Favorites() {
   const { user } = useSelector((state: RootState) => state.sessionSlice);
 
   const dispatch = useAppDispatch();
-  const [favoriteItems, setFavoriteItems] = useState([]);
+  const [favoriteItems, setFavoriteItems] = useState<any[]>([]);
 
   useEffect(() => {
     dispatch(fetchAllFavorites());
@@ -27,7 +27,7 @@ export default function Favorites() {
 
   useEffect(() => {
     const favoritesFromStorage =
-      JSON.parse(localStorage.getItem('favorites')) || [];
+      JSON.parse(localStorage.getItem('favorites')!) || '[]';
 
     const fetchData = async () => {
       const fetchedItems = [];
@@ -77,7 +77,8 @@ export default function Favorites() {
             isFavorite={item.isFavorite}
             isCart={item.isCart}
           />
-        ))
+        )
+        )
       : null;
 
   const renderProductCardsLocal =

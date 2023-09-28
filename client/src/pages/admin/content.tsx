@@ -16,15 +16,16 @@ import { useRouter } from 'next/router';
 
 import { Button } from '@mui/material';
 
-export default function addContent() {
+export default function AddContent() {
   const [openCat, setOpenCat] = useState<boolean>(false);
   const [openCol, setOpenCol] = useState<boolean>(false);
   const [openMat, setOpenMat] = useState<boolean>(false);
   const [openItem, setOpenItem] = useState<boolean>(false);
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  let [id, setId] = useState();
-  const [itemData, setItemData] = useState(null);
+  const [open, setOpen] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
+  let [id, setId] = useState<number>();
+  // TODO типизация - any заглушка
+  const [itemData, setItemData] = useState<any>(null);
 
   useEffect(() => {
     if (!openItem) {
@@ -32,7 +33,8 @@ export default function addContent() {
     }
   }, [openItem]);
 
-  const handleOpenItem = (data) => {
+  // TODO типизировать, any заглушка
+  const handleOpenItem = (data: any) => {
     setOpenItem(true);
     setItemData(data);
   };
@@ -40,7 +42,7 @@ export default function addContent() {
   const handleOpenCol = () => setOpenCol(true);
   const handleOpenMat = () => setOpenMat(true);
 
-  const [content, setContent] = useState([]);
+  const [content, setContent] = useState<[]>([]);
   const address = 'item';
   useEffect(() => {
     dataAxios(setContent, setMessage, address);

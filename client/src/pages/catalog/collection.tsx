@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Pagination } from '@mui/material';
 import { styled } from '@mui/system';
 import BasePage from '@/components/ItemPage/BasePage';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 const CollectionContainer = styled('div')({
   display: 'grid',
@@ -9,38 +10,67 @@ const CollectionContainer = styled('div')({
   gap: '1rem',
 });
 
-export default function CollectionPage() {
-  const [collectionItems, setCollectionItems] = useState([]);
-  const [collectionName, setCollectionName] = useState('');
+interface CollectionItem {
+  id: number;
+  name: string;
+  article: string;
+  description: string;
+  model_params: string;
+  characteristics: string;
+  price: number;
+  new_price: number;
+  in_stock: boolean;
+  purchased: boolean;
+  bestseller: boolean;
+  collection_id: number;
+  material_id: number;
+  category_id: number;
+  createdAt: string;
+  updatedAt: string;
+  Collection: {
+    id: number;
+    name: string;
+    photo: string;
+    description: string;
+    urlName: string;
+    current: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+  Material: {
+    id: number;
+    name: string;
+    photo: string;
+    category_id: number;
+    createdAt: string;
+    updatedAt: string;
+  };
+  Photos: string[];
+}
+
+interface CollectionPageProps {
+  collectionItems: IBasePageItem[];
+  collectionName: string;
+}
+
+function CollectionPage({
+  collectionItems,
+  collectionName,
+}: CollectionPageProps) {
+  const itemsPerPage = 4;
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(4);
 
-  useEffect(() => {
-    try {
-      (async function (): Promise<void> {
-        const response = await fetch(
-          process.env.NEXT_PUBLIC_URL + `catalog/collection`
-        );
-        if (response.status === 200) {
-          const collection = await response.json();
-          setCollectionItems(collection);
-          setCollectionName(collection[0].Collection.name);
-        }
-      })();
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
-
-  const lastIndex = currentPage * itemsPerPage;
-
-  const firstIndex = lastIndex - itemsPerPage;
-
-  const currentItems = collectionItems.slice(firstIndex, lastIndex);
-
-  const handlePageChange = (event, page) => {
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
     setCurrentPage(page);
   };
+
+  const lastIndex = currentPage * itemsPerPage;
+  const firstIndex = lastIndex - itemsPerPage;
+  const currentItems = collectionItems.slice(firstIndex, lastIndex);
 
   return (
     <>
@@ -66,3 +96,39 @@ export default function CollectionPage() {
     </>
   );
 }
+
+export async function getServerSideProps() {
+  try {
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_URL + 'catalog/collection'
+    );
+    if (response.status === 200) {
+      const collection: CollectionItem[] = await response.json();
+      console.log('collection', collection);
+      const collectionName = collection[0]?.Collection.name || '';
+      return {
+        props: {
+          collectionItems: collection,
+          collectionName,
+        },
+      };
+    } else {
+      return {
+        props: {
+          collectionItems: [],
+          collectionName: '',
+        },
+      };
+    }
+  } catch (err) {
+    console.error(err);
+    return {
+      props: {
+        collectionItems: [],
+        collectionName: '',
+      },
+    };
+  }
+}
+
+export default CollectionPage;

@@ -5,6 +5,7 @@ import { useCartControl } from '@/components/Cart/useCartControl';
 import styles from '../styles/Checkout.module.css';
 import Link from 'next/link';
 import Head from 'next/head';
+import CircularProgress from '@mui/material/CircularProgress';
 import UrgencyForm from '@/components/Cart/UrgencyForm';
 import CommentForm from '@/components/Cart/CommentForm';
 import DeliveryForm from '@/components/Cart/DeliveryForm';
@@ -14,40 +15,14 @@ import RightBlock from '@/components/Cart/RightBlock';
 import LSItemDisplay from '@/components/Cart/LSCart/LSItemDisplay';
 
 export default function CheckoutPage() {
-  const {
-    showParamsForm,
-    deliveryCost,
-    showAddressInputs,
-    delError,
-    orderStatus,
-    promoUsed,
-    promocode,
-    promocodeErr,
-    discount,
-    twoItemDiscount,
-    urgencyFee,
-    urgentMaking,
-    liningCost,
-    cartTotal,
-    userParams,
-    handleDisplaySizesForm,
-    handlePersonalDataInputChange,
-    handleDeleteItemFromCart,
-    handleSaveSizesInputs,
-    handlePromocodeChange,
-    handleApplyPromocode,
-    handleChange,
-    handleInputChange,
-    handleUrgentChange,
-    handleDeliveryChange,
-    handleCommentChange,
-    handleCreateOrder,
-    handleCustomFormChange,
-  } = useCartControl();
+  const { showSpinner, delError } = useCartControl();
 
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
   const cartItemsList = useAppSelector(
     (state: RootState) => state.cartSlice.cartItems
+  );
+  const orderStatus = useAppSelector(
+    (state: RootState) => state.cartControlSlice.orderStatus
   );
 
   return (
@@ -58,7 +33,11 @@ export default function CheckoutPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {cartItemsList?.length === 0 ? (
+      {showSpinner ? (
+        <div className={styles.spinnerCart}>
+          <CircularProgress color="inherit" />
+        </div>
+      ) : cartItemsList?.length === 0 ? (
         <>
           {orderStatus && <p className="order-status-cart">{orderStatus}</p>}
           <p className={styles.emptyCartMsg}>
@@ -80,66 +59,22 @@ export default function CheckoutPage() {
                 >
                   {user
                     ? cartItemsList?.map((item, index) => (
-                        <ItemDisplay
-                          key={item.id}
-                          index={index}
-                          item={item}
-                          handleDeleteItemFromCart={handleDeleteItemFromCart}
-                          userParams={userParams}
-                          handleDisplaySizesForm={handleDisplaySizesForm}
-                          showParamsForm={showParamsForm}
-                          handleChange={handleChange}
-                          handleSaveSizesInputs={handleSaveSizesInputs}
-                          handleCustomFormChange={handleCustomFormChange}
-                        />
+                        <ItemDisplay key={item.id} index={index} item={item} />
                       ))
                     : cartItemsList?.map((item, index) => (
                         <LSItemDisplay
                           key={item.id}
                           index={index}
                           item={item}
-                          handleDeleteItemFromCart={handleDeleteItemFromCart}
-                          userParams={userParams}
-                          handleDisplaySizesForm={handleDisplaySizesForm}
-                          showParamsForm={showParamsForm}
-                          handleChange={handleChange}
-                          handleSaveSizesInputs={handleSaveSizesInputs}
-                          handleCustomFormChange={handleCustomFormChange}
                         />
                       ))}
                 </section>
-                {!user && (
-                  <PersonalDataForm
-                    handlePersonalDataInputChange={
-                      handlePersonalDataInputChange
-                    }
-                  />
-                )}
-                <UrgencyForm handleUrgentChange={handleUrgentChange} />
-                <CommentForm handleCommentChange={handleCommentChange} />
-                <DeliveryForm
-                  handleDeliveryChange={handleDeliveryChange}
-                  handleInputChange={handleInputChange}
-                  showAddressInputs={showAddressInputs}
-                />
+                {!user && <PersonalDataForm />}
+                <UrgencyForm />
+                <CommentForm />
+                <DeliveryForm />
               </div>
-              <RightBlock
-                promocode={promocode}
-                handlePromocodeChange={handlePromocodeChange}
-                handleApplyPromocode={handleApplyPromocode}
-                promocodeErr={promocodeErr}
-                promoUsed={promoUsed}
-                discount={discount}
-                twoItemDiscount={twoItemDiscount}
-                deliveryCost={deliveryCost}
-                liningCost={liningCost}
-                urgencyFee={urgencyFee}
-                urgentMaking={urgentMaking}
-                cartTotal={cartTotal}
-                cartItemsList={cartItemsList}
-                orderStatus={orderStatus}
-                handleCreateOrder={handleCreateOrder}
-              />
+              <RightBlock />
             </section>
           </div>
         </>

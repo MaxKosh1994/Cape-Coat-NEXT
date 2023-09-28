@@ -24,7 +24,7 @@ export default function ForgotPass() {
     setNewPass({ ...newPass, [e.target.name]: e.target.value });
   };
 
-  const handleUpdPass = async (e) => {
+  const handleUpdPass = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const { token } = router.query;
     if (
@@ -33,22 +33,20 @@ export default function ForgotPass() {
       newPass.password1 === newPass.password2
     ) {
       const response = await dispatch(resetPassThunk(token, newPass.password1));
-      if (response.success) {
+
+      if (response?.success) {
         setShowErrorMsg(false);
         setUpdSuccess(response.message);
       } else {
-        setShowErrorMsg(true);
-        handleError({
-          response: { data: { message: response.message } },
-        });
+        setTimeout(() => {
+          dispatch(handleError({ message: '' }));
+        }, 2000);
       }
     } else {
-      await dispatch(
-        handleError({
-          response: { data: { message: 'Введенные пароли не совпадают' } },
-        })
-      );
-      setShowErrorMsg(true);
+      dispatch(handleError({ message: 'Введенные пароли не совпадают' }));
+      setTimeout(() => {
+        dispatch(handleError({ message: '' }));
+      }, 2000);
     }
   };
 
@@ -76,7 +74,7 @@ export default function ForgotPass() {
         ) : (
           <form className={styles.signInForm}>
             <h3 className={styles.header}>Введите новый пароль</h3>
-            {showErrorMsg && <p className={styles.errMsg}>{error}</p>}
+            {error && <p className={styles.errMsg}>{error}</p>}
             <TextField
               className={styles.textField}
               placeholder="Пароль"

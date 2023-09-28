@@ -1,22 +1,23 @@
-import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
-import Typography from "@mui/material/Typography"
-import Modal from "@mui/material/Modal"
-import "./customImgModalStyel.css"
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import './customImgModalStyel.css';
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 600,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
-  "@media (max-width: 767px)": {
+  '@media (max-width: 767px)': {
     width: 300,
   },
-}
+};
+// TODO компонент нигде не используется - удалить ?
 
 export default function CustomImgModal({ open, onClose, imageUrl }) {
   return (
@@ -38,5 +39,5 @@ export default function CustomImgModal({ open, onClose, imageUrl }) {
         </Box>
       </Modal>
     </div>
-  )
+  );
 }

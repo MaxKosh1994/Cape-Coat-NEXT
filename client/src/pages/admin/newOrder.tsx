@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-export default function newOrder() {
+export default function NewOrder() {
   const isAdmin = useSelector((state: RootState) => state.sessionSlice.isAdmin);
 
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function newOrder() {
       {isAdmin && (
         <>
           <Head>
-            <meta name='robots' content='noindex,nofollow' />
+            <meta name="robots" content="noindex,nofollow" />
           </Head>
           <NavAdminComp />
           <FormAddOrder />

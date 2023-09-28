@@ -2,8 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 // import { stateType, userType } from "../types"
 
 export interface IPhoto {
-  photo: string; // Поле для фотографии товара
-  // Дополнительные свойства фотографии, если есть
+  photo: string; 
 }
 
 export interface ICategory {
@@ -18,10 +17,16 @@ export interface ICategory {
   isCart: boolean;
 }
 
+// export type stateType = {
+//   categoryItems: ICategory[];
+//   favorites: ICategory[];
+//   itemsInCart: ICategory[];
+// };
+
 export type stateType = {
   categoryItems: ICategory[];
-  favorites: ICategory[];
-  itemsInCart: ICategory[];
+  favorites: number[]; 
+  itemsInCart: number[]; 
 };
 
 const initialState: stateType = {
@@ -43,7 +48,6 @@ const rtkSlice = createSlice({
       if (index !== -1) {
         const isFavorite = state.categoryItems[index].isFavorite;
         state.categoryItems[index].isFavorite = !isFavorite;
-
         if (isFavorite) {
           state.favorites = state.favorites.filter((favId) => favId !== id);
         } else {

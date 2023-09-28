@@ -24,9 +24,13 @@ module.exports.register = async (req, res) => {
       return res.status(401).json({ message: registrationResult.message });
     }
     req.session.user = registrationResult.userData.email;
-    req.session.isAdmin = registrationResult.userData.isAdmin;
+    req.session.isAdmin = registrationResult.userData.admin;
     req.session.save();
-    res.json(registrationResult.userData.email);
+    res.json({
+      email: registrationResult.userData.email,
+      name: registrationResult.userData.full_name,
+      isAdmin: registrationResult.userData.admin,
+    });
   } catch (err) {
     res.status(500).json({ message: 'Ошибка сервера' });
   }
@@ -40,7 +44,6 @@ module.exports.login = async (req, res) => {
     if (!loginResult.success) {
       return res.status(401).json({ message: loginResult.message });
     }
-
     req.session.user = loginResult.email;
     req.session.isAdmin = loginResult.isAdmin;
     req.session.save();
@@ -64,13 +67,16 @@ module.exports.forgotPass = async (req, res) => {
         host: 'smtp.gmail.com',
         port: 587,
         auth: {
+          // TODO исправить в ENV почту
           user: process.env.NODEMAILER_EMAIL,
           pass: 'dzfe wzzk dkln smoj',
         },
       });
+      // TODO исправить на адрес сайта
       const resetLink = `localhost:3000/reset-pass/${token}`;
       const mailOptions = {
         from: `CapeNCoat <${process.env.NODEMAILER_EMAIL}>`,
+        // TODO исправить на переменную email
         to: 'sashainiesta@gmail.com',
         subject: 'Сброс пароля на CapeNCoat',
         text: `Перейдите по ссылке чтобы установить новый пароль: ${resetLink}`,
@@ -108,9 +114,10 @@ module.exports.resetPass = async (req, res) => {
         res.status(500).json(wasPassUpdated);
       }
     } else {
-      res
-        .status(401)
-        .json({ message: 'Отправьте новый запрос о сбросе пароля' });
+      res.status(401).json({
+        success: false,
+        message: 'Отправьте новый запрос о сбросе пароля',
+      });
     }
   } catch (err) {
     console.log(err);

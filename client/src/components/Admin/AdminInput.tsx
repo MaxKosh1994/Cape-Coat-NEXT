@@ -1,6 +1,7 @@
 import TextField from '@mui/material/TextField';
 
-export default function AdminInput(props) {
+// TODO типизация пропсов, any как заглушка
+export default function AdminInput(props: any) {
   const isRequired = props.name === 'new_price' && props.formData.in_stock;
 
   return (

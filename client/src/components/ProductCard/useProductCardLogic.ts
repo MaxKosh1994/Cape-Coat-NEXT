@@ -13,24 +13,15 @@ import {
   getCartItemsByIdThunk,
   getCartItemsThunk,
 } from '../../app/thunkActionsCart';
-import {
-  addCartItem,
-  delCartItem,
-  delItemInCart,
-  getCartItems,
-} from '../../app/cartSlice';
-import {
-  addItem,
-  removeItem,
-  setFavourites,
-  setLikedStatus,
-} from '../../app/favouriteSlice';
+import { setFavourites, setLikedStatus } from '../../app/favouriteSlice';
 import { RootState } from '../../app/store';
+import { ILocalStorageCartItems } from '@/app/types/cartTypes';
+import { IProductCard } from '@/TypeScript/ProductCard.type';
 
 const useProductCardLogic = (
   id: number,
   material_name: string,
-  article: string,
+  article: string | number,
   photo: string,
   name: string,
   price: number,
@@ -49,13 +40,13 @@ const useProductCardLogic = (
   const favoriteHandler = async () => {
     if (!user) {
       const favoritesFromStorage =
-        JSON.parse(localStorage.getItem('favorites')) || [];
+        JSON.parse(localStorage.getItem('favorites')!) || [];
 
       const isItemInFavorites = favoritesFromStorage.includes(id);
 
       if (isItemInFavorites) {
         const updatedFavorites = favoritesFromStorage.filter(
-          (favId) => favId !== id
+          (favId: number) => favId !== id
         );
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
         setIsFavorite(!isFavorite);
@@ -69,7 +60,7 @@ const useProductCardLogic = (
     } else {
       setIsFavorite(!isFavorite);
       try {
-        const favoriteData = {
+        const favoriteData: IProductCard = {
           id,
           material_name,
           article,
@@ -85,7 +76,7 @@ const useProductCardLogic = (
           : addToFavorites;
         const favorite = await favoriteAction(favoriteData);
         setFavCard(favorite);
-        await dispatch(fetchFavouritesData(favorite));
+        await dispatch(fetchFavouritesData());
         await dispatch(setLikedStatus(!isFavorite));
       } catch (err) {
         console.log(err);
@@ -96,32 +87,32 @@ const useProductCardLogic = (
   const cartHandler = async () => {
     if (!user) {
       const cartItemsFromStorage =
-        JSON.parse(localStorage.getItem('cartItems')) || [];
+        JSON.parse(localStorage.getItem('cartItems')!) || [];
 
-      const isItemInCart = cartItemsFromStorage.find((item) => item.id === id);
+      const isItemInCart = cartItemsFromStorage.find(
+        (item: ILocalStorageCartItems) => item.id === id
+      );
 
       if (isItemInCart) {
         const updatedCartItems = cartItemsFromStorage.filter(
-          (item) => item.id !== id
+          (item: ILocalStorageCartItems) => item.id !== id
         );
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-        await dispatch(getCartItemsByIdThunk(updatedCartItems));
         setIsCart(!isCart);
+        await dispatch(getCartItemsByIdThunk(updatedCartItems));
       } else {
         const updatedCartItems = [
           ...cartItemsFromStorage,
           { id, material_name, in_stock: newPrice ? true : false },
         ];
-        console.log(updatedCartItems);
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
         setIsCart(!isCart);
-        console.log(updatedCartItems);
         await dispatch(getCartItemsByIdThunk(updatedCartItems));
       }
     } else {
       setIsCart(!isCart);
       try {
-        const cartData = {
+        const cartData: IProductCard = {
           id,
           material_name,
           article,
@@ -137,10 +128,10 @@ const useProductCardLogic = (
           const inCart = await addToCart(cartData);
           const itemInCart = inCart[1];
           setIsCart(itemInCart);
-          dispatch(addCartItem(inCart[0]));
+          await dispatch(getCartItemsThunk());
         } else {
           const delCart = await removeFromCart(cartData);
-          await dispatch(getCartItemsThunk(user));
+          await dispatch(getCartItemsThunk());
           setIsCart(false);
         }
       } catch (err) {
@@ -151,24 +142,34 @@ const useProductCardLogic = (
 
   useEffect(() => {
     if (user) {
-      const cartFromStorage =
-        JSON.parse(localStorage.getItem('cartItems')) || [];
+      //TODO если ничего не меняет, то проще так оставить : одна строка вместо кучи кода
 
-      if (cartFromStorage.length > 0) {
+      // const cartItemsFromStorage = localStorage.getItem('cartItems');
+      const cartItemsFromStorage =
+        JSON.parse(localStorage.getItem('cartItems')!) || [];
+      // let cartFromStorage = [];
+      // console.log('!!!!!!', cartItemsFromStorage);
+      // console.log('typeof', typeof cartItemsFromStorage);
+
+      // if (cartItemsFromStorage) {
+      //   try {
+      //     cartFromStorage = JSON.parse(cartItemsFromStorage);
+      //   } catch (error) {
+      //     console.error('Error parsing cartItems from localStorage:', error);
+      //   }
+      if (cartItemsFromStorage.length > 0) {
         Promise.all(
-          cartFromStorage.map(async (cartId) => {
+          cartItemsFromStorage.map(async (cartId: ILocalStorageCartItems) => {
             const cartData = {
               id: cartId.id,
               material_name: cartId.material_name,
             };
+            console.log({ cartData });
             return addToCart(cartData);
           })
         )
           .then(() => {
-            // Удалить данные из localStorage после успешной отправки
             localStorage.removeItem('cartItems');
-
-            // Запросить обновленные данные об избранных с сервера
             dispatch(getCartItemsThunk());
           })
           .catch((error) => {
@@ -194,12 +195,17 @@ const useProductCardLogic = (
           console.log(err);
         }
       };
+
       fetchData();
+      // }
     } else {
       const cartFromStorage = JSON.parse(
         localStorage.getItem('cartItems') || '[]'
       );
-      async function fetchUpdCartItems(cartFromStorage) {
+
+      async function fetchUpdCartItems(
+        cartFromStorage: ILocalStorageCartItems[]
+      ) {
         try {
           await dispatch(getCartItemsByIdThunk(cartFromStorage));
         } catch (error) {
@@ -207,7 +213,9 @@ const useProductCardLogic = (
         }
       }
       fetchUpdCartItems(cartFromStorage);
-      const isItemInCart = cartFromStorage.some((element) => element.id === id);
+      const isItemInCart = cartFromStorage.some(
+        (element: ILocalStorageCartItems) => element.id === id
+      );
       setIsCart(isItemInCart);
     }
   }, [user]);
@@ -215,11 +223,11 @@ const useProductCardLogic = (
   useEffect(() => {
     if (user) {
       const favoritesFromStorage =
-        JSON.parse(localStorage.getItem('favorites')) || [];
+        JSON.parse(localStorage.getItem('favorites')!) || [];
 
       if (favoritesFromStorage.length > 0) {
         Promise.all(
-          favoritesFromStorage.map(async (favId) => {
+          favoritesFromStorage.map(async (favId: number) => {
             const favoriteData = {
               id: favId,
             };
@@ -262,7 +270,14 @@ const useProductCardLogic = (
       const favoritesFromStorage = JSON.parse(
         localStorage.getItem('favorites') || '[]'
       );
+      const itemsLocal = localStorage.getItem('cartItems');
+      if (itemsLocal !== null) {
+        const parsedItems = JSON.parse(itemsLocal);
+        dispatch(getCartItemsByIdThunk(parsedItems));
+      }
+
       dispatch(setFavourites(favoritesFromStorage));
+
       const isItemInFavorites = favoritesFromStorage.includes(id);
       setIsFavorite(isItemInFavorites);
     }

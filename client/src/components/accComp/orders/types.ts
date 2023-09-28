@@ -1,4 +1,5 @@
 export interface IItem {
+  [x: string]: any;
   id: number;
   article: number;
   name: string;

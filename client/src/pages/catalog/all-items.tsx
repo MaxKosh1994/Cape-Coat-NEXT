@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import BasePage from '@/components/ItemPage/BasePage';
-import Custom404 from '../404';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 export default function AllItemsPage() {
   const [allItems, setAllItems] = useState([]);
@@ -12,7 +12,7 @@ export default function AllItemsPage() {
         );
         if (response.status === 200) {
           const result = await response.json();
-          const items = result.map((item) => ({
+          const items = result.map((item: IBasePageItem) => ({
             ...item,
             isFavorite: false,
             isCart: false,
@@ -25,13 +25,5 @@ export default function AllItemsPage() {
     }
   }, []);
 
-  return (
-    <>
-      {allItems.length ? (
-        <BasePage pageName="Все товары" itemsArr={allItems} />
-      ) : (
-        <Custom404 />
-      )}
-    </>
-  );
+  return <BasePage pageName="Все товары" itemsArr={allItems} />;
 }

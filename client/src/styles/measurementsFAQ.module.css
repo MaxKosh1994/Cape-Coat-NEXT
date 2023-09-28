@@ -1,10 +1,11 @@
 .mainContainer {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   max-width: 800px;
   margin: 0 auto;
+  height: 130vh;
 }
 
 .headerContainer {
@@ -63,12 +64,14 @@
 @media (max-width: 821px) {
   .mainContainer {
     max-width: 700px;
+    height: 125vh;
   }
 }
 
 @media (max-width: 550px) {
   .mainContainer {
     max-width: 350px;
+    height: 280vh;
   }
 
   .mainInfoContainer {

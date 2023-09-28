@@ -65,7 +65,7 @@ const MobileMenu: React.FC<IMobileMenuProps> = ({
         onClick={handleMobileMenuClose}
       />
       <MobileMenuItem
-        label="Коллекции"
+        label="Коллекция"
         link="/catalog/collection"
         onClick={handleMobileMenuClose}
       />

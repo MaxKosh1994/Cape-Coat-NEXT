@@ -24,4 +24,4 @@ module.exports = cartRouter
   .get('/item/:email', checkCart)
   .delete('/item/del', delToCartInOneCat)
   .delete('/item/:id/:user', delItemFromCart)
-  .delete('/emptyCart/:user', emptyCart);
+  .delete('/emptyCart/', emptyCart);

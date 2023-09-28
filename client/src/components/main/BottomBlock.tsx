@@ -3,6 +3,7 @@ import ProductCard from '../ProductCard/ProductCard';
 import styles from '../../styles/Home.module.css';
 import Link from 'next/link';
 import { useMediaQuery } from '@mui/material';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 export default function BottomBlock() {
   const [itemsForMain, setItemsForMain] = useState([]);
@@ -22,13 +23,16 @@ export default function BottomBlock() {
         }
       );
       const response = await allItems.json();
-      const items = response.map((item) => ({
+
+      const items = response.map((item: IBasePageItem) => ({
         ...item,
         isFavorite: false,
         isCart: false,
       }));
       if (allItems.status === 200) {
-        const filterStock = items.filter((item) => item.in_stock === false);
+        const filterStock = items.filter(
+          (item: IBasePageItem) => item.in_stock === false
+        );
         setItemsForMain(filterStock);
       }
     } catch (error) {
@@ -41,7 +45,7 @@ export default function BottomBlock() {
       <div className={styles.cardsContainer}>
         {isMobile ? (
           <>
-            {itemsForMain.slice(6, 8).map((item) => (
+            {itemsForMain.slice(6, 8).map((item: IBasePageItem) => (
               <ProductCard
                 key={item.id}
                 material_name={item.Material.name}
@@ -58,7 +62,7 @@ export default function BottomBlock() {
           </>
         ) : isLaptop ? (
           <>
-            {itemsForMain.slice(4, 7).map((item) => (
+            {itemsForMain.slice(4, 7).map((item: IBasePageItem) => (
               <ProductCard
                 key={item.id}
                 id={item.id}
@@ -75,7 +79,7 @@ export default function BottomBlock() {
           </>
         ) : (
           <>
-            {itemsForMain.slice(4, 8).map((item) => (
+            {itemsForMain.slice(4, 8).map((item: IBasePageItem) => (
               <ProductCard
                 key={item.id}
                 id={item.id}

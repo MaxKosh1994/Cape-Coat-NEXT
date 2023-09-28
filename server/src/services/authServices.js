@@ -28,7 +28,7 @@ module.exports.registerUser = async (full_name, email, phone, password) => {
       message: 'Пользователь с таким email уже существует',
     };
   } catch (err) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -56,7 +56,7 @@ module.exports.loginUser = async (email, password) => {
       isAdmin: currentUser.admin,
     };
   } catch (err) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
@@ -75,41 +75,62 @@ module.exports.checkSession = async (session) => {
     }
     return { isLogin: false };
   } catch (err) {
-    throw new Error('Ошибка сервера');
+    return null;
   }
 };
 
 module.exports.generateToken = async (email) => {
-  const token = await bcrypt.hash(Date.now().toString(), 10);
-  const currUser = await findUserByEmail(email);
-  if (!currUser) {
-    return '';
+  try {
+    const token = await bcrypt.hash(Date.now().toString(), 10);
+    const currUser = await findUserByEmail(email);
+    if (!currUser) {
+      return '';
+    }
+    await Token.create({
+      resetToken: token,
+      user_id: currUser.id,
+    });
+    return token;
+  } catch (error) {
+    return null;
   }
-  await Token.create({
-    resetToken: token,
-    user_id: currUser.id,
-  });
-  return token;
 };
 
 module.exports.validateToken = async (token) => {
-  const tokenRecord = await Token.findOne({
-    where: { resetToken: token },
-    include: {
-      model: User,
-      attributes: ['email'],
-    },
-    raw: true,
-    nest: true,
-  });
-  const user = tokenRecord.User.email;
-  const currentDateTime = new Date();
-  if (!tokenRecord || tokenRecord.expirationDate > currentDateTime) {
-    return { success: false, message: 'Истек срок токена' };
+  try {
+    const tokenRecord = await Token.findOne({
+      where: { resetToken: token },
+      include: {
+        model: User,
+        attributes: ['email'],
+      },
+      raw: true,
+      nest: true,
+    });
+    if (tokenRecord === null) {
+      return {
+        success: false,
+        message: 'Отправьте новый запрос о сбросе пароля',
+      };
+    }
+    const user = tokenRecord.User.email;
+    const currentDateTime = new Date();
+    if (!tokenRecord || tokenRecord.expirationDate > currentDateTime) {
+      return { success: false, message: 'Истек срок токена' };
+    }
+    return { success: true, user };
+  } catch (error) {
+    return {
+      success: false,
+      message: 'Ошибка сервера',
+    };
   }
-  return { success: true, user };
 };
 
 module.exports.deleteToken = async (resetToken) => {
-  await Token.destroy({ where: { resetToken } });
+  try {
+    await Token.destroy({ where: { resetToken } });
+  } catch (error) {
+    return null;
+  }
 };

@@ -7,6 +7,9 @@ import { signInUserThunk } from '../app/thunkActionsAuth';
 import Link from 'next/link';
 import Head from 'next/head';
 import { ISignInInputs } from '@/TypeScript/authTypes';
+import { handleError } from '@/app/sessionSlice';
+import { fetchFavouritesData } from '@/app/thunkActionsFavourite';
+import { getCartItemsThunk } from '@/app/thunkActionsCart';
 
 export default function SignIn() {
   const error = useAppSelector((state) => state.sessionSlice.error);
@@ -18,7 +21,6 @@ export default function SignIn() {
     email: '',
     password: '',
   });
-  const [errorMsg, setErrorMsg] = useState<boolean>(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -28,17 +30,20 @@ export default function SignIn() {
     event.preventDefault();
     if (formData.email && formData.password) {
       const resp = await dispatch(signInUserThunk(formData));
-      if (resp.message) {
-        setErrorMsg(resp.response.data.message);
+      console.log(resp);
+      if (error || resp.message) {
+        setTimeout(() => {
+          dispatch(handleError({ message: '' }));
+        }, 2000);
       } else {
         if (resp.isAdmin) {
+          dispatch(handleError({ message: '' }));
           router.push('/admin/ordersHistory');
         } else {
-          if (user) {
-            router.push('/');
-          } else {
-            router.push('/');
-          }
+          await dispatch(fetchFavouritesData());
+          await dispatch(getCartItemsThunk());
+          router.push('/');
+          dispatch(handleError({ message: '' }));
         }
       }
     }
@@ -55,7 +60,7 @@ export default function SignIn() {
       <div className={styles.formContainer}>
         <form className={styles.signInForm}>
           <h3 className={styles.header}>Войдите в аккаунт</h3>
-          {errorMsg && <p>{error}</p>}
+          {error && <p>{error}</p>}
           <TextField
             className={styles.textField}
             placeholder="Email"

@@ -1,0 +1,110 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+  height: 50vh;
+}
+
+.headerContainer {
+  font-size: 2rem;
+}
+.mainInfoContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+}
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  padding: 30px;
+  text-align: justify;
+}
+
+.info {
+  margin: 5px;
+  font-size: large;
+  text-align: justify;
+}
+
+.info a {
+  font-style: italic;
+  text-decoration: underline;
+}
+
+.movieContainer {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  margin: 0 auto;
+}
+
+.tableCaption {
+  font-size: 1.6rem;
+  margin: 15px 0;
+}
+
+.sizeTableHead {
+  text-align: center;
+  padding: 15px 8px;
+}
+
+.sizeTableCol {
+  width: 250px;
+  height: 30px;
+  text-align: center;
+}
+.sizeTableEntry {
+  padding: 8px;
+}
+
+@media (max-width: 821px) {
+  .mainContainer {
+    max-width: 700px;
+    height: 60vh;
+  }
+}
+
+@media (max-width: 550px) {
+  .mainContainer {
+    max-width: 350px;
+    height: 100vh;
+  }
+
+  .mainInfoContainer {
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+
+  /* Adjust the width and padding to make the table more compact */
+  .sizeTableCol {
+    width: auto;
+    padding: 5px;
+  }
+
+  /* Center-align the content in cells */
+  .sizeTableCol,
+  .sizeTableEntry {
+    text-align: center;
+  }
+
+  /* Increase the font size for better readability */
+  .sizeTableHead,
+  .sizeTableEntry {
+    font-size: 20px;
+    border: 1px solid #ddd;
+  }
+
+  /* Add some spacing between rows */
+  .sizeTableCol:first-child,
+  .sizeTableEntry:first-child {
+    margin-top: 10px;
+  }
+
+  .info {
+    margin: 10px;
+  }
+}

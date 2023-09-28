@@ -1,23 +1,28 @@
 import React from 'react';
 import styles from '../../styles/Checkout.module.css';
+import { useCartControl } from './useCartControl';
+import { useAppSelector } from '@/app/hooks';
+import { RootState } from '@/app/store';
 
-export default function RightBlock({
-  promocode,
-  handlePromocodeChange,
-  handleApplyPromocode,
-  promocodeErr,
-  promoUsed,
-  discount,
-  twoItemDiscount,
-  deliveryCost,
-  liningCost,
-  urgencyFee,
-  urgentMaking,
-  cartTotal,
-  cartItemsList,
-  orderStatus,
-  handleCreateOrder,
-}) {
+export default function RightBlock() {
+  const { handlePromocodeChange, handleApplyPromocode, handleCreateOrder } =
+    useCartControl();
+  const cartItemsList = useAppSelector(
+    (state: RootState) => state.cartSlice.cartItems
+  );
+  const {
+    promocode,
+    promocodeErr,
+    promoUsed,
+    discount,
+    twoItemDiscount,
+    deliveryCost,
+    liningCost,
+    urgencyFee,
+    urgentMaking,
+    cartTotal,
+    orderStatus,
+  } = useAppSelector((state: RootState) => state.cartControlSlice);
   return (
     <div className={`${styles.orderBlock} ${styles.orderBlockSummary}`}>
       <h1 className={styles.headerItemCart}>Ваш заказ</h1>
@@ -102,10 +107,10 @@ export default function RightBlock({
           )}
           {liningCost ? (
             <div className={styles.orderSummaryRow}>
-              <span>Утепление для пальто:</span>
+              <span>Утепление:</span>
               <div className={styles.itemPrices}>
                 <span className={styles.itemPricesPrice}>
-                  {Math.floor(liningCost).toLocaleString()} &#8381;
+                  +{Math.floor(liningCost).toLocaleString()} &#8381;
                 </span>
               </div>
             </div>
@@ -117,11 +122,11 @@ export default function RightBlock({
             <div className={styles.itemPrices}>
               {twoItemDiscount ? (
                 <span className={styles.itemPricesPrice}>
-                  {Math.floor(discount + twoItemDiscount).toLocaleString()}{' '}
-                  &#8381;
+                  -{(discount + twoItemDiscount).toLocaleString()} &#8381;
                 </span>
               ) : (
                 <span className={styles.itemPricesPrice}>
+                  {discount > 0 ? '-' : ''}
                   {Math.floor(discount).toLocaleString()} &#8381;
                 </span>
               )}

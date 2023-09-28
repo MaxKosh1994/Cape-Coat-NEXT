@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-// import ProductCard from '../ProductCard/ProductCard';
-import styles from '../../styles/NewArrivals.module.css';
-import { Typography } from '@mui/material';
-import Head from 'next/head';
-import ProductCard from '@/components/ProductCard/ProductCard';
 import BasePage from '@/components/ItemPage/BasePage';
-import Custom404 from '../404';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 
 export default function NewArrivalsPage() {
   const [newArrivalsItems, setNewArrivalsItems] = useState([]);
@@ -17,7 +12,7 @@ export default function NewArrivalsPage() {
         );
         if (response.status === 200) {
           const result = await response.json();
-          const collection = result.map((el) => ({
+          const collection = result.map((el: IBasePageItem) => ({
             ...el,
             isFavorite: false,
             isCart: false,
@@ -30,13 +25,5 @@ export default function NewArrivalsPage() {
     }
   }, []);
 
-  return (
-    <>
-      {newArrivalsItems.length ? (
-        <BasePage pageName="Новые поступления" itemsArr={newArrivalsItems} />
-      ) : (
-        <Custom404 />
-      )}
-    </>
-  );
+  return <BasePage pageName="Новые поступления" itemsArr={newArrivalsItems} />;
 }

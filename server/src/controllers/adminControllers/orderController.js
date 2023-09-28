@@ -57,7 +57,7 @@ module.exports.updateOrderItemField = async (req, res) => {
         item_id: itemId,
       },
     });
-    
+
     if (!orderItem) {
       res.status(404).json({ message: 'Не найдено OrderItem для обновления' });
       return;
@@ -108,7 +108,7 @@ module.exports.createOrder = async (req, res) => {
         const createdUser = await User.create({
           email: personalData.email,
           full_name: personalData.name,
-          phone: personalData.number,
+          phone: personalData.phone,
           telegram_instagram: personalData.telegram_instagram,
           password: 'yourDefaultPassword',
         });
@@ -122,7 +122,7 @@ module.exports.createOrder = async (req, res) => {
         address: addressString,
         total: cartTotal,
         comments: commentsInput || '',
-        urgent: urgentMaking || false,
+        urgent: Boolean(urgentMaking) || false,
       },
       { raw: true },
     );

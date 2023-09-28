@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import {
   startSession,
   endSession,
@@ -6,96 +6,109 @@ import {
   checkSession,
 } from './sessionSlice';
 import { setFavourites } from './favouriteSlice';
-import { fetchFavouritesData } from './thunkActionsFavourite';
-import { getCartItemsThunk } from './thunkActionsCart';
 import { getCartItems } from './cartSlice';
+import { Dispatch } from '@reduxjs/toolkit';
+import { ISignInInputs, ISignUpInputs } from '@/TypeScript/authTypes';
+import { AppThunk } from './store';
+import {
+  ForgotPassThunk,
+  ResetPassThunk,
+  SignInThunk,
+  SignUpThunk,
+} from './types/sessionTypes';
 
-export const signUpUserThunk = (inputsData) => async (dispatch) => {
-  try {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_URL}auth/register`,
-      inputsData,
-      {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      }
-    );
-    dispatch(startSession(res.data));
-    return res.data;
-  } catch (err) {
-    dispatch(handleError(err));
-    return err;
-  }
-};
+export const signUpUserThunk =
+  (inputsData: ISignUpInputs): SignUpThunk =>
+  async (dispatch: Dispatch) => {
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_URL}auth/register`,
+        inputsData,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      dispatch(startSession(res.data));
+      return res.data;
+    } catch (err: AxiosError | any) {
+      const { response } = err;
+      dispatch(handleError(response?.data));
+    }
+  };
 
-export const signInUserThunk = (inputsData) => async (dispatch) => {
-  try {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_URL}auth/login`,
-      inputsData,
-      {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      }
-    );
+export const signInUserThunk =
+  (inputsData: ISignInInputs): SignInThunk =>
+  async (dispatch: Dispatch) => {
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_URL}auth/login`,
+        inputsData,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-    dispatch(startSession(res.data));
-    dispatch(fetchFavouritesData());
-    dispatch(getCartItemsThunk());
+      dispatch(startSession(res.data));
+      return res.data;
+    } catch (err: AxiosError | any) {
+      const { response } = err;
+      console.log(err);
+      dispatch(handleError(response?.data));
+      return response.data;
+    }
+  };
 
-    return res.data;
-  } catch (err) {
-    dispatch(handleError(err));
-    return err;
-  }
-};
+export const forgotPassThunk =
+  (userEmail: { email: string }): ForgotPassThunk =>
+  async (dispatch: Dispatch) => {
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_URL}auth/forgot-pass`,
+        userEmail,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      return res.data;
+    } catch (err: AxiosError | any) {
+      const { response } = err;
+      dispatch(handleError(response?.data));
+      return null;
+    }
+  };
 
-export const forgotPassThunk = (userEmail) => async (dispatch) => {
-  try {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_URL}auth/forgot-pass`,
-      userEmail,
-      {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    return res.data;
-  } catch (error) {
-    console.log(error);
-    dispatch(handleError(error));
-  }
-};
+export const resetPassThunk =
+  (token: string | string[] | undefined, password: string): ResetPassThunk =>
+  async (dispatch: Dispatch) => {
+    try {
+      const data = { token, password };
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_URL}auth/reset-pass`,
+        data,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      return res.data;
+    } catch (err: AxiosError | any) {
+      const { response } = err;
+      dispatch(handleError(response?.data));
+    }
+  };
 
-export const resetPassThunk = (token, password) => async (dispatch) => {
-  try {
-    const data = { token, password };
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_URL}auth/reset-pass`,
-      data,
-      {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    return res.data;
-  } catch (error) {
-    console.log(error);
-    dispatch(handleError(error));
-  }
-};
-
-export const signOutUserThunk = () => async (dispatch) => {
+export const signOutUserThunk = (): AppThunk => async (dispatch: Dispatch) => {
   try {
     await axios.get(`${process.env.NEXT_PUBLIC_URL}auth/logout`, {
       withCredentials: true,
@@ -104,12 +117,13 @@ export const signOutUserThunk = () => async (dispatch) => {
     dispatch(endSession());
     dispatch(setFavourites([]));
     dispatch(getCartItems([]));
-  } catch (err) {
-    console.log(err);
+  } catch (err: AxiosError | any) {
+    const { response } = err;
+    dispatch(handleError(response?.data));
   }
 };
 
-export const isUserLoginThunk = () => async (dispatch) => {
+export const isUserLoginThunk = (): AppThunk => async (dispatch: Dispatch) => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}auth/session`, {
       credentials: 'include',
@@ -125,7 +139,8 @@ export const isUserLoginThunk = () => async (dispatch) => {
         dispatch(endSession());
       }
     }
-  } catch (error) {
-    console.log(error);
+  } catch (err: AxiosError | any) {
+    const { response } = err;
+    dispatch(handleError(response?.data));
   }
 };

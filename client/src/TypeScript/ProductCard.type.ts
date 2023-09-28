@@ -1,7 +1,7 @@
 export interface IProductCard {
   id: number;
   material_name: string;
-  article: string;
+  article: string | number;
   photo: string;
   name: string;
   price: number;
@@ -11,3 +11,13 @@ export interface IProductCard {
   isItemInFavoritesState?: boolean;
   urlName?: string;
 }
+
+export interface ILocalStorageCartItems {
+  id: number;
+  material_name: string | undefined;
+}
+
+export interface ILocalStorageFavotiteItems {
+  id: number;
+}
+

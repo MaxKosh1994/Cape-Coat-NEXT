@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import Navbar from '../Navbar/Navbar';
 import Script from 'next/script';
 import Footer from '../Footer/Footer';
@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import MyCookieConsent from '../cookieConsent/CookieConsent';
 import { useMediaQuery } from '@mui/material';
 
-const Layout = ({ children }) => {
+const Layout = ({ children }: {children: ReactNode}) => {
   const router = useRouter();
   const isHomePage = router.pathname === '/';
   const isMobile = useMediaQuery('(max-width: 768px)');

@@ -36,7 +36,7 @@ module.exports.oneItem = async (req, res) => {
     if (item && materials) {
       res.status(200).json({ item, materials });
     } else {
-      res.status(404).json('Нет такого товара');
+      res.status(404).json({ message: 'Нет такого товара' });
     }
   } catch (err) {
     console.log(err);
@@ -136,7 +136,7 @@ module.exports.addFavourites = async (req, res) => {
         res.status(200).json(updatedFav);
       }
     } else {
-      res.status(401).json({ message: 'Unauthorized' });
+      res.status(401).json({ message: 'Войдите в аккаунт' });
     }
   } catch (err) {
     res.status(500).json({ message: 'Ошибка сервера' });

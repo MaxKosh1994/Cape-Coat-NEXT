@@ -4,6 +4,7 @@
   align-items: center;
   margin-bottom: 40px;
   margin-top: 40px;
+  min-height: 60vh;
 }
 
 .mainContainer {
@@ -92,18 +93,19 @@
 }
 
 @media (max-width: 550px) {
+  .mainDiv {
+    min-height: 30vh;
+  }
+
   .container {
-    width: 100%;
+    width: 95%;
   }
   .containerButton {
-    width: 50%;
+    width: 95%;
   }
   .headerDiv {
     margin-bottom: 20px;
     margin-top: 20px;
-  }
-  .container {
-    border: none;
   }
 
   .pFive {

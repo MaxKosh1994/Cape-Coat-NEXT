@@ -1,4 +1,4 @@
-import { IUserInfo } from '../profile/UserDataTypes';
+import { IUserInfo } from '../profile/userDataTypes';
 
 export interface IInputsEditInfo {
   full_name: string;

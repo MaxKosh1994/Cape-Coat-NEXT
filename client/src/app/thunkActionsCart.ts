@@ -1,8 +1,10 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { addCartItem, delCartItem, emptyCart, getCartItems } from './cartSlice';
 
 import { AppThunk, RootState } from './store';
 import { Dispatch } from '@reduxjs/toolkit';
+import { handleError } from './sessionSlice';
+import { ILocalStorageCartItems } from './types/cartTypes';
 
 export const getCartItemsThunk = (): AppThunk => async (dispatch: Dispatch) => {
   try {
@@ -11,19 +13,17 @@ export const getCartItemsThunk = (): AppThunk => async (dispatch: Dispatch) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include',
     });
     const data = await dispatch(getCartItems(res.data));
     return data.payload;
-  } catch (err) {
-    // dispatch(handleError(err))
-    console.log(err);
-    return err;
+  } catch (err: AxiosError | any) {
+    const { response } = err;
+    dispatch(handleError(response?.data));
   }
 };
 
 export const getCartItemsByIdThunk =
-  (itemIds): AppThunk =>
+  (itemIds: ILocalStorageCartItems[]): AppThunk =>
   async (dispatch: Dispatch) => {
     try {
       const res = await axios.post(
@@ -35,15 +35,13 @@ export const getCartItemsByIdThunk =
           headers: {
             'Content-Type': 'application/json',
           },
-          credentials: 'include',
         }
       );
       const resp = await dispatch(getCartItems(res.data));
       return resp.payload;
-    } catch (err) {
-      // dispatch(handleError(err))
-      console.log(err);
-      return err;
+    } catch (err: AxiosError | any) {
+      const { response } = err;
+      dispatch(handleError(response?.data));
     }
   };
 
@@ -60,42 +58,37 @@ export const delCartItemThunk =
           headers: {
             'Content-Type': 'application/json',
           },
-          credentials: 'include',
         }
       );
       if (res.status === 200) {
         dispatch(delCartItem(itemId));
       }
       return res.data;
-    } catch (err) {
-      // dispatch(handleError(err))
-      console.log(err);
-      return err;
+    } catch (err: AxiosError | any) {
+      const { response } = err;
+      dispatch(handleError(response?.data));
     }
   };
 
-export const emptyCartThunk =
-  (user: string): AppThunk =>
-  async (dispatch: Dispatch) => {
-    try {
-      const res = await axios.delete(
-        `${process.env.NEXT_PUBLIC_URL}cart/emptyCart/${user}`,
-        {
-          method: 'DELETE',
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      dispatch(emptyCart());
-      return res.status;
-    } catch (err) {
-      // dispatch(handleError(err))
-      console.log(err);
-      return err;
-    }
-  };
+export const emptyCartThunk = (): AppThunk => async (dispatch: Dispatch) => {
+  try {
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_URL}cart/emptyCart`,
+      {
+        method: 'DELETE',
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    dispatch(emptyCart());
+    return res.status;
+  } catch (err: AxiosError | any) {
+    const { response } = err;
+    dispatch(handleError(response?.data));
+  }
+};
 
 export const addCartItemsThunk =
   (id: number): AppThunk =>
@@ -114,10 +107,9 @@ export const addCartItemsThunk =
 
       dispatch(getCartItems(res.data.newCartItem));
       return res.data;
-    } catch (err) {
-      // dispatch(handleError(err))
-      console.log(err);
-      return err;
+    } catch (err: AxiosError | any) {
+      const { response } = err;
+      dispatch(handleError(response?.data));
     }
   };
 
@@ -141,8 +133,8 @@ export const checkCartItemThunk =
       );
 
       dispatch(getCartItems(res.data.cartItem));
-    } catch (err) {
-      console.log(err);
-      return err;
+    } catch (err: AxiosError | any) {
+      const { response } = err;
+      dispatch(handleError(response?.data));
     }
   };

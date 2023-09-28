@@ -14,7 +14,7 @@ const rtkSlice = createSlice({
     },
     delCartItem(state, action: PayloadAction<number>) {
       state.cartItems = state.cartItems.filter(
-        (el) => el.item_id !== +action.payload
+        (el) => el.id !== +action.payload
       );
     },
     emptyCart(state) {

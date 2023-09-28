@@ -1,5 +1,5 @@
+import { IItem } from '@/components/accComp/orders/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IItem } from '../components/accountComp/Orders/Orders';
 
 export interface FavouriteItem {
   user_id: number;

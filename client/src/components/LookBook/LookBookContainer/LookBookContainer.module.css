@@ -1,0 +1,115 @@
+.mainContainer {
+  position: relative;
+  margin: 20px;
+}
+
+.topBlock,
+.bottomBlock {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.topBlock__big,
+.bottomBlock__big,
+.topBlock__little,
+.bottomBlock__little {
+  position: relative;
+  margin: 50px;
+}
+
+.topBlock__big {
+  top: -40px;
+}
+
+.bottomBlock__big {
+  top: -100px;
+}
+
+.topBlock__little {
+  top: 150px;
+  right: 0;
+}
+
+.bottomBlock__little {
+  top: -80px;
+  left: 0;
+}
+
+@media (max-width: 821px) {
+  .mainContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .topBlock,
+  .bottomBlock {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .topBlock__big,
+  .topBlock__little,
+  .bottomBlock__big,
+  .bottomBlock__little {
+    margin: 5px auto;
+    position: static;
+    transform: none !important;
+  }
+
+  .bigImage {
+    width: 600px;
+    height: 800px;
+  }
+
+  .littleImage {
+    width: 600px;
+    height: 800px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bigImage {
+    width: 600px;
+    height: 800px;
+  }
+
+  .littleImage {
+    width: 600px;
+    height: 800px;
+  }
+}
+
+@media (max-width: 540px) {
+  .bigImage {
+    width: 400px;
+    height: 525px;
+  }
+
+  .littleImage {
+    width: 400px;
+    height: 525px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bigImage {
+    width: 320px;
+    height: 427px;
+  }
+
+  .littleImage {
+    width: 320px;
+    height: 427px;
+  }
+}

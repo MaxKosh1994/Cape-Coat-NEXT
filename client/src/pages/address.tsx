@@ -17,9 +17,9 @@ const Address = () => {
     <>
       <Head>
         <title>Cape&Coat | Наш шоурум</title>
-        <meta name='title' content='Cape and Coat' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <link rel='icon' href='/favicon.ico' />
+        <meta name="title" content="Cape and Coat" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.mainContainer}>
         <div className={styles.mapContainer}>
@@ -27,55 +27,55 @@ const Address = () => {
         </div>
         <div className={styles.infoContainer}>
           <div className={styles.addressContainer}>
-            <Typography className={styles.header} variant='h3' align='center'>
+            <Typography className={styles.header} variant="h3" align="center">
               <strong>Адрес шоурума</strong>
             </Typography>
-            <Typography className={styles.infoText} variant='p'>
-              Наш адрес: Россия, г.Нижний Новгород, ул. Ильинская, 79
+            <Typography className={styles.infoText} variant="subtitle1">
+              <div>Наш адрес: Россия, г.Нижний Новгород, ул. Ильинская, 79</div>
             </Typography>
           </div>
 
           <div className={styles.contactContainer}>
-            <Typography className={styles.header} variant='h3' align='center'>
+            <Typography className={styles.header} variant="h3" align="center">
               <strong>Наши контакты</strong>
             </Typography>
-            <Typography className={styles.infoText} variant='p'>
+            <Typography className={styles.infoText} variant="subtitle1">
               <a
-                href='mailto:Cape.n.coat@gmail.com'
+                href="mailto:Cape.n.coat@gmail.com"
                 className={styles.contactLink}
               >
                 <MailOutlineIcon className={styles.Icon} /> Email:
                 Cape.n.coat@gmail.com
               </a>
             </Typography>
-            <Typography className={styles.infoTextNotVk} variant='p'>
-              <a href='https://t.me/@kkireva' className={styles.contactLink}>
+            <Typography className={styles.infoTextNotVk} variant="subtitle1">
+              <a href="https://t.me/@kkireva" className={styles.contactLink}>
                 <TelegramIcon className={styles.Icon} /> Telegram: @kkireva
               </a>
             </Typography>
-            <Typography className={styles.infoTextNotVk} variant='p'>
-              <a className={styles.link} href='https://pin.it/2lozIsT'>
+            <Typography className={styles.infoTextNotVk} variant="subtitle1">
+              <a className={styles.link} href="https://pin.it/2lozIsT">
                 <PinterestIcon className={styles.Icon} /> Pinterest: @capencoat
               </a>
             </Typography>
-            <Typography className={styles.infoTextNotVk} variant='p'>
-              <a className={styles.link} href='https://pin.it/AK7aIDV'>
+            <Typography className={styles.infoTextNotVk} variant="subtitle1">
+              <a className={styles.link} href="https://pin.it/AK7aIDV">
                 <PinterestIcon className={styles.Icon} /> Pinterest: @KKir_eva
               </a>
             </Typography>
-            <Typography className={styles.infoTextNotVk} variant='p'>
-              <a href='tel:+79201199919' className={styles.contactLink}>
+            <Typography className={styles.infoTextNotVk} variant="subtitle1">
+              <a href="tel:+79201199919" className={styles.contactLink}>
                 <PhoneIcon className={styles.Icon} /> Phone number:
                 +7(920)-119-99-19
               </a>
             </Typography>
-            <Typography className={styles.infoText} variant='p'>
-              <a className={styles.link} href='https://vk.com/cape.n.coat'>
+            <Typography className={styles.infoText} variant="subtitle1">
+              <a className={styles.link} href="https://vk.com/cape.n.coat">
                 <Icon36LogoVk className={styles.Icon} /> Группа ВК
               </a>
             </Typography>
-            <Typography className={styles.infoText} variant='p'>
-              <a className={styles.link} href='https://vk.com/kkireva'>
+            <Typography className={styles.infoText} variant="subtitle1">
+              <a className={styles.link} href="https://vk.com/kkireva">
                 <Icon36LogoVk className={styles.Icon} /> Группа ВК (платья)
               </a>
             </Typography>

@@ -2,12 +2,15 @@ const bcrypt = require('bcrypt');
 const { User } = require('../../db/models');
 
 module.exports.findUserByEmail = async (email) => {
-  const currUser = await User.findOne({
-    where: { email },
-    raw: true,
-  });
-  console.log(currUser);
-  return currUser;
+  try {
+    const currUser = await User.findOne({
+      where: { email },
+      raw: true,
+    });
+    return currUser;
+  } catch (error) {
+    return null;
+  }
 };
 
 module.exports.findOrCreateUserByEmail = async (
@@ -17,17 +20,21 @@ module.exports.findOrCreateUserByEmail = async (
   password,
   telegram_instagram,
 ) => {
-  const currUser = await User.findOrCreate({
-    where: { email },
-    defaults: {
-      full_name,
-      email,
-      phone,
-      password,
-      telegram_instagram,
-    },
-  });
-  return currUser;
+  try {
+    const currUser = await User.findOrCreate({
+      where: { email },
+      defaults: {
+        full_name,
+        email,
+        phone,
+        password,
+        telegram_instagram,
+      },
+    });
+    return currUser;
+  } catch (error) {
+    return null;
+  }
 };
 
 module.exports.updUserPass = async (email, password) => {
@@ -42,6 +49,6 @@ module.exports.updUserPass = async (email, password) => {
     }
     return { success: true, message: 'Пароль обновлен' };
   } catch (err) {
-    console.log(err);
+    return null;
   }
 };

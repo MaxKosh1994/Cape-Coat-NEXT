@@ -1,12 +1,12 @@
 import Modal from '@mui/material/Modal';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { dataAxios } from '../../HTTP/adminApi';
 import styles from './ColModal.module.css';
 import AdminInput from '../../AdminInput';
 import InputFiles from '../../InputFiles';
 import CustomButton from '../../CustomButton';
 import InfoModal from '../../InfoModal';
-import CheckBox from '../../checkbox';
+import CheckBox from '../../CheckBox';
 import CustomFormControl from '../../CustomFormControl';
 
 export default function ColModal({
@@ -16,6 +16,13 @@ export default function ColModal({
   setOpen,
   message,
   setMessage,
+}: {
+  openChange: boolean;
+  setOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  message: string;
+  setMessage: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const formRef = useRef(null);
   const [files, setFile] = useState();
@@ -23,28 +30,30 @@ export default function ColModal({
   const [conten, setConten] = useState([]);
   const [name, setName] = useState('');
   const address = 'collection';
+  // TODO ошибка типизации
   const id = description.collection_id;
 
   useEffect(() => {
     dataAxios(setConten, setMessage, address);
   }, []);
 
-  const changeHandlerFiles = (e) => {
+  const changeHandlerFiles = (e: ChangeEvent<HTMLInputElement>) => {
+    // TODO ошибка типизации
     setFile({ ...files, photos: e.target.files });
   };
 
-  const changeHandlerDescript = (e) => {
+  const changeHandlerDescript = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription({ ...description, [e.target.name]: e.target.checked });
   };
 
-  const changeHandlerDescription = (e) => {
+  const changeHandlerDescription = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription({ ...description, [e.target.name]: e.target.value });
   };
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
 
-  const submit = async (e, url) => {
+  const submit = async (e: FormEvent<HTMLFormElement>, url: string) => {
     try {
       e.preventDefault();
       const formData = new FormData();
@@ -52,12 +61,14 @@ export default function ColModal({
         url === `create-${address}` ||
         (url === `update-${address}` && files)
       ) {
+        // TODO ошибка типизации
         for (let key in files.photos) {
           formData.append('photos', files.photos[key]);
         }
       }
       formData.append('description', JSON.stringify(description));
       const val = await Object.fromEntries(formData.entries());
+      // TODO ошибка типизации
       await dataAxios(setConten, setMessage, address, formData, url, id);
       setOpen(true);
       setTimeout(() => {
@@ -65,6 +76,7 @@ export default function ColModal({
         setOpen(false);
       }, 1000);
       setOpenChange(false);
+      // TODO ошибка типизации
       formRef.current.reset();
     } catch (err) {
       console.log(err);
@@ -77,8 +89,8 @@ export default function ColModal({
         className={styles.modal}
         open={openChange}
         onClose={() => setOpenChange(false)}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
       >
         <div className={styles.mainContainer}>
           <div className={styles.headerDiv}>
@@ -86,8 +98,9 @@ export default function ColModal({
           </div>
           <form
             ref={formRef}
+            // TODO ошибка типизации
             onSubmit={submit}
-            encType='multipart/form-data'
+            encType="multipart/form-data"
             className={styles.formContainer}
           >
             <div className={styles.selectContainer}>

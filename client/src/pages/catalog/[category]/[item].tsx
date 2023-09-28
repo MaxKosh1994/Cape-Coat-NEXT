@@ -1,22 +1,21 @@
 import React from 'react';
-
 import './itemStyle.css';
-
 import ItemLeftPart from '@/components/ItemLeftPart/ItemLeftPart';
 import ItemRightPart from '@/components/ItemRightPart/ItemRightPart';
-
 import Head from 'next/head';
 import BasePage from '@/components/ItemPage/BasePage';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { getItems } from './fetchItemData';
+import { getItems } from '../../../app/fetchItemData';
 import { Item, ItemState } from '@/app/itemSlice';
 import { GetServerSidePropsContext } from 'next';
+import Custom404 from '@/pages/404';
+import { IBasePageItem } from '@/TypeScript/basePageTypes';
 interface ItemProps {
   itemData: Item;
   imageData: { id: number; url: string }[];
   itemId: number;
   materialsData: ImaterialsData[];
-  similarItems: Item[];
+  similarItems: IBasePageItem[];
+  error: { message: string };
 }
 export interface ImaterialsData {
   id: number;
@@ -31,13 +30,23 @@ function Item({
   itemId,
   materialsData,
   similarItems,
+  error,
 }: ItemProps) {
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  if (error) {
+    return (
+      <div className="error-message">Произошла ошибка: {error.message}</div>
+    );
+  }
+
+  if (!itemData) {
+    return <Custom404 />;
+  }
 
   return (
     <>
       <Head>
-        <title>Cape&Coat | {itemData.name}</title>
+        <title>Cape&Coat | {`${itemData.name}`}</title>
+
         <meta
           name="description"
           content={`Откройте для себя ${itemData.name} на Cape&Coat, качественная одежда на все случаи жизни`}
@@ -93,8 +102,9 @@ function Item({
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { item: itemId, isMobile } = context.query;
-  console.log('context.query', context.query);
+  const { item: itemId } = context.query;
+  const isMobileQueryParam = context.query.isMobile;
+  const isMobile = isMobileQueryParam === 'true';
 
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL}item/${itemId}`, {
@@ -122,14 +132,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           itemId: Number(itemId),
           materialsData: data.materials,
           similarItems: similarItems,
+          error: null,
+        },
+      };
+    } else if (!res.ok) {
+      return {
+        props: {
+          itemData: null,
         },
       };
     }
   } catch (error) {
     console.error(error);
-    return {
-      notFound: true,
-    };
   }
 }
 

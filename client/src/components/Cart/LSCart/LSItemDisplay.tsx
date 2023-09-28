@@ -5,21 +5,26 @@ import styles from '../../../styles/Checkout.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import DelBtn from '../DelBtn';
+import { ILocalStorageCartItem, ISingleItem } from '@/app/types/cartTypes';
+import { useCartControl } from '../useCartControl';
 import { useAppSelector } from '@/app/hooks';
 import { RootState } from '@/app/store';
 
 export default function LSItemDisplay({
   item,
   index,
-  handleDeleteItemFromCart,
-  userParams,
-  handleDisplaySizesForm,
-  showParamsForm,
-  handleChange,
-  handleSaveSizesInputs,
-  handleCustomFormChange,
+}: {
+  item: ISingleItem;
+  index: number;
 }) {
-  const localData = JSON.parse(localStorage.getItem('cartItems')) || [];
+  const { handleDeleteItemFromCart, handleDisplaySizesForm } = useCartControl();
+  const localData = JSON.parse(localStorage.getItem('cartItems')!) || '[]';
+  const userParams = useAppSelector(
+    (state: RootState) => state.cartControlSlice.userParams
+  );
+  const showParamsForm = useAppSelector(
+    (state: RootState) => state.cartControlSlice.showParamsForm
+  );
 
   return (
     <div className={styles.basketItem}>
@@ -44,19 +49,20 @@ export default function LSItemDisplay({
           </Link>
           <div className={styles.iconsContainer}>
             <LikeButton itemId={item.id} />
-            <DelBtn
-              itemId={item.id}
-              handleDeleteItemFromCart={handleDeleteItemFromCart}
-            />
+            <DelBtn itemId={item.id} />
           </div>
         </div>
         <div className={styles.basketItemContent}>
-          <div className={styles.basketItemProperties}>
+          <div
+            className={`${styles.basketItemProperties} ${styles.basketItemMinorProperties}`}
+          >
             <div>Артикул: {item.article}</div>
           </div>
         </div>
         <div className={styles.basketItemContent}>
-          <div className={styles.basketItemProperties}>
+          <div
+            className={`${styles.basketItemProperties} ${styles.basketItemMinorProperties}`}
+          >
             {item.selected_material ? (
               <div>Материал: {item.selected_material}</div>
             ) : (
@@ -64,7 +70,9 @@ export default function LSItemDisplay({
             )}
           </div>
         </div>
-        <div className={styles.basketItemContent}>
+        <div
+          className={`${styles.basketItemContent} ${styles.itemPriceImportant}`}
+        >
           {item.in_stock ? (
             <>
               <div className={styles.itemPrices}>
@@ -97,7 +105,8 @@ export default function LSItemDisplay({
         ) : (
           <>
             {userParams[index] ||
-            localData.find((data) => data.id === item.id)?.height ? (
+            localData.find((data: ILocalStorageCartItem) => data.id === item.id)
+              ?.height ? (
               <>
                 <div className={styles.userParameters}>
                   <div className={styles.itemPrices}>
@@ -105,37 +114,81 @@ export default function LSItemDisplay({
                       {userParams[index] || (
                         <div>
                           Ваш рост:{' '}
-                          {localData.find((data) => data.id === item.id).height}
+                          {
+                            localData.find(
+                              (data: ILocalStorageCartItem) =>
+                                data.id === item.id
+                            ).height
+                          }
                           см, Длина изделия:{' '}
-                          {localData.find((data) => data.id === item.id).length}
+                          {
+                            localData.find(
+                              (data: ILocalStorageCartItem) =>
+                                data.id === item.id
+                            ).length
+                          }
                           см, Длина рукава:{' '}
-                          {localData.find((data) => data.id === item.id).sleeve}
+                          {
+                            localData.find(
+                              (data: ILocalStorageCartItem) =>
+                                data.id === item.id
+                            ).sleeve
+                          }
                           см, Объем груди:{' '}
-                          {localData.find((data) => data.id === item.id).bust}
+                          {
+                            localData.find(
+                              (data: ILocalStorageCartItem) =>
+                                data.id === item.id
+                            ).bust
+                          }
                           см, Объем талии:
-                          {localData.find((data) => data.id === item.id).waist}
+                          {
+                            localData.find(
+                              (data: ILocalStorageCartItem) =>
+                                data.id === item.id
+                            ).waist
+                          }
                           см, Объем бедер:{' '}
-                          {localData.find((data) => data.id === item.id).hips}
+                          {
+                            localData.find(
+                              (data: ILocalStorageCartItem) =>
+                                data.id === item.id
+                            ).hips
+                          }
                           см
-                          {localData.find((data) => data.id === item.id).lining
+                          {localData.find(
+                            (data: ILocalStorageCartItem) => data.id === item.id
+                          ).lining
                             ? `, Утепление: ${
-                                localData.find((data) => data.id === item.id)
-                                  .lining
+                                localData.find(
+                                  (data: ILocalStorageCartItem) =>
+                                    data.id === item.id
+                                ).lining
                               }`
                             : ''}
-                          {localData.find((data) => data.id === item.id).buttons
+                          {localData.find(
+                            (data: ILocalStorageCartItem) => data.id === item.id
+                          ).buttons
                             ? `, Фурнитура: ${
-                                localData.find((data) => data.id === item.id)
-                                  .buttons
+                                localData.find(
+                                  (data: ILocalStorageCartItem) =>
+                                    data.id === item.id
+                                ).buttons
                               }`
                             : ''}
-                          {localData.find((data) => data.id === item.id).loops
+                          {localData.find(
+                            (data: ILocalStorageCartItem) => data.id === item.id
+                          ).loops
                             ? `, со шлёвками`
                             : ''}
-                          {localData.find((data) => data.id === item.id).saddle
+                          {localData.find(
+                            (data: ILocalStorageCartItem) => data.id === item.id
+                          ).saddle
                             ? `, седло: ${
-                                localData.find((data) => data.id === item.id)
-                                  .saddle
+                                localData.find(
+                                  (data: ILocalStorageCartItem) =>
+                                    data.id === item.id
+                                ).saddle
                               }`
                             : ''}
                         </div>
@@ -161,13 +214,7 @@ export default function LSItemDisplay({
           </>
         )}
         {showParamsForm[item.id] && (
-          <MeasurementsForm
-            index={index}
-            item={item}
-            handleChange={handleChange}
-            handleSaveSizesInputs={handleSaveSizesInputs}
-            handleCustomFormChange={handleCustomFormChange}
-          />
+          <MeasurementsForm index={index} item={item} />
         )}
       </div>
     </div>

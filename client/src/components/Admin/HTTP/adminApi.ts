@@ -1,13 +1,14 @@
 import axios from 'axios';
 
+// TODO нужна типизация, any заглушка
 export const dataAxios = async (
-  setContent,
-  setMessage,
-  address,
+  setContent: any,
+  setMessage: any,
+  address: any,
   formData = undefined,
   url = undefined,
   id = undefined
-): Promise<object> => {
+): Promise<any> => {
   try {
     if (url === `create-${address}`) {
       //!POST
@@ -20,6 +21,7 @@ export const dataAxios = async (
         }
       );
       const responseData: object = await response.data;
+      // TODO типизация
       setMessage((prev) => responseData.message);
       setContent((prev) => [...prev, responseData.res]);
 
@@ -31,6 +33,7 @@ export const dataAxios = async (
         { withCredentials: true }
       );
       const responseData: object = await response.data;
+      // TODO типизация
       setContent((prev) => [...prev.filter((el) => el.id !== id)]);
       setMessage((prev) => responseData.message);
       return responseData;
@@ -45,7 +48,7 @@ export const dataAxios = async (
         }
       );
       const responseData = await response.data;
-
+      // TODO типизация
       setContent((prev) => {
         const updatedContent = prev.map((item) => {
           if (item.id === id) {
@@ -59,7 +62,7 @@ export const dataAxios = async (
         });
         return updatedContent;
       });
-
+      // TODO типизация
       setMessage((prev) => responseData.message);
       return responseData;
     } else if (url === undefined) {
@@ -70,7 +73,7 @@ export const dataAxios = async (
       );
       const responseData = await response.data;
       setContent(responseData.res);
-      setMessage((prev) => responseData.message);
+      // setMessage((prev) => responseData.message);
       return responseData;
     }
   } catch (error) {
@@ -78,7 +81,8 @@ export const dataAxios = async (
   }
 };
 
-export const allOrderDataFetch = async (setOrder): Promise<object> => {
+// TODO нужна типизация, any заглушка
+export const allOrderDataFetch = async (setOrder: any): Promise<any> => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}admin/order/allorder`,
@@ -95,11 +99,12 @@ export const allOrderDataFetch = async (setOrder): Promise<object> => {
   }
 };
 
+// TODO нужна типизация, any заглушка
 export const updateOrderDataFetch = async (
-  id,
-  status,
-  setMessage
-): Promise<object> => {
+  id: any,
+  status: any,
+  setMessage: any
+): Promise<any> => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}admin/order/update/${id}`,
@@ -111,6 +116,7 @@ export const updateOrderDataFetch = async (
       }
     );
     const data = await response.json();
+    // TODO типизация
     setMessage((prev) => data.message);
   } catch (error) {
     console.log(error);

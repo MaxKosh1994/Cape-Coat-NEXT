@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import styles from './CartMin.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,18 +9,19 @@ import { useCartControl } from './useCartControl';
 import DelBtn from './DelBtn';
 import { RootState } from '@/app/store';
 import { emptyCart } from '@/app/cartSlice';
+import { setCartTotal } from '@/app/cartControlSlice';
+import { emptyCartThunk } from '@/app/thunkActionsCart';
 
-const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
-  show,
-  handleCartIconClick,
-}) => {
-  const { delError, setCartTotal, fetchCartItems, handleDeleteItemFromCart } =
-    useCartControl();
+const CartMin: React.FC<{
+  show: boolean;
+  handleCartIconClick: (e: MouseEvent<HTMLButtonElement>) => void;
+}> = ({ show, handleCartIconClick }) => {
+  const dispatch = useAppDispatch();
+  const { delError, fetchCartItems } = useCartControl();
   const user = useAppSelector((state: RootState) => state.sessionSlice.user);
   const cartItemsList = useAppSelector(
     (state: RootState) => state.cartSlice.cartItems
   );
-  const dispatch = useAppDispatch();
   const [showDiv, setShowDiv] = useState<boolean>(show);
 
   useEffect(() => {
@@ -35,18 +36,20 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
       .filter((item) => !item.in_stock)
       .reduce((sum, item) => sum + item.price, 0);
 
-    setCartTotal(subtotal + subtotalStock);
+    dispatch(setCartTotal(subtotal + subtotalStock));
   }, [cartItemsList]);
 
   const emptyCartMin = async () => {
-    await dispatch(emptyCart());
-    localStorage.setItem('cartItems', []);
+    user
+      ? await dispatch(emptyCartThunk())
+      : localStorage.setItem('cartItems', '[]');
+    fetchCartItems();
   };
 
-  const handleCloseCart = () => {
+  const handleCloseCart = (e: MouseEvent<HTMLButtonElement>) => {
     setShowDiv((prev) => !prev);
     setTimeout(() => {
-      handleCartIconClick();
+      handleCartIconClick(e);
     }, 1001);
   };
 
@@ -110,19 +113,21 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
                       <div className={styles.basketItemProperties}>
                         <div>Артикул: {item.article}</div>
                       </div>
+                      <div className={styles.basketItemProperties}>
+                        <div>
+                          Материал: {item.Material.name.split(' - ')[0]}
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div className={styles.basketItemRight}>
                     <div className={styles.basketItemContentRight}>
                       <div className={styles.iconsContainer}>
                         <LikeButton itemId={item.id} />
-                        <DelBtn
-                          itemId={item.id}
-                          handleDeleteItemFromCart={handleDeleteItemFromCart}
-                        />
+                        <DelBtn itemId={item.id} />
                       </div>
                       {item.in_stock ? (
-                        <>
+                        <div className={styles.twoPrices}>
                           <div className={styles.itemPrice}>
                             <span
                               className={`${styles.itemPricesPrice}  ${styles.strikethrough}`}
@@ -137,7 +142,7 @@ const CartMin: React.FC<{ show: boolean; handleCartIconClick: () => void }> = ({
                               {item.new_price.toLocaleString()} &#8381;
                             </span>
                           </div>
-                        </>
+                        </div>
                       ) : (
                         <div className={styles.itemPrice}>
                           <span className={styles.itemPricesPrice}>
