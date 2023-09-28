@@ -23,7 +23,7 @@ export default function AboutComp() {
                   <td className={styles.Photo}>
                     <Image
                       src={`${process.env.NEXT_PUBLIC_COLLAGE_URL}collage1.png`}
-                      alt="collage1"
+                      alt='collage1'
                       width={300}
                       height={400}
                     />
@@ -67,7 +67,7 @@ export default function AboutComp() {
                   <td className={styles.Photo}>
                     <Image
                       src={`${process.env.NEXT_PUBLIC_COLLAGE_URL}collage2.png`}
-                      alt="collage1"
+                      alt='collage1'
                       width={300}
                       height={400}
                     />
@@ -78,39 +78,41 @@ export default function AboutComp() {
           </div>
           <div className={styles.socialMediaContainer}>
             <h1 className={styles.Contact}>Наши контакты и соц.сети:</h1>
-            <Typography className={styles.displayFlex} variant="subtitle1">
-              <a className={styles.link} href="mailto:Cape.n.coat@gmail.com">
+            <Typography className={styles.displayFlex} variant='subtitle1'>
+              <a className={styles.link} href='mailto:Cape.n.coat@gmail.com'>
                 <MailOutlineIcon className={styles.Icon} /> Email:
                 Cape.n.coat@gmail.com
               </a>
             </Typography>
-            <Typography className={styles.displayFlex} variant="subtitle1">
-              <a className={styles.link} href="https://t.me/@kkireva">
+            <Typography className={styles.displayFlex} variant='subtitle1'>
+              <a className={styles.link} href='https://t.me/@kkireva'>
                 <TelegramIcon className={styles.Icon} /> Telegram: @kkireva
               </a>
             </Typography>
-            <Typography className={styles.displayFlex} variant="subtitle1">
-              <a className={styles.link} href="https://pin.it/2lozIsT">
+            <Typography className={styles.displayFlex} variant='subtitle1'>
+              <a className={styles.link} href='https://pin.it/2lozIsT'>
                 <PinterestIcon className={styles.Icon} /> Pinterest: @capencoat
               </a>
             </Typography>
-            <Typography className={styles.displayFlex} variant="subtitle1">
-              <a className={styles.link} href="https://pin.it/AK7aIDV">
+            <Typography className={styles.displayFlex} variant='subtitle1'>
+              <a className={styles.link} href='https://pin.it/AK7aIDV'>
                 <PinterestIcon className={styles.Icon} /> Pinterest: @KKir_eva
               </a>
             </Typography>
-            <Typography className={styles.displayFlex} variant="subtitle1">
-              <a className={styles.link} href="https://vk.com/cape.n.coat">
+            <Typography className={styles.displayFlex} variant='subtitle1'>
+              <a className={styles.link} href='https://vk.com/cape.n.coat'>
                 <Icon36LogoVk className={styles.Icon} /> Группа ВК
               </a>
             </Typography>
-            <Typography className={styles.displayFlex} variant="subtitle1">
-              <a className={styles.link} href="https://vk.com/kkireva">
+            <Typography className={styles.displayFlex} variant='subtitle1'>
+              <a className={styles.link} href='https://vk.com/kkireva'>
                 <Icon36LogoVk className={styles.Icon} /> Группа ВК (платья)
               </a>
             </Typography>
-            <Typography className={styles.displayFlex} variant="subtitle1">
-              <PhoneIcon className={styles.Icon} /> +7(920)-119-99-19
+            <Typography className={styles.displayFlex} variant='subtitle1'>
+              <a href='tel:+79201199919' className={styles.contactLink}>
+                <PhoneIcon className={styles.Icon} /> +7(920)-119-99-19
+              </a>
             </Typography>
           </div>
         </div>
