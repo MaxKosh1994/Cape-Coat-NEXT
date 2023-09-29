@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['77.222.53.48', 'cape-n-coat.ru'],
+    domains: ['77.222.53.48', 'cape-n-coat.ru', 'localhost'],
   },
   typescript: {
     // !! WARN !!
