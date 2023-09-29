@@ -1,5 +1,8 @@
 require('dotenv').config();
+const fs = require('fs');
 const path = require('path');
+const http = require('http');
+const https = require('https');
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -25,6 +28,11 @@ const sessionConfig = {
   },
 };
 
+const httpsOptions = {
+  key: fs.readFileSync(path.join(process.cwd(), '/certs/privkey.pem')),
+  cert: fs.readFileSync(path.join(process.cwd(), '/certs/fullchain.pem')),
+};
+
 const app = express();
 
 app.use(expressSession(sessionConfig));
@@ -36,9 +44,30 @@ app.use(cors(corsOptions));
 
 app.use(express.static(path.join(process.cwd(), 'storage')));
 
+app.use((req, res, next) => {
+  if (!req.secure && req.protocol !== 'https') {
+    const { host } = req.headers;
+    const parts = host.split(':');
+    const hostName = parts[0];
+    res.redirect(`https://${hostName}${req.url}`);
+  } else {
+    next();
+  }
+});
+
 app.use('/api', apiRouter);
 
-app.listen(PORT, () => {
-  console.log('Server started - УСПЕХ НЕИЗБЕЖЕН');
-  console.log('➜  Local:   ', `http://localhost:${PORT}/`);
+const httpsServer = https.createServer(httpsOptions, app);
+
+http.createServer(app).listen(PORT, () => {
+  console.log(`HTTP-server started on port ${PORT}`);
 });
+
+httpsServer.listen(443, () => {
+  console.log('`HTTP-server started on port 443');
+});
+
+// app.listen(PORT, () => {
+//   console.log('Server started - УСПЕХ НЕИЗБЕЖЕН');
+//   console.log('➜  Local:   ', `http://localhost:${PORT}/`);
+// });
