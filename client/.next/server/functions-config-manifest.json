@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "functions": {
+    "/catalog/[category]": {},
+    "/catalog/[category]/[item]": {},
+    "/catalog/collection": {},
+    "/catalog": {},
+    "/catalog/sale": {}
+  }
+}
