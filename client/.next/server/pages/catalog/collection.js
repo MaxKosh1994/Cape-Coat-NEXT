@@ -105,7 +105,7 @@ function CollectionPage({ collectionItems, collectionName }) {
 }
 async function getServerSideProps() {
     try {
-        const response = await fetch("http://localhost:3377/api/" + "catalog/collection");
+        const response = await fetch("http://77.222.53.48:3377/api/" + "catalog/collection");
         if (response.status === 200) {
             const collection = await response.json();
             console.log("collection", collection);

@@ -655,7 +655,7 @@ const { startSession, endSession, handleError, checkSession } = rtkSlice.actions
 
 const signUpUserThunk = (inputsData)=>async (dispatch)=>{
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(`${"http://localhost:3377/api/"}auth/register`, inputsData, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(`${"http://77.222.53.48:3377/api/"}auth/register`, inputsData, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
@@ -670,7 +670,7 @@ const signUpUserThunk = (inputsData)=>async (dispatch)=>{
     };
 const signInUserThunk = (inputsData)=>async (dispatch)=>{
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(`${"http://localhost:3377/api/"}auth/login`, inputsData, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(`${"http://77.222.53.48:3377/api/"}auth/login`, inputsData, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
@@ -687,7 +687,7 @@ const signInUserThunk = (inputsData)=>async (dispatch)=>{
     };
 const forgotPassThunk = (userEmail)=>async (dispatch)=>{
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(`${"http://localhost:3377/api/"}auth/forgot-pass`, userEmail, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(`${"http://77.222.53.48:3377/api/"}auth/forgot-pass`, userEmail, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
@@ -706,7 +706,7 @@ const resetPassThunk = (token, password)=>async (dispatch)=>{
                 token,
                 password
             };
-            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(`${"http://localhost:3377/api/"}auth/reset-pass`, data, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(`${"http://77.222.53.48:3377/api/"}auth/reset-pass`, data, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
@@ -720,7 +720,7 @@ const resetPassThunk = (token, password)=>async (dispatch)=>{
     };
 const signOutUserThunk = ()=>async (dispatch)=>{
         try {
-            await axios__WEBPACK_IMPORTED_MODULE_0___default().get(`${"http://localhost:3377/api/"}auth/logout`, {
+            await axios__WEBPACK_IMPORTED_MODULE_0___default().get(`${"http://77.222.53.48:3377/api/"}auth/logout`, {
                 withCredentials: true
             });
             dispatch((0,_sessionSlice__WEBPACK_IMPORTED_MODULE_1__/* .endSession */ .TM)());
@@ -733,7 +733,7 @@ const signOutUserThunk = ()=>async (dispatch)=>{
     };
 const isUserLoginThunk = ()=>async (dispatch)=>{
         try {
-            const response = await fetch(`${"http://localhost:3377/api/"}auth/session`, {
+            const response = await fetch(`${"http://77.222.53.48:3377/api/"}auth/session`, {
                 credentials: "include"
             });
             if (response.ok) {
@@ -778,7 +778,7 @@ const isUserLoginThunk = ()=>async (dispatch)=>{
 
 const getCartItemsThunk = ()=>async (dispatch)=>{
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default().get(`${"http://localhost:3377/api/"}cart/`, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default().get(`${"http://77.222.53.48:3377/api/"}cart/`, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
@@ -793,7 +793,7 @@ const getCartItemsThunk = ()=>async (dispatch)=>{
     };
 const getCartItemsByIdThunk = (itemIds)=>async (dispatch)=>{
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(`${"http://localhost:3377/api/"}item/itemsById`, itemIds, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(`${"http://77.222.53.48:3377/api/"}item/itemsById`, itemIds, {
                 method: "POST",
                 withCredentials: true,
                 headers: {
@@ -810,7 +810,7 @@ const getCartItemsByIdThunk = (itemIds)=>async (dispatch)=>{
 const delCartItemThunk = (data)=>async (dispatch)=>{
         const { itemId, user } = data;
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"](`${"http://localhost:3377/api/"}cart/item/${itemId}/${user}`, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"](`${"http://77.222.53.48:3377/api/"}cart/item/${itemId}/${user}`, {
                 method: "DELETE",
                 withCredentials: true,
                 headers: {
@@ -828,7 +828,7 @@ const delCartItemThunk = (data)=>async (dispatch)=>{
     };
 const emptyCartThunk = ()=>async (dispatch)=>{
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"](`${"http://localhost:3377/api/"}cart/emptyCart`, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"](`${"http://77.222.53.48:3377/api/"}cart/emptyCart`, {
                 method: "DELETE",
                 withCredentials: true,
                 headers: {
@@ -844,7 +844,7 @@ const emptyCartThunk = ()=>async (dispatch)=>{
     };
 const addCartItemsThunk = (id)=>async (dispatch)=>{
         try {
-            const res = await axios.post(`${"http://localhost:3377/api/"}cart/item/${id}`, {}, {
+            const res = await axios.post(`${"http://77.222.53.48:3377/api/"}cart/item/${id}`, {}, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
@@ -863,7 +863,7 @@ const checkCartItemThunk = ()=>async (dispatch, getState)=>{
             if (!user) {
                 return;
             }
-            const res = await axios.get(`${"http://localhost:3377/api/"}cart/item/${user}`, {
+            const res = await axios.get(`${"http://77.222.53.48:3377/api/"}cart/item/${user}`, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
@@ -898,7 +898,7 @@ const checkCartItemThunk = ()=>async (dispatch, getState)=>{
 
 const fetchItemData = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)("item/fetchItemData", async (itemId, { dispatch })=>{
     try {
-        const res = await fetch(`${"http://localhost:3377/api/"}item/${itemId}`, {
+        const res = await fetch(`${"http://77.222.53.48:3377/api/"}item/${itemId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -921,7 +921,7 @@ const fetchFavouritesData = ()=>async (dispatch, getState)=>{
             if (!user) {
                 return;
             }
-            const res = await fetch(`${"http://localhost:3377/api/"}item/favourites/${user}`, {
+            const res = await fetch(`${"http://77.222.53.48:3377/api/"}item/favourites/${user}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -938,7 +938,7 @@ const fetchFavouritesData = ()=>async (dispatch, getState)=>{
     };
 const fetchAllFavorites = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)("favorites/fetchAllFavorites", async (_, { dispatch })=>{
     try {
-        const res = await fetch(`${"http://localhost:3377/api/"}item/allFavorites`, {
+        const res = await fetch(`${"http://77.222.53.48:3377/api/"}item/allFavorites`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -955,7 +955,7 @@ const fetchAllFavorites = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.creat
 });
 const fetchOneFavourite = (item)=>async (dispatch, getState)=>{
         try {
-            const res = await fetch(`${"http://localhost:3377/api/"}item/favourites/${item}`, {
+            const res = await fetch(`${"http://77.222.53.48:3377/api/"}item/favourites/${item}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -1308,7 +1308,7 @@ const useCartControl = ()=>{
             }
         }
         // записывает мерки к товару в CartItems
-        const response = await fetch(`${"http://localhost:3377/api/"}cart/measures/${itemId}`, {
+        const response = await fetch(`${"http://77.222.53.48:3377/api/"}cart/measures/${itemId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -1345,7 +1345,7 @@ const useCartControl = ()=>{
         // если введен промокод и это первый введенный промокод
         if (promocode && !promoUsed) {
             // проверяем на беке есть ли такой промокод
-            const isValidPromo = await fetch(`${"http://localhost:3377/api/"}cart/promocode/${promocode}`, {
+            const isValidPromo = await fetch(`${"http://77.222.53.48:3377/api/"}cart/promocode/${promocode}`, {
                 method: "GET",
                 credentials: "include"
             });
@@ -1395,7 +1395,7 @@ const useCartControl = ()=>{
     const createOrder = async (data)=>{
         setShowSpinner(true);
         try {
-            const response = await fetch(`${"http://localhost:3377/api/"}order/new`, {
+            const response = await fetch(`${"http://77.222.53.48:3377/api/"}order/new`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -1565,7 +1565,7 @@ const useCartControl = ()=>{
 const getAllItems = async ()=>{
     try {
         const responseFetch = await fetch(`
-			  ${"http://localhost:3377/api/"}item/allItems`);
+			  ${"http://77.222.53.48:3377/api/"}item/allItems`);
         const { status } = await responseFetch;
         const response = await responseFetch.json();
         if (status !== 200) {
@@ -2021,7 +2021,7 @@ var NavigationComp_module_default = /*#__PURE__*/__webpack_require__.n(Navigatio
 ;// CONCATENATED MODULE: ./src/components/Navbar/NavigationMenu/fetchNavigationMenuData.tsx
 const fetchNavigationMenuCategoryData = async ()=>{
     try {
-        const responseFetch = await fetch(`${"http://localhost:3377/api/"}catalog/categories`, {
+        const responseFetch = await fetch(`${"http://77.222.53.48:3377/api/"}catalog/categories`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -2055,7 +2055,7 @@ const fetchNavigationMenuCategoryData = async ()=>{
 };
 const fetchNavigationMenuCollectionData = async ()=>{
     try {
-        const responseFetch = await fetch(`${"http://localhost:3377/api/"}catalog/collection/all`, {
+        const responseFetch = await fetch(`${"http://77.222.53.48:3377/api/"}catalog/collection/all`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
