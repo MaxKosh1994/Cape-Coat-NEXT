@@ -21,7 +21,7 @@ const dataAxios = async (setContent, setMessage, address, formData = undefined, 
     try {
         if (url === `create-${address}`) {
             //!POST
-            const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(`${"http://localhost:3377/api/"}admin/${address}/${url}`, formData, {
+            const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(`${"http://77.222.53.48:3377/api/"}admin/${address}/${url}`, formData, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "multipart/form-data"
@@ -37,7 +37,7 @@ const dataAxios = async (setContent, setMessage, address, formData = undefined, 
             return responseData;
         } else if (url === `delete-${address}`) {
             //!DELETE
-            const response = await axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"](`${"http://localhost:3377/api/"}admin/${address}/${url}/${id}`, {
+            const response = await axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"](`${"http://77.222.53.48:3377/api/"}admin/${address}/${url}/${id}`, {
                 withCredentials: true
             });
             const responseData = await response.data;
@@ -49,7 +49,7 @@ const dataAxios = async (setContent, setMessage, address, formData = undefined, 
             return responseData;
         } else if (url === `update-${address}`) {
             //!PATCH
-            const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().patch(`${"http://localhost:3377/api/"}admin/${address}/${url}/${id}`, formData, {
+            const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().patch(`${"http://77.222.53.48:3377/api/"}admin/${address}/${url}/${id}`, formData, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "multipart/form-data"
@@ -75,7 +75,7 @@ const dataAxios = async (setContent, setMessage, address, formData = undefined, 
             return responseData;
         } else if (url === undefined) {
             //!GET
-            const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().get(`${"http://localhost:3377/api/"}admin/${address}/read-${address}`, {
+            const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().get(`${"http://77.222.53.48:3377/api/"}admin/${address}/read-${address}`, {
                 withCredentials: true
             });
             const responseData = await response.data;
@@ -90,7 +90,7 @@ const dataAxios = async (setContent, setMessage, address, formData = undefined, 
 // TODO нужна типизация, any заглушка
 const allOrderDataFetch = async (setOrder)=>{
     try {
-        const response = await fetch(`${"http://localhost:3377/api/"}admin/order/allorder`, {
+        const response = await fetch(`${"http://77.222.53.48:3377/api/"}admin/order/allorder`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -106,7 +106,7 @@ const allOrderDataFetch = async (setOrder)=>{
 // TODO нужна типизация, any заглушка
 const updateOrderDataFetch = async (id, status, setMessage)=>{
     try {
-        const response = await fetch(`${"http://localhost:3377/api/"}admin/order/update/${id}`, {
+        const response = await fetch(`${"http://77.222.53.48:3377/api/"}admin/order/update/${id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
@@ -124,7 +124,7 @@ const updateOrderDataFetch = async (id, status, setMessage)=>{
     }
 };
 const updateOrderFieldFetch = async (id, fieldName, fieldValue)=>{
-    const response = await fetch(`${"http://localhost:3377/api/"}admin/order/updateOrderField/${id}`, {
+    const response = await fetch(`${"http://77.222.53.48:3377/api/"}admin/order/updateOrderField/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -137,7 +137,7 @@ const updateOrderFieldFetch = async (id, fieldName, fieldValue)=>{
     return await response.json();
 };
 const updateOrderItemFieldFetch = async (id, itemId, fieldName, fieldValue)=>{
-    const response = await fetch(`${"http://localhost:3377/api/"}admin/order/updateOrderItemField/${id}/${itemId}`, {
+    const response = await fetch(`${"http://77.222.53.48:3377/api/"}admin/order/updateOrderItemField/${id}/${itemId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"

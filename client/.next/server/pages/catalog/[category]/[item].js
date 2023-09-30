@@ -115,7 +115,7 @@ __webpack_async_result__();
 /* unused harmony exports fetchNavigationMenuCategoryData, fetchNavigationMenuCollectionData */
 const fetchNavigationMenuCategoryData = async ()=>{
     try {
-        const responseFetch = await fetch(`${"http://localhost:3377/api/"}catalog/categories`, {
+        const responseFetch = await fetch(`${"http://77.222.53.48:3377/api/"}catalog/categories`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -150,7 +150,7 @@ const fetchNavigationMenuCategoryData = async ()=>{
 };
 const fetchNavigationMenuCollectionData = async ()=>{
     try {
-        const responseFetch = await fetch(`${"http://localhost:3377/api/"}catalog/collection/all`, {
+        const responseFetch = await fetch(`${"http://77.222.53.48:3377/api/"}catalog/collection/all`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -186,7 +186,7 @@ const fetchNavigationMenuCollectionData = async ()=>{
 const getItems = async (// setSimilarItems: React.Dispatch<React.SetStateAction<Item[]>>,
 isMobile, itemData)=>{
     try {
-        const allItems = await fetch(`${"http://localhost:3377/api/"}item/allItems`, {
+        const allItems = await fetch(`${"http://77.222.53.48:3377/api/"}item/allItems`, {
             credentials: "include"
         });
         const response = await allItems.json();
@@ -436,7 +436,7 @@ function CartButton({ itemId, selectedMaterialId, selectedMaterialName, setMater
                     const materialName = {
                         material_name: material
                     };
-                    const res = await fetch(`${"http://localhost:3377/api/"}cart/item/${itemId}`, {
+                    const res = await fetch(`${"http://77.222.53.48:3377/api/"}cart/item/${itemId}`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -930,7 +930,7 @@ async function getServerSideProps(context) {
     const isMobileQueryParam = context.query.isMobile;
     const isMobile = isMobileQueryParam === "true";
     try {
-        const res = await fetch(`${"http://localhost:3377/api/"}item/${itemId}`, {
+        const res = await fetch(`${"http://77.222.53.48:3377/api/"}item/${itemId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"

@@ -166,7 +166,7 @@ function Catalog({ allCategories }) {
 }
 async function getServerSideProps() {
     try {
-        const response = await fetch("http://localhost:3377/api/" + "catalog/categories", {
+        const response = await fetch("http://77.222.53.48:3377/api/" + "catalog/categories", {
             credentials: "include"
         });
         if (response.status === 200) {

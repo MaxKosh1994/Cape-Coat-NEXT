@@ -53,7 +53,7 @@ var external_axios_default = /*#__PURE__*/__webpack_require__.n(external_axios_)
 
 const addToFavorites = async (data)=>{
     try {
-        const response = await external_axios_default().post(`${"http://localhost:3377/api/"}favorite/add`, data, {
+        const response = await external_axios_default().post(`${"http://77.222.53.48:3377/api/"}favorite/add`, data, {
             headers: {
                 "Content-Type": "application/json"
             },
@@ -68,7 +68,7 @@ const addToFavorites = async (data)=>{
 };
 const removeFromFavorites = async (data)=>{
     try {
-        const response = await external_axios_default()["delete"](`${"http://localhost:3377/api/"}favorite/del`, {
+        const response = await external_axios_default()["delete"](`${"http://77.222.53.48:3377/api/"}favorite/del`, {
             data,
             headers: {
                 "Content-Type": "application/json"
@@ -87,7 +87,7 @@ const addToCart = async (data)=>{
         data
     });
     try {
-        const response = await external_axios_default().post(`${"http://localhost:3377/api/"}cart/item/add`, data, {
+        const response = await external_axios_default().post(`${"http://77.222.53.48:3377/api/"}cart/item/add`, data, {
             headers: {
                 "Content-Type": "application/json"
             },
@@ -102,7 +102,7 @@ const addToCart = async (data)=>{
 };
 const addToCartItem = async (data)=>{
     try {
-        const response = await axios.post(`${"http://localhost:3377/api/"}cart/item/add`, data, {
+        const response = await axios.post(`${"http://77.222.53.48:3377/api/"}cart/item/add`, data, {
             headers: {
                 "Content-Type": "application/json"
             },
@@ -117,7 +117,7 @@ const addToCartItem = async (data)=>{
 };
 const removeFromCart = async (data)=>{
     try {
-        const response = await external_axios_default()["delete"](`${"http://localhost:3377/api/"}cart/item/del`, {
+        const response = await external_axios_default()["delete"](`${"http://77.222.53.48:3377/api/"}cart/item/del`, {
             data,
             headers: {
                 "Content-Type": "application/json"
@@ -279,7 +279,7 @@ const useProductCardLogic = (id, material_name, article, photo, name, price, ini
             }
             const fetchData = async ()=>{
                 try {
-                    const response = await fetch("http://localhost:3377/api/" + "cart/cartInCat", {
+                    const response = await fetch("http://77.222.53.48:3377/api/" + "cart/cartInCat", {
                         method: "GET",
                         credentials: "include"
                     });
@@ -331,7 +331,7 @@ const useProductCardLogic = (id, material_name, article, photo, name, price, ini
             }
             const fetchData = async ()=>{
                 try {
-                    const response = await fetch("http://localhost:3377/api/" + "favorite", {
+                    const response = await fetch("http://77.222.53.48:3377/api/" + "favorite", {
                         method: "GET",
                         credentials: "include"
                     });

@@ -4,7 +4,7 @@
     "/catalog/[category]": {},
     "/catalog/[category]/[item]": {},
     "/catalog/collection": {},
-    "/catalog": {},
-    "/catalog/sale": {}
+    "/catalog/sale": {},
+    "/catalog": {}
   }
 }

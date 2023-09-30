@@ -67,7 +67,7 @@ function Category({ catName, categoryItems, error }) {
 async function getServerSideProps(context) {
     try {
         const { category: nameOneCategory } = context.query;
-        const response = await fetch("http://localhost:3377/api/" + `category/${nameOneCategory}`, {
+        const response = await fetch("http://77.222.53.48:3377/api/" + `category/${nameOneCategory}`, {
             credentials: "include"
         });
         if (response.status === 200) {

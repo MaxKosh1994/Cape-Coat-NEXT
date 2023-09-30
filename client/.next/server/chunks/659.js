@@ -55,7 +55,7 @@ function Favorites() {
             const fetchedItems = [];
             for (const id of favoritesFromStorage){
                 try {
-                    const response = await fetch("http://localhost:3377/api/" + "item/" + id, {
+                    const response = await fetch("http://77.222.53.48:3377/api/" + "item/" + id, {
                         credentials: "include"
                     });
                     if (response.status === 200) {

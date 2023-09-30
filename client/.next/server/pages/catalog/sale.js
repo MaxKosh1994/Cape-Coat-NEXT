@@ -60,7 +60,7 @@ function SalePage({ saleItems }) {
 }
 async function getServerSideProps() {
     try {
-        const response = await fetch("http://localhost:3377/api/" + "catalog/sale");
+        const response = await fetch("http://77.222.53.48:3377/api/" + "catalog/sale");
         if (response.status === 200) {
             const result = await response.json();
             const items = result.map((item)=>({
